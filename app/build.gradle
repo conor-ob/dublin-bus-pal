@@ -1,4 +1,7 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 
 Properties properties = new Properties()
@@ -76,10 +79,10 @@ dependencies {
 
     // Dagger
     implementation "com.google.dagger:dagger:$rootProject.daggerVersion"
-    annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
     implementation "com.google.dagger:dagger-android:$rootProject.daggerVersion"
     implementation "com.google.dagger:dagger-android-support:$rootProject.daggerVersion"
-    annotationProcessor "com.google.dagger:dagger-android-processor:$rootProject.daggerVersion"
+    kapt "com.google.dagger:dagger-android-processor:$rootProject.daggerVersion"
     provided 'javax.annotation:jsr250-api:1.0'
 
     // Android GMS
@@ -94,7 +97,7 @@ dependencies {
 
     // Room Persistence Library
     implementation "android.arch.persistence.room:runtime:$rootProject.roomVersion"
-    annotationProcessor "android.arch.persistence.room:compiler:$rootProject.roomVersion"
+    kapt "android.arch.persistence.room:compiler:$rootProject.roomVersion"
     //testing testImplementation "android.arch.persistence.room:testing:1.0.0"
 
     // Mosby MVP
@@ -130,4 +133,8 @@ dependencies {
     androidTestImplementation("com.android.support.test.espresso:espresso-core:$rootProject.espressoTestRunnerVersion") {
         exclude group: 'com.google.code.findbugs'
     }
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+repositories {
+    mavenCentral()
 }
