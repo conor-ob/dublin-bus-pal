@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array
+        name="preference_array_home_screen_entries">
+        <item>News</item>
+        <item>Nearby</item>
+        <item>Favourites</item>
+        <item>Search</item>
+    </string-array>
+    <string-array
+        name="preference_array_home_screen_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array
+        name="preference_auto_refresh_interval_entries">
+        <item>15 seconds</item>
+        <item>30 seconds</item>
+        <item>1 minute</item>
+    </string-array>
+    <string-array
+        name="preference_auto_refresh_interval_values">
+        <item>5</item>
+        <item>30</item>
+        <item>60</item>
+    </string-array>
+
+    <string-array
+        name="preference_auto_update_frequency_entries">
+        <item>Every day</item>
+        <item>Every 3 days</item>
+        <item>Every week</item>
+        <item>Every 2 weeks</item>
+    </string-array>
+    <string-array
+        name="preference_auto_update_frequency_values">
+        <item>1</item>
+        <item>3</item>
+        <item>7</item>
+        <item>14</item>
+    </string-array>
+
+</resources>

@@ -1,0 +1,133 @@
+apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('user.properties').newDataInputStream())
+def googleMapsApiKey = properties.getProperty('com.google.android.geo.API_KEY')
+def fabricApiKey = properties.getProperty('io.fabric.ApiKey')
+def twitterConsumerKey = properties.getProperty('com.twitter.sdk.android.CONSUMER_KEY')
+def twitterConsumerSecret = properties.getProperty('com.twitter.sdk.android.CONSUMER_SECRET')
+
+android {
+    compileSdkVersion 27
+    buildToolsVersion "27.0.2"
+    defaultConfig {
+        applicationId "ie.dublinbuspal.android"
+        minSdkVersion 21
+        targetSdkVersion 27
+        versionCode 1000
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
+        manifestPlaceholders = [ googleMapsApiKey: "$googleMapsApiKey",
+                                 fabricApiKey: "$fabricApiKey",
+                                 twitterConsumerKey: "$twitterConsumerKey",
+                                 twitterConsumerSecret: "$twitterConsumerSecret" ]
+    }
+    buildTypes {
+        release {
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            debuggable true
+        }
+    }
+    flavorDimensions "default"
+    productFlavors {
+        prod {
+            dimension "default"
+        }
+        mock {
+            dimension "default"
+            applicationIdSuffix = ".mock"
+        }
+    }
+    // Remove mockRelease as it's not needed.
+    android.variantFilter { variant ->
+        if (variant.buildType.name == 'release'
+                && variant.getFlavors().get(0).name == 'mock') {
+            variant.setIgnore(true)
+        }
+    }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+    }
+}
+
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Android Support
+    implementation "com.android.support:appcompat-v7:$rootProject.androidSupportVersion"
+    implementation "com.android.support:design:$rootProject.androidSupportVersion"
+    implementation "com.android.support:recyclerview-v7:$rootProject.androidSupportVersion"
+    implementation "com.android.support:support-v4:$rootProject.androidSupportVersion"
+    implementation "com.android.support:support-vector-drawable:$rootProject.androidSupportVersion"
+    implementation "com.android.support.constraint:constraint-layout:$rootProject.androidSupportConstraintVersion"
+
+    // Dagger
+    implementation "com.google.dagger:dagger:$rootProject.daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
+    implementation "com.google.dagger:dagger-android:$rootProject.daggerVersion"
+    implementation "com.google.dagger:dagger-android-support:$rootProject.daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$rootProject.daggerVersion"
+    provided 'javax.annotation:jsr250-api:1.0'
+
+    // Android GMS
+    implementation "com.google.android.gms:play-services-location:$rootProject.androidGMSVersion"
+    implementation "com.google.android.gms:play-services-maps:$rootProject.androidGMSVersion"
+
+    // RxJava
+    implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxJava2Version"
+    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxAndroidVersion"
+    implementation "com.tbruyelle.rxpermissions2:rxpermissions:$rootProject.rxPermissionsVersion"
+    implementation "pl.charmas.android:android-reactive-location2:$rootProject.rxLocationVersion"
+
+    // Room Persistence Library
+    implementation "android.arch.persistence.room:runtime:$rootProject.roomVersion"
+    annotationProcessor "android.arch.persistence.room:compiler:$rootProject.roomVersion"
+    //testing testImplementation "android.arch.persistence.room:testing:1.0.0"
+
+    // Mosby MVP
+    implementation "com.hannesdorfmann.mosby3:mvp:$rootProject.mosbyVersion"
+
+    // Google Libraries
+    implementation "com.google.guava:guava:$rootProject.guavaVersion"
+
+    // Retrofit
+    implementation "com.squareup.okhttp3:okhttp:$rootProject.okhttpVersion"
+    implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$rootProject.retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
+    implementation("com.squareup.retrofit2:converter-simplexml:$rootProject.simpleXmlVersion") {
+        exclude group: 'stax', module: 'stax-api'
+        exclude group: 'stax', module: 'stax'
+        exclude group: 'xpp3', module: 'xpp3'
+    }
+
+    // Twitter
+    implementation "com.twitter.sdk.android:tweet-ui:$rootProject.twitterVersion"
+
+    // Apache Commons
+    implementation "org.apache.commons:commons-lang3:$rootProject.apacheCommonsVersion"
+
+    implementation('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
+        transitive = true
+    }
+
+    // Testing
+    testImplementation "junit:junit:$rootProject.junitVersion"
+    androidTestImplementation "com.android.support.test:runner:$rootProject.testRunnerVersion"
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$rootProject.espressoTestRunnerVersion") {
+        exclude group: 'com.google.code.findbugs'
+    }
+}
