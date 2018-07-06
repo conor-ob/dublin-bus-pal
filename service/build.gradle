@@ -1,0 +1,15 @@
+apply plugin: 'kotlin'
+apply plugin: 'kotlin-kapt'
+
+dependencies {
+    implementation project(':base')
+    implementation libs.gson
+    kapt libs.dagger_compiler
+    implementation libs.retrofit_rxjava_adapter
+    implementation libs.retrofit_gson_converter
+    implementation("com.squareup.retrofit2:converter-simplexml:$rootProject.simpleXmlVersion") {
+        exclude group: 'stax', module: 'stax-api'
+        exclude group: 'stax', module: 'stax'
+        exclude group: 'xpp3', module: 'xpp3'
+    }
+}

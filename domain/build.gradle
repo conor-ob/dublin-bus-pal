@@ -1,0 +1,10 @@
+apply plugin: 'kotlin'
+apply plugin: 'kotlin-kapt'
+
+dependencies {
+    implementation project(':base')
+    implementation project(':database')
+    implementation project(':service')
+    implementation libs.store
+    kapt libs.dagger_compiler
+}

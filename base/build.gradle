@@ -1,0 +1,13 @@
+apply plugin: 'kotlin'
+
+dependencies {
+    compile libs.kotlin
+    compile libs.rx_kotlin
+    compile libs.rx_java
+    compile libs.dagger
+    compile libs.retrofit
+    compile libs.three_ten
+    compile libs.timber
+    compile libs.slf4j_timber
+    compile libs.slf4j_api
+}
