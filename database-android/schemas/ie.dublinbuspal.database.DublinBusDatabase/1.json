@@ -1,0 +1,51 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "878f2beb30f5724dffd843d91b7265a0",
+    "entities": [
+      {
+        "tableName": "tb_bus_stops",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`stop_id` TEXT NOT NULL, `stop_name` TEXT NOT NULL, `stop_latitude` REAL NOT NULL, `stop_longitude` REAL NOT NULL, PRIMARY KEY(`stop_id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "stop_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "stop_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "latitude",
+            "columnName": "stop_latitude",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "longitude",
+            "columnName": "stop_longitude",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "stop_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"878f2beb30f5724dffd843d91b7265a0\")"
+    ]
+  }
+}

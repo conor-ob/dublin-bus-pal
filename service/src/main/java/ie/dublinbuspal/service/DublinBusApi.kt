@@ -1,7 +1,7 @@
 package ie.dublinbuspal.service
 
-import ie.dublinbuspal.service.busstops.BusStopsRequestXml
-import ie.dublinbuspal.service.busstops.BusStopsResponseXml
+import ie.dublinbuspal.service.model.busstops.BusStopsRequestXml
+import ie.dublinbuspal.service.model.busstops.BusStopsResponseXml
 import io.reactivex.Single
 import retrofit2.http.Body
 import retrofit2.http.Headers

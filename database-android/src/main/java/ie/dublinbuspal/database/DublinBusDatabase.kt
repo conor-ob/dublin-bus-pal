@@ -13,7 +13,7 @@ import ie.dublinbuspal.database.entity.BusStopEntity
             BusStopEntity::class
         ]
 )
-@TypeConverters(Converters::class)
+//@TypeConverters(Converters::class)
 abstract class DublinBusDatabase : RoomDatabase() {
 
     abstract fun busStopDao(): BusStopDao

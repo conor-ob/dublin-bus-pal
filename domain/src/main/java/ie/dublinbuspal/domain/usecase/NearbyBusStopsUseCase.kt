@@ -4,13 +4,14 @@ import ie.dublinbuspal.base.Coordinate
 import ie.dublinbuspal.base.Repository
 import ie.dublinbuspal.domain.model.BusStop
 import ie.dublinbuspal.domain.util.LocationUtils
-import ie.dublinbuspal.service.busstops.BusStopsRequestBodyXml
-import ie.dublinbuspal.service.busstops.BusStopsRequestRootXml
-import ie.dublinbuspal.service.busstops.BusStopsRequestXml
+import ie.dublinbuspal.service.model.busstops.BusStopsRequestBodyXml
+import ie.dublinbuspal.service.model.busstops.BusStopsRequestRootXml
+import ie.dublinbuspal.service.model.busstops.BusStopsRequestXml
 import io.reactivex.Observable
 import java.util.*
+import javax.inject.Inject
 
-class NearbyBusStopsUseCase(private val repository: Repository<List<BusStop>, BusStopsRequestXml>) {
+class NearbyBusStopsUseCase @Inject constructor(private val repository: Repository<List<BusStop>, BusStopsRequestXml>) {
 
     private val key: BusStopsRequestXml by lazy {
         val root = BusStopsRequestRootXml()

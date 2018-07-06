@@ -6,9 +6,9 @@ import ie.dublinbuspal.base.TxRunner
 import ie.dublinbuspal.database.dao.BusStopDao
 import ie.dublinbuspal.database.entity.BusStopEntity
 import ie.dublinbuspal.domain.model.BusStop
-import ie.dublinbuspal.service.busstops.BusStopXml
-import ie.dublinbuspal.service.busstops.BusStopsRequestXml
-import ie.dublinbuspal.service.busstops.BusStopsResponseXml
+import ie.dublinbuspal.service.model.busstops.BusStopXml
+import ie.dublinbuspal.service.model.busstops.BusStopsRequestXml
+import ie.dublinbuspal.service.model.busstops.BusStopsResponseXml
 import io.reactivex.Observable
 
 class BusStopPersister(private val dao: BusStopDao,
@@ -26,7 +26,7 @@ class BusStopPersister(private val dao: BusStopDao,
     override fun write(key: BusStopsRequestXml, xml: BusStopsResponseXml) {
         txRunner.runInTx {
             dao.deleteAll()
-            dao.insertAll(entityMapper.map(xml.busStops))
+            dao.insertAll(entityMapper.map(xml.busStops!!))
         }
     }
 

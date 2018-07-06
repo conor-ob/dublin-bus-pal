@@ -69,6 +69,12 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+    implementation project(':base')
+    implementation project(':database')
+    implementation project(':database-android')
+    implementation project(":domain")
+    implementation project(":service")
+
     // Android Support
     implementation "com.android.support:appcompat-v7:$rootProject.androidSupportVersion"
     implementation "com.android.support:design:$rootProject.androidSupportVersion"
@@ -134,6 +140,9 @@ dependencies {
         exclude group: 'com.google.code.findbugs'
     }
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation libs.mosby
+    implementation libs.store //TODO does this need to be here?
 }
 repositories {
     mavenCentral()

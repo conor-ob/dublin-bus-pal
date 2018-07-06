@@ -15,8 +15,8 @@ import ie.dublinbuspal.domain.model.BusStop
 import ie.dublinbuspal.domain.repository.BusStopPersister
 import ie.dublinbuspal.domain.repository.BusStopRepository
 import ie.dublinbuspal.service.DublinBusApi
-import ie.dublinbuspal.service.busstops.BusStopsRequestXml
-import ie.dublinbuspal.service.busstops.BusStopsResponseXml
+import ie.dublinbuspal.service.model.busstops.BusStopsRequestXml
+import ie.dublinbuspal.service.model.busstops.BusStopsResponseXml
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
