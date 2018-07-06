@@ -30,6 +30,11 @@ class NearbyController(args: Bundle) : BaseViewController<NearbyView, NearbyPres
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         val view = super.onCreateView(inflater, container)
+        setupMap(view)
+        return view
+    }
+
+    private fun setupMap(view: View) {
         mapView = view.findViewById(R.id.google_map)
         mapView.onCreate(null)
         mapView.onStart()
@@ -40,12 +45,12 @@ class NearbyController(args: Bundle) : BaseViewController<NearbyView, NearbyPres
                     val coordinate = Coordinate(googleMap.cameraPosition.target.latitude, googleMap.cameraPosition.target.longitude)
                     presenter.start(coordinate)
                 }
-//                setOnCameraMoveListener {
-//                    if (mapView.mapIsTouched()) {
-//                        gpsButton.setImageResource(R.drawable.ic_gps_fixed_inactive)
-//                        presenter.onRemoveLocationUpdates()
-//                    }
-//                }
+    //                setOnCameraMoveListener {
+    //                    if (mapView.mapIsTouched()) {
+    //                        gpsButton.setImageResource(R.drawable.ic_gps_fixed_inactive)
+    //                        presenter.onRemoveLocationUpdates()
+    //                    }
+    //                }
                 uiSettings.isMyLocationButtonEnabled = false
                 uiSettings.isMapToolbarEnabled = false
                 uiSettings.isCompassEnabled = false
@@ -53,7 +58,6 @@ class NearbyController(args: Bundle) : BaseViewController<NearbyView, NearbyPres
                 uiSettings.isTiltGesturesEnabled = false
             }
         }
-        return view
     }
 
     override fun onAttach(view: View) {
@@ -81,7 +85,7 @@ class NearbyController(args: Bundle) : BaseViewController<NearbyView, NearbyPres
         for (busStop in busStops) {
             if (mapMarkers[busStop] == null) {
                 val marker = googleMap.addMarker(MarkerOptions()
-                        .position(LatLng(busStop.latitude, busStop.longitude))
+                        .position(LatLng(busStop.coordinate.x, busStop.coordinate.y))
                         .anchor(0.3f, 1.0f)
                         .infoWindowAnchor(0.3f, 0.0f)
                         .title(busStop.name)

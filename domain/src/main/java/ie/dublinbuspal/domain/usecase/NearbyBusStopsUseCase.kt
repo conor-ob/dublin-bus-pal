@@ -29,7 +29,7 @@ class NearbyBusStopsUseCase @Inject constructor(private val repository: Reposito
         val filtered = TreeMap<Double, BusStop>()
 
         for (busStop in busStops) {
-            sorted[LocationUtils.haversineDistance(coordinate, Coordinate(busStop.latitude, busStop.longitude))] = busStop
+            sorted[LocationUtils.haversineDistance(coordinate, busStop.coordinate)] = busStop
         }
 
         var i = 0

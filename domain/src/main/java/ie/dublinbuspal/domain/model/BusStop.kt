@@ -1,8 +1,9 @@
 package ie.dublinbuspal.domain.model
 
+import ie.dublinbuspal.base.Coordinate
+
 data class BusStop(
         val id: String,
         val name: String,
-        val latitude: Double,
-        val longitude: Double
+        val coordinate: Coordinate
 )
