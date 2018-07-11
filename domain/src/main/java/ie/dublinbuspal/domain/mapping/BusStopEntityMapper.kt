@@ -2,7 +2,7 @@ package ie.dublinbuspal.domain.mapping
 
 import ie.dublinbuspal.base.Mapper
 import ie.dublinbuspal.database.entity.BusStopEntity
-import ie.dublinbuspal.service.model.busstops.BusStopXml
+import ie.dublinbuspal.service.model.stop.BusStopXml
 
 class BusStopEntityMapper : Mapper<BusStopXml, BusStopEntity> {
 

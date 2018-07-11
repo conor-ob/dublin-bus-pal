@@ -16,6 +16,10 @@ android {
         }
     }
 
+    sourceSets {
+        androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -30,6 +34,7 @@ dependencies {
     kapt libs.room_compiler
     kapt libs.dagger_compiler
     implementation libs.junit
+    androidTestImplementation "android.arch.persistence.room:testing:1.1.1"
     androidTestImplementation libs.test_runner
     androidTestImplementation libs.espresso
 }

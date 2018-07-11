@@ -1,4 +1,4 @@
-package ie.dublinbuspal.service.model.busstops
+package ie.dublinbuspal.service.model.livedata
 
 import org.simpleframework.xml.Element
 import org.simpleframework.xml.Namespace
@@ -11,6 +11,6 @@ import org.simpleframework.xml.Root
         Namespace(prefix = "xsd", reference = "http://www.w3.org/2001/XMLSchema"),
         Namespace(prefix = "soap12", reference = "http://www.w3.org/2003/05/soap-envelope")
 )
-data class BusStopsRequestXml(
-        @field:Element(name = "soap12:Body", required = false) val busStopsRequestBodyXml: BusStopsRequestBodyXml
+data class LiveDataRequestXml(
+        @field:Element(name = "soap12:Body", required = false) val liveDataRequestBodyXml: LiveDataRequestBodyXml
 )

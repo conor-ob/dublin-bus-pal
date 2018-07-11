@@ -3,7 +3,7 @@ package ie.dublinbuspal.android.view.nearby
 import android.util.Log
 import ie.dublinbuspal.android.view.BasePresenter
 import ie.dublinbuspal.base.Coordinate
-import ie.dublinbuspal.domain.usecase.NearbyBusStopsUseCase
+import ie.dublinbuspal.domain.usecase.nearby.NearbyBusStopsUseCase
 import javax.inject.Inject
 
 class NearbyPresenter @Inject constructor(private val useCase: NearbyBusStopsUseCase) : BasePresenter<NearbyView>() {

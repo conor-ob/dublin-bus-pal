@@ -1,4 +1,4 @@
-package ie.dublinbuspal.service.model.busstops
+package ie.dublinbuspal.service.model.stop
 
 import org.simpleframework.xml.ElementList
 import org.simpleframework.xml.Path

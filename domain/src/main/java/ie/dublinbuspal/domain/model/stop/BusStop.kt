@@ -1,4 +1,4 @@
-package ie.dublinbuspal.domain.model
+package ie.dublinbuspal.domain.model.stop
 
 import ie.dublinbuspal.base.Coordinate
 

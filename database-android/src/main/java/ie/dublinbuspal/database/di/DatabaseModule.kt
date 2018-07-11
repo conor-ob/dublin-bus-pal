@@ -7,6 +7,7 @@ import dagger.Provides
 import ie.dublinbuspal.base.TxRunner
 import ie.dublinbuspal.database.DatabaseTxRunner
 import ie.dublinbuspal.database.DublinBusDatabase
+import ie.dublinbuspal.database.migration.Migrations.MIGRATION_1_2
 import ie.dublinbuspal.database.R
 import ie.dublinbuspal.database.dao.BusStopDao
 import javax.inject.Singleton
@@ -18,6 +19,9 @@ class DatabaseModule {
     @Singleton
     fun provideDatabase(context: Context): DublinBusDatabase = Room
             .databaseBuilder(context, DublinBusDatabase::class.java, context.getString(R.string.database_name))
+            .addMigrations(
+                    MIGRATION_1_2
+            )
             .build()
 
     @Provides
