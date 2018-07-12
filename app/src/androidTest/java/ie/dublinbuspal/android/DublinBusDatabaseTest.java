@@ -38,7 +38,7 @@ public class DublinBusDatabaseTest {
 
     @Test
     public void testEmptyDatabase() {
-//        List<BusStop> busStops = busStopsDao.selectAll();
+//        List<Stop> busStops = busStopsDao.selectAll();
 //        assertThat(busStops.size(), is(0));
     }
 

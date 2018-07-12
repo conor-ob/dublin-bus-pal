@@ -13,6 +13,12 @@ class LiveDataPresenter @Inject constructor(private val useCase: LiveDataUseCase
                 .doOnNext { ifViewAttached { view -> view.showLiveData(it) } }
                 .doOnError { Log.e(javaClass.simpleName, it.message, it) }
                 .subscribe()
+
+        useCase.getStopService(stopId)
+                .compose(applySchedulers())
+                .doOnNext { Log.i(javaClass.simpleName, it.toString()) }
+                .doOnError { Log.e(javaClass.simpleName, it.message, it) }
+                .subscribe()
     }
 
 }

@@ -18,14 +18,14 @@ import ie.dublinbuspal.android.util.ImageUtils
 import ie.dublinbuspal.android.view.BaseViewController
 import ie.dublinbuspal.android.view.livedata.LiveDataController
 import ie.dublinbuspal.base.Coordinate
-import ie.dublinbuspal.domain.model.stop.BusStop
+import ie.dublinbuspal.domain.model.stop.Stop
 import java.util.*
 
 class NearbyController(args: Bundle) : BaseViewController<NearbyView, NearbyPresenter>(args), NearbyView {
 
     private lateinit var mapView: NearbyMapView
     private lateinit var googleMap: GoogleMap
-    private val mapMarkers = hashMapOf<BusStop, Marker>()
+    private val mapMarkers = hashMapOf<Stop, Marker>()
 
     override fun getLayoutId() = R.layout.view_nearby
 
@@ -85,6 +85,7 @@ class NearbyController(args: Bundle) : BaseViewController<NearbyView, NearbyPres
     override fun onDestroyView(view: View) {
         mapView.onStop()
         mapView.onDestroy()
+        mapMarkers.clear()
         super.onDestroyView(view)
     }
 
@@ -97,13 +98,13 @@ class NearbyController(args: Bundle) : BaseViewController<NearbyView, NearbyPres
                 .popChangeHandler(FadeChangeHandler()))
     }
 
-    override fun showBusStops(busStops: SortedMap<Double, BusStop>) {
-        addNewMarkers(busStops.values)
-        removeOldMarkers(busStops.values)
+    override fun showBusStops(stops: SortedMap<Double, Stop>) {
+        addNewMarkers(stops.values)
+        removeOldMarkers(stops.values)
     }
 
-    private fun addNewMarkers(busStops: Collection<BusStop>) {
-        for (busStop in busStops) {
+    private fun addNewMarkers(stops: Collection<Stop>) {
+        for (busStop in stops) {
             if (mapMarkers[busStop] == null) {
                 val marker = googleMap.addMarker(MarkerOptions()
                         .position(LatLng(busStop.coordinate.x, busStop.coordinate.y))
@@ -118,11 +119,11 @@ class NearbyController(args: Bundle) : BaseViewController<NearbyView, NearbyPres
         }
     }
 
-    private fun removeOldMarkers(busStops: Collection<BusStop>) {
+    private fun removeOldMarkers(stops: Collection<Stop>) {
         val iterator = mapMarkers.entries.iterator()
         while (iterator.hasNext()) {
             val entry = iterator.next()
-            if (!busStops.contains(entry.key)) {
+            if (!stops.contains(entry.key)) {
                 AnimationUtils.fadeOutMarker(entry.value)
                 iterator.remove()
             }

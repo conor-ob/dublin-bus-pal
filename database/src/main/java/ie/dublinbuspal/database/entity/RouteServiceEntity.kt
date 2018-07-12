@@ -7,7 +7,7 @@ import android.support.annotation.NonNull
 
 @Entity(tableName = "route_services")
 data class RouteServiceEntity(
-        @field:PrimaryKey @field:ColumnInfo(name = "id") val id: String,
+        @field:PrimaryKey @field:ColumnInfo(name = "id") var id: String = "", //TODO tidy this up
         @field:ColumnInfo(name = "name") val name: String,
         @field:ColumnInfo(name = "origin") val origin: String,
         @field:ColumnInfo(name = "destination") val destination: String,
