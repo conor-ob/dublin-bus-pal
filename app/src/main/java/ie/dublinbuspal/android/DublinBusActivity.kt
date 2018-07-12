@@ -21,7 +21,10 @@ class DublinBusActivity : AppCompatActivity() {
     private fun setupRouter(savedInstanceState: Bundle?) {
         router = Conductor.attachRouter(this, container, savedInstanceState)
         if (!router.hasRootController()) {
-            router.setRoot(RouterTransaction.with(NearbyController(Bundle.EMPTY)))
+            router.setRoot(RouterTransaction
+                    .with(NearbyController
+                            .Builder(53.347335, -6.259137, 15.9F) //TODO get last known location
+                            .build()))
         }
     }
 

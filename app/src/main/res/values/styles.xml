@@ -17,7 +17,12 @@
     </style>
 
     <style name="SplashTheme" parent="AppTheme.NoActionBar">
-        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="android:windowBackground">@android:color/white</item>
+    </style>
+
+    <style name="TransparentAppBarTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
     <style name="SettingsTheme" parent="AppTheme">

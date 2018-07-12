@@ -1,4 +1,4 @@
-package ie.dublinbuspal.domain.mapping
+package ie.dublinbuspal.domain.mapping.stop
 
 import ie.dublinbuspal.base.Coordinate
 import ie.dublinbuspal.base.Mapper

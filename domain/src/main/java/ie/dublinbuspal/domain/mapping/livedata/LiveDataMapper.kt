@@ -14,7 +14,7 @@ import java.util.*
 class LiveDataMapper : Mapper<LiveDataXml, LiveData> {
 
     override fun map(from: LiveDataXml): LiveData {
-        return LiveData(from.routeId!!, from.destination!!, mapDueTime(from.timestamp!!, from.expectedTime!!))
+        return LiveData(from.routeId!!, from.destination!!, mapDueTime(from.timestamp!!, from.expectedTimestamp!!))
     }
 
     private fun mapDueTime(timestamp: String, expectedTime: String): DueTime {

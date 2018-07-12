@@ -11,8 +11,8 @@ import dagger.Provides
 import ie.dublinbuspal.base.Repository
 import ie.dublinbuspal.base.TxRunner
 import ie.dublinbuspal.database.dao.BusStopDao
-import ie.dublinbuspal.domain.mapping.BusStopDomainMapper
-import ie.dublinbuspal.domain.mapping.BusStopEntityMapper
+import ie.dublinbuspal.domain.mapping.stop.BusStopDomainMapper
+import ie.dublinbuspal.domain.mapping.stop.BusStopEntityMapper
 import ie.dublinbuspal.domain.mapping.livedata.LiveDataMapper
 import ie.dublinbuspal.domain.model.livedata.LiveData
 import ie.dublinbuspal.domain.model.stop.BusStop

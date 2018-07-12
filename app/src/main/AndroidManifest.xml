@@ -2,33 +2,34 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ie.dublinbuspal.android">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:name=".DublinBusApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
+        android:installLocation="preferExternal"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:installLocation="preferExternal"
-        android:theme="@style/AppTheme.NoActionBar">
+        android:theme="@style/TransparentAppBarTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="${googleMapsApiKey}"/>
+            android:value="${googleMapsApiKey}" />
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="${fabricApiKey}"/>
+            android:value="${fabricApiKey}" />
         <meta-data
             android:name="com.twitter.sdk.android.CONSUMER_KEY"
-            android:value="${twitterConsumerKey}"/>
+            android:value="${twitterConsumerKey}" />
         <meta-data
             android:name="com.twitter.sdk.android.CONSUMER_SECRET"
-            android:value="${twitterConsumerSecret}"/>
+            android:value="${twitterConsumerSecret}" />
+
         <activity
             android:name=".DublinBusActivity"
             android:launchMode="singleTask">

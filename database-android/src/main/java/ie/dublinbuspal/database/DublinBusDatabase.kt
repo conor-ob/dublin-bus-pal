@@ -8,6 +8,7 @@ import ie.dublinbuspal.database.entity.*
 
 @Database(
         version = 2,
+        exportSchema = true,
         entities = [
             BusStopEntity::class,
             RouteEntity::class,

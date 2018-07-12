@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
@@ -44,6 +46,10 @@ class NearbyController(args: Bundle) : BaseViewController<NearbyView, NearbyPres
         mapView.getMapAsync {
             googleMap = it
             googleMap.apply {
+                animateCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.Builder()
+                        .target(LatLng(args.getDouble(LAT), args.getDouble(LONG)))
+                        .zoom(args.getFloat(ZOOM))
+                        .build()))
                 setOnCameraIdleListener {
                     val coordinate = Coordinate(googleMap.cameraPosition.target.latitude, googleMap.cameraPosition.target.longitude)
                     presenter.start(coordinate)
@@ -121,6 +127,28 @@ class NearbyController(args: Bundle) : BaseViewController<NearbyView, NearbyPres
                 iterator.remove()
             }
         }
+    }
+
+    companion object {
+
+        private const val LAT = "latitude"
+        private const val LONG = "longitude"
+        private const val ZOOM = "zoom"
+
+    }
+
+    class Builder(private val latitude: Double,
+                  private val longitude: Double,
+                  private val zoom: Float) {
+
+        fun build(): NearbyController {
+            val args = Bundle()
+            args.putDouble(LAT, latitude)
+            args.putDouble(LONG, longitude)
+            args.putFloat(ZOOM, zoom)
+            return NearbyController(args)
+        }
+
     }
 
 }
