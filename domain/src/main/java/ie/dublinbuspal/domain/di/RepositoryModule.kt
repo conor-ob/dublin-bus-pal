@@ -9,10 +9,10 @@ import dagger.Module
 import dagger.Provides
 import ie.dublinbuspal.base.Repository
 import ie.dublinbuspal.base.TxRunner
-import ie.dublinbuspal.database.dao.RouteDao
-import ie.dublinbuspal.database.dao.RouteServiceDao
-import ie.dublinbuspal.database.dao.StopDao
-import ie.dublinbuspal.database.dao.StopServiceDao
+import ie.dublinbuspal.database.dao.*
+import ie.dublinbuspal.database.entity.FavouriteStopEntity
+import ie.dublinbuspal.domain.mapping.favourite.FavouriteStopDomainMapper
+import ie.dublinbuspal.domain.mapping.favourite.FavouriteStopEntityMapper
 import ie.dublinbuspal.domain.mapping.livedata.LiveDataMapper
 import ie.dublinbuspal.domain.mapping.route.RouteDomainMapper
 import ie.dublinbuspal.domain.mapping.route.RouteEntityMapper
@@ -22,11 +22,14 @@ import ie.dublinbuspal.domain.mapping.stop.StopDomainMapper
 import ie.dublinbuspal.domain.mapping.stop.StopEntityMapper
 import ie.dublinbuspal.domain.mapping.stopservice.StopServiceDomainMapper
 import ie.dublinbuspal.domain.mapping.stopservice.StopServiceEntityMapper
+import ie.dublinbuspal.domain.model.favourite.FavouriteStop
 import ie.dublinbuspal.domain.model.livedata.LiveData
 import ie.dublinbuspal.domain.model.route.Route
 import ie.dublinbuspal.domain.model.routeservice.RouteService
 import ie.dublinbuspal.domain.model.stop.Stop
 import ie.dublinbuspal.domain.model.stopservice.StopService
+import ie.dublinbuspal.domain.repository.favourite.FavouritePersister
+import ie.dublinbuspal.domain.repository.favourite.FavouriteRepository
 import ie.dublinbuspal.domain.repository.livedata.LiveDataRepository
 import ie.dublinbuspal.domain.repository.route.RoutePersister
 import ie.dublinbuspal.domain.repository.route.RouteRepository
@@ -47,6 +50,7 @@ import ie.dublinbuspal.service.model.stop.StopsRequestXml
 import ie.dublinbuspal.service.model.stop.StopsResponseXml
 import ie.dublinbuspal.service.model.stopservice.StopServiceRequestXml
 import ie.dublinbuspal.service.model.stopservice.StopServiceResponseXml
+import io.reactivex.Single
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -153,6 +157,26 @@ class RepositoryModule {
                 .open()
 
         return LiveDataRepository(store)
+    }
+
+    @Provides
+    @Singleton
+    fun favouritesRepository(dao: FavouriteStopDao): Repository<List<FavouriteStop>, Any> {
+
+        val fetcher = Fetcher<List<FavouriteStopEntity>, Any> { dao.selectAll().toSingle() }
+
+        val memoryPolicy = MemoryPolicy.builder()
+                .setExpireAfterWrite(30)
+                .setExpireAfterTimeUnit(TimeUnit.SECONDS)
+                .build()
+
+        val domainMapper = FavouriteStopDomainMapper()
+        val entityMapper = FavouriteStopEntityMapper()
+        val persister = FavouritePersister(dao, domainMapper)
+
+        val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
+
+        return FavouriteRepository(store, dao, entityMapper)
     }
 
 }

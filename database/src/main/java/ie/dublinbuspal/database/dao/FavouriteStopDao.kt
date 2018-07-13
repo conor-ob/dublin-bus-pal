@@ -1,9 +1,6 @@
 package ie.dublinbuspal.database.dao
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.OnConflictStrategy
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 import ie.dublinbuspal.database.entity.FavouriteStopEntity
 import io.reactivex.Maybe
 
@@ -12,6 +9,15 @@ interface FavouriteStopDao {
 
     @Query("SELECT * FROM favourites")
     fun selectAll(): Maybe<List<FavouriteStopEntity>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(entity: FavouriteStopEntity)
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    fun update(entity: FavouriteStopEntity)
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    fun updateAll(entities: List<FavouriteStopEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(entities: List<FavouriteStopEntity>)

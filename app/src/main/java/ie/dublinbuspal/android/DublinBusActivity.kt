@@ -18,7 +18,6 @@ class DublinBusActivity : AppCompatActivity() {
         setupRouter(savedInstanceState)
     }
 
-
     private fun setupRouter(savedInstanceState: Bundle?) {
         router = Conductor.attachRouter(this, container, savedInstanceState)
         if (!router.hasRootController()) {
@@ -28,6 +27,13 @@ class DublinBusActivity : AppCompatActivity() {
                             .build()))
         }
     }
+
+//    private fun setupRouter(savedInstanceState: Bundle?) {
+//        router = Conductor.attachRouter(this, container, savedInstanceState)
+//        if (!router.hasRootController()) {
+//            router.setRoot(RouterTransaction.with(FavouritesController(Bundle.EMPTY)))
+//        }
+//    }
 
     override fun onBackPressed() {
         if (!router.handleBack()) {
