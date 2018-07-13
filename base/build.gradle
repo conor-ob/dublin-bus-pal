@@ -1,18 +1,5 @@
 apply plugin: 'kotlin'
 
-task jarTest (type: Jar) {
-    from sourceSets.test.output
-    classifier = 'test'
-}
-
-configurations {
-    testOutput
-}
-
-artifacts {
-    testOutput jarTest
-}
-
 dependencies {
     compile libs.kotlin
     compile libs.rx_kotlin
@@ -24,5 +11,18 @@ dependencies {
     compile libs.slf4j_timber
     compile libs.slf4j_api
     testImplementation libs.junit
-    testOutput sourceSets.test.output
+}
+
+// https://softnoise.wordpress.com/2014/09/07/gradle-sub-project-test-dependencies-in-multi-project-builds/
+configurations {
+    testOutput.extendsFrom (testCompile)
+}
+
+task jarTest (type: Jar, dependsOn: testClasses) {
+    from sourceSets.test.output
+    classifier = 'test'
+}
+
+artifacts {
+    testOutput jarTest
 }
