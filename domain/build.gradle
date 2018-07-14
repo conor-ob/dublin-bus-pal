@@ -15,3 +15,8 @@ dependencies {
     testImplementation project(path: ':database', configuration: 'testOutput')
     testImplementation project(path: ':service', configuration: 'testOutput')
 }
+
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+    test.java.srcDirs += 'src/test/kotlin'
+}

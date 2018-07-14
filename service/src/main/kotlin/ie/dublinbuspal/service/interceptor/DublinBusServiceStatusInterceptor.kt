@@ -4,9 +4,6 @@ import ie.dublinbuspal.service.DublinBusApi
 import ie.dublinbuspal.service.model.status.ServiceStatusRequestBodyXml
 import ie.dublinbuspal.service.model.status.ServiceStatusRequestRootXml
 import ie.dublinbuspal.service.model.status.ServiceStatusRequestXml
-import ie.dublinbuspal.service.model.stop.StopsRequestBodyXml
-import ie.dublinbuspal.service.model.stop.StopsRequestRootXml
-import ie.dublinbuspal.service.model.stop.StopsRequestXml
 import okhttp3.Interceptor
 import okhttp3.Response
 

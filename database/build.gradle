@@ -5,6 +5,11 @@ dependencies {
     implementation libs.room_common
 }
 
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+    test.java.srcDirs += 'src/test/kotlin'
+}
+
 configurations {
     testOutput.extendsFrom (testCompile)
 }

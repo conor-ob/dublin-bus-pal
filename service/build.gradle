@@ -16,6 +16,11 @@ dependencies {
     testImplementation project(path: ':base', configuration: 'testOutput')
 }
 
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+    test.java.srcDirs += 'src/test/kotlin'
+}
+
 configurations {
     testOutput.extendsFrom (testCompile)
 }
