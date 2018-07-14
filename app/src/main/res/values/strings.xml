@@ -120,4 +120,8 @@
     <string name="preference_key_nearby_map_latitude">preference_nearby_map_latitude</string>
     <string name="preference_key_nearby_map_longitude">preference_nearby_map_longitude</string>
     <string name="preference_key_nearby_map_zoom">preference_nearby_map_zoom</string>
+
+
+    <string name="dublin_bus_api_endpoint">http://rtpi.dublinbus.ie/</string>
+    <string name="dublin_bus_database_name">dublinbus.db</string>
 </resources>

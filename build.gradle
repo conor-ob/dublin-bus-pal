@@ -14,13 +14,13 @@ buildscript {
                 'retrofit'         : '2.4.0',  // https://mvnrepository.com/artifact/com.squareup.retrofit2/retrofit
                 'room'             : '1.1.1',  // https://mvnrepository.com/artifact/android.arch.persistence.room/runtime
                 'rx_android'       : '2.0.2',  // https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxandroid
-                'rx_java'          : '2.1.14', // https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxjava
+                'rx_java'          : '2.1.16', // https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxjava
                 'rx_kotlin'        : '2.2.0',  // https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxkotlin
                 'support_library'  : '27.1.1', // https://mvnrepository.com/artifact/com.android.support/appcompat-v7
                 'store'            : '3.1.0',  // https://mvnrepository.com/artifact/com.nytimes.android/store3
                 'test_runner'      : '1.0.2',  // https://mvnrepository.com/artifact/com.android.support.test/runner
                 'three_ten'        : '1.1.0',  // https://mvnrepository.com/artifact/com.jakewharton.threetenabp/threetenabp
-                'timber'           : '4.7.0',  // https://mvnrepository.com/artifact/com.jakewharton.timber/timber
+                'timber'           : '4.7.1',  // https://mvnrepository.com/artifact/com.jakewharton.timber/timber
                 'slf4j_api'        : '1.7.25', // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
                 'slf4j_timber'     : '1.0.1'   // https://mvnrepository.com/artifact/at.favre.lib/slf4j-timber
         ]

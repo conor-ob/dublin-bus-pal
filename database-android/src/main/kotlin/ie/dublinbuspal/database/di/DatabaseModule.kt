@@ -13,12 +13,12 @@ import ie.dublinbuspal.database.migration.Migrations.MIGRATION_1_2
 import javax.inject.Singleton
 
 @Module
-class DatabaseModule {
+class DatabaseModule(private val databaseName: String) {
 
     @Provides
     @Singleton
     fun database(context: Context): DublinBusDatabase = Room
-            .databaseBuilder(context, DublinBusDatabase::class.java, context.getString(R.string.database_name))
+            .databaseBuilder(context, DublinBusDatabase::class.java, databaseName)
             .addMigrations(
                     MIGRATION_1_2
             )

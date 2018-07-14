@@ -3,6 +3,8 @@ package ie.dublinbuspal.service.di
 import dagger.Module
 import dagger.Provides
 import ie.dublinbuspal.service.DublinBusApi
+import ie.dublinbuspal.service.interceptor.NetworkLoggingInterceptor
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.CallAdapter
 import retrofit2.Converter
@@ -13,14 +15,14 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
-class NetworkModule {
+class NetworkModule(private val apiEndpoint: String) {
 
     @Provides
     @Singleton
-    fun provideHttpClient(): OkHttpClient {
+    fun okHttpClient(loggingInterceptor: Interceptor): OkHttpClient {
         return OkHttpClient.Builder()
                 //.addInterceptor(downloadInterceptor)
-                //.addNetworkInterceptor(loggingInterceptor)
+                .addNetworkInterceptor(loggingInterceptor)
                 .retryOnConnectionFailure(true)
                 .connectTimeout(60, TimeUnit.SECONDS)
                 .writeTimeout(60, TimeUnit.SECONDS)
@@ -30,15 +32,15 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideDublinBusApi(retrofit: Retrofit): DublinBusApi
-            = retrofit.create(DublinBusApi::class.java)
+    fun dublinBusApi(retrofit: Retrofit): DublinBusApi = retrofit.create(DublinBusApi::class.java)
 
     @Provides
     @Singleton
-    fun provideRetrofit(client: OkHttpClient, converterFactory: Converter.Factory,
-                        callAdapterFactory: CallAdapter.Factory): Retrofit {
+    fun retrofit(client: OkHttpClient,
+                 converterFactory: Converter.Factory,
+                 callAdapterFactory: CallAdapter.Factory): Retrofit {
         return Retrofit.Builder()
-                .baseUrl("http://rtpi.dublinbus.ie/")
+                .baseUrl(apiEndpoint)
                 .client(client)
                 .addConverterFactory(converterFactory)
                 .addCallAdapterFactory(callAdapterFactory)
@@ -47,10 +49,14 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideConverterFactoryXml(): Converter.Factory = SimpleXmlConverterFactory.create()
+    fun networkLoggingInterceptor(): Interceptor = NetworkLoggingInterceptor()
 
     @Provides
     @Singleton
-    fun provideCallAdapterFactory(): CallAdapter.Factory = RxJava2CallAdapterFactory.create()
+    fun converterFactoryXml(): Converter.Factory = SimpleXmlConverterFactory.create()
+
+    @Provides
+    @Singleton
+    fun callAdapterFactory(): CallAdapter.Factory = RxJava2CallAdapterFactory.create()
 
 }
