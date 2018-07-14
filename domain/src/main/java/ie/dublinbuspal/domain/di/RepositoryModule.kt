@@ -50,7 +50,6 @@ import ie.dublinbuspal.service.model.stop.StopsRequestXml
 import ie.dublinbuspal.service.model.stop.StopsResponseXml
 import ie.dublinbuspal.service.model.stopservice.StopServiceRequestXml
 import ie.dublinbuspal.service.model.stopservice.StopServiceResponseXml
-import io.reactivex.Single
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -151,7 +150,7 @@ class RepositoryModule {
         val mapper = LiveDataMapper()
         val store = StoreBuilder.parsedWithKey<LiveDataRequestXml, LiveDataResponseXml, List<LiveData>>()
                 .fetcher { key -> api.getLiveData(key) }
-                .parser { json -> mapper.map(json.liveData!!) }
+                .parser { json -> mapper.map(json.liveData) }
                 .memoryPolicy(memoryPolicy)
                 .refreshOnStale()
                 .open()
@@ -166,8 +165,8 @@ class RepositoryModule {
         val fetcher = Fetcher<List<FavouriteStopEntity>, Any> { dao.selectAll().toSingle() }
 
         val memoryPolicy = MemoryPolicy.builder()
-                .setExpireAfterWrite(30)
-                .setExpireAfterTimeUnit(TimeUnit.SECONDS)
+                .setExpireAfterWrite(24)
+                .setExpireAfterTimeUnit(TimeUnit.HOURS)
                 .build()
 
         val domainMapper = FavouriteStopDomainMapper()

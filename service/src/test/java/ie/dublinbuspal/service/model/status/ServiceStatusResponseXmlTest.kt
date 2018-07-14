@@ -1,6 +1,8 @@
 package ie.dublinbuspal.service.model.status
 
 import ie.dublinbuspal.base.AbstractDataClassTest
+import ie.dublinbuspal.service.util.XmlUtils
+import org.junit.Test
 
 class ServiceStatusResponseXmlTest : AbstractDataClassTest<ServiceStatusResponseXml>() {
 
@@ -10,6 +12,11 @@ class ServiceStatusResponseXmlTest : AbstractDataClassTest<ServiceStatusResponse
 
     override fun newInstance2(): ServiceStatusResponseXml {
         return ServiceStatusResponseXml("ERROR")
+    }
+
+    @Test
+    fun testDeserializeXml() {
+        XmlUtils.resolveXml("service_status_response.xml", ServiceStatusResponseXml::class.java)
     }
 
 }

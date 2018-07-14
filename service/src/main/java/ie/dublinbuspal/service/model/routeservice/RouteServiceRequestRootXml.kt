@@ -7,5 +7,5 @@ import org.simpleframework.xml.Root
 @Root(name = "GetStopDataByRoute", strict = false)
 @Namespace(reference = "http://dublinbus.ie/")
 data class RouteServiceRequestRootXml(
-        @field:Element(name = "route", required = false) val id: String
+        @field:Element(name = "route", required = false) val routeId: String
 )

@@ -13,5 +13,18 @@ dependencies {
         exclude group: 'xpp3', module: 'xpp3'
     }
     testImplementation libs.junit
-    testCompile project(path: ':base', configuration: 'testOutput')
+    testImplementation project(path: ':base', configuration: 'testOutput')
+}
+
+configurations {
+    testOutput.extendsFrom (testCompile)
+}
+
+task jarTest (type: Jar, dependsOn: testClasses) {
+    from sourceSets.test.output
+    classifier = 'test'
+}
+
+artifacts {
+    testOutput jarTest
 }

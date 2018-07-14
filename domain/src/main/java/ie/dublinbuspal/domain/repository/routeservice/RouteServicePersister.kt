@@ -14,14 +14,14 @@ class RouteServicePersister(private val dao: RouteServiceDao,
                             private val domainMapper: Mapper<RouteServiceEntity, RouteService>) : RoomPersister<RouteServiceResponseXml, RouteService, RouteServiceRequestXml> {
 
     override fun read(key: RouteServiceRequestXml): Observable<RouteService> {
-        return dao.select(key.routeServiceRequestBodyXml.routeServiceRequestRootXml.id)
+        return dao.select(key.routeServiceRequestBodyXml.routeServiceRequestRootXml.routeId)
                 .map { domainMapper.map(it) }
                 .toObservable()
     }
 
     override fun write(key: RouteServiceRequestXml, xml: RouteServiceResponseXml) {
         val routeService = entityMapper.map(xml)
-        routeService.id = key.routeServiceRequestBodyXml.routeServiceRequestRootXml.id
+        routeService.id = key.routeServiceRequestBodyXml.routeServiceRequestRootXml.routeId
         dao.insert(routeService)
     }
 

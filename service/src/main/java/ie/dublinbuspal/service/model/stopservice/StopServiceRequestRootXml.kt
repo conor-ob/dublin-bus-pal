@@ -7,5 +7,5 @@ import org.simpleframework.xml.Root
 @Root(name = "GetRoutesServicedByStopNumber", strict = false)
 @Namespace(reference = "http://dublinbus.ie/")
 data class StopServiceRequestRootXml(
-        @field:Element(name = "stopId", required = false) val id: String
+        @field:Element(name = "stopId", required = false) val stopId: String
 )
