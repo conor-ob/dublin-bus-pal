@@ -19,11 +19,11 @@ import ie.dublinbuspal.android.view.BaseViewController
 import ie.dublinbuspal.android.view.livedata.LiveDataController
 import ie.dublinbuspal.base.Coordinate
 import ie.dublinbuspal.domain.model.stop.Stop
+import kotlinx.android.synthetic.main.view_nearby.view.*
 import java.util.*
 
 class NearbyController(args: Bundle) : BaseViewController<NearbyView, NearbyPresenter>(args), NearbyView {
 
-    private lateinit var mapView: NearbyMapView
     private lateinit var googleMap: GoogleMap
     private val mapMarkers = hashMapOf<Stop, Marker>()
 
@@ -40,10 +40,9 @@ class NearbyController(args: Bundle) : BaseViewController<NearbyView, NearbyPres
     }
 
     private fun setupMap(view: View) {
-        mapView = view.findViewById(R.id.google_map)
-        mapView.onCreate(null)
-        mapView.onStart()
-        mapView.getMapAsync {
+        view.google_map.onCreate(null)
+        view.google_map.onStart()
+        view.google_map.getMapAsync {
             googleMap = it
             googleMap.apply {
                 animateCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.Builder()
@@ -57,12 +56,12 @@ class NearbyController(args: Bundle) : BaseViewController<NearbyView, NearbyPres
                 setOnInfoWindowClickListener {
                     onBusStopClicked(it.tag as String)
                 }
-    //                setOnCameraMoveListener {
-    //                    if (mapView.mapIsTouched()) {
-    //                        gpsButton.setImageResource(R.drawable.ic_gps_fixed_inactive)
-    //                        presenter.onRemoveLocationUpdates()
-    //                    }
-    //                }
+                //                setOnCameraMoveListener {
+                //                    if (mapView.mapIsTouched()) {
+                //                        gpsButton.setImageResource(R.drawable.ic_gps_fixed_inactive)
+                //                        presenter.onRemoveLocationUpdates()
+                //                    }
+                //                }
                 uiSettings.isMyLocationButtonEnabled = false
                 uiSettings.isMapToolbarEnabled = false
                 uiSettings.isCompassEnabled = false
@@ -74,17 +73,17 @@ class NearbyController(args: Bundle) : BaseViewController<NearbyView, NearbyPres
 
     override fun onAttach(view: View) {
         super.onAttach(view)
-        mapView.onResume()
+        view.google_map.onResume()
     }
 
     override fun onDetach(view: View) {
-        mapView.onPause()
+        view.google_map.onPause()
         super.onDetach(view)
     }
 
     override fun onDestroyView(view: View) {
-        mapView.onStop()
-        mapView.onDestroy()
+        view.google_map.onStop()
+        view.google_map.onDestroy()
         mapMarkers.clear()
         super.onDestroyView(view)
     }
