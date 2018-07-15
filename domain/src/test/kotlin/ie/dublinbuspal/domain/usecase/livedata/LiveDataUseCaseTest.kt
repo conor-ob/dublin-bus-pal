@@ -7,7 +7,7 @@ import ie.dublinbuspal.domain.mapping.livedata.LiveDataMapper
 import ie.dublinbuspal.domain.model.livedata.LiveData
 import ie.dublinbuspal.domain.model.stopservice.StopService
 import ie.dublinbuspal.domain.repository.livedata.LiveDataRepository
-import ie.dublinbuspal.service.MockDublinBusApi
+import ie.dublinbuspal.service.MockDublinBusSoapApi
 import ie.dublinbuspal.service.model.livedata.LiveDataRequestXml
 import ie.dublinbuspal.service.model.livedata.LiveDataResponseXml
 import ie.dublinbuspal.service.model.stopservice.StopServiceRequestXml
@@ -20,7 +20,7 @@ class LiveDataUseCaseTest {
 
     private val useCase by lazy {
 
-        val api = MockDublinBusApi()
+        val api = MockDublinBusSoapApi()
 
         val memoryPolicy = MemoryPolicy.builder()
                 .setExpireAfterWrite(30)

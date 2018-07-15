@@ -17,7 +17,7 @@ import retrofit2.http.Body
 import retrofit2.http.Headers
 import retrofit2.http.POST
 
-interface DublinBusApi {
+interface DublinBusSoapApi {
 
     @Headers("Content-Type: text/xml", "Accept-Charset: utf-8")
     @POST("/DublinBusRTPIService.asmx")

@@ -15,7 +15,7 @@ import ie.dublinbuspal.service.model.stopservice.StopServiceResponseXml
 import ie.dublinbuspal.service.util.XmlUtils
 import io.reactivex.Single
 
-class MockDublinBusApi : DublinBusApi {
+class MockDublinBusSoapApi : DublinBusSoapApi {
 
     override fun getBusStops(body: StopsRequestXml): Single<StopsResponseXml> {
         return singleResponse("stops_response.xml", StopsResponseXml::class.java)

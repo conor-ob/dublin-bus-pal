@@ -10,7 +10,7 @@ import ie.dublinbuspal.database.dao.MockStopDao
 import ie.dublinbuspal.domain.mapping.stop.StopDomainMapper
 import ie.dublinbuspal.domain.mapping.stop.StopEntityMapper
 import ie.dublinbuspal.domain.model.stop.Stop
-import ie.dublinbuspal.service.MockDublinBusApi
+import ie.dublinbuspal.service.MockDublinBusSoapApi
 import ie.dublinbuspal.service.model.stop.StopsRequestXml
 import ie.dublinbuspal.service.model.stop.StopsResponseXml
 import io.reactivex.Observable
@@ -29,7 +29,7 @@ class MockStopRepository : Repository<List<Stop>, StopsRequestXml> {
     }
 
     private fun buildStore(): StoreRoom<List<Stop>, StopsRequestXml> {
-        val api = MockDublinBusApi()
+        val api = MockDublinBusSoapApi()
 
         val fetcher = Fetcher<StopsResponseXml, StopsRequestXml> { key -> api.getBusStops(key) }
 

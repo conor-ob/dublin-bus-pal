@@ -122,6 +122,7 @@
     <string name="preference_key_nearby_map_zoom">preference_nearby_map_zoom</string>
 
 
-    <string name="dublin_bus_api_endpoint">http://rtpi.dublinbus.ie/</string>
+    <string name="dublin_bus_soap_api_endpoint">http://rtpi.dublinbus.ie/</string>
+    <string name="dublin_bus_rss_api_endpoint">http://www.dublinbus.ie/</string>
     <string name="dublin_bus_database_name">dublinbus.db</string>
 </resources>

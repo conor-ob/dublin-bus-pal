@@ -18,6 +18,7 @@ import ie.dublinbuspal.domain.mapping.route.RouteDomainMapper
 import ie.dublinbuspal.domain.mapping.route.RouteEntityMapper
 import ie.dublinbuspal.domain.mapping.routeservice.RouteServiceDomainMapper
 import ie.dublinbuspal.domain.mapping.routeservice.RouteServiceEntityMapper
+import ie.dublinbuspal.domain.mapping.rss.RssMapper
 import ie.dublinbuspal.domain.mapping.stop.StopDomainMapper
 import ie.dublinbuspal.domain.mapping.stop.StopEntityMapper
 import ie.dublinbuspal.domain.mapping.stopservice.StopServiceDomainMapper
@@ -26,6 +27,7 @@ import ie.dublinbuspal.domain.model.favourite.FavouriteStop
 import ie.dublinbuspal.domain.model.livedata.LiveData
 import ie.dublinbuspal.domain.model.route.Route
 import ie.dublinbuspal.domain.model.routeservice.RouteService
+import ie.dublinbuspal.domain.model.rss.NewsItem
 import ie.dublinbuspal.domain.model.stop.Stop
 import ie.dublinbuspal.domain.model.stopservice.StopService
 import ie.dublinbuspal.domain.repository.favourite.FavouritePersister
@@ -35,17 +37,21 @@ import ie.dublinbuspal.domain.repository.route.RoutePersister
 import ie.dublinbuspal.domain.repository.route.RouteRepository
 import ie.dublinbuspal.domain.repository.routeservice.RouteServicePersister
 import ie.dublinbuspal.domain.repository.routeservice.RouteServiceRepository
+import ie.dublinbuspal.domain.repository.rss.RssRepository
 import ie.dublinbuspal.domain.repository.stop.StopPersister
 import ie.dublinbuspal.domain.repository.stop.StopRepository
 import ie.dublinbuspal.domain.repository.stopservice.StopServicePersister
 import ie.dublinbuspal.domain.repository.stopservice.StopServiceRepository
-import ie.dublinbuspal.service.DublinBusApi
+import ie.dublinbuspal.service.DublinBusRssApi
+import ie.dublinbuspal.service.DublinBusSoapApi
 import ie.dublinbuspal.service.model.livedata.LiveDataRequestXml
 import ie.dublinbuspal.service.model.livedata.LiveDataResponseXml
 import ie.dublinbuspal.service.model.route.RoutesRequestXml
 import ie.dublinbuspal.service.model.route.RoutesResponseXml
 import ie.dublinbuspal.service.model.routeservice.RouteServiceRequestXml
 import ie.dublinbuspal.service.model.routeservice.RouteServiceResponseXml
+import ie.dublinbuspal.service.model.rss.NewsItemXml
+import ie.dublinbuspal.service.model.rss.RssResponseXml
 import ie.dublinbuspal.service.model.stop.StopsRequestXml
 import ie.dublinbuspal.service.model.stop.StopsResponseXml
 import ie.dublinbuspal.service.model.stopservice.StopServiceRequestXml
@@ -58,7 +64,7 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun stopRepository(api: DublinBusApi,
+    fun stopRepository(api: DublinBusSoapApi,
                        dao: StopDao,
                        txRunner: TxRunner): Repository<List<Stop>, StopsRequestXml> {
 
@@ -79,7 +85,7 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun routeRepository(api: DublinBusApi,
+    fun routeRepository(api: DublinBusSoapApi,
                         dao: RouteDao,
                         txRunner: TxRunner): Repository<List<Route>, RoutesRequestXml> {
 
@@ -100,7 +106,7 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun stopServiceRepository(api: DublinBusApi,
+    fun stopServiceRepository(api: DublinBusSoapApi,
                               dao: StopServiceDao): Repository<StopService, StopServiceRequestXml> {
 
         val fetcher = Fetcher<StopServiceResponseXml, StopServiceRequestXml> { key -> api.getStopService(key) }
@@ -120,7 +126,7 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun routeServiceRepository(api: DublinBusApi,
+    fun routeServiceRepository(api: DublinBusSoapApi,
                                dao: RouteServiceDao): Repository<RouteService, RouteServiceRequestXml> {
 
         val fetcher = Fetcher<RouteServiceResponseXml, RouteServiceRequestXml> { key -> api.getRouteService(key) }
@@ -140,7 +146,7 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun liveDataRepository(api: DublinBusApi): Repository<List<LiveData>, LiveDataRequestXml> {
+    fun liveDataRepository(api: DublinBusSoapApi): Repository<List<LiveData>, LiveDataRequestXml> {
 
         val memoryPolicy = MemoryPolicy.builder()
                 .setExpireAfterWrite(30)
@@ -150,7 +156,7 @@ class RepositoryModule {
         val mapper = LiveDataMapper()
         val store = StoreBuilder.parsedWithKey<LiveDataRequestXml, LiveDataResponseXml, List<LiveData>>()
                 .fetcher { key -> api.getLiveData(key) }
-                .parser { json -> mapper.map(json.liveData) }
+                .parser { xml -> mapper.map(xml.liveData) }
                 .memoryPolicy(memoryPolicy)
                 .refreshOnStale()
                 .open()
@@ -176,6 +182,26 @@ class RepositoryModule {
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
 
         return FavouriteRepository(store, dao, entityMapper)
+    }
+
+    @Provides
+    @Singleton
+    fun rssRepository(api: DublinBusRssApi): Repository<List<NewsItem>, Any> {
+
+        val memoryPolicy = MemoryPolicy.builder()
+                .setExpireAfterWrite(24)
+                .setExpireAfterTimeUnit(TimeUnit.HOURS)
+                .build()
+
+        val mapper = RssMapper()
+        val store = StoreBuilder.parsedWithKey<Any, RssResponseXml, List<NewsItem>>()
+                .fetcher { api.getRssNews() }
+                .parser { xml -> mapper.map(xml.channel!!.newsItems) }
+                .memoryPolicy(memoryPolicy)
+                .refreshOnStale()
+                .open()
+
+        return RssRepository(store)
     }
 
 }

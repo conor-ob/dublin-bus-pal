@@ -1,13 +1,13 @@
 package ie.dublinbuspal.service.interceptor
 
-import ie.dublinbuspal.service.DublinBusApi
+import ie.dublinbuspal.service.DublinBusSoapApi
 import ie.dublinbuspal.service.model.status.ServiceStatusRequestBodyXml
 import ie.dublinbuspal.service.model.status.ServiceStatusRequestRootXml
 import ie.dublinbuspal.service.model.status.ServiceStatusRequestXml
 import okhttp3.Interceptor
 import okhttp3.Response
 
-class DublinBusServiceStatusInterceptor(private val api: DublinBusApi) : Interceptor {
+class DublinBusServiceStatusInterceptor(private val api: DublinBusSoapApi) : Interceptor {
 
     private val request: ServiceStatusRequestXml by lazy {
         val root = ServiceStatusRequestRootXml()
