@@ -36,29 +36,13 @@ android {
     buildTypes {
         release {
             debuggable false
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled false
+            shrinkResources false
+            useProguard false
+            //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
             debuggable true
-        }
-    }
-    flavorDimensions "default"
-    productFlavors {
-        prod {
-            dimension "default"
-        }
-        mock {
-            dimension "default"
-            applicationIdSuffix = ".mock"
-        }
-    }
-    // Remove mockRelease as it's not needed.
-    android.variantFilter { variant ->
-        if (variant.buildType.name == 'release'
-                && variant.getFlavors().get(0).name == 'mock') {
-            variant.setIgnore(true)
         }
     }
     compileOptions {
@@ -72,8 +56,6 @@ android {
 
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
     implementation project(':base')
     implementation project(':database')
     implementation project(':database-android')
@@ -81,12 +63,12 @@ dependencies {
     implementation project(":service")
 
     // Android Support
-    implementation "com.android.support:appcompat-v7:$rootProject.androidSupportVersion"
-    implementation "com.android.support:design:$rootProject.androidSupportVersion"
+    implementation libs.support_appcompat
+    implementation libs.support_design
     implementation "com.android.support:recyclerview-v7:$rootProject.androidSupportVersion"
     implementation "com.android.support:support-v4:$rootProject.androidSupportVersion"
     implementation "com.android.support:support-vector-drawable:$rootProject.androidSupportVersion"
-    implementation "com.android.support.constraint:constraint-layout:$rootProject.androidSupportConstraintVersion"
+    implementation libs.support_constraint
 
     // Dagger
     implementation "com.google.dagger:dagger:$rootProject.daggerVersion"
