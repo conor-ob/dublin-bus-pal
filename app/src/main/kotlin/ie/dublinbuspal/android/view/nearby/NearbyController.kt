@@ -45,13 +45,9 @@ class NearbyController(args: Bundle) : BaseViewController<NearbyView, NearbyPres
         view.google_map.getMapAsync {
             googleMap = it
             googleMap.apply {
-                animateCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.Builder()
-                        .target(LatLng(args.getDouble(LAT), args.getDouble(LONG)))
-                        .zoom(args.getFloat(ZOOM))
-                        .build()))
                 setOnCameraIdleListener {
                     val coordinate = Coordinate(googleMap.cameraPosition.target.latitude, googleMap.cameraPosition.target.longitude)
-                    presenter.start(coordinate)
+                    presenter.refresh(coordinate)
                 }
                 setOnInfoWindowClickListener {
                     onBusStopClicked(it.tag as String)
@@ -73,11 +69,13 @@ class NearbyController(args: Bundle) : BaseViewController<NearbyView, NearbyPres
 
     override fun onAttach(view: View) {
         super.onAttach(view)
+        presenter.start()
         view.google_map.onResume()
     }
 
     override fun onDetach(view: View) {
         view.google_map.onPause()
+        presenter.stop(Coordinate(googleMap.cameraPosition.target.latitude, googleMap.cameraPosition.target.longitude))
         super.onDetach(view)
     }
 
@@ -86,6 +84,13 @@ class NearbyController(args: Bundle) : BaseViewController<NearbyView, NearbyPres
         view.google_map.onDestroy()
         mapMarkers.clear()
         super.onDestroyView(view)
+    }
+
+    override fun moveCamera(coordinate: Coordinate) {
+        googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.Builder()
+                .target(LatLng(coordinate.x, coordinate.y))
+                .zoom(15.9F)
+                .build()))
     }
 
     private fun onBusStopClicked(stopId: String) {
@@ -127,28 +132,6 @@ class NearbyController(args: Bundle) : BaseViewController<NearbyView, NearbyPres
                 iterator.remove()
             }
         }
-    }
-
-    companion object {
-
-        private const val LAT = "latitude"
-        private const val LONG = "longitude"
-        private const val ZOOM = "zoom"
-
-    }
-
-    class Builder(private val latitude: Double,
-                  private val longitude: Double,
-                  private val zoom: Float) {
-
-        fun build(): NearbyController {
-            val args = Bundle()
-            args.putDouble(LAT, latitude)
-            args.putDouble(LONG, longitude)
-            args.putFloat(ZOOM, zoom)
-            return NearbyController(args)
-        }
-
     }
 
 }

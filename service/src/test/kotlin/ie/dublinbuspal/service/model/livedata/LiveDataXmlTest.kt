@@ -1,4 +1,4 @@
-package ie.dublinbuspal.service.model.status
+package ie.dublinbuspal.service.model.livedata
 
 import ie.dublinbuspal.base.AbstractDataClassTest
 import ie.dublinbuspal.service.model.livedata.LiveDataXml

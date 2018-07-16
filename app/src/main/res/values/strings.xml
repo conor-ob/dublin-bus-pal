@@ -125,4 +125,10 @@
     <string name="dublin_bus_soap_api_endpoint">http://rtpi.dublinbus.ie/</string>
     <string name="dublin_bus_rss_api_endpoint">http://www.dublinbus.ie/</string>
     <string name="dublin_bus_database_name">dublinbus.db</string>
+    <string name="view_search_stops_empty">No stops found</string>
+    <string name="view_search_routes_empty">No routes found</string>
+    <string name="view_search_stops_header">Found %d stops</string>
+    <string name="view_search_routes_header">Found %d routes</string>
+    <string name="preference_key_last_location_latitude">preference_last_location_latitude</string>
+    <string name="preference_key_last_location_longitude">preference_last_location_longitude</string>
 </resources>

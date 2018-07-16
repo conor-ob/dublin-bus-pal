@@ -49,9 +49,7 @@ class DublinBusActivity : AppCompatActivity() {
 
     private fun nearby(): Boolean {
         router.replaceTopController(RouterTransaction
-                .with(NearbyController
-                        .Builder(53.347335, -6.259137, 15.9F) //TODO get last known location
-                        .build())
+                .with(NearbyController(Bundle.EMPTY))
                 .pushChangeHandler(FadeChangeHandler(500L))
                 .popChangeHandler(FadeChangeHandler(500L))
         )
@@ -79,10 +77,7 @@ class DublinBusActivity : AppCompatActivity() {
     private fun setupRouter(savedInstanceState: Bundle?) {
         router = Conductor.attachRouter(this, container, savedInstanceState)
         if (!router.hasRootController()) {
-            router.setRoot(RouterTransaction
-                    .with(NearbyController
-                            .Builder(53.347335, -6.259137, 15.9F) //TODO get last known location
-                            .build()))
+            router.setRoot(RouterTransaction.with(NearbyController(Bundle.EMPTY)))
         }
     }
 

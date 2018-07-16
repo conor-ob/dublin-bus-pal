@@ -70,6 +70,9 @@ dependencies {
     implementation "com.android.support:support-vector-drawable:$rootProject.androidSupportVersion"
     implementation libs.support_constraint
 
+    implementation 'com.github.conor-ob:sticky-headers-recyclerview:27f63c0'
+    implementation 'com.mikepenz:fastadapter-commons:3.2.7'
+
     // Dagger
     implementation "com.google.dagger:dagger:$rootProject.daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"

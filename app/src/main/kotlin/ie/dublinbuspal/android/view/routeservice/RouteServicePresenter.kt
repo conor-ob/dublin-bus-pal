@@ -9,7 +9,7 @@ class RouteServicePresenter @Inject constructor(private val useCase: RouteServic
 
     fun start(routeId: String) {
         useCase.getRouteService(routeId)
-                .compose(applySchedulers())
+                .compose(applyObservableSchedulers())
                 .doOnNext { Log.i(javaClass.simpleName, it.toString()) }
                 .doOnError { Log.e(javaClass.simpleName, it.message, it) }
                 .subscribe()
