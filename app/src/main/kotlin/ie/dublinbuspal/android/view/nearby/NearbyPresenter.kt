@@ -9,11 +9,11 @@ import javax.inject.Inject
 class NearbyPresenter @Inject constructor(private val useCase: NearbyStopsUseCase) : BasePresenter<NearbyView>() {
 
     fun start() {
-        useCase.getLastKnownLocation()
+        useCase.getLastLocation()
                 .compose(applyObservableSchedulers())
                 .doOnNext {
                     ifViewAttached { view -> view.moveCamera(it) }
-                    refresh(it)
+                    refresh(it.first)
                 }
                 .doOnError { Timber.e(it) }
                 .subscribe()
@@ -27,8 +27,8 @@ class NearbyPresenter @Inject constructor(private val useCase: NearbyStopsUseCas
                 .subscribe()
     }
 
-    fun stop(coordinate: Coordinate) {
-        useCase.saveLocation(coordinate)
+    fun stop(location: Pair<Coordinate, Float>) {
+        useCase.saveLastLocation(location)
                 .compose(applyCompletableSchedulers())
                 .doOnComplete { Timber.d("done") }
                 .doOnError { Timber.e(it) }

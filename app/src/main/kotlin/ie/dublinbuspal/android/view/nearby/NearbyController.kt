@@ -75,7 +75,10 @@ class NearbyController(args: Bundle) : BaseViewController<NearbyView, NearbyPres
 
     override fun onDetach(view: View) {
         view.google_map.onPause()
-        presenter.stop(Coordinate(googleMap.cameraPosition.target.latitude, googleMap.cameraPosition.target.longitude))
+        presenter.stop(Pair(Coordinate(
+                googleMap.cameraPosition.target.latitude,
+                googleMap.cameraPosition.target.longitude),
+                googleMap.cameraPosition.zoom))
         super.onDetach(view)
     }
 
@@ -86,10 +89,10 @@ class NearbyController(args: Bundle) : BaseViewController<NearbyView, NearbyPres
         super.onDestroyView(view)
     }
 
-    override fun moveCamera(coordinate: Coordinate) {
+    override fun moveCamera(location: Pair<Coordinate, Float>) {
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.Builder()
-                .target(LatLng(coordinate.x, coordinate.y))
-                .zoom(15.9F)
+                .target(LatLng(location.first.x, location.first.y))
+                .zoom(location.second)
                 .build()))
     }
 

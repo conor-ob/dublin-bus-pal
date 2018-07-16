@@ -131,4 +131,5 @@
     <string name="view_search_routes_header">Found %d routes</string>
     <string name="preference_key_last_location_latitude">preference_last_location_latitude</string>
     <string name="preference_key_last_location_longitude">preference_last_location_longitude</string>
+    <string name="preference_key_last_location_zoom">preference_last_location_zoom</string>
 </resources>

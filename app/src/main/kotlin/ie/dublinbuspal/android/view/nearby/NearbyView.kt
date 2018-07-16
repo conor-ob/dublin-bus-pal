@@ -9,6 +9,6 @@ interface NearbyView : MvpView {
 
     fun showBusStops(stops: SortedMap<Double, Stop>)
 
-    fun moveCamera(coordinate: Coordinate)
+    fun moveCamera(location: Pair<Coordinate, Float>)
 
 }

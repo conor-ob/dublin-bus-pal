@@ -5,8 +5,8 @@ import io.reactivex.Observable
 
 interface PreferencesRepository {
 
-    fun saveLastLocation(coordinate: Coordinate): Completable
+    fun saveLastLocation(location: Pair<Coordinate, Float>): Completable
 
-    fun getLastLocation(): Observable<Coordinate>
+    fun getLastLocation(): Observable<Pair<Coordinate, Float>>
 
 }

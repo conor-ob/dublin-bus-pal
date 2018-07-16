@@ -27,14 +27,6 @@ class NearbyStopsUseCase @Inject constructor(private val repository: Repository<
                 .map { filter(it, coordinate) }
     }
 
-    fun getLastKnownLocation(): Observable<Coordinate> {
-        return preferences.getLastLocation()
-    }
-
-    fun saveLocation(coordinate: Coordinate): Completable {
-        return preferences.saveLastLocation(coordinate)
-    }
-
     private fun filter(stops: List<Stop>, coordinate: Coordinate): SortedMap<Double, Stop> {
         val sorted = TreeMap<Double, Stop>()
         val filtered = TreeMap<Double, Stop>()
@@ -52,6 +44,14 @@ class NearbyStopsUseCase @Inject constructor(private val repository: Repository<
         }
 
         return filtered
+    }
+
+    fun getLastLocation(): Observable<Pair<Coordinate, Float>> {
+        return preferences.getLastLocation()
+    }
+
+    fun saveLastLocation(location: Pair<Coordinate, Float>): Completable {
+        return preferences.saveLastLocation(location)
     }
 
 }
