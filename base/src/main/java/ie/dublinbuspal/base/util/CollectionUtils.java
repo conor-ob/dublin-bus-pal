@@ -4,7 +4,10 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 public final class CollectionUtils {
 
@@ -41,6 +44,19 @@ public final class CollectionUtils {
         }
         set.addAll(collection);
         return set;
+    }
+
+    public static <K, V> SortedMap<K, V> headMap(SortedMap<K, V> map, int limit) {
+        int count = 0;
+        TreeMap<K,V> headMap = new TreeMap<>();
+        for (Map.Entry<K,V> entry : map.entrySet()) {
+            if (count >= limit) {
+                break;
+            }
+            headMap.put(entry.getKey(), entry.getValue());
+            count++;
+        }
+        return headMap;
     }
 
 }
