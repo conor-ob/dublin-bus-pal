@@ -6,7 +6,7 @@ import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import ie.dublinbuspal.android.view.home.HomeController
-import kotlinx.android.synthetic.main.activity_root.*
+import kotlinx.android.synthetic.main.view_root.*
 
 class DublinBusActivity : AppCompatActivity() {
 
@@ -14,7 +14,7 @@ class DublinBusActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_root)
+        setContentView(R.layout.view_root)
         setupRouter(savedInstanceState)
     }
 

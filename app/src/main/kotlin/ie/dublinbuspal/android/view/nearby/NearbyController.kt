@@ -91,12 +91,12 @@ class NearbyController(args: Bundle) : BaseMvpController<NearbyView, NearbyPrese
     }
 
     private fun onBusStopClicked(stopId: String) {
-        router.pushController(RouterTransaction
+        parentController?.router?.pushController(RouterTransaction
                 .with(LiveDataController
                         .Builder(stopId)
                         .build())
-                .pushChangeHandler(FadeChangeHandler())
-                .popChangeHandler(FadeChangeHandler()))
+                .pushChangeHandler(FadeChangeHandler(500L))
+                .popChangeHandler(FadeChangeHandler(500L)))
     }
 
     override fun showBusStops(stops: SortedMap<Double, Stop>) {
