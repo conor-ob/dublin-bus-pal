@@ -4,4 +4,5 @@
     <item name="view_search_route_item" type="id" />
     <item name="view_search_stop_header" type="id" />
     <item name="view_search_route_header" type="id" />
+    <item name="view_rss_news_item" type="id" />
 </resources>

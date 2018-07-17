@@ -4,6 +4,7 @@ import dagger.Component
 import ie.dublinbuspal.android.view.favourites.FavouritesPresenter
 import ie.dublinbuspal.android.view.livedata.LiveDataPresenter
 import ie.dublinbuspal.android.view.nearby.NearbyPresenter
+import ie.dublinbuspal.android.view.news.rss.RssNewsPresenter
 import ie.dublinbuspal.android.view.routeservice.RouteServicePresenter
 import ie.dublinbuspal.android.view.search.SearchPresenter
 import ie.dublinbuspal.database.di.DatabaseModule
@@ -31,5 +32,7 @@ interface ApplicationComponent {
     fun routePresenter(): RouteServicePresenter
 
     fun favouritesPresenter(): FavouritesPresenter
+
+    fun rssNewsPresenter(): RssNewsPresenter
 
 }

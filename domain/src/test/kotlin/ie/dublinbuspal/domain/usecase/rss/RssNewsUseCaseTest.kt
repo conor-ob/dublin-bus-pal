@@ -3,15 +3,15 @@ package ie.dublinbuspal.domain.usecase.rss
 import com.nytimes.android.external.store3.base.impl.MemoryPolicy
 import com.nytimes.android.external.store3.base.impl.StoreBuilder
 import ie.dublinbuspal.domain.mapping.rss.RssMapper
-import ie.dublinbuspal.domain.model.rss.NewsItem
-import ie.dublinbuspal.domain.repository.rss.RssRepository
+import ie.dublinbuspal.domain.model.rss.RssNews
+import ie.dublinbuspal.domain.repository.rss.RssNewsRepository
 import ie.dublinbuspal.service.MockDublinBusRssApi
 import ie.dublinbuspal.service.model.rss.RssResponseXml
 import org.junit.Assert
 import org.junit.Test
 import java.util.concurrent.TimeUnit
 
-class RssUseCaseTest {
+class RssNewsUseCaseTest {
 
     private val useCase by lazy {
 
@@ -23,21 +23,21 @@ class RssUseCaseTest {
                 .build()
 
         val mapper = RssMapper()
-        val store = StoreBuilder.parsedWithKey<Any, RssResponseXml, List<NewsItem>>()
+        val store = StoreBuilder.parsedWithKey<Any, RssResponseXml, List<RssNews>>()
                 .fetcher { api.getRssNews() }
                 .parser { xml -> mapper.map(xml.channel!!.newsItems) }
                 .memoryPolicy(memoryPolicy)
                 .refreshOnStale()
                 .open()
 
-        val repository = RssRepository(store)
+        val repository = RssNewsRepository(store)
 
-        return@lazy RssUseCase(repository)
+        return@lazy RssNewsUseCase(repository)
     }
 
     @Test
     fun testGetRss() {
-        useCase.getRss()
+        useCase.getRssNews()
                 .doOnNext { print(it.toString()) }
                 .doOnError { Assert.fail() }
                 .subscribe()

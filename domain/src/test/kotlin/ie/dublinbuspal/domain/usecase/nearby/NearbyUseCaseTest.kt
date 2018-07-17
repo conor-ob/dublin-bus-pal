@@ -4,6 +4,6 @@ import ie.dublinbuspal.domain.AbstractIntegrationTest
 
 class NearbyUseCaseTest : AbstractIntegrationTest() {
 
-    private val useCase = NearbyStopsUseCase(stopRepository())
+    //private val useCase = NearbyStopsUseCase(stopRepository())
 
 }

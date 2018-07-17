@@ -27,7 +27,7 @@ import ie.dublinbuspal.domain.model.favourite.FavouriteStop
 import ie.dublinbuspal.domain.model.livedata.LiveData
 import ie.dublinbuspal.domain.model.route.Route
 import ie.dublinbuspal.domain.model.routeservice.RouteService
-import ie.dublinbuspal.domain.model.rss.NewsItem
+import ie.dublinbuspal.domain.model.rss.RssNews
 import ie.dublinbuspal.domain.model.stop.Stop
 import ie.dublinbuspal.domain.model.stopservice.StopService
 import ie.dublinbuspal.domain.repository.favourite.FavouritePersister
@@ -37,7 +37,7 @@ import ie.dublinbuspal.domain.repository.route.RoutePersister
 import ie.dublinbuspal.domain.repository.route.RouteRepository
 import ie.dublinbuspal.domain.repository.routeservice.RouteServicePersister
 import ie.dublinbuspal.domain.repository.routeservice.RouteServiceRepository
-import ie.dublinbuspal.domain.repository.rss.RssRepository
+import ie.dublinbuspal.domain.repository.rss.RssNewsRepository
 import ie.dublinbuspal.domain.repository.stop.StopPersister
 import ie.dublinbuspal.domain.repository.stop.StopRepository
 import ie.dublinbuspal.domain.repository.stopservice.StopServicePersister
@@ -185,7 +185,7 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun rssRepository(api: DublinBusRssApi): Repository<List<NewsItem>, Any> {
+    fun rssRepository(api: DublinBusRssApi): Repository<List<RssNews>, Any> {
 
         val memoryPolicy = MemoryPolicy.builder()
                 .setExpireAfterWrite(24)
@@ -193,14 +193,14 @@ class RepositoryModule {
                 .build()
 
         val mapper = RssMapper()
-        val store = StoreBuilder.parsedWithKey<Any, RssResponseXml, List<NewsItem>>()
+        val store = StoreBuilder.parsedWithKey<Any, RssResponseXml, List<RssNews>>()
                 .fetcher { api.getRssNews() }
                 .parser { xml -> mapper.map(xml.channel!!.newsItems) }
                 .memoryPolicy(memoryPolicy)
                 .refreshOnStale()
                 .open()
 
-        return RssRepository(store)
+        return RssNewsRepository(store)
     }
 
 }

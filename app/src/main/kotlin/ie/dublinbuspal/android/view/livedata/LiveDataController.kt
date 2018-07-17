@@ -9,7 +9,7 @@ import timber.log.Timber
 
 class LiveDataController(args: Bundle) : BaseMvpController<LiveDataView, LiveDataPresenter>(args) , LiveDataView {
 
-    override fun getLayoutId() = R.layout.view_live_data
+    override fun getLayoutId() = R.layout.view_livedata
 
     override fun createPresenter(): LiveDataPresenter {
         return applicationComponent()?.liveDataPresenter()!!
