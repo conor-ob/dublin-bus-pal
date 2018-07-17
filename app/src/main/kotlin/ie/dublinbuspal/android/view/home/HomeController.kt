@@ -34,8 +34,7 @@ class HomeController : Controller() {
                 else -> false
             }
         }
-        view.bottom_navigation.selectedItemId = R.id.navigation_nearby
-        view.bottom_navigation.menu.getItem(1).isChecked = true
+        view.bottom_navigation.selectedItemId = R.id.navigation_favourites
     }
 
     private fun replaceTopController(view: View, controller: Controller): Boolean {
