@@ -17,7 +17,7 @@ import io.reactivex.Single
 
 class MockDublinBusSoapApi : DublinBusSoapApi {
 
-    override fun getBusStops(body: StopsRequestXml): Single<StopsResponseXml> {
+    override fun getStops(body: StopsRequestXml): Single<StopsResponseXml> {
         return singleResponse("stops_response.xml", StopsResponseXml::class.java)
     }
 

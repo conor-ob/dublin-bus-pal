@@ -50,7 +50,6 @@ import ie.dublinbuspal.service.model.route.RoutesRequestXml
 import ie.dublinbuspal.service.model.route.RoutesResponseXml
 import ie.dublinbuspal.service.model.routeservice.RouteServiceRequestXml
 import ie.dublinbuspal.service.model.routeservice.RouteServiceResponseXml
-import ie.dublinbuspal.service.model.rss.NewsItemXml
 import ie.dublinbuspal.service.model.rss.RssResponseXml
 import ie.dublinbuspal.service.model.stop.StopsRequestXml
 import ie.dublinbuspal.service.model.stop.StopsResponseXml
@@ -68,7 +67,7 @@ class RepositoryModule {
                        dao: StopDao,
                        txRunner: TxRunner): Repository<List<Stop>, StopsRequestXml> {
 
-        val fetcher = Fetcher<StopsResponseXml, StopsRequestXml> { key -> api.getBusStops(key) }
+        val fetcher = Fetcher<StopsResponseXml, StopsRequestXml> { key -> api.getStops(key) }
 
         val memoryPolicy = MemoryPolicy.builder()
                 .setExpireAfterWrite(24)

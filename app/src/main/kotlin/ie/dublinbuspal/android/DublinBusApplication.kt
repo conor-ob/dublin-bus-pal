@@ -24,8 +24,11 @@ class DublinBusApplication : Application() {
         applicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule(ApplicationModule(applicationContext))
                 .databaseModule(DatabaseModule(resources.getString(R.string.dublin_bus_database_name)))
-                .networkModule(NetworkModule(resources.getString(R.string.dublin_bus_soap_api_endpoint),
-                        resources.getString(R.string.dublin_bus_rss_api_endpoint)))
+                .networkModule(NetworkModule(
+                        resources.getString(R.string.dublin_bus_soap_api_endpoint),
+                        resources.getString(R.string.dublin_bus_rss_api_endpoint),
+                        resources.getString(R.string.smart_dublin_rest_api_endpoint))
+                )
                 .build()
     }
 

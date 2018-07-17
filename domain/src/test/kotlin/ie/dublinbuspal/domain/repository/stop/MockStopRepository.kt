@@ -31,7 +31,7 @@ class MockStopRepository : Repository<List<Stop>, StopsRequestXml> {
     private fun buildStore(): StoreRoom<List<Stop>, StopsRequestXml> {
         val api = MockDublinBusSoapApi()
 
-        val fetcher = Fetcher<StopsResponseXml, StopsRequestXml> { key -> api.getBusStops(key) }
+        val fetcher = Fetcher<StopsResponseXml, StopsRequestXml> { key -> api.getStops(key) }
 
         val memoryPolicy = MemoryPolicy.builder()
                 .setExpireAfterWrite(24)

@@ -124,6 +124,7 @@
 
     <string name="dublin_bus_soap_api_endpoint">http://rtpi.dublinbus.ie/</string>
     <string name="dublin_bus_rss_api_endpoint">http://www.dublinbus.ie/</string>
+    <string name="smart_dublin_rest_api_endpoint">https://data.smartdublin.ie/cgi-bin/rtpi/</string>
     <string name="dublin_bus_database_name">dublinbus.db</string>
     <string name="view_search_stops_empty">No stops found</string>
     <string name="view_search_routes_empty">No routes found</string>

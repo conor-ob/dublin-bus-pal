@@ -21,7 +21,7 @@ interface DublinBusSoapApi {
 
     @Headers("Content-Type: text/xml", "Accept-Charset: utf-8")
     @POST("/DublinBusRTPIService.asmx")
-    fun getBusStops(@Body body: StopsRequestXml): Single<StopsResponseXml>
+    fun getStops(@Body body: StopsRequestXml): Single<StopsResponseXml>
 
     @Headers("Content-Type: text/xml", "Accept-Charset: utf-8")
     @POST("/DublinBusRTPIService.asmx")
