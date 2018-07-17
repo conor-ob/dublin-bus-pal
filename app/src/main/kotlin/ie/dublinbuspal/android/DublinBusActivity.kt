@@ -3,6 +3,7 @@ package ie.dublinbuspal.android
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.bluelinelabs.conductor.Conductor
+import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
@@ -24,61 +25,34 @@ class DublinBusActivity : AppCompatActivity() {
         setupRouter(savedInstanceState)
     }
 
-    private fun setupBottomNavigation() {
-        BottomNavigationUtils.disableShiftMode(bottom_navigation)
-        bottom_navigation.menu.getItem(1).isChecked = true
-        bottom_navigation.setOnNavigationItemSelectedListener {
-            when (it.itemId) {
-                R.id.navigation_news -> news()
-                R.id.navigation_nearby -> nearby()
-                R.id.navigation_favourites -> favourites()
-                R.id.navigation_search -> search()
-                else -> false
-            }
-        }
-    }
-
-    private fun news(): Boolean {
-        router.replaceTopController(RouterTransaction
-                .with(NewsController(Bundle.EMPTY))
-                .pushChangeHandler(FadeChangeHandler(500L))
-                .popChangeHandler(FadeChangeHandler(500L))
-        )
-        return true
-    }
-
-    private fun nearby(): Boolean {
-        router.replaceTopController(RouterTransaction
-                .with(NearbyController(Bundle.EMPTY))
-                .pushChangeHandler(FadeChangeHandler(500L))
-                .popChangeHandler(FadeChangeHandler(500L))
-        )
-        return true
-    }
-
-    private fun favourites(): Boolean {
-        router.replaceTopController(RouterTransaction
-                .with(FavouritesController(Bundle.EMPTY))
-                .pushChangeHandler(FadeChangeHandler(500L))
-                .popChangeHandler(FadeChangeHandler(500L))
-        )
-        return true
-    }
-
-    private fun search(): Boolean {
-        router.replaceTopController(RouterTransaction
-                .with(SearchController(Bundle.EMPTY))
-                .pushChangeHandler(FadeChangeHandler(500L))
-                .popChangeHandler(FadeChangeHandler(500L))
-        )
-        return true
-    }
-
     private fun setupRouter(savedInstanceState: Bundle?) {
         router = Conductor.attachRouter(this, container, savedInstanceState)
         if (!router.hasRootController()) {
             router.setRoot(RouterTransaction.with(NearbyController(Bundle.EMPTY)))
         }
+    }
+
+    private fun setupBottomNavigation() {
+        BottomNavigationUtils.disableShiftMode(bottom_navigation)
+        bottom_navigation.menu.getItem(1).isChecked = true
+        bottom_navigation.setOnNavigationItemSelectedListener {
+            return@setOnNavigationItemSelectedListener when (it.itemId) {
+                R.id.navigation_news -> replaceTopController(NewsController(Bundle.EMPTY))
+                R.id.navigation_nearby -> replaceTopController(NearbyController(Bundle.EMPTY))
+                R.id.navigation_favourites -> replaceTopController(FavouritesController(Bundle.EMPTY))
+                R.id.navigation_search -> replaceTopController(SearchController(Bundle.EMPTY))
+                else -> false
+            }
+        }
+    }
+
+    private fun replaceTopController(controller: Controller): Boolean {
+        router.replaceTopController(RouterTransaction
+                .with(controller)
+                .pushChangeHandler(FadeChangeHandler(500L))
+                .popChangeHandler(FadeChangeHandler(500L))
+        )
+        return router.hasRootController()
     }
 
     override fun onBackPressed() {
