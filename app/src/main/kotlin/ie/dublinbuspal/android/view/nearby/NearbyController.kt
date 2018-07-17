@@ -69,23 +69,23 @@ class NearbyController(args: Bundle) : BaseViewController<NearbyView, NearbyPres
 
     override fun onAttach(view: View) {
         super.onAttach(view)
-        presenter.start()
         view.google_map.onResume()
+        presenter.start()
     }
 
     override fun onDetach(view: View) {
-        view.google_map.onPause()
         presenter.stop(Pair(Coordinate(
                 googleMap.cameraPosition.target.latitude,
                 googleMap.cameraPosition.target.longitude),
                 googleMap.cameraPosition.zoom))
+        view.google_map.onPause()
         super.onDetach(view)
     }
 
     override fun onDestroyView(view: View) {
+        mapMarkers.clear()
         view.google_map.onStop()
         view.google_map.onDestroy()
-        mapMarkers.clear()
         super.onDestroyView(view)
     }
 
