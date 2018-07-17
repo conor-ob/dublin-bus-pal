@@ -52,12 +52,6 @@ class NearbyController(args: Bundle) : BaseViewController<NearbyView, NearbyPres
                 setOnInfoWindowClickListener {
                     onBusStopClicked(it.tag as String)
                 }
-                //                setOnCameraMoveListener {
-                //                    if (mapView.mapIsTouched()) {
-                //                        gpsButton.setImageResource(R.drawable.ic_gps_fixed_inactive)
-                //                        presenter.onRemoveLocationUpdates()
-                //                    }
-                //                }
                 uiSettings.isMyLocationButtonEnabled = false
                 uiSettings.isMapToolbarEnabled = false
                 uiSettings.isCompassEnabled = false
