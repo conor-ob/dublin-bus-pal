@@ -3,9 +3,9 @@ package ie.dublinbuspal.android.view.favourites
 import android.os.Bundle
 import android.view.View
 import ie.dublinbuspal.android.R
-import ie.dublinbuspal.android.view.BaseViewController
+import ie.dublinbuspal.android.view.BaseMvpController
 
-class FavouritesController(args: Bundle) : BaseViewController<FavouritesView, FavouritesPresenter>(args), FavouritesView {
+class FavouritesController(args: Bundle) : BaseMvpController<FavouritesView, FavouritesPresenter>(args), FavouritesView {
 
     override fun getLayoutId() = R.layout.view_favourites
 

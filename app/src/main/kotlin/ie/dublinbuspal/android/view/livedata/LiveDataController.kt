@@ -1,13 +1,13 @@
 package ie.dublinbuspal.android.view.livedata
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import ie.dublinbuspal.android.R
-import ie.dublinbuspal.android.view.BaseViewController
+import ie.dublinbuspal.android.view.BaseMvpController
 import ie.dublinbuspal.domain.model.livedata.LiveData
+import timber.log.Timber
 
-class LiveDataController(args: Bundle) : BaseViewController<LiveDataView, LiveDataPresenter>(args) , LiveDataView {
+class LiveDataController(args: Bundle) : BaseMvpController<LiveDataView, LiveDataPresenter>(args) , LiveDataView {
 
     override fun getLayoutId() = R.layout.view_live_data
 
@@ -21,7 +21,7 @@ class LiveDataController(args: Bundle) : BaseViewController<LiveDataView, LiveDa
     }
 
     override fun showLiveData(liveData: List<LiveData>) {
-        Log.i("LIVE", liveData.toString())
+        Timber.d(liveData.toString())
     }
 
     companion object {

@@ -3,9 +3,9 @@ package ie.dublinbuspal.android.view.routeservice
 import android.os.Bundle
 import android.view.View
 import ie.dublinbuspal.android.R
-import ie.dublinbuspal.android.view.BaseViewController
+import ie.dublinbuspal.android.view.BaseMvpController
 
-class RouteServiceController(args: Bundle) : BaseViewController<RouteServiceView, RouteServicePresenter>(args), RouteServiceView {
+class RouteServiceController(args: Bundle) : BaseMvpController<RouteServiceView, RouteServicePresenter>(args), RouteServiceView {
 
     override fun getLayoutId() = R.layout.view_route
 

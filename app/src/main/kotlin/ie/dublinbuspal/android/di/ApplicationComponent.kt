@@ -4,7 +4,6 @@ import dagger.Component
 import ie.dublinbuspal.android.view.favourites.FavouritesPresenter
 import ie.dublinbuspal.android.view.livedata.LiveDataPresenter
 import ie.dublinbuspal.android.view.nearby.NearbyPresenter
-import ie.dublinbuspal.android.view.news.NewsPresenter
 import ie.dublinbuspal.android.view.routeservice.RouteServicePresenter
 import ie.dublinbuspal.android.view.search.SearchPresenter
 import ie.dublinbuspal.database.di.DatabaseModule
@@ -22,8 +21,6 @@ import javax.inject.Singleton
         ]
 )
 interface ApplicationComponent {
-
-    fun newsPresenter(): NewsPresenter
 
     fun nearbyPresenter(): NearbyPresenter
 

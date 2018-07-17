@@ -13,7 +13,7 @@ import com.mikepenz.fastadapter.commons.utils.FastAdapterDiffUtil
 import com.mikepenz.fastadapter.listeners.ItemFilterListener
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration
 import ie.dublinbuspal.android.R
-import ie.dublinbuspal.android.view.BaseViewController
+import ie.dublinbuspal.android.view.BaseMvpController
 import ie.dublinbuspal.android.view.search.adapter.*
 import ie.dublinbuspal.domain.model.route.Route
 import ie.dublinbuspal.domain.model.stop.Stop
@@ -27,7 +27,7 @@ import kotlinx.android.synthetic.main.view_search.view.*
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class SearchController(args: Bundle) : BaseViewController<SearchView, SearchPresenter>(args), SearchView {
+class SearchController(args: Bundle) : BaseMvpController<SearchView, SearchPresenter>(args), SearchView {
 
     private lateinit var fastAdapter: FastAdapter<IItem<Any, RecyclerView.ViewHolder>>
     private lateinit var stickyHeaderAdapter: SearchStickyHeaderAdapter

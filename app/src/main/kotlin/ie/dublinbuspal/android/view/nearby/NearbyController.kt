@@ -15,14 +15,14 @@ import com.google.android.gms.maps.model.MarkerOptions
 import ie.dublinbuspal.android.R
 import ie.dublinbuspal.android.util.AnimationUtils
 import ie.dublinbuspal.android.util.ImageUtils
-import ie.dublinbuspal.android.view.BaseViewController
+import ie.dublinbuspal.android.view.BaseMvpController
 import ie.dublinbuspal.android.view.livedata.LiveDataController
 import ie.dublinbuspal.base.Coordinate
 import ie.dublinbuspal.domain.model.stop.Stop
 import kotlinx.android.synthetic.main.view_nearby.view.*
 import java.util.*
 
-class NearbyController(args: Bundle) : BaseViewController<NearbyView, NearbyPresenter>(args), NearbyView {
+class NearbyController(args: Bundle) : BaseMvpController<NearbyView, NearbyPresenter>(args), NearbyView {
 
     private lateinit var googleMap: GoogleMap
     private val mapMarkers = hashMapOf<Stop, Marker>()

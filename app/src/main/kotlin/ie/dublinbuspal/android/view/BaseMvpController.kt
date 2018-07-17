@@ -15,7 +15,7 @@ import ie.dublinbuspal.android.DublinBusApplication
 import ie.dublinbuspal.android.R
 import ie.dublinbuspal.android.di.ApplicationComponent
 
-abstract class BaseViewController<V : MvpView, P : MvpPresenter<V>>(args: Bundle) : MvpController<V, P>(args) {
+abstract class BaseMvpController<V : MvpView, P : MvpPresenter<V>>(args: Bundle) : MvpController<V, P>(args) {
 
     @LayoutRes
     protected abstract fun getLayoutId(): Int

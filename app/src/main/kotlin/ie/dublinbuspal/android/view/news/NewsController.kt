@@ -1,15 +1,10 @@
 package ie.dublinbuspal.android.view.news
 
-import android.os.Bundle
 import ie.dublinbuspal.android.R
-import ie.dublinbuspal.android.view.BaseViewController
+import ie.dublinbuspal.android.view.BaseController
 
-class NewsController(args: Bundle) : BaseViewController<NewsView, NewsPresenter>(args), NewsView {
+class NewsController : BaseController() {
 
     override fun getLayoutId() = R.layout.view_news
-
-    override fun createPresenter(): NewsPresenter {
-        return applicationComponent()?.newsPresenter()!!
-    }
 
 }
