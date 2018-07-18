@@ -1,6 +1,7 @@
 package ie.dublinbuspal.android.view.home
 
 import android.os.Bundle
+import android.support.design.bottomnavigation.LabelVisibilityMode
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +28,6 @@ class HomeController : BaseController() {
     }
 
     private fun setupBottomNavigation(view: View) {
-        BottomNavigationUtils.disableShiftMode(view.bottom_navigation)
         view.bottom_navigation.setOnNavigationItemSelectedListener {
             return@setOnNavigationItemSelectedListener when (it.itemId) {
                 R.id.navigation_news -> replaceTopController(view, NewsController())

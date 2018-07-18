@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:textColor="@color/textColorPrimary"
-        android:fontFamily="sans-serif-light"
+        android:fontFamily="@font/google_sans_bold"
         android:textStyle="bold"
         android:text="@string/dublin_bus"
         app:layout_constraintTop_toTopOf="parent"
@@ -38,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/dublin_bus_ie"
-        android:fontFamily="sans-serif-light"
+        android:fontFamily="@font/google_sans_regular"
         android:textSize="14sp"
         android:textColor="@color/grey_600"
         app:layout_constraintLeft_toRightOf="@id/dot1"
@@ -61,7 +61,7 @@
         android:id="@+id/publish_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-light"
+        android:fontFamily="@font/google_sans_regular"
         android:textSize="14sp"
         android:textColor="@color/grey_600"
         app:layout_constraintLeft_toRightOf="@id/dot2"
@@ -80,7 +80,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:fontFamily="sans-serif-light"
+        android:fontFamily="@font/google_sans_medium"
         android:textStyle="bold"
         android:textSize="14sp"
         android:textColorLink="@color/colorPrimaryDark"
@@ -92,7 +92,72 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:fontFamily="sans-serif-light"
+        android:fontFamily="@font/google_sans_regular
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"
         android:lineSpacingExtra="2dp"
         android:textSize="16sp"
         android:textColor="#292f33"

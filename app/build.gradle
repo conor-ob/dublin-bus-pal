@@ -12,12 +12,11 @@ def twitterConsumerKey = properties.getProperty('com.twitter.sdk.android.CONSUME
 def twitterConsumerSecret = properties.getProperty('com.twitter.sdk.android.CONSUMER_SECRET')
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion "27.0.2"
+    compileSdkVersion 28
     defaultConfig {
         applicationId "ie.dublinbuspal.android"
         minSdkVersion 21
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1000
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -43,6 +42,7 @@ android {
         }
         debug {
             debuggable true
+            applicationIdSuffix ".debug"
         }
     }
     compileOptions {
@@ -65,9 +65,9 @@ dependencies {
     // Android Support
     implementation libs.support_appcompat
     implementation libs.support_design
-    implementation "com.android.support:recyclerview-v7:$rootProject.androidSupportVersion"
-    implementation "com.android.support:support-v4:$rootProject.androidSupportVersion"
-    implementation "com.android.support:support-vector-drawable:$rootProject.androidSupportVersion"
+//    implementation "com.android.support:recyclerview-v7:$rootProject.androidSupportVersion"
+//    implementation "com.android.support:support-v4:$rootProject.androidSupportVersion"
+//    implementation "com.android.support:support-vector-drawable:$rootProject.androidSupportVersion"
     implementation libs.support_constraint
 
     implementation 'com.github.conor-ob:sticky-headers-recyclerview:27f63c0'

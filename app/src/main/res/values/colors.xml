@@ -4,12 +4,16 @@
     <color name="colorPrimaryDark">#346AC2</color>
     <color name="colorAccent">#ffd740</color>
 
+    <color name="colorPrimaryRipple">#804286f5</color>
+
     <color name="textColorPrimary">@color/grey_900</color>
     <color name="textColorSecondary">@color/grey_600</color>
     <color name="textColorPrimaryInverse">@color/grey_50</color>
     <color name="textColorSecondaryInverse">@color/grey_600</color>
     <color name="textColorPrimaryDisabled">@color/grey_400</color>
     <color name="textColorSecondaryDisabled">@color/grey_400</color>
+
+    <color name="white">#ffffff</color>
 
     <color name="toolbarSecondary">@android:color/white</color>
     <color name="buttonBackground">@android:color/white</color>
@@ -23,7 +27,7 @@
 
     <color name="map_overlay">#789E9E9E</color>
 
-    <color name="windowBackground">@color/blue_grey_50</color>
+    <color name="windowBackground">@color/white</color>
 
     <!-- Material Colours -->
     <color name="blue_grey_50">#eceff1</color>

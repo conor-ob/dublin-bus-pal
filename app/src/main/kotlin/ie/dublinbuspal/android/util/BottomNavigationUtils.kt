@@ -19,7 +19,7 @@ object BottomNavigationUtils {
             for (i in 0 until menuView.childCount) {
                 val item = menuView.getChildAt(i) as BottomNavigationItemView
                 // noinspection RestrictedApi
-                item.setShiftingMode(false)
+                //item.setShiftingMode(false)
                 // set once again checked value, so view will be updated
                 // noinspection RestrictedApi
                 item.setChecked(item.itemData.isChecked)

@@ -11,6 +11,12 @@
         <item name="android:windowBackground">@color/windowBackground</item>
     </style>
 
+    <style name="AppTheme.White" parent="AppTheme.NoActionBar">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
     <style name="AppTheme.NoActionBar" parent="AppTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -50,6 +56,28 @@
 
     <style name="FavouriteDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">@color/colorPrimary</item>
+    </style>
+
+    <style name="Widget.BottomNavigationView" parent="Widget.Design.BottomNavigationView">
+        <item name="labelVisibilityMode">labeled</item>
+        <item name="itemBackground">@android:color/white</item>
+        <item name="itemHorizontalTranslationEnabled">false</item>
+    </style>
+
+    <style name="Theme.BottomNavigationView" parent="">
+        <item name="fontFamily">@font/google_sans_medium</item>
+        <item name="colorControlHighlight">@color/colorPrimaryRipple</item>
+    </style>
+
+    <style name="CustomTabLayoutStyle" parent="Base.Widget.Design.TabLayout">
+        <item name="tabSelectedTextColor">@color/colorPrimary</item>
+        <item name="tabIndicatorColor">@color/colorPrimary</item>
+        <item name="tabTextAppearance">@style/CustomTabTextStyle</item>
+        <item name="colorControlHighlight">@color/colorPrimaryRipple</item>
+    </style>
+
+    <style name="CustomTabTextStyle" parent="android:TextAppearance.Widget.TabWidget">
+        <item name="fontFamily">@font/google_sans_medium</item>
     </style>
 
 </resources>

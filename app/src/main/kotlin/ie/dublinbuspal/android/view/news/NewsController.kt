@@ -28,6 +28,10 @@ class NewsController : BaseController() {
 
     private fun setupTabs(view: View) {
         val tabs = view.findViewById(R.id.tabs) as TabLayout
+
+        tabs.setSelectedTabIndicator(R.drawable.tab_indicator_rounded)
+        tabs.setSelectedTabIndicatorGravity(0)
+
         val tab1 = tabs.getTabAt(0) as TabLayout.Tab
         tab1.tag = "twitter"
         val tab2 = tabs.getTabAt(1) as TabLayout.Tab
