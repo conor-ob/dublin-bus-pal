@@ -1,7 +1,6 @@
 package ie.dublinbuspal.android.view.news
 
 import android.os.Bundle
-import android.support.design.widget.TabItem
 import android.support.design.widget.TabLayout
 import android.view.LayoutInflater
 import android.view.View
@@ -22,31 +21,26 @@ class NewsController : BaseController() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         val view = super.onCreateView(inflater, container)
-        setupTabs(view)
+        setupTabLayout(view)
         return view
     }
 
-    private fun setupTabs(view: View) {
-        val tabs = view.findViewById(R.id.tabs) as TabLayout
+    override fun onAttach(view: View) {
+        replaceTopController(view, TwitterController())
+    }
 
-        tabs.setSelectedTabIndicator(R.drawable.tab_indicator_rounded)
-        tabs.setSelectedTabIndicatorGravity(0)
+    private fun setupTabLayout(view: View) {
+        val tabLayout = view.tab_layout
+        tabLayout.isTabIndicatorFullWidth = false
+        tabLayout.setTabRippleColorResource(R.color.colorPrimaryRipple)
+        tabLayout.setSelectedTabIndicator(R.drawable.tab_indicator_rounded)
+        tabLayout.setSelectedTabIndicatorGravity(0)
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
 
-        val tab1 = tabs.getTabAt(0) as TabLayout.Tab
-        tab1.tag = "twitter"
-        val tab2 = tabs.getTabAt(1) as TabLayout.Tab
-        tab2.tag = "rss"
-//        val tab1 = view.findViewById(R.id.tabItem) as TabItem
-//        val tab2 = view.findViewById(R.id.tabItem2) as TabItem
-//        tab1.setOnClickListener { replaceTopController(view, TwitterController()) }
-//        tab2.setOnClickListener { replaceTopController(view, RssNewsController(Bundle.EMPTY)) }
-
-        tabs.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                Timber.d("selected")
-                if (tab.tag == "twitter") {
+                if (tab.position == 0) {
                     replaceTopController(view, TwitterController())
-                } else if (tab.tag == "rss") {
+                } else if (tab.position == 1) {
                     replaceTopController(view, RssNewsController(Bundle.EMPTY))
                 }
             }

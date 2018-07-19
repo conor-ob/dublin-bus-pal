@@ -19,7 +19,7 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.view_rss.view.*
+import kotlinx.android.synthetic.main.view_newsfeed.view.*
 import java.util.*
 
 class RssNewsController(args: Bundle) : BaseMvpController<RssNewsView, RssNewsPresenter>(args), RssNewsView {
@@ -27,7 +27,7 @@ class RssNewsController(args: Bundle) : BaseMvpController<RssNewsView, RssNewsPr
     private lateinit var fastAdapter: FastAdapter<IItem<Any, RecyclerView.ViewHolder>>
     private lateinit var rssNewsAdapter: ItemAdapter<RssNewsItem>
 
-    override fun getLayoutId() = R.layout.view_rss
+    override fun getLayoutId() = R.layout.view_newsfeed
 
     override fun createPresenter(): RssNewsPresenter {
         return applicationComponent()?.rssNewsPresenter()!!

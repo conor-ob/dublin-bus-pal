@@ -29,6 +29,8 @@
 
     <color name="windowBackground">@color/white</color>
 
+    <color name="unselected">#5F6267</color>
+
     <!-- Material Colours -->
     <color name="blue_grey_50">#eceff1</color>
 

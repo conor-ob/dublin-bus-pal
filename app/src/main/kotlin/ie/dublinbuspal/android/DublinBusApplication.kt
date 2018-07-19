@@ -2,12 +2,17 @@ package ie.dublinbuspal.android
 
 import android.app.Application
 import com.jakewharton.threetenabp.AndroidThreeTen
+import com.twitter.sdk.android.core.Twitter
+import com.twitter.sdk.android.core.TwitterAuthConfig
+import com.twitter.sdk.android.core.TwitterConfig
 import ie.dublinbuspal.android.di.ApplicationComponent
 import ie.dublinbuspal.android.di.ApplicationModule
 import ie.dublinbuspal.android.di.DaggerApplicationComponent
+import ie.dublinbuspal.android.util.MetadataUtils
 import ie.dublinbuspal.database.di.DatabaseModule
 import ie.dublinbuspal.service.di.NetworkModule
 import timber.log.Timber
+
 
 class DublinBusApplication : Application() {
 
@@ -18,6 +23,7 @@ class DublinBusApplication : Application() {
         setupDagger()
         setupTimber()
         setupThreeTen()
+        setupTwitter()
     }
 
     private fun setupDagger() {
@@ -40,6 +46,17 @@ class DublinBusApplication : Application() {
 
     private fun setupThreeTen() {
         AndroidThreeTen.init(applicationContext)
+    }
+
+    private fun setupTwitter() {
+        val config = TwitterConfig.Builder(applicationContext)
+                .twitterAuthConfig(TwitterAuthConfig(
+                        MetadataUtils.getMetadata(applicationContext,
+                                "com.twitter.sdk.android.CONSUMER_KEY"),
+                        MetadataUtils.getMetadata(applicationContext,
+                                "com.twitter.sdk.android.CONSUMER_SECRET")))
+                .build()
+        Twitter.initialize(config)
     }
 
 }
