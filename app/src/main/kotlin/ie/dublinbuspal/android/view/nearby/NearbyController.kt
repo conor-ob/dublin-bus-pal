@@ -30,7 +30,9 @@ class NearbyController(args: Bundle) : BaseMvpController<NearbyView, NearbyPrese
     override fun getLayoutId() = R.layout.view_nearby
 
     override fun createPresenter(): NearbyPresenter {
-        return applicationComponent()?.nearbyPresenter()!!
+        val presenter = applicationComponent()?.nearbyPresenter()!!
+        presenter.preload()
+        return presenter
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {

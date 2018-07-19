@@ -4,7 +4,9 @@ import ie.dublinbuspal.base.Coordinate
 import ie.dublinbuspal.base.PreferencesRepository
 import ie.dublinbuspal.base.Repository
 import ie.dublinbuspal.base.util.CollectionUtils
+import ie.dublinbuspal.database.entity.SmartDublinStopServiceEntity
 import ie.dublinbuspal.domain.model.stop.Stop
+import ie.dublinbuspal.domain.repository.stop.SmartDublinKey
 import ie.dublinbuspal.domain.util.LocationUtils
 import ie.dublinbuspal.service.model.stop.StopsRequestBodyXml
 import ie.dublinbuspal.service.model.stop.StopsRequestRootXml
@@ -14,7 +16,8 @@ import io.reactivex.Observable
 import java.util.*
 import javax.inject.Inject
 
-class NearbyStopsUseCase @Inject constructor(private val repository: Repository<List<Stop>, StopsRequestXml>,
+class NearbyStopsUseCase @Inject constructor(private val stopRepository: Repository<List<Stop>, StopsRequestXml>,
+                                             private val smartDublinStopServiceRepository: Repository<List<SmartDublinStopServiceEntity>, SmartDublinKey>,
                                              private val preferences: PreferencesRepository) {
 
     private val key: StopsRequestXml by lazy {
@@ -24,7 +27,7 @@ class NearbyStopsUseCase @Inject constructor(private val repository: Repository<
     }
 
     fun getNearbyBusStops(coordinate: Coordinate): Observable<SortedMap<Double, Stop>> {
-        return repository.get(key)
+        return stopRepository.get(key)
                 .map { filter(it, coordinate) }
     }
 
@@ -42,6 +45,10 @@ class NearbyStopsUseCase @Inject constructor(private val repository: Repository<
 
     fun saveLastLocation(location: Pair<Coordinate, Float>): Completable {
         return preferences.saveLastLocation(location)
+    }
+
+    fun preload(): Completable {
+        return Completable.fromObservable(smartDublinStopServiceRepository.get(SmartDublinKey("bac", "json")))
     }
 
 }

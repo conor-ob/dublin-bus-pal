@@ -46,6 +46,14 @@ class DatabaseModule(private val databaseName: String) {
 
     @Provides
     @Singleton
+    fun smartDublinStopServiceDao(database: DublinBusDatabase): SmartDublinStopServiceDao = database.smartDublinStopServiceDao()
+
+    @Provides
+    @Singleton
+    fun detailedStopDao(database: DublinBusDatabase): DetailedStopDao = database.detailedStopDao()
+
+    @Provides
+    @Singleton
     fun txRunner(database: DublinBusDatabase): TxRunner = DatabaseTxRunner(database)
 
 }

@@ -11,6 +11,7 @@ import ie.dublinbuspal.base.Repository
 import ie.dublinbuspal.base.TxRunner
 import ie.dublinbuspal.database.dao.*
 import ie.dublinbuspal.database.entity.FavouriteStopEntity
+import ie.dublinbuspal.database.entity.SmartDublinStopServiceEntity
 import ie.dublinbuspal.domain.mapping.favourite.FavouriteStopDomainMapper
 import ie.dublinbuspal.domain.mapping.favourite.FavouriteStopEntityMapper
 import ie.dublinbuspal.domain.mapping.livedata.LiveDataMapper
@@ -19,6 +20,7 @@ import ie.dublinbuspal.domain.mapping.route.RouteEntityMapper
 import ie.dublinbuspal.domain.mapping.routeservice.RouteServiceDomainMapper
 import ie.dublinbuspal.domain.mapping.routeservice.RouteServiceEntityMapper
 import ie.dublinbuspal.domain.mapping.rss.RssMapper
+import ie.dublinbuspal.domain.mapping.stop.SmartDublinStopServiceEntityMapper
 import ie.dublinbuspal.domain.mapping.stop.StopDomainMapper
 import ie.dublinbuspal.domain.mapping.stop.StopEntityMapper
 import ie.dublinbuspal.domain.mapping.stopservice.StopServiceDomainMapper
@@ -38,12 +40,12 @@ import ie.dublinbuspal.domain.repository.route.RouteRepository
 import ie.dublinbuspal.domain.repository.routeservice.RouteServicePersister
 import ie.dublinbuspal.domain.repository.routeservice.RouteServiceRepository
 import ie.dublinbuspal.domain.repository.rss.RssNewsRepository
-import ie.dublinbuspal.domain.repository.stop.StopPersister
-import ie.dublinbuspal.domain.repository.stop.StopRepository
+import ie.dublinbuspal.domain.repository.stop.*
 import ie.dublinbuspal.domain.repository.stopservice.StopServicePersister
 import ie.dublinbuspal.domain.repository.stopservice.StopServiceRepository
 import ie.dublinbuspal.service.DublinBusRssApi
 import ie.dublinbuspal.service.DublinBusSoapApi
+import ie.dublinbuspal.service.SmartDublinRestApi
 import ie.dublinbuspal.service.model.livedata.LiveDataRequestXml
 import ie.dublinbuspal.service.model.livedata.LiveDataResponseXml
 import ie.dublinbuspal.service.model.route.RoutesRequestXml
@@ -52,9 +54,12 @@ import ie.dublinbuspal.service.model.routeservice.RouteServiceRequestXml
 import ie.dublinbuspal.service.model.routeservice.RouteServiceResponseXml
 import ie.dublinbuspal.service.model.rss.RssResponseXml
 import ie.dublinbuspal.service.model.stop.StopsRequestXml
+import ie.dublinbuspal.service.model.stop.StopsResponseJson
 import ie.dublinbuspal.service.model.stop.StopsResponseXml
 import ie.dublinbuspal.service.model.stopservice.StopServiceRequestXml
 import ie.dublinbuspal.service.model.stopservice.StopServiceResponseXml
+import io.reactivex.Completable
+import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -201,6 +206,26 @@ class RepositoryModule {
                 .open()
 
         return RssNewsRepository(store)
+    }
+
+    @Provides
+    @Singleton
+    fun smartDublinStopServiceRepository(api: SmartDublinRestApi,
+                                         dao: SmartDublinStopServiceDao,
+                                         txRunner: TxRunner): Repository<List<SmartDublinStopServiceEntity>, SmartDublinKey> {
+
+        val fetcher = Fetcher<StopsResponseJson, SmartDublinKey> { key -> api.getStops(key.operator, key.format) }
+
+        val memoryPolicy = MemoryPolicy.builder()
+                .setExpireAfterWrite(24)
+                .setExpireAfterTimeUnit(TimeUnit.HOURS)
+                .build()
+
+        val entityMapper = SmartDublinStopServiceEntityMapper()
+        val persister = SmartDublinStopServicePersister(dao, txRunner, entityMapper)
+        val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
+
+        return SmartDublinStopServiceRepository(store)
     }
 
 }

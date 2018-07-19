@@ -8,6 +8,14 @@ import javax.inject.Inject
 
 class NearbyPresenter @Inject constructor(private val useCase: NearbyStopsUseCase) : BasePresenter<NearbyView>() {
 
+    fun preload() {
+        useCase.preload()
+                .compose(applyCompletableSchedulers())
+                .doOnComplete { Timber.d("done") }
+                .doOnError { Timber.e(it) }
+                .subscribe()
+    }
+
     fun start() {
         useCase.getLastLocation()
                 .compose(applyObservableSchedulers())

@@ -14,7 +14,8 @@ import ie.dublinbuspal.database.entity.*
             RouteEntity::class,
             StopServiceEntity::class,
             RouteServiceEntity::class,
-            FavouriteStopEntity::class
+            FavouriteStopEntity::class,
+            SmartDublinStopServiceEntity::class
         ]
 )
 @TypeConverters(Converters::class)
@@ -29,5 +30,9 @@ abstract class DublinBusDatabase : RoomDatabase() {
     abstract fun routeServiceDao(): RouteServiceDao
 
     abstract fun favouriteStopDao(): FavouriteStopDao
+
+    abstract fun smartDublinStopServiceDao(): SmartDublinStopServiceDao
+
+    abstract fun detailedStopDao(): DetailedStopDao
 
 }
