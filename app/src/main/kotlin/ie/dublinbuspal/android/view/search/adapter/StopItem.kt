@@ -20,6 +20,7 @@ class StopItem(val stop: Stop) : AbstractItem<StopItem, StopItem.ViewHolder>() {
         override fun bindView(item: StopItem, payloads: MutableList<Any>?) {
             itemView.stop_id.text = item.stop.id
             itemView.stop_name.text = item.stop.name
+            itemView.routes.text = item.stop.routes.toString()
         }
 
         override fun unbindView(item: StopItem?) {

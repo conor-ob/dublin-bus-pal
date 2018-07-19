@@ -11,7 +11,7 @@ data class DetailedStopEntity(
         var favouriteRoutes: List<String>? = emptyList()
 ) {
 
-    fun name(): String? {
+    fun customName(): String? {
         if (favouriteName != null) {
             return favouriteName
         }

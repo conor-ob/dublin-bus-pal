@@ -20,7 +20,7 @@ object Converters {
 
     @TypeConverter
     @JvmStatic
-    fun toList(value: String): List<String> {
+    fun toList(value: String?): List<String> {
         if (value != null) {
             return value.split(DELIMETER)
         }

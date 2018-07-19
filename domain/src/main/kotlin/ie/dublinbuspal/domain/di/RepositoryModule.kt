@@ -58,8 +58,6 @@ import ie.dublinbuspal.service.model.stop.StopsResponseJson
 import ie.dublinbuspal.service.model.stop.StopsResponseXml
 import ie.dublinbuspal.service.model.stopservice.StopServiceRequestXml
 import ie.dublinbuspal.service.model.stopservice.StopServiceResponseXml
-import io.reactivex.Completable
-import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -69,7 +67,8 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun stopRepository(api: DublinBusSoapApi,
-                       dao: StopDao,
+                       stopDao: StopDao,
+                       detailedStopDao: DetailedStopDao,
                        txRunner: TxRunner): Repository<List<Stop>, StopsRequestXml> {
 
         val fetcher = Fetcher<StopsResponseXml, StopsRequestXml> { key -> api.getStops(key) }
@@ -81,7 +80,7 @@ class RepositoryModule {
 
         val domainMapper = StopDomainMapper()
         val entityMapper = StopEntityMapper()
-        val persister = StopPersister(dao, txRunner, entityMapper, domainMapper)
+        val persister = StopPersister(stopDao, detailedStopDao, txRunner, entityMapper, domainMapper)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
 
         return StopRepository(store)
