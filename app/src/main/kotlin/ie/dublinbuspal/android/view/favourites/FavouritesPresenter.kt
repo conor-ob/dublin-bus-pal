@@ -1,6 +1,5 @@
 package ie.dublinbuspal.android.view.favourites
 
-import android.util.Log
 import ie.dublinbuspal.android.view.BasePresenter
 import ie.dublinbuspal.domain.usecase.favourites.FavouritesUseCase
 import timber.log.Timber

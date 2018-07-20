@@ -12,9 +12,9 @@ import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.mikepenz.fastadapter.commons.utils.FastAdapterDiffUtil
 import ie.dublinbuspal.android.R
 import ie.dublinbuspal.android.view.BaseMvpController
-import ie.dublinbuspal.android.view.favourites.adapter.FavouriteStopDiffCallback
-import ie.dublinbuspal.android.view.favourites.adapter.FavouriteStopItem
-import ie.dublinbuspal.domain.model.favourite.FavouriteStop
+import ie.dublinbuspal.android.view.search.adapter.StopDiffCallback
+import ie.dublinbuspal.android.view.search.adapter.StopItem
+import ie.dublinbuspal.domain.model.stop.Stop
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
@@ -25,7 +25,7 @@ import java.util.*
 class FavouritesController(args: Bundle) : BaseMvpController<FavouritesView, FavouritesPresenter>(args), FavouritesView {
 
     private lateinit var fastAdapter: FastAdapter<IItem<Any, RecyclerView.ViewHolder>>
-    private lateinit var stopsAdapter: ItemAdapter<FavouriteStopItem>
+    private lateinit var stopsAdapter: ItemAdapter<StopItem>
 
     override fun getLayoutId() = R.layout.view_favourites
 
@@ -55,9 +55,9 @@ class FavouritesController(args: Bundle) : BaseMvpController<FavouritesView, Fav
         presenter.start()
     }
 
-    override fun showFavourites(favourites: List<FavouriteStop>) {
-        Single.fromCallable { favourites.map { FavouriteStopItem(it) } }
-                .map { FastAdapterDiffUtil.calculateDiff(stopsAdapter, it, FavouriteStopDiffCallback()) }
+    override fun showFavourites(favourites: List<Stop>) {
+        Single.fromCallable { favourites.map { StopItem(it) } }
+                .map { FastAdapterDiffUtil.calculateDiff(stopsAdapter, it, StopDiffCallback()) }
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy { FastAdapterDiffUtil.set(stopsAdapter, it) }

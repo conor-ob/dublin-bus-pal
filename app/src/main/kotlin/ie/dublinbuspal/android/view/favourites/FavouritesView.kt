@@ -1,10 +1,10 @@
 package ie.dublinbuspal.android.view.favourites
 
 import com.hannesdorfmann.mosby3.mvp.MvpView
-import ie.dublinbuspal.domain.model.favourite.FavouriteStop
+import ie.dublinbuspal.domain.model.stop.Stop
 
 interface FavouritesView : MvpView {
 
-    fun showFavourites(favourites: List<FavouriteStop>)
+    fun showFavourites(favourites: List<Stop>)
 
 }

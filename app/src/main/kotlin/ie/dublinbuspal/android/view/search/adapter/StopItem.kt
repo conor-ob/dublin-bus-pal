@@ -1,5 +1,7 @@
 package ie.dublinbuspal.android.view.search.adapter
 
+import android.support.design.chip.Chip
+import android.view.LayoutInflater
 import android.view.View
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
@@ -18,9 +20,14 @@ class StopItem(val stop: Stop) : AbstractItem<StopItem, StopItem.ViewHolder>() {
     class ViewHolder(itemView: View) : FastAdapter.ViewHolder<StopItem>(itemView) {
 
         override fun bindView(item: StopItem, payloads: MutableList<Any>?) {
-            itemView.stop_id.text = item.stop.id
+            itemView.stop_id.text = itemView.resources.getString(R.string.formatted_stop_id, item.stop.id)
             itemView.stop_name.text = item.stop.name
-            itemView.routes.text = item.stop.routes.toString()
+            itemView.routes.removeAllViews()
+            for (route in item.stop.routes) {
+                val chip = LayoutInflater.from(itemView.context).inflate(R.layout.cat_chip_group_item_filter, itemView.routes, false) as Chip
+                chip.text = route
+                itemView.routes.addView(chip)
+            }
         }
 
         override fun unbindView(item: StopItem?) {

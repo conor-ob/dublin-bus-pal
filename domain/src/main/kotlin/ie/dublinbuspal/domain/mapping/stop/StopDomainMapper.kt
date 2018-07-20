@@ -9,7 +9,7 @@ import ie.dublinbuspal.domain.model.stop.Stop
 class StopDomainMapper : Mapper<DetailedStopEntity, Stop> {
 
     override fun map(from: DetailedStopEntity): Stop {
-        return Stop(from.id, from.name, Coordinate(from.latitude, from.longitude), from.smartDublinRoutes!!)
+        return Stop(from.id, from.customName()!!, Coordinate(from.latitude, from.longitude), from.customRoutes()!!)
     }
 
 }

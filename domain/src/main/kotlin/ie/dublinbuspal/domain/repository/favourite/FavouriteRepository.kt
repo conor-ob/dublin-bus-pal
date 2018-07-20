@@ -6,17 +6,18 @@ import ie.dublinbuspal.base.Repository
 import ie.dublinbuspal.database.dao.FavouriteStopDao
 import ie.dublinbuspal.database.entity.FavouriteStopEntity
 import ie.dublinbuspal.domain.model.favourite.FavouriteStop
+import ie.dublinbuspal.domain.model.stop.Stop
 import io.reactivex.Observable
 
-class FavouriteRepository(private val store: StoreRoom<List<FavouriteStop>, Any>,
+class FavouriteRepository(private val store: StoreRoom<List<Stop>, Any>,
                           private val dao: FavouriteStopDao,
-                          private val mapper: Mapper<FavouriteStop, FavouriteStopEntity>) : Repository<List<FavouriteStop>, Any> {
+                          private val mapper: Mapper<FavouriteStop, FavouriteStopEntity>) : Repository<List<Stop>, Any> {
 
-    override fun get(key: Any): Observable<List<FavouriteStop>> {
+    override fun get(key: Any): Observable<List<Stop>> {
         return store.get(key)
     }
 
-    override fun fetch(key: Any): Observable<List<FavouriteStop>> {
+    override fun fetch(key: Any): Observable<List<Stop>> {
         TODO()
     }
 

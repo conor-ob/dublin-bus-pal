@@ -65,7 +65,7 @@
     </style>
 
     <style name="Theme.BottomNavigationView" parent="">
-        <item name="fontFamily">@font/google_sans_medium</item>
+        <item name="fontFamily">@font/google_sans_regular</item>
         <item name="colorControlHighlight">@color/colorPrimaryRipple</item>
     </style>
 

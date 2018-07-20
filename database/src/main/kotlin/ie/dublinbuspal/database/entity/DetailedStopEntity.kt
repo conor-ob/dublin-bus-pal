@@ -3,9 +3,10 @@ package ie.dublinbuspal.database.entity
 data class DetailedStopEntity(
         val id: String,
         val name: String,
-        var favouriteName: String? = null,
         val latitude: Double,
         val longitude: Double,
+        var favouriteName: String? = null,
+        var favouriteOrder: Int? = null,
         var routes: List<String>? = emptyList(),
         var smartDublinRoutes: List<String>? = emptyList(),
         var favouriteRoutes: List<String>? = emptyList()
@@ -18,6 +19,13 @@ data class DetailedStopEntity(
         return name
     }
 
-    fun isFavourite() = favouriteName != null
+    fun customRoutes(): List<String>? {
+        if (favouriteRoutes != null && favouriteRoutes!!.isNotEmpty()) {
+            return favouriteRoutes
+        } else if (routes != null && routes!!.isNotEmpty()) {
+            return routes
+        }
+        return smartDublinRoutes
+    }
 
 }

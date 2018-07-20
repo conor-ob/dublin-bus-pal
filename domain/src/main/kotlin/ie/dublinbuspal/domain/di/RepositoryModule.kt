@@ -169,22 +169,23 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun favouritesRepository(dao: FavouriteStopDao): Repository<List<FavouriteStop>, Any> {
+    fun favouritesRepository(stopDao: FavouriteStopDao,
+                             detailedStopDao: DetailedStopDao): Repository<List<Stop>, Any> {
 
-        val fetcher = Fetcher<List<FavouriteStopEntity>, Any> { dao.selectAll().toSingle() }
+        val fetcher = Fetcher<List<FavouriteStopEntity>, Any> { stopDao.selectAll().toSingle() }
 
         val memoryPolicy = MemoryPolicy.builder()
                 .setExpireAfterWrite(24)
                 .setExpireAfterTimeUnit(TimeUnit.HOURS)
                 .build()
 
-        val domainMapper = FavouriteStopDomainMapper()
+        val domainMapper = StopDomainMapper()
         val entityMapper = FavouriteStopEntityMapper()
-        val persister = FavouritePersister(dao, domainMapper)
+        val persister = FavouritePersister(stopDao, detailedStopDao, domainMapper)
 
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
 
-        return FavouriteRepository(store, dao, entityMapper)
+        return FavouriteRepository(store, stopDao, entityMapper)
     }
 
     @Provides
