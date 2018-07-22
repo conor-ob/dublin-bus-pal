@@ -1,7 +1,6 @@
 package ie.dublinbuspal.android.view.news.rss.adapter
 
 import com.mikepenz.fastadapter.commons.utils.DiffCallback
-import ie.dublinbuspal.android.view.favourites.adapter.FavouriteStopItem
 
 class RssNewsDiffCallback : DiffCallback<RssNewsItem> {
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <item name="view_livedata_item" type="id" />
     <item name="view_search_stop_item" type="id" />
     <item name="view_search_route_item" type="id" />
     <item name="view_search_stop_header" type="id" />

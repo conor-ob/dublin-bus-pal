@@ -12,8 +12,10 @@ import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.mikepenz.fastadapter.commons.utils.FastAdapterDiffUtil
 import ie.dublinbuspal.android.R
 import ie.dublinbuspal.android.view.BaseMvpController
+import ie.dublinbuspal.android.view.livedata.adapter.LiveDataItem
 import ie.dublinbuspal.android.view.search.adapter.StopDiffCallback
 import ie.dublinbuspal.android.view.search.adapter.StopItem
+import ie.dublinbuspal.domain.model.livedata.LiveData
 import ie.dublinbuspal.domain.model.stop.Stop
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -26,6 +28,7 @@ class FavouritesController(args: Bundle) : BaseMvpController<FavouritesView, Fav
 
     private lateinit var fastAdapter: FastAdapter<IItem<Any, RecyclerView.ViewHolder>>
     private lateinit var stopsAdapter: ItemAdapter<StopItem>
+    private lateinit var livedatadapter: ItemAdapter<LiveDataItem>
 
     override fun getLayoutId() = R.layout.view_favourites
 
@@ -41,7 +44,8 @@ class FavouritesController(args: Bundle) : BaseMvpController<FavouritesView, Fav
 
     private fun setupRecyclerView(view: View) {
         stopsAdapter = ItemAdapter()
-        fastAdapter = FastAdapter.with(Arrays.asList(stopsAdapter))
+        livedatadapter = ItemAdapter()
+        fastAdapter = FastAdapter.with(Arrays.asList(stopsAdapter, livedatadapter))
         fastAdapter.withSelectable(true)
         view.recycler_view.apply {
             setHasFixedSize(true)
@@ -61,6 +65,10 @@ class FavouritesController(args: Bundle) : BaseMvpController<FavouritesView, Fav
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy { FastAdapterDiffUtil.set(stopsAdapter, it) }
+    }
+
+    override fun showLiveData(livedata: List<LiveData>) {
+
     }
 
 }

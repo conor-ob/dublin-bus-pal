@@ -19,7 +19,7 @@ class RouteItem(val route: Route) : AbstractItem<RouteItem, RouteItem.ViewHolder
 
         override fun bindView(item: RouteItem, payloads: MutableList<Any>?) {
             itemView.route_id.text = item.route.id
-            itemView.route_description.text = item.route.destination
+            itemView.route_description.text = itemView.resources.getString(R.string.formatted_route_title, item.route.origin, item.route.destination)
         }
 
         override fun unbindView(item: RouteItem?) {

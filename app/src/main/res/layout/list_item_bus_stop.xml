@@ -11,7 +11,7 @@
         android:id="@+id/stop_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/google_sans_medium"
+        android:fontFamily="@font/google_sans_regular"
         android:textColor="@color/textColorPrimary"
         android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
