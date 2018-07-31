@@ -52,7 +52,9 @@ class NearbyController(args: Bundle) : BaseMvpController<NearbyView, NearbyPrese
                     presenter.refresh(coordinate)
                 }
                 setOnInfoWindowClickListener {
-                    onBusStopClicked(it.tag as String)
+                    val tag = it.tag as String
+                    val tags = tag.split("::")
+                    onBusStopClicked(tags[0], tags[1])
                 }
                 uiSettings.isMyLocationButtonEnabled = false
                 uiSettings.isMapToolbarEnabled = false
@@ -92,10 +94,10 @@ class NearbyController(args: Bundle) : BaseMvpController<NearbyView, NearbyPrese
                 .build()))
     }
 
-    private fun onBusStopClicked(stopId: String) {
+    private fun onBusStopClicked(stopId: String, stopName: String) {
         parentController?.router?.pushController(RouterTransaction
                 .with(LiveDataController
-                        .Builder(stopId)
+                        .Builder(stopId, stopName)
                         .build())
                 .pushChangeHandler(FadeChangeHandler(500L))
                 .popChangeHandler(FadeChangeHandler(500L)))
@@ -115,7 +117,7 @@ class NearbyController(args: Bundle) : BaseMvpController<NearbyView, NearbyPrese
                         .infoWindowAnchor(0.3f, 0.0f)
                         .title(busStop.name)
                         .icon(ImageUtils.drawableToBitmap(applicationContext!!, R.drawable.ic_map_marker_bus_double_decker_default)))
-                marker.tag = busStop.id
+                marker.tag = "${busStop.id}::${busStop.name}"
                 mapMarkers[busStop] = marker
                 AnimationUtils.fadeInMarker(marker)
             }
