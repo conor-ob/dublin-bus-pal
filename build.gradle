@@ -11,6 +11,7 @@ buildscript {
                 'junit'            : '4.12',   // https://mvnrepository.com/artifact/junit/junit
                 'kotlin'           : '1.2.50', // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib
                 'mosby'            : '3.1.0',  // https://mvnrepository.com/artifact/com.hannesdorfmann.mosby3/mvp-conductor
+                'okhttp_logging_interceptor': '3.11.0', // https://mvnrepository.com/artifact/com.squareup.okhttp3/logging-interceptor
                 'retrofit'         : '2.4.0',  // https://mvnrepository.com/artifact/com.squareup.retrofit2/retrofit
                 'room'             : '1.1.1',  // https://mvnrepository.com/artifact/android.arch.persistence.room/runtime
                 'rx_android'       : '2.0.2',  // https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxandroid
@@ -41,6 +42,7 @@ buildscript {
                 'kotlin_android_extensions': "org.jetbrains.kotlin:kotlin-android-extensions:${versions.kotlin}",
                 'kotlin_gradle_plugin'     : "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}",
                 'mosby'                    : "com.hannesdorfmann.mosby3:mvp-conductor:${versions.mosby}",
+                'okhttp_logging_interceptor': "com.squareup.okhttp3:logging-interceptor:${versions.okhttp_logging_interceptor}",
                 'retrofit'                 : "com.squareup.retrofit2:retrofit:${versions.retrofit}",
                 'retrofit_gson_converter'  : "com.squareup.retrofit2:converter-gson:${versions.retrofit}",
                 'retrofit_rxjava_adapter'  : "com.squareup.retrofit2:adapter-rxjava2:${versions.retrofit}",

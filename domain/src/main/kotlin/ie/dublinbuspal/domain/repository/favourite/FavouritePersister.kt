@@ -21,7 +21,7 @@ class FavouritePersister(private val stopDao: FavouriteStopDao,
     }
 
     override fun write(key: Any, raw: List<FavouriteStopEntity>) {
-        stopDao.insert(FavouriteStopEntity("315", "Howiye", Arrays.asList("46A", "145"), 1))
+//        stopDao.insert(FavouriteStopEntity("315", "Howiye", Arrays.asList("46A", "145"), 1))
         stopDao.insert(FavouriteStopEntity("769", "Blah Blah", Arrays.asList("46A"), 2))
     }
 

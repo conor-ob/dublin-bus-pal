@@ -15,7 +15,7 @@ class ServiceStatusResponseXmlTest : AbstractDataClassTest<ServiceStatusResponse
     }
 
     @Test
-    fun testDeserializeXml() {
+    fun `xml should be deserialized correctly`() {
         XmlUtils.resolveXml("service_status_response.xml", ServiceStatusResponseXml::class.java)
     }
 

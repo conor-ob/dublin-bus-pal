@@ -1,7 +1,6 @@
 package ie.dublinbuspal.android.view.home
 
 import android.os.Bundle
-import android.support.design.bottomnavigation.LabelVisibilityMode
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,13 +8,13 @@ import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import ie.dublinbuspal.android.R
-import ie.dublinbuspal.android.util.BottomNavigationUtils
 import ie.dublinbuspal.android.view.BaseController
 import ie.dublinbuspal.android.view.favourites.FavouritesController
 import ie.dublinbuspal.android.view.nearby.NearbyController
 import ie.dublinbuspal.android.view.news.NewsController
 import ie.dublinbuspal.android.view.search.SearchController
 import kotlinx.android.synthetic.main.view_home.view.*
+import timber.log.Timber
 
 class HomeController : BaseController() {
 
@@ -36,6 +35,9 @@ class HomeController : BaseController() {
                 R.id.navigation_search -> replaceTopController(view, SearchController(Bundle.EMPTY))
                 else -> false
             }
+        }
+        view.bottom_navigation.setOnNavigationItemReselectedListener {
+            Timber.d("Bottom navigation item reselected")
         }
         view.bottom_navigation.selectedItemId = R.id.navigation_nearby
     }

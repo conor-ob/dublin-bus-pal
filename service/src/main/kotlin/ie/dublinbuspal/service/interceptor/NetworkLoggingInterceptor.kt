@@ -2,24 +2,29 @@ package ie.dublinbuspal.service.interceptor
 
 import okhttp3.Interceptor
 import okhttp3.Response
+import okhttp3.logging.HttpLoggingInterceptor
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 class NetworkLoggingInterceptor : Interceptor {
 
-    private val log = LoggerFactory.getLogger(javaClass)
+    private val httpLoggingInterceptor: Interceptor by lazy { newHttpLoggingInterceptor() }
+    private val log: Logger by lazy { newLogger() }
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val request = chain.request()
+        return httpLoggingInterceptor.intercept(chain)
+    }
 
-        val t1 = System.nanoTime()
-        log.debug("sending request ${request.url()} on ${chain.connection()}\n${request.headers()}")
+    private fun newLogger(): Logger {
+        return LoggerFactory.getLogger(javaClass)
+    }
 
-        val response = chain.proceed(request)
-
-        val t2 = System.nanoTime()
-        log.debug("received response for ${response.request().url()} in ${(t2 - t1) / 1e6} ms\n${response.headers()}")
-
-        return response
+    private fun newHttpLoggingInterceptor(): Interceptor {
+        val interceptor = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger {
+            log.debug(it)
+        })
+        interceptor.level = HttpLoggingInterceptor.Level.HEADERS
+        return interceptor
     }
 
 }

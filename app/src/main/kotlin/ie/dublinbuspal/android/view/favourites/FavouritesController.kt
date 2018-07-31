@@ -12,9 +12,9 @@ import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.mikepenz.fastadapter.commons.utils.FastAdapterDiffUtil
 import ie.dublinbuspal.android.R
 import ie.dublinbuspal.android.view.BaseMvpController
+import ie.dublinbuspal.android.view.favourites.adapter.FavouriteDiffCallback
+import ie.dublinbuspal.android.view.favourites.adapter.FavouriteItem
 import ie.dublinbuspal.android.view.livedata.adapter.LiveDataItem
-import ie.dublinbuspal.android.view.search.adapter.StopDiffCallback
-import ie.dublinbuspal.android.view.search.adapter.StopItem
 import ie.dublinbuspal.domain.model.livedata.LiveData
 import ie.dublinbuspal.domain.model.stop.Stop
 import io.reactivex.Single
@@ -27,8 +27,7 @@ import java.util.*
 class FavouritesController(args: Bundle) : BaseMvpController<FavouritesView, FavouritesPresenter>(args), FavouritesView {
 
     private lateinit var fastAdapter: FastAdapter<IItem<Any, RecyclerView.ViewHolder>>
-    private lateinit var stopsAdapter: ItemAdapter<StopItem>
-    private lateinit var livedatadapter: ItemAdapter<LiveDataItem>
+    private lateinit var stopsAdapter: ItemAdapter<FavouriteItem>
 
     override fun getLayoutId() = R.layout.view_favourites
 
@@ -44,8 +43,7 @@ class FavouritesController(args: Bundle) : BaseMvpController<FavouritesView, Fav
 
     private fun setupRecyclerView(view: View) {
         stopsAdapter = ItemAdapter()
-        livedatadapter = ItemAdapter()
-        fastAdapter = FastAdapter.with(Arrays.asList(stopsAdapter, livedatadapter))
+        fastAdapter = FastAdapter.with(Collections.singletonList(stopsAdapter))
         fastAdapter.withSelectable(true)
         view.recycler_view.apply {
             setHasFixedSize(true)
@@ -60,15 +58,26 @@ class FavouritesController(args: Bundle) : BaseMvpController<FavouritesView, Fav
     }
 
     override fun showFavourites(favourites: List<Stop>) {
-        Single.fromCallable { favourites.map { StopItem(it) } }
-                .map { FastAdapterDiffUtil.calculateDiff(stopsAdapter, it, StopDiffCallback()) }
+        Single.fromCallable { favourites.map { FavouriteItem(it) } }
+                .map { FastAdapterDiffUtil.calculateDiff(stopsAdapter, it, FavouriteDiffCallback()) }
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy { FastAdapterDiffUtil.set(stopsAdapter, it) }
     }
 
-    override fun showLiveData(livedata: List<LiveData>) {
-
+    override fun showLiveData(favourites: List<Stop>, favouriteId: String, livedata: List<LiveData>) {
+        Single.fromCallable {
+            favourites.map {
+                if (it.id == favouriteId) {
+                    return@map FavouriteItem(it, livedata)
+                }
+                return@map FavouriteItem(it)
+            }
+        }
+                .map { FastAdapterDiffUtil.calculateDiff(stopsAdapter, it, FavouriteDiffCallback()) }
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy { FastAdapterDiffUtil.set(stopsAdapter, it) }
     }
 
 }
