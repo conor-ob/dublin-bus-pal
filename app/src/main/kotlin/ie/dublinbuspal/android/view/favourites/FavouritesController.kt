@@ -65,7 +65,7 @@ class FavouritesController(args: Bundle) : BaseMvpController<FavouritesView, Fav
                 .subscribeBy { FastAdapterDiffUtil.set(stopsAdapter, it) }
     }
 
-    override fun showLiveData(favourites: List<Stop>, favouriteId: String, livedata: List<LiveData>) {
+    override fun showLiveData(favourites: List<Stop>, favouriteId: String, livedata: Map<Pair<String, String>, List<LiveData>>) {
         Single.fromCallable {
             favourites.map {
                 if (it.id == favouriteId) {

@@ -23,7 +23,7 @@ class FavouritesPresenter @Inject constructor(private val favouritesUseCase: Fav
 
     private fun getLiveData(favourites: List<Stop>) {
         for (favourite in favourites) {
-            liveDataUseCase.getLiveData(favourite.id)
+            liveDataUseCase.getCondensedLiveData(favourite.id)
                     .compose(applyObservableSchedulers())
                     .doOnNext {
                         ifViewAttached { view -> view.showLiveData(favourites, favourite.id, it) }

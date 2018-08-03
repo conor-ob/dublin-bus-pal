@@ -19,6 +19,24 @@ class LiveDataUseCase @Inject constructor(private val liveDataRepository: Reposi
         return liveDataRepository.get(buildLiveDataKey(stopId))
     }
 
+    fun getCondensedLiveData(stopId: String): Observable<Map<Pair<String, String>, List<LiveData>>> {
+        return getLiveData(stopId).map { condenseLiveData(it) }
+    }
+
+    private fun condenseLiveData(liveData: List<LiveData>): Map<Pair<String, String>, List<LiveData>>? {
+        val condensedLivedata = LinkedHashMap<Pair<String, String>, MutableList<LiveData>>()
+        for (data in liveData) {
+            val key = Pair(data.routeId, data.destination)
+            var liveDataForRoute = condensedLivedata[key]
+            if (liveDataForRoute == null) {
+                liveDataForRoute = mutableListOf()
+                condensedLivedata[key] = liveDataForRoute
+            }
+            liveDataForRoute.add(data)
+        }
+        return condensedLivedata
+    }
+
     private fun buildLiveDataKey(stopId: String): LiveDataRequestXml {
         val root = LiveDataRequestRootXml(stopId, true.toString().toLowerCase())
         val body = LiveDataRequestBodyXml(root)

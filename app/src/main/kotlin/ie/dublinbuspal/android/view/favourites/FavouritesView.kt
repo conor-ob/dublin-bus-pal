@@ -8,6 +8,6 @@ interface FavouritesView : MvpView {
 
     fun showFavourites(favourites: List<Stop>)
 
-    fun showLiveData(favourites: List<Stop>, favouriteId: String, livedata: List<LiveData>)
+    fun showLiveData(favourites: List<Stop>, favouriteId: String, livedata: Map<Pair<String, String>, List<LiveData>>)
 
 }
