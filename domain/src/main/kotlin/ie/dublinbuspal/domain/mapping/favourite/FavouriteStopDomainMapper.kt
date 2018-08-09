@@ -1,6 +1,6 @@
 package ie.dublinbuspal.domain.mapping.favourite
 
-import ie.dublinbuspal.base.Mapper
+import ie.dublinbuspal.domain.repository.Mapper
 import ie.dublinbuspal.database.entity.FavouriteStopEntity
 import ie.dublinbuspal.domain.model.favourite.FavouriteStop
 

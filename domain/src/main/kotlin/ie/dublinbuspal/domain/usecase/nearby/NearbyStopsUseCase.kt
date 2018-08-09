@@ -1,12 +1,11 @@
 package ie.dublinbuspal.domain.usecase.nearby
 
 import ie.dublinbuspal.base.Coordinate
-import ie.dublinbuspal.base.PreferencesRepository
-import ie.dublinbuspal.base.Repository
 import ie.dublinbuspal.base.util.CollectionUtils
 import ie.dublinbuspal.database.entity.SmartDublinStopServiceEntity
 import ie.dublinbuspal.domain.model.stop.Stop
-import ie.dublinbuspal.domain.repository.stop.SmartDublinKey
+import ie.dublinbuspal.domain.repository.PreferencesRepository
+import ie.dublinbuspal.domain.repository.Repository
 import ie.dublinbuspal.domain.util.LocationUtils
 import ie.dublinbuspal.service.model.stop.StopsRequestBodyXml
 import ie.dublinbuspal.service.model.stop.StopsRequestRootXml

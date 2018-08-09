@@ -1,6 +1,6 @@
 package ie.dublinbuspal.domain.usecase.routeservice
 
-import ie.dublinbuspal.base.Repository
+import ie.dublinbuspal.domain.repository.Repository
 import ie.dublinbuspal.domain.model.routeservice.RouteService
 import ie.dublinbuspal.service.model.routeservice.RouteServiceRequestBodyXml
 import ie.dublinbuspal.service.model.routeservice.RouteServiceRequestRootXml

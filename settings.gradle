@@ -1,1 +1,1 @@
-include ':app', ':service', ':domain', ':base', ':database', ':database-android'
+include ':app', ':service', ':domain', ':base', ':database', ':database-android', ':repository'

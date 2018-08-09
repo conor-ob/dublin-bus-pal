@@ -1,6 +1,6 @@
 package ie.dublinbuspal.domain.mapping.stop
 
-import ie.dublinbuspal.base.Mapper
+import ie.dublinbuspal.domain.repository.Mapper
 import ie.dublinbuspal.database.entity.SmartDublinStopServiceEntity
 import ie.dublinbuspal.service.model.stop.OperatorJson
 import ie.dublinbuspal.service.model.stop.StopJson

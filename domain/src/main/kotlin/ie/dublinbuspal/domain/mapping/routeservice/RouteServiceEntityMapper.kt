@@ -1,6 +1,6 @@
 package ie.dublinbuspal.domain.mapping.routeservice
 
-import ie.dublinbuspal.base.Mapper
+import ie.dublinbuspal.domain.repository.Mapper
 import ie.dublinbuspal.database.entity.RouteServiceEntity
 import ie.dublinbuspal.service.model.routeservice.RouteServiceInboundStopXml
 import ie.dublinbuspal.service.model.routeservice.RouteServiceOutboundStopXml

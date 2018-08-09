@@ -1,6 +1,6 @@
 package ie.dublinbuspal.domain.mapping.route
 
-import ie.dublinbuspal.base.Mapper
+import ie.dublinbuspal.domain.repository.Mapper
 import ie.dublinbuspal.database.entity.RouteEntity
 import ie.dublinbuspal.service.model.route.RouteXml
 

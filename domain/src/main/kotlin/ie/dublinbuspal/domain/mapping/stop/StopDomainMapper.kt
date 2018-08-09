@@ -1,9 +1,8 @@
 package ie.dublinbuspal.domain.mapping.stop
 
 import ie.dublinbuspal.base.Coordinate
-import ie.dublinbuspal.base.Mapper
+import ie.dublinbuspal.domain.repository.Mapper
 import ie.dublinbuspal.database.entity.DetailedStopEntity
-import ie.dublinbuspal.database.entity.StopEntity
 import ie.dublinbuspal.domain.model.stop.Stop
 
 class StopDomainMapper : Mapper<DetailedStopEntity, Stop> {

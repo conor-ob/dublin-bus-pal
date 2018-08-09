@@ -1,6 +1,6 @@
 package ie.dublinbuspal.domain.mapping.stopservice
 
-import ie.dublinbuspal.base.Mapper
+import ie.dublinbuspal.domain.repository.Mapper
 import ie.dublinbuspal.database.entity.StopServiceEntity
 import ie.dublinbuspal.service.model.stopservice.StopServiceResponseXml
 

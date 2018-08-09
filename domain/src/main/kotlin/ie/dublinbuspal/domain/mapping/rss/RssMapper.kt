@@ -1,10 +1,9 @@
 package ie.dublinbuspal.domain.mapping.rss
 
-import ie.dublinbuspal.base.Mapper
+import ie.dublinbuspal.domain.repository.Mapper
 import ie.dublinbuspal.domain.model.rss.RssNews
 import ie.dublinbuspal.service.model.rss.NewsItemXml
 import org.threeten.bp.Instant
-import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.*
 

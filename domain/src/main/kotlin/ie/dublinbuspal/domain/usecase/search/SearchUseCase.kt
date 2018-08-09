@@ -1,6 +1,6 @@
 package ie.dublinbuspal.domain.usecase.search
 
-import ie.dublinbuspal.base.Repository
+import ie.dublinbuspal.domain.repository.Repository
 import ie.dublinbuspal.domain.model.route.Route
 import ie.dublinbuspal.domain.model.stop.Stop
 import ie.dublinbuspal.service.model.route.RoutesRequestBodyXml

@@ -1,6 +1,6 @@
 package ie.dublinbuspal.domain.usecase.rss
 
-import ie.dublinbuspal.base.Repository
+import ie.dublinbuspal.domain.repository.Repository
 import ie.dublinbuspal.domain.model.rss.RssNews
 import io.reactivex.Observable
 import javax.inject.Inject

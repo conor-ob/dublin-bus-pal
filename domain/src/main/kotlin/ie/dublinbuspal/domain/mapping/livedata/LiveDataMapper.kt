@@ -1,6 +1,6 @@
 package ie.dublinbuspal.domain.mapping.livedata
 
-import ie.dublinbuspal.base.Mapper
+import ie.dublinbuspal.domain.repository.Mapper
 import ie.dublinbuspal.domain.model.livedata.DueTime
 import ie.dublinbuspal.domain.model.livedata.LiveData
 import ie.dublinbuspal.service.model.livedata.LiveDataXml

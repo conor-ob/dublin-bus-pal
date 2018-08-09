@@ -4,7 +4,7 @@ import android.content.Context
 import android.preference.PreferenceManager
 import ie.dublinbuspal.android.R
 import ie.dublinbuspal.base.Coordinate
-import ie.dublinbuspal.base.PreferencesRepository
+import ie.dublinbuspal.domain.repository.PreferencesRepository
 import io.reactivex.Completable
 import io.reactivex.Observable
 
