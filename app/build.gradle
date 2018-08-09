@@ -57,8 +57,8 @@ android {
 
 dependencies {
     implementation project(':base')
+    implementation project(':data')
     implementation project(':database')
-    implementation project(':database-android')
     implementation project(":domain")
     implementation project(":repository")
     implementation project(":service")

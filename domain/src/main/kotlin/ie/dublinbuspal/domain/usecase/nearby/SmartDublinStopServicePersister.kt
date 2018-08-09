@@ -1,9 +1,9 @@
 package ie.dublinbuspal.domain.usecase.nearby
 
 import com.nytimes.android.external.store3.base.room.RoomPersister
-import ie.dublinbuspal.database.TxRunner
-import ie.dublinbuspal.database.dao.SmartDublinStopServiceDao
-import ie.dublinbuspal.database.entity.SmartDublinStopServiceEntity
+import ie.dublinbuspal.data.TxRunner
+import ie.dublinbuspal.data.dao.SmartDublinStopServiceDao
+import ie.dublinbuspal.data.entity.SmartDublinStopServiceEntity
 import ie.dublinbuspal.domain.repository.Mapper
 import ie.dublinbuspal.service.model.stop.StopJson
 import ie.dublinbuspal.service.model.stop.StopsResponseJson

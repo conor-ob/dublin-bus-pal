@@ -2,8 +2,8 @@ package ie.dublinbuspal.repository.stopservice
 
 import com.nytimes.android.external.store3.base.room.RoomPersister
 import ie.dublinbuspal.domain.repository.Mapper
-import ie.dublinbuspal.database.dao.StopServiceDao
-import ie.dublinbuspal.database.entity.StopServiceEntity
+import ie.dublinbuspal.data.dao.StopServiceDao
+import ie.dublinbuspal.data.entity.StopServiceEntity
 import ie.dublinbuspal.domain.model.stopservice.StopService
 import ie.dublinbuspal.service.model.stopservice.StopServiceRequestXml
 import ie.dublinbuspal.service.model.stopservice.StopServiceResponseXml

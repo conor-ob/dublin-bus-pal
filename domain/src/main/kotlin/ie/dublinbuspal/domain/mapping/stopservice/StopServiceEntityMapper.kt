@@ -1,7 +1,7 @@
 package ie.dublinbuspal.domain.mapping.stopservice
 
 import ie.dublinbuspal.domain.repository.Mapper
-import ie.dublinbuspal.database.entity.StopServiceEntity
+import ie.dublinbuspal.data.entity.StopServiceEntity
 import ie.dublinbuspal.service.model.stopservice.StopServiceResponseXml
 
 class StopServiceEntityMapper : Mapper<StopServiceResponseXml, StopServiceEntity> {

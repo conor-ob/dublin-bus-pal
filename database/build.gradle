@@ -1,24 +1,43 @@
-apply plugin: 'kotlin'
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 27
+
+    defaultConfig {
+        minSdkVersion 21
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+        androidTest.java.srcDirs += 'src/androidTest/kotlin'
+        androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
 
 dependencies {
-    implementation project(":base")
-    implementation libs.room_common
-}
-
-sourceSets {
-    main.java.srcDirs += 'src/main/kotlin'
-    test.java.srcDirs += 'src/test/kotlin'
-}
-
-configurations {
-    testOutput.extendsFrom (testCompile)
-}
-
-task jarTest (type: Jar, dependsOn: testClasses) {
-    from sourceSets.test.output
-    classifier = 'test'
-}
-
-artifacts {
-    testOutput jarTest
+    implementation project(':base')
+    implementation project(':data')
+    implementation libs.room_runtime
+    implementation libs.room_rxjava
+    kapt libs.room_compiler
+    kapt libs.dagger_compiler
+    implementation libs.junit
+    androidTestImplementation "android.arch.persistence.room:testing:1.1.1"
+    androidTestImplementation libs.test_runner
+    androidTestImplementation libs.espresso
 }

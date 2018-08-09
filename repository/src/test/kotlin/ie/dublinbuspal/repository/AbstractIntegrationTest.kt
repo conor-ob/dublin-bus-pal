@@ -1,9 +1,9 @@
 package ie.dublinbuspal.repository
 
-import ie.dublinbuspal.database.MockTxRunner
-import ie.dublinbuspal.database.dao.MockDetailedStopDao
-import ie.dublinbuspal.database.dao.MockStopDao
-import ie.dublinbuspal.database.dao.MockStopServiceDao
+import ie.dublinbuspal.data.MockTxRunner
+import ie.dublinbuspal.data.dao.MockDetailedStopDao
+import ie.dublinbuspal.data.dao.MockStopDao
+import ie.dublinbuspal.data.dao.MockStopServiceDao
 import ie.dublinbuspal.domain.model.livedata.LiveData
 import ie.dublinbuspal.domain.model.stop.Stop
 import ie.dublinbuspal.domain.model.stopservice.StopService

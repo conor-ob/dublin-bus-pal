@@ -1,11 +1,11 @@
 package ie.dublinbuspal.repository.stop
 
 import com.nytimes.android.external.store3.base.room.RoomPersister
-import ie.dublinbuspal.database.TxRunner
-import ie.dublinbuspal.database.dao.DetailedStopDao
-import ie.dublinbuspal.database.dao.StopDao
-import ie.dublinbuspal.database.entity.DetailedStopEntity
-import ie.dublinbuspal.database.entity.StopEntity
+import ie.dublinbuspal.data.TxRunner
+import ie.dublinbuspal.data.dao.DetailedStopDao
+import ie.dublinbuspal.data.dao.StopDao
+import ie.dublinbuspal.data.entity.DetailedStopEntity
+import ie.dublinbuspal.data.entity.StopEntity
 import ie.dublinbuspal.domain.model.stop.Stop
 import ie.dublinbuspal.domain.repository.Mapper
 import ie.dublinbuspal.service.model.stop.StopXml

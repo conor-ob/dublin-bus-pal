@@ -7,10 +7,10 @@ import com.nytimes.android.external.store3.base.impl.StoreBuilder
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
 import dagger.Module
 import dagger.Provides
-import ie.dublinbuspal.database.TxRunner
-import ie.dublinbuspal.database.dao.*
-import ie.dublinbuspal.database.entity.FavouriteStopEntity
-import ie.dublinbuspal.database.entity.SmartDublinStopServiceEntity
+import ie.dublinbuspal.data.TxRunner
+import ie.dublinbuspal.data.dao.*
+import ie.dublinbuspal.data.entity.FavouriteStopEntity
+import ie.dublinbuspal.data.entity.SmartDublinStopServiceEntity
 import ie.dublinbuspal.domain.mapping.favourite.FavouriteStopEntityMapper
 import ie.dublinbuspal.domain.mapping.livedata.LiveDataMapper
 import ie.dublinbuspal.domain.mapping.route.RouteDomainMapper

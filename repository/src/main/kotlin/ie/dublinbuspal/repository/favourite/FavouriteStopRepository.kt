@@ -1,8 +1,8 @@
 package ie.dublinbuspal.repository.favourite
 
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
-import ie.dublinbuspal.database.dao.FavouriteStopDao
-import ie.dublinbuspal.database.entity.FavouriteStopEntity
+import ie.dublinbuspal.data.dao.FavouriteStopDao
+import ie.dublinbuspal.data.entity.FavouriteStopEntity
 import ie.dublinbuspal.domain.model.favourite.FavouriteStop
 import ie.dublinbuspal.domain.model.stop.Stop
 import ie.dublinbuspal.domain.repository.FavouriteRepository

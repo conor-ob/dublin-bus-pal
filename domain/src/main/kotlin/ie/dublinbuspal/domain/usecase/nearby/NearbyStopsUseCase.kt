@@ -2,7 +2,7 @@ package ie.dublinbuspal.domain.usecase.nearby
 
 import ie.dublinbuspal.base.Coordinate
 import ie.dublinbuspal.base.util.CollectionUtils
-import ie.dublinbuspal.database.entity.SmartDublinStopServiceEntity
+import ie.dublinbuspal.data.entity.SmartDublinStopServiceEntity
 import ie.dublinbuspal.domain.model.stop.Stop
 import ie.dublinbuspal.domain.repository.PreferencesRepository
 import ie.dublinbuspal.domain.repository.Repository
