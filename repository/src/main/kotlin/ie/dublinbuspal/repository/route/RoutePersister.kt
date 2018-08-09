@@ -3,8 +3,8 @@ package ie.dublinbuspal.repository.route
 import com.nytimes.android.external.store3.base.room.RoomPersister
 import ie.dublinbuspal.data.TxRunner
 import ie.dublinbuspal.data.dao.RouteDao
-import ie.dublinbuspal.domain.mapping.route.RouteDomainMapper
-import ie.dublinbuspal.domain.mapping.route.RouteEntityMapper
+import ie.dublinbuspal.repository.mapping.route.RouteDomainMapper
+import ie.dublinbuspal.repository.mapping.route.RouteEntityMapper
 import ie.dublinbuspal.domain.model.route.Route
 import ie.dublinbuspal.service.model.route.RoutesRequestXml
 import ie.dublinbuspal.service.model.route.RoutesResponseXml

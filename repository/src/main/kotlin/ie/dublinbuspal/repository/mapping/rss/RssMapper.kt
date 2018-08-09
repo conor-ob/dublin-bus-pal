@@ -1,4 +1,4 @@
-package ie.dublinbuspal.domain.mapping.rss
+package ie.dublinbuspal.repository.mapping.rss
 
 import ie.dublinbuspal.domain.repository.Mapper
 import ie.dublinbuspal.domain.model.rss.RssNews

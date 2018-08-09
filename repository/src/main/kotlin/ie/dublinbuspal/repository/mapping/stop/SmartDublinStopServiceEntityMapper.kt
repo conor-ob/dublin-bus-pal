@@ -1,4 +1,4 @@
-package ie.dublinbuspal.domain.mapping.stop
+package ie.dublinbuspal.repository.mapping.stop
 
 import ie.dublinbuspal.domain.repository.Mapper
 import ie.dublinbuspal.data.entity.SmartDublinStopServiceEntity

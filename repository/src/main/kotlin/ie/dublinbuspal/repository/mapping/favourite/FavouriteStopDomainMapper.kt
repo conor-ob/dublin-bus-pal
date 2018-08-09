@@ -1,4 +1,4 @@
-package ie.dublinbuspal.domain.mapping.favourite
+package ie.dublinbuspal.repository.mapping.favourite
 
 import ie.dublinbuspal.domain.repository.Mapper
 import ie.dublinbuspal.data.entity.FavouriteStopEntity

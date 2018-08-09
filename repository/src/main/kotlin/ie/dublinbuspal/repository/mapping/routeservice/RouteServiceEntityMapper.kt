@@ -1,4 +1,4 @@
-package ie.dublinbuspal.domain.mapping.routeservice
+package ie.dublinbuspal.repository.mapping.routeservice
 
 import ie.dublinbuspal.domain.repository.Mapper
 import ie.dublinbuspal.data.entity.RouteServiceEntity

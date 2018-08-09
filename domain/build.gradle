@@ -1,19 +1,12 @@
 apply plugin: 'kotlin'
-apply plugin: 'kotlin-kapt'
 
 dependencies {
     implementation project(':base')
-    implementation project(':data')
-    implementation project(':service')
-    implementation libs.store
-    kapt libs.dagger_compiler
     testImplementation libs.junit
     testImplementation ('org.threeten:threetenbp:1.3.1') {
         exclude module: 'com.jakewharton.threetenabp:threetenabp:1.0.2'
     }
     testImplementation project(path: ':base', configuration: 'testOutput')
-    testImplementation project(path: ':data', configuration: 'testOutput')
-    testImplementation project(path: ':service', configuration: 'testOutput')
 }
 
 sourceSets {

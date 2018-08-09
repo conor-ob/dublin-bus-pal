@@ -1,4 +1,4 @@
-package ie.dublinbuspal.domain.usecase.nearby
+package ie.dublinbuspal.repository.stop
 
 data class SmartDublinKey(
      val operator: String,

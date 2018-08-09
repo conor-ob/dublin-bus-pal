@@ -10,40 +10,37 @@ import dagger.Provides
 import ie.dublinbuspal.data.TxRunner
 import ie.dublinbuspal.data.dao.*
 import ie.dublinbuspal.data.entity.FavouriteStopEntity
-import ie.dublinbuspal.data.entity.SmartDublinStopServiceEntity
-import ie.dublinbuspal.domain.mapping.favourite.FavouriteStopEntityMapper
-import ie.dublinbuspal.domain.mapping.livedata.LiveDataMapper
-import ie.dublinbuspal.domain.mapping.route.RouteDomainMapper
-import ie.dublinbuspal.domain.mapping.route.RouteEntityMapper
-import ie.dublinbuspal.domain.mapping.routeservice.RouteServiceDomainMapper
-import ie.dublinbuspal.domain.mapping.routeservice.RouteServiceEntityMapper
-import ie.dublinbuspal.domain.mapping.rss.RssMapper
-import ie.dublinbuspal.domain.mapping.stop.SmartDublinStopServiceEntityMapper
-import ie.dublinbuspal.domain.mapping.stop.StopDomainMapper
-import ie.dublinbuspal.domain.mapping.stop.StopEntityMapper
-import ie.dublinbuspal.domain.mapping.stopservice.StopServiceDomainMapper
-import ie.dublinbuspal.domain.mapping.stopservice.StopServiceEntityMapper
 import ie.dublinbuspal.domain.model.livedata.LiveData
 import ie.dublinbuspal.domain.model.route.Route
 import ie.dublinbuspal.domain.model.routeservice.RouteService
 import ie.dublinbuspal.domain.model.rss.RssNews
 import ie.dublinbuspal.domain.model.stop.Stop
+import ie.dublinbuspal.domain.model.stopservice.SmartDublinStopService
 import ie.dublinbuspal.domain.model.stopservice.StopService
 import ie.dublinbuspal.domain.repository.FavouriteRepository
 import ie.dublinbuspal.domain.repository.Repository
-import ie.dublinbuspal.domain.usecase.nearby.SmartDublinKey
-import ie.dublinbuspal.domain.usecase.nearby.SmartDublinStopServicePersister
 import ie.dublinbuspal.repository.favourite.FavouritePersister
 import ie.dublinbuspal.repository.favourite.FavouriteStopRepository
 import ie.dublinbuspal.repository.livedata.LiveDataRepository
+import ie.dublinbuspal.repository.mapping.favourite.FavouriteStopEntityMapper
+import ie.dublinbuspal.repository.mapping.livedata.LiveDataMapper
+import ie.dublinbuspal.repository.mapping.route.RouteDomainMapper
+import ie.dublinbuspal.repository.mapping.route.RouteEntityMapper
+import ie.dublinbuspal.repository.mapping.routeservice.RouteServiceDomainMapper
+import ie.dublinbuspal.repository.mapping.routeservice.RouteServiceEntityMapper
+import ie.dublinbuspal.repository.mapping.rss.RssMapper
+import ie.dublinbuspal.repository.mapping.stop.SmartDublinStopServiceDomainMapper
+import ie.dublinbuspal.repository.mapping.stop.SmartDublinStopServiceEntityMapper
+import ie.dublinbuspal.repository.mapping.stop.StopDomainMapper
+import ie.dublinbuspal.repository.mapping.stop.StopEntityMapper
+import ie.dublinbuspal.repository.mapping.stopservice.StopServiceDomainMapper
+import ie.dublinbuspal.repository.mapping.stopservice.StopServiceEntityMapper
 import ie.dublinbuspal.repository.route.RoutePersister
 import ie.dublinbuspal.repository.route.RouteRepository
 import ie.dublinbuspal.repository.routeservice.RouteServicePersister
 import ie.dublinbuspal.repository.routeservice.RouteServiceRepository
 import ie.dublinbuspal.repository.rss.RssNewsRepository
-import ie.dublinbuspal.repository.stop.SmartDublinStopServiceRepository
-import ie.dublinbuspal.repository.stop.StopPersister
-import ie.dublinbuspal.repository.stop.StopRepository
+import ie.dublinbuspal.repository.stop.*
 import ie.dublinbuspal.repository.stopservice.StopServicePersister
 import ie.dublinbuspal.repository.stopservice.StopServiceRepository
 import ie.dublinbuspal.service.DublinBusRssApi
@@ -72,7 +69,7 @@ class RepositoryModule {
     fun stopRepository(api: DublinBusSoapApi,
                        stopDao: StopDao,
                        detailedStopDao: DetailedStopDao,
-                       txRunner: TxRunner): Repository<List<Stop>, StopsRequestXml> {
+                       txRunner: TxRunner): Repository<List<Stop>, Any> {
 
         val fetcher = Fetcher<StopsResponseXml, StopsRequestXml> { key -> api.getStops(key) }
 
@@ -93,7 +90,7 @@ class RepositoryModule {
     @Singleton
     fun routeRepository(api: DublinBusSoapApi,
                         dao: RouteDao,
-                        txRunner: TxRunner): Repository<List<Route>, RoutesRequestXml> {
+                        txRunner: TxRunner): Repository<List<Route>, Any> {
 
         val fetcher = Fetcher<RoutesResponseXml, RoutesRequestXml> { key -> api.getRoutes(key) }
 
@@ -113,7 +110,7 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun stopServiceRepository(api: DublinBusSoapApi,
-                              dao: StopServiceDao): Repository<StopService, StopServiceRequestXml> {
+                              dao: StopServiceDao): Repository<StopService, String> {
 
         val fetcher = Fetcher<StopServiceResponseXml, StopServiceRequestXml> { key -> api.getStopService(key) }
 
@@ -133,7 +130,7 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun routeServiceRepository(api: DublinBusSoapApi,
-                               dao: RouteServiceDao): Repository<RouteService, RouteServiceRequestXml> {
+                               dao: RouteServiceDao): Repository<RouteService, String> {
 
         val fetcher = Fetcher<RouteServiceResponseXml, RouteServiceRequestXml> { key -> api.getRouteService(key) }
 
@@ -152,7 +149,7 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun liveDataRepository(api: DublinBusSoapApi): Repository<List<LiveData>, LiveDataRequestXml> {
+    fun liveDataRepository(api: DublinBusSoapApi): Repository<List<LiveData>, String> {
 
         val memoryPolicy = MemoryPolicy.builder()
                 .setExpireAfterWrite(30)
@@ -215,7 +212,7 @@ class RepositoryModule {
     @Singleton
     fun smartDublinStopServiceRepository(api: SmartDublinRestApi,
                                          dao: SmartDublinStopServiceDao,
-                                         txRunner: TxRunner): Repository<List<SmartDublinStopServiceEntity>, SmartDublinKey> {
+                                         txRunner: TxRunner): Repository<List<SmartDublinStopService>, Any> {
 
         val fetcher = Fetcher<StopsResponseJson, SmartDublinKey> { key -> api.getStops(key.operator, key.format) }
 
@@ -225,7 +222,8 @@ class RepositoryModule {
                 .build()
 
         val entityMapper = SmartDublinStopServiceEntityMapper()
-        val persister = SmartDublinStopServicePersister(dao, txRunner, entityMapper)
+        val domainMapper = SmartDublinStopServiceDomainMapper()
+        val persister = SmartDublinStopServicePersister(dao, txRunner, entityMapper, domainMapper)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
 
         return SmartDublinStopServiceRepository(store)
