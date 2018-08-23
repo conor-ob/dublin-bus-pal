@@ -7,9 +7,9 @@ import ie.dublinbuspal.android.view.nearby.NearbyPresenter
 import ie.dublinbuspal.android.view.news.rss.RssNewsPresenter
 import ie.dublinbuspal.android.view.routeservice.RouteServicePresenter
 import ie.dublinbuspal.android.view.search.SearchPresenter
-import ie.dublinbuspal.database.di.DatabaseModule
-import ie.dublinbuspal.repository.di.RepositoryModule
-import ie.dublinbuspal.service.di.NetworkModule
+import ie.dublinbuspal.di.DatabaseModule
+import ie.dublinbuspal.di.NetworkModule
+import ie.dublinbuspal.di.RepositoryModule
 import javax.inject.Singleton
 
 @Singleton

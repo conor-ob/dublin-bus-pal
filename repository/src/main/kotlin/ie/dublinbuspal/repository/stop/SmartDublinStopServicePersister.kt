@@ -4,8 +4,8 @@ import com.nytimes.android.external.store3.base.room.RoomPersister
 import ie.dublinbuspal.data.TxRunner
 import ie.dublinbuspal.data.dao.SmartDublinStopServiceDao
 import ie.dublinbuspal.data.entity.SmartDublinStopServiceEntity
-import ie.dublinbuspal.domain.model.stopservice.SmartDublinStopService
-import ie.dublinbuspal.domain.repository.Mapper
+import ie.dublinbuspal.model.stopservice.SmartDublinStopService
+import ie.dublinbuspal.repository.Mapper
 import ie.dublinbuspal.service.model.stop.StopJson
 import ie.dublinbuspal.service.model.stop.StopsResponseJson
 import io.reactivex.Observable

@@ -14,9 +14,8 @@ import ie.dublinbuspal.android.R
 import ie.dublinbuspal.android.view.BaseMvpController
 import ie.dublinbuspal.android.view.favourites.adapter.FavouriteDiffCallback
 import ie.dublinbuspal.android.view.favourites.adapter.FavouriteItem
-import ie.dublinbuspal.android.view.livedata.adapter.LiveDataItem
-import ie.dublinbuspal.domain.model.livedata.LiveData
-import ie.dublinbuspal.domain.model.stop.Stop
+import ie.dublinbuspal.model.livedata.LiveData
+import ie.dublinbuspal.model.stop.Stop
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy

@@ -2,7 +2,7 @@ package ie.dublinbuspal.android.view.search
 
 import android.util.Log
 import ie.dublinbuspal.android.view.BasePresenter
-import ie.dublinbuspal.domain.usecase.search.SearchUseCase
+import ie.dublinbuspal.usecase.search.SearchUseCase
 import javax.inject.Inject
 
 class SearchPresenter @Inject constructor(private val useCase: SearchUseCase) : BasePresenter<SearchView>() {

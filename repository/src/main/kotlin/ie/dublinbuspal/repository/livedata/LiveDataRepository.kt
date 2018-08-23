@@ -1,8 +1,8 @@
 package ie.dublinbuspal.repository.livedata
 
 import com.nytimes.android.external.store3.base.impl.Store
-import ie.dublinbuspal.domain.model.livedata.LiveData
-import ie.dublinbuspal.domain.repository.Repository
+import ie.dublinbuspal.model.livedata.LiveData
+import ie.dublinbuspal.repository.Repository
 import ie.dublinbuspal.service.model.livedata.LiveDataRequestBodyXml
 import ie.dublinbuspal.service.model.livedata.LiveDataRequestRootXml
 import ie.dublinbuspal.service.model.livedata.LiveDataRequestXml

@@ -5,7 +5,6 @@ import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
 import ie.dublinbuspal.data.entity.RouteServiceEntity
-import ie.dublinbuspal.data.entity.StopServiceEntity
 import io.reactivex.Maybe
 
 @Dao

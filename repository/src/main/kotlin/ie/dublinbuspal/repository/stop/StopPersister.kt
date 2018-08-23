@@ -6,8 +6,8 @@ import ie.dublinbuspal.data.dao.DetailedStopDao
 import ie.dublinbuspal.data.dao.StopDao
 import ie.dublinbuspal.data.entity.DetailedStopEntity
 import ie.dublinbuspal.data.entity.StopEntity
-import ie.dublinbuspal.domain.model.stop.Stop
-import ie.dublinbuspal.domain.repository.Mapper
+import ie.dublinbuspal.model.stop.Stop
+import ie.dublinbuspal.repository.Mapper
 import ie.dublinbuspal.service.model.stop.StopXml
 import ie.dublinbuspal.service.model.stop.StopsRequestXml
 import ie.dublinbuspal.service.model.stop.StopsResponseXml

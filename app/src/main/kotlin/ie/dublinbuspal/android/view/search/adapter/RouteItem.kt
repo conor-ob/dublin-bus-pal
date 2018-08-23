@@ -4,7 +4,7 @@ import android.view.View
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
 import ie.dublinbuspal.android.R
-import ie.dublinbuspal.domain.model.route.Route
+import ie.dublinbuspal.model.route.Route
 import kotlinx.android.synthetic.main.list_item_route.view.*
 
 class RouteItem(val route: Route) : AbstractItem<RouteItem, RouteItem.ViewHolder>() {

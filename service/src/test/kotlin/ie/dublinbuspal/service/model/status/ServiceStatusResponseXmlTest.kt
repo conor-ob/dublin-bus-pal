@@ -1,6 +1,6 @@
 package ie.dublinbuspal.service.model.status
 
-import ie.dublinbuspal.base.AbstractDataClassTest
+import ie.dublinbuspal.AbstractDataClassTest
 import ie.dublinbuspal.service.util.XmlUtils
 import org.junit.Test
 

@@ -2,7 +2,7 @@ package ie.dublinbuspal.android.view.routeservice
 
 import android.util.Log
 import ie.dublinbuspal.android.view.BasePresenter
-import ie.dublinbuspal.domain.usecase.routeservice.RouteServiceUseCase
+import ie.dublinbuspal.usecase.routeservice.RouteServiceUseCase
 import javax.inject.Inject
 
 class RouteServicePresenter @Inject constructor(private val useCase: RouteServiceUseCase) : BasePresenter<RouteServiceView>() {

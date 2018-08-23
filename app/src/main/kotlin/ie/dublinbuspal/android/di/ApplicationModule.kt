@@ -4,7 +4,7 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import ie.dublinbuspal.android.preferences.DefaultPreferencesRepository
-import ie.dublinbuspal.domain.repository.PreferencesRepository
+import ie.dublinbuspal.repository.PreferencesRepository
 import javax.inject.Singleton
 
 @Module

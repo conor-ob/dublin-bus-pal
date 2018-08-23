@@ -6,7 +6,7 @@ import android.view.View
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
 import ie.dublinbuspal.android.R
-import ie.dublinbuspal.domain.model.stop.Stop
+import ie.dublinbuspal.model.stop.Stop
 import kotlinx.android.synthetic.main.list_item_bus_stop.view.*
 
 class StopItem(val stop: Stop) : AbstractItem<StopItem, StopItem.ViewHolder>() {

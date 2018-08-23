@@ -1,8 +1,8 @@
 package ie.dublinbuspal.data
 
 import android.arch.persistence.room.TypeConverter
-import ie.dublinbuspal.base.util.CollectionUtils
-import ie.dublinbuspal.base.util.StringUtils
+import ie.dublinbuspal.util.CollectionUtils
+import ie.dublinbuspal.util.StringUtils
 import java.util.*
 
 object Converters {

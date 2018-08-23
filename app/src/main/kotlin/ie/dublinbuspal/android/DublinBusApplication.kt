@@ -9,10 +9,9 @@ import ie.dublinbuspal.android.di.ApplicationComponent
 import ie.dublinbuspal.android.di.ApplicationModule
 import ie.dublinbuspal.android.di.DaggerApplicationComponent
 import ie.dublinbuspal.android.util.MetadataUtils
-import ie.dublinbuspal.database.di.DatabaseModule
-import ie.dublinbuspal.service.di.NetworkModule
+import ie.dublinbuspal.di.DatabaseModule
+import ie.dublinbuspal.di.NetworkModule
 import timber.log.Timber
-
 
 class DublinBusApplication : Application() {
 

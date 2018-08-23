@@ -1,6 +1,5 @@
 package ie.dublinbuspal.data.dao
 
-import ie.dublinbuspal.data.dao.StopServiceDao
 import ie.dublinbuspal.data.entity.StopServiceEntity
 import io.reactivex.Maybe
 

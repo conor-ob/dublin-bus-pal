@@ -1,7 +1,6 @@
 package ie.dublinbuspal.service.model.livedata
 
-import ie.dublinbuspal.base.AbstractDataClassTest
-import ie.dublinbuspal.service.model.livedata.LiveDataXml
+import ie.dublinbuspal.AbstractDataClassTest
 
 class LiveDataXmlTest : AbstractDataClassTest<LiveDataXml>() {
 

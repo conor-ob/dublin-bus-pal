@@ -1,8 +1,8 @@
 package ie.dublinbuspal.repository.stopservice
 
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
-import ie.dublinbuspal.domain.model.stopservice.StopService
-import ie.dublinbuspal.domain.repository.Repository
+import ie.dublinbuspal.model.stopservice.StopService
+import ie.dublinbuspal.repository.Repository
 import ie.dublinbuspal.service.model.stopservice.StopServiceRequestBodyXml
 import ie.dublinbuspal.service.model.stopservice.StopServiceRequestRootXml
 import ie.dublinbuspal.service.model.stopservice.StopServiceRequestXml

@@ -4,7 +4,7 @@ import android.view.View
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
 import ie.dublinbuspal.android.R
-import ie.dublinbuspal.domain.model.livedata.LiveData
+import ie.dublinbuspal.model.livedata.LiveData
 import kotlinx.android.synthetic.main.list_item_live_data.view.*
 
 class LiveDataItem(val livedata: LiveData) : AbstractItem<LiveDataItem, LiveDataItem.ViewHolder>() {

@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
 import com.google.android.gms.location.LocationRequest
-import ie.dublinbuspal.base.Coordinate
+import ie.dublinbuspal.Coordinate
 import io.reactivex.Observable
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 import javax.inject.Inject

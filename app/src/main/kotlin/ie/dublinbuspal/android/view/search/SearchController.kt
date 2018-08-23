@@ -15,8 +15,8 @@ import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration
 import ie.dublinbuspal.android.R
 import ie.dublinbuspal.android.view.BaseMvpController
 import ie.dublinbuspal.android.view.search.adapter.*
-import ie.dublinbuspal.domain.model.route.Route
-import ie.dublinbuspal.domain.model.stop.Stop
+import ie.dublinbuspal.model.route.Route
+import ie.dublinbuspal.model.stop.Stop
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.Single

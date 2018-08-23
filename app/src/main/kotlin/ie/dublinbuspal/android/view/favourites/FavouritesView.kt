@@ -1,8 +1,8 @@
 package ie.dublinbuspal.android.view.favourites
 
 import com.hannesdorfmann.mosby3.mvp.MvpView
-import ie.dublinbuspal.domain.model.livedata.LiveData
-import ie.dublinbuspal.domain.model.stop.Stop
+import ie.dublinbuspal.model.livedata.LiveData
+import ie.dublinbuspal.model.stop.Stop
 
 interface FavouritesView : MvpView {
 

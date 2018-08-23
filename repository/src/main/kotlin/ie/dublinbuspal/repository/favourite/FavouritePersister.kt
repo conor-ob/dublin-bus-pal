@@ -1,12 +1,12 @@
 package ie.dublinbuspal.repository.favourite
 
 import com.nytimes.android.external.store3.base.room.RoomPersister
-import ie.dublinbuspal.domain.repository.Mapper
 import ie.dublinbuspal.data.dao.DetailedStopDao
 import ie.dublinbuspal.data.dao.FavouriteStopDao
 import ie.dublinbuspal.data.entity.DetailedStopEntity
 import ie.dublinbuspal.data.entity.FavouriteStopEntity
-import ie.dublinbuspal.domain.model.stop.Stop
+import ie.dublinbuspal.model.stop.Stop
+import ie.dublinbuspal.repository.Mapper
 import io.reactivex.Observable
 import java.util.*
 

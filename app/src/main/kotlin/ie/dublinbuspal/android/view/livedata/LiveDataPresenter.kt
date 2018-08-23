@@ -2,7 +2,7 @@ package ie.dublinbuspal.android.view.livedata
 
 import android.util.Log
 import ie.dublinbuspal.android.view.BasePresenter
-import ie.dublinbuspal.domain.usecase.livedata.LiveDataUseCase
+import ie.dublinbuspal.usecase.livedata.LiveDataUseCase
 import javax.inject.Inject
 
 class LiveDataPresenter @Inject constructor(private val useCase: LiveDataUseCase): BasePresenter<LiveDataView>() {

@@ -14,7 +14,7 @@ import ie.dublinbuspal.android.R
 import ie.dublinbuspal.android.view.BaseMvpController
 import ie.dublinbuspal.android.view.news.rss.adapter.RssNewsDiffCallback
 import ie.dublinbuspal.android.view.news.rss.adapter.RssNewsItem
-import ie.dublinbuspal.domain.model.rss.RssNews
+import ie.dublinbuspal.model.rss.RssNews
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy

@@ -1,10 +1,10 @@
 package ie.dublinbuspal.repository.routeservice
 
 import com.nytimes.android.external.store3.base.room.RoomPersister
-import ie.dublinbuspal.domain.repository.Mapper
 import ie.dublinbuspal.data.dao.RouteServiceDao
 import ie.dublinbuspal.data.entity.RouteServiceEntity
-import ie.dublinbuspal.domain.model.routeservice.RouteService
+import ie.dublinbuspal.model.routeservice.RouteService
+import ie.dublinbuspal.repository.Mapper
 import ie.dublinbuspal.service.model.routeservice.RouteServiceRequestXml
 import ie.dublinbuspal.service.model.routeservice.RouteServiceResponseXml
 import io.reactivex.Observable

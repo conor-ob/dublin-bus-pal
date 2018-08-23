@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.*
 import ie.dublinbuspal.android.R
 import ie.dublinbuspal.android.view.BaseMvpController
-import ie.dublinbuspal.domain.model.livedata.LiveData
+import ie.dublinbuspal.model.livedata.LiveData
 import kotlinx.android.synthetic.main.view_livedata.view.*
 import timber.log.Timber
 

@@ -2,7 +2,6 @@ package ie.dublinbuspal.data.dao
 
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Query
-import android.arch.persistence.room.RoomWarnings
 import ie.dublinbuspal.data.entity.DetailedStopEntity
 import io.reactivex.Maybe
 

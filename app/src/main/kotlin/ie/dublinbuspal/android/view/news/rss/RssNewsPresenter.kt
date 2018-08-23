@@ -1,7 +1,7 @@
 package ie.dublinbuspal.android.view.news.rss
 
 import ie.dublinbuspal.android.view.BasePresenter
-import ie.dublinbuspal.domain.usecase.rss.RssNewsUseCase
+import ie.dublinbuspal.usecase.rss.RssNewsUseCase
 import timber.log.Timber
 import javax.inject.Inject
 

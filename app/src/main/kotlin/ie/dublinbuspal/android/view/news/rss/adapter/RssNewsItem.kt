@@ -6,7 +6,7 @@ import android.view.View
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
 import ie.dublinbuspal.android.R
-import ie.dublinbuspal.domain.model.rss.RssNews
+import ie.dublinbuspal.model.rss.RssNews
 import kotlinx.android.synthetic.main.list_item_rss.view.*
 import java.util.*
 

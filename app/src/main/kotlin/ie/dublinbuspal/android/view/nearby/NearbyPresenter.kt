@@ -1,8 +1,8 @@
 package ie.dublinbuspal.android.view.nearby
 
+import ie.dublinbuspal.Coordinate
 import ie.dublinbuspal.android.view.BasePresenter
-import ie.dublinbuspal.base.Coordinate
-import ie.dublinbuspal.domain.usecase.nearby.NearbyStopsUseCase
+import ie.dublinbuspal.usecase.nearby.NearbyStopsUseCase
 import timber.log.Timber
 import javax.inject.Inject
 

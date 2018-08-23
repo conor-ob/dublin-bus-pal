@@ -4,15 +4,11 @@ import ie.dublinbuspal.data.MockTxRunner
 import ie.dublinbuspal.data.dao.MockDetailedStopDao
 import ie.dublinbuspal.data.dao.MockStopDao
 import ie.dublinbuspal.data.dao.MockStopServiceDao
-import ie.dublinbuspal.domain.model.livedata.LiveData
-import ie.dublinbuspal.domain.model.stop.Stop
-import ie.dublinbuspal.domain.model.stopservice.StopService
-import ie.dublinbuspal.domain.repository.Repository
-import ie.dublinbuspal.repository.di.RepositoryModule
+import ie.dublinbuspal.di.RepositoryModule
+import ie.dublinbuspal.model.livedata.LiveData
+import ie.dublinbuspal.model.stop.Stop
+import ie.dublinbuspal.model.stopservice.StopService
 import ie.dublinbuspal.service.MockDublinBusSoapApi
-import ie.dublinbuspal.service.model.livedata.LiveDataRequestXml
-import ie.dublinbuspal.service.model.stop.StopsRequestXml
-import ie.dublinbuspal.service.model.stopservice.StopServiceRequestXml
 
 abstract class AbstractIntegrationTest {
 
@@ -23,15 +19,15 @@ abstract class AbstractIntegrationTest {
     private val stopServiceDao = MockStopServiceDao()
     private val txRunner = MockTxRunner()
 
-    fun stopRepository(): Repository<List<Stop>, StopsRequestXml> {
+    fun stopRepository(): Repository<List<Stop>, Any> {
         return repositoryModule.stopRepository(soapApi, stopDao, detailedStopDao, txRunner)
     }
 
-    fun liveDataRepository(): Repository<List<LiveData>, LiveDataRequestXml> {
+    fun liveDataRepository(): Repository<List<LiveData>, String> {
         return repositoryModule.liveDataRepository(soapApi)
     }
 
-    fun stopServiceRepository(): Repository<StopService, StopServiceRequestXml> {
+    fun stopServiceRepository(): Repository<StopService, String> {
         return repositoryModule.stopServiceRepository(soapApi, stopServiceDao)
     }
 

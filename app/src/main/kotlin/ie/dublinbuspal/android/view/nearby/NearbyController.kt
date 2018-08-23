@@ -12,14 +12,13 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import ie.dublinbuspal.Coordinate
 import ie.dublinbuspal.android.R
 import ie.dublinbuspal.android.util.AnimationUtils
 import ie.dublinbuspal.android.util.ImageUtils
 import ie.dublinbuspal.android.view.BaseMvpController
 import ie.dublinbuspal.android.view.livedata.LiveDataController
-import ie.dublinbuspal.base.Coordinate
-import ie.dublinbuspal.base.util.CollectionUtils
-import ie.dublinbuspal.domain.model.stop.Stop
+import ie.dublinbuspal.model.stop.Stop
 import kotlinx.android.synthetic.main.view_nearby.view.*
 import java.util.*
 

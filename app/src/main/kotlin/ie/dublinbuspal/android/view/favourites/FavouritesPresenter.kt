@@ -1,9 +1,9 @@
 package ie.dublinbuspal.android.view.favourites
 
 import ie.dublinbuspal.android.view.BasePresenter
-import ie.dublinbuspal.domain.model.stop.Stop
-import ie.dublinbuspal.domain.usecase.favourites.FavouritesUseCase
-import ie.dublinbuspal.domain.usecase.livedata.LiveDataUseCase
+import ie.dublinbuspal.model.stop.Stop
+import ie.dublinbuspal.usecase.favourites.FavouritesUseCase
+import ie.dublinbuspal.usecase.livedata.LiveDataUseCase
 import timber.log.Timber
 import javax.inject.Inject
 

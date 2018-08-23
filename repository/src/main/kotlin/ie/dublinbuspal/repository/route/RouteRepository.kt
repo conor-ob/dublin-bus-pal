@@ -1,8 +1,8 @@
 package ie.dublinbuspal.repository.route
 
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
-import ie.dublinbuspal.domain.model.route.Route
-import ie.dublinbuspal.domain.repository.Repository
+import ie.dublinbuspal.model.route.Route
+import ie.dublinbuspal.repository.Repository
 import ie.dublinbuspal.service.model.route.RoutesRequestBodyXml
 import ie.dublinbuspal.service.model.route.RoutesRequestRootXml
 import ie.dublinbuspal.service.model.route.RoutesRequestXml
