@@ -18,12 +18,14 @@ import ie.dublinbuspal.android.util.ImageUtils
 import ie.dublinbuspal.android.view.BaseMvpController
 import ie.dublinbuspal.android.view.livedata.LiveDataController
 import ie.dublinbuspal.base.Coordinate
+import ie.dublinbuspal.base.util.CollectionUtils
 import ie.dublinbuspal.domain.model.stop.Stop
 import kotlinx.android.synthetic.main.view_nearby.view.*
 import java.util.*
 
 class NearbyController(args: Bundle) : BaseMvpController<NearbyView, NearbyPresenter>(args), NearbyView {
 
+    private lateinit var bottomSheet: ViewGroup
     private lateinit var googleMap: GoogleMap
     private val mapMarkers = hashMapOf<Stop, Marker>()
 
@@ -37,8 +39,13 @@ class NearbyController(args: Bundle) : BaseMvpController<NearbyView, NearbyPrese
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         val view = super.onCreateView(inflater, container)
+        setupView(view)
         setupMap(view)
         return view
+    }
+
+    private fun setupView(view: View) {
+        bottomSheet = view.bottom_sheet_container
     }
 
     private fun setupMap(view: View) {
@@ -104,8 +111,17 @@ class NearbyController(args: Bundle) : BaseMvpController<NearbyView, NearbyPrese
     }
 
     override fun showBusStops(stops: SortedMap<Double, Stop>) {
+        focusOnNearestStop(stops.values)
         addNewMarkers(stops.values)
         removeOldMarkers(stops.values)
+    }
+
+    private fun focusOnNearestStop(stops: Collection<Stop>) {
+//        val nearestStop = CollectionUtils.safeFirstElement(stops)
+//        val liveDataRouter = getChildRouter(bottomSheet)
+//        if (!liveDataRouter.hasRootController()) {
+//            liveDataRouter.setRoot(RouterTransaction.with(NearbyLiveDataController()))
+//        }
     }
 
     private fun addNewMarkers(stops: Collection<Stop>) {

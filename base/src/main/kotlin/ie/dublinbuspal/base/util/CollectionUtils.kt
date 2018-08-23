@@ -21,4 +21,11 @@ object CollectionUtils {
         return headMap
     }
 
+    fun <T> safeFirstElement(collection: Collection<T>?): T? {
+        if (isNullOrEmpty(collection)) {
+            return null
+        }
+        return collection!!.iterator().next()
+    }
+
 }
