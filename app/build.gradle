@@ -134,6 +134,14 @@ dependencies {
 
     implementation libs.mosby
     implementation libs.store //TODO does this need to be here?
+//
+//    testImplementation "com.google.dagger:dagger:$rootProject.daggerVersion"
+//    kaptAndroidTest "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
+//    testImplementation "com.google.dagger:dagger-android:$rootProject.daggerVersion"
+//    testImplementation "com.google.dagger:dagger-android-support:$rootProject.daggerVersion"
+//    kaptAndroidTest "com.google.dagger:dagger-android-processor:$rootProject.daggerVersion"
+
+    testImplementation project(path: ':service', configuration: 'testOutput')
 }
 repositories {
     mavenCentral()
