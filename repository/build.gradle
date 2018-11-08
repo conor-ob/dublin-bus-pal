@@ -8,6 +8,10 @@ dependencies {
     implementation project(':service')
     implementation libs.store
     kapt libs.dagger_compiler
+    testImplementation libs.junit
+    testImplementation project(path: ':base', configuration: 'testOutput')
+    testImplementation project(path: ':data', configuration: 'testOutput')
+    testImplementation project(path: ':service', configuration: 'testOutput')
 }
 
 sourceSets {
