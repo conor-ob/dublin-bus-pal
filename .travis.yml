@@ -12,6 +12,7 @@ android:
     - google-gdk-license-.+
 
 before_install:
+  - yes | sdkmanager "platforms;android-27"
   - chmod +x gradlew
   - chmod +x gradle/wrapper/gradle-wrapper.jar
 
