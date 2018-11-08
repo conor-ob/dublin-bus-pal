@@ -15,6 +15,7 @@ android:
     - google-gdk-license-.+
 
 before_install:
+  - touch keys.properties
   - yes | sdkmanager "platforms;android-27"
   - chmod +x gradlew
   - chmod +x gradle/wrapper/gradle-wrapper.jar
