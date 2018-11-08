@@ -7,7 +7,7 @@ apply plugin: 'io.fabric'
 Properties properties = new Properties()
 properties.load(project.rootProject.file('keys.properties').newDataInputStream())
 def googleMapsApiKey = properties.getProperty('com.google.android.geo.API_KEY')
-def fabricApiKey = properties.getProperty('io.fabric.ApiKey')
+def fabricApiKey = properties.getProperty('io.fabric.ApiKey', 'dummykey')
 def twitterConsumerKey = properties.getProperty('com.twitter.sdk.android.CONSUMER_KEY')
 def twitterConsumerSecret = properties.getProperty('com.twitter.sdk.android.CONSUMER_SECRET')
 
