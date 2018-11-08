@@ -113,7 +113,7 @@ ext {
     apacheCommonsVersion = '3.6'
     androidSupportVersion = '27.0.2'
     androidSupportConstraintVersion = '1.1.0-beta4'
-    androidGMSVersion = '11.8.0'
+    androidGMSVersion = '16.0.0'
     daggerVersion = '2.14.1'
     guavaVersion = '23.6-android'
     mosbyVersion = '3.1.0'
