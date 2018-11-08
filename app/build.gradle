@@ -2,12 +2,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'io.fabric'
+if (file("keys.properties").exists()) {
+    apply plugin: 'io.fabric'
+}
 
 Properties properties = new Properties()
 properties.load(project.rootProject.file('keys.properties').newDataInputStream())
 def googleMapsApiKey = properties.getProperty('com.google.android.geo.API_KEY')
-def fabricApiKey = properties.getProperty('io.fabric.ApiKey', 'dummykey')
+def fabricApiKey = properties.getProperty('io.fabric.ApiKey')
 def twitterConsumerKey = properties.getProperty('com.twitter.sdk.android.CONSUMER_KEY')
 def twitterConsumerSecret = properties.getProperty('com.twitter.sdk.android.CONSUMER_SECRET')
 
@@ -43,7 +45,6 @@ android {
         debug {
             debuggable true
             applicationIdSuffix ".debug"
-            ext.enableCrashlytics = false
         }
     }
     compileOptions {
