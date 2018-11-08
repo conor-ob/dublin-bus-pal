@@ -2,13 +2,13 @@ package ie.dublinbuspal.database.migration;
 
 import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.db.framework.FrameworkSQLiteOpenHelperFactory;
+import android.arch.persistence.room.Room;
 import android.arch.persistence.room.migration.Migration;
 import android.arch.persistence.room.testing.MigrationTestHelper;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Rule;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
@@ -18,44 +18,37 @@ import ie.dublinbuspal.database.DublinBusDatabase;
 @RunWith(AndroidJUnit4.class)
 public abstract class MigrationTest {
 
-    private static final String TEST_DB = "migration-test";
-    private final int fromVersion;
-    private final int toVersion;
-    private final Migration migration;
+    private static final String TEST_DATABASE_NAME = "test.db";
 
     @Rule
-    public MigrationTestHelper helper;
+    public MigrationTestHelper helper = new MigrationTestHelper(
+            InstrumentationRegistry.getInstrumentation(),
+            DublinBusDatabase.class.getCanonicalName(),
+            new FrameworkSQLiteOpenHelperFactory()
+    );
 
-    public MigrationTest(int fromVersion, int toVersion, Migration migration) {
-        this.fromVersion = fromVersion;
-        this.toVersion = toVersion;
-        this.migration = migration;
-        this.helper = new MigrationTestHelper(
-                InstrumentationRegistry.getInstrumentation(),
-                DublinBusDatabase.class.getCanonicalName(),
-                new FrameworkSQLiteOpenHelperFactory()
-        );
+    protected void testMigration(int fromVersion, int toVersion, Migration migration) throws IOException {
+        SupportSQLiteDatabase database = helper.createDatabase(TEST_DATABASE_NAME, fromVersion);
+        populateDatabasePreMigration(database);
+        database.close();
+        database = helper.runMigrationsAndValidate(TEST_DATABASE_NAME, toVersion, true, migration);
+        database.close();
+        assertDatabaseIntegrityPostMigration(getMigratedDatabase());
     }
 
-    @Test
-    public void testMigration() throws IOException {
-        SupportSQLiteDatabase database = helper.createDatabase(TEST_DB, fromVersion);
-
-        assertDatabaseIntegrityPreMigration(database);
-
-        populateDatabase(database);
-        database.close();
-
-        database = helper.runMigrationsAndValidate(TEST_DB, toVersion, true, migration);
-
-        assertDatabaseIntegrityPostMigration(database);
-        database.close();
+    private DublinBusDatabase getMigratedDatabase() {
+        DublinBusDatabase database = Room.databaseBuilder(InstrumentationRegistry.getTargetContext(),
+                DublinBusDatabase.class, TEST_DATABASE_NAME)
+                .addMigrations(getMigrations())
+                .build();
+        helper.closeWhenFinished(database);
+        return database;
     }
 
-    protected abstract void assertDatabaseIntegrityPreMigration(SupportSQLiteDatabase database);
+    protected abstract Migration[] getMigrations();
 
-    protected abstract void populateDatabase(SupportSQLiteDatabase database);
+    protected abstract void populateDatabasePreMigration(SupportSQLiteDatabase database);
 
-    protected abstract void assertDatabaseIntegrityPostMigration(SupportSQLiteDatabase database);
+    protected abstract void assertDatabaseIntegrityPostMigration(DublinBusDatabase database);
 
 }

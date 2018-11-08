@@ -7,6 +7,9 @@ import io.reactivex.Maybe
 @Dao
 interface FavouriteStopDao {
 
+    @Query("SELECT * FROM favourites WHERE id = :id")
+    fun select(id: String): Maybe<FavouriteStopEntity>
+
     @Query("SELECT * FROM favourites")
     fun selectAll(): Maybe<List<FavouriteStopEntity>>
 
