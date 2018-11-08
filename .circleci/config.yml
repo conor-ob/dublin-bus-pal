@@ -25,7 +25,10 @@ jobs:
       - checkout
       - run:
           name: Pre-Build Step
-          command: touch keys.properties
+          command: |
+            touch keys.properties
+            chmod +x gradlew
+            chmod +x gradle/wrapper/gradle-wrapper.jar
       - run:
           name: Build & Test
           command: ./gradlew clean build connectedCheck
