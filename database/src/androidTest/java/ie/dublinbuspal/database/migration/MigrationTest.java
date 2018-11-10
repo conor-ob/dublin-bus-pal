@@ -10,8 +10,9 @@ import androidx.room.migration.Migration;
 import androidx.room.testing.MigrationTestHelper;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory;
-import androidx.test.InstrumentationRegistry;
-import androidx.test.runner.AndroidJUnit4;
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 import ie.dublinbuspal.database.DublinBusDatabase;
 
 @RunWith(AndroidJUnit4.class)
@@ -36,7 +37,7 @@ public abstract class MigrationTest {
     }
 
     private DublinBusDatabase getMigratedDatabase() {
-        DublinBusDatabase database = Room.databaseBuilder(InstrumentationRegistry.getTargetContext(),
+        DublinBusDatabase database = Room.databaseBuilder(ApplicationProvider.getApplicationContext(),
                 DublinBusDatabase.class, TEST_DATABASE_NAME)
                 .addMigrations(getMigrations())
                 .build();

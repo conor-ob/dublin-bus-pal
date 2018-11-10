@@ -11,7 +11,7 @@ android {
         targetSdkVersion buildConfig.targetSdk
         versionCode 1000
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -38,5 +38,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
     implementation "androidx.appcompat:appcompat:${versions.androidx.appcompat}"
     testImplementation "junit:junit:${testVersions.junit}"
-    androidTestImplementation "com.android.support.test:runner:${testVersions.runner}"
+    androidTestImplementation "androidx.test:core:${testVersions.androidx.core}"
+    androidTestImplementation "androidx.test.ext:junit:${testVersions.androidx.junit}"
+    androidTestImplementation "androidx.test:runner:${testVersions.androidx.runner}"
 }
