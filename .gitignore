@@ -39,6 +39,7 @@ captures/
 .idea/tasks.xml
 .idea/dictionaries
 .idea/libraries
+.idea/workspace.xml
 .idea/codeStyles/Project.xml
 
 # Keystore files

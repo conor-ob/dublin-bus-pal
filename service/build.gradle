@@ -1,0 +1,23 @@
+apply plugin: 'kotlin'
+apply plugin: 'kotlin-kapt'
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
+    implementation "com.squareup.retrofit2:retrofit:${versions.retrofit}"
+    implementation "com.squareup.okhttp3:logging-interceptor:${versions.logging_interceptor}"
+    implementation "io.reactivex.rxjava2:rxkotlin:${versions.rx_kotlin}"
+    implementation "org.slf4j:slf4j-api:${versions.slf4j_api}"
+    implementation "com.google.code.gson:gson:${versions.gson}"
+    implementation("com.squareup.retrofit2:converter-simplexml:${versions.converter_simplexml}") {
+        exclude group: 'stax', module: 'stax-api'
+        exclude group: 'stax', module: 'stax'
+        exclude group: 'xpp3', module: 'xpp3'
+    }
+    testImplementation project(path: ':util', configuration: 'testOutput')
+    testImplementation "junit:junit:${testVersions.junit}"
+}
+
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+    test.java.srcDirs += 'src/test/kotlin'
+}

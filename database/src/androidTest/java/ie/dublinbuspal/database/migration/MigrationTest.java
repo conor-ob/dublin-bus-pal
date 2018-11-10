@@ -1,8 +1,5 @@
 package ie.dublinbuspal.database.migration;
 
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
-
 import org.junit.Rule;
 import org.junit.runner.RunWith;
 
@@ -13,6 +10,8 @@ import androidx.room.migration.Migration;
 import androidx.room.testing.MigrationTestHelper;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory;
+import androidx.test.InstrumentationRegistry;
+import androidx.test.runner.AndroidJUnit4;
 import ie.dublinbuspal.database.DublinBusDatabase;
 
 @RunWith(AndroidJUnit4.class)
