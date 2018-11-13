@@ -1,0 +1,13 @@
+apply plugin: 'kotlin'
+
+dependencies {
+    implementation project(":util")
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
+    implementation "com.google.dagger:dagger-compiler:${versions.dagger_compiler}"
+    implementation "io.reactivex.rxjava2:rxkotlin:${versions.rx_kotlin}"
+}
+
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+    test.java.srcDirs += 'src/test/kotlin'
+}

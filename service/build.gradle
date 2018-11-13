@@ -3,6 +3,9 @@ apply plugin: 'kotlin-kapt'
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
+    implementation "com.google.dagger:dagger-compiler:${versions.dagger_compiler}"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:${versions.adapter_rxjava2}"
+    implementation "com.squareup.retrofit2:converter-gson:${versions.converter_gson}"
     implementation "com.squareup.retrofit2:retrofit:${versions.retrofit}"
     implementation "com.squareup.okhttp3:logging-interceptor:${versions.logging_interceptor}"
     implementation "io.reactivex.rxjava2:rxkotlin:${versions.rx_kotlin}"

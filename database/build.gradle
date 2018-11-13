@@ -37,6 +37,8 @@ android {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
     implementation project(':data')
+    kapt "com.google.dagger:dagger-compiler:${versions.dagger_compiler}"
+    implementation "com.google.dagger:dagger:${versions.dagger}"
     implementation "androidx.room:room-runtime:${versions.androidx.room_runtime}"
     kapt "androidx.room:room-compiler:${versions.androidx.room_compiler}"
     implementation "androidx.room:room-rxjava2:${versions.androidx.room_rxjava2}"
