@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
 android {
@@ -12,6 +13,14 @@ android {
         versionCode 1000
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+//        multiDexEnabled true
+
+//        javaCompileOptions {
+//            annotationProcessorOptions {
+//                includeCompileClasspath = true
+//            }
+//        }
     }
 
     buildTypes {
@@ -35,10 +44,32 @@ android {
 }
 
 dependencies {
+    implementation project(':data')
+    implementation project(':database')
+    implementation project(':domain')
+    implementation project(":repository")
+    implementation project(":service")
+    implementation project(':util')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
+    implementation "io.reactivex.rxjava2:rxandroid:${versions.rx_android}"
+    implementation "androidx.constraintlayout:constraintlayout:${versions.androidx.constraintlayout}"
+    implementation "androidx.recyclerview:recyclerview:${versions.androidx.recyclerview}"
     implementation "androidx.appcompat:appcompat:${versions.androidx.appcompat}"
+    implementation "com.mikepenz:fastadapter:${versions.fastadapter}"
+    implementation "com.mikepenz:fastadapter-commons:${versions.fastadapter_commons}"
+    implementation "com.hannesdorfmann.mosby3:mvp-conductor:${versions.mvp_conductor}"
+//    implementation "com.nytimes.android:store3:${versions.store3}"
+    implementation "com.github.conor-ob:sticky-headers-recyclerview:${versions.sticky_headers_recyclerview}"
     testImplementation "junit:junit:${testVersions.junit}"
     androidTestImplementation "androidx.test:core:${testVersions.androidx.core}"
     androidTestImplementation "androidx.test.ext:junit:${testVersions.androidx.junit}"
     androidTestImplementation "androidx.test:runner:${testVersions.androidx.runner}"
+
+    implementation "androidx.room:room-runtime:${versions.androidx.room_runtime}"
+
+    implementation "com.google.dagger:dagger:${versions.dagger}"
+    kapt "com.google.dagger:dagger-compiler:${versions.dagger_compiler}"
+//    kapt "com.google.dagger:dagger-android-processor:${versions.dagger_android_processor}"
+//    implementation "com.google.dagger:dagger-android:${versions.dagger_android}"
+//    implementation "com.google.dagger:dagger-android-support:${versions.dagger_android_support}"
 }

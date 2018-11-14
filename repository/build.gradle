@@ -6,7 +6,6 @@ dependencies {
     implementation project(':data')
     implementation project(':service')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
-    implementation "com.google.dagger:dagger-compiler:${versions.dagger_compiler}"
     implementation "io.reactivex.rxjava2:rxkotlin:${versions.rx_kotlin}"
     implementation "com.nytimes.android:store3:${versions.store3}"
 //    implementation project(':base')
@@ -19,6 +18,9 @@ dependencies {
 //    testImplementation project(path: ':base', configuration: 'testOutput')
 //    testImplementation project(path: ':data', configuration: 'testOutput')
 //    testImplementation project(path: ':service', configuration: 'testOutput')
+
+    implementation "com.google.dagger:dagger:${versions.dagger}"
+    kapt "com.google.dagger:dagger-compiler:${versions.dagger_compiler}"
 }
 
 sourceSets {
