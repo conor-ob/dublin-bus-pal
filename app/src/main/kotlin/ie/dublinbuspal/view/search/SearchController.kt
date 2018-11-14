@@ -14,6 +14,7 @@ import com.mikepenz.fastadapter.listeners.ItemFilterListener
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration
 import ie.dublinbuspal.android.R
 import ie.dublinbuspal.model.route.Route
+import ie.dublinbuspal.model.stop.ResolvedStop
 import ie.dublinbuspal.model.stop.Stop
 import ie.dublinbuspal.view.BaseMvpController
 import ie.dublinbuspal.view.search.adapter.*
@@ -86,7 +87,7 @@ class SearchController(args: Bundle) : BaseMvpController<SearchView, SearchPrese
             addItemDecoration(decoration)
         }
         stopsAdapter.itemFilter.withFilterPredicate { item, constraint ->
-            String.format("%s %s", item.stop.id, item.stop.name).toLowerCase().contains(constraint!!)
+            String.format("%s %s", item.stop.id(), item.stop.name()).toLowerCase().contains(constraint!!)
         }
         stopsAdapter.itemFilter.withItemFilterListener(object: ItemFilterListener<StopItem> {
 
@@ -121,7 +122,7 @@ class SearchController(args: Bundle) : BaseMvpController<SearchView, SearchPrese
         presenter.start()
     }
 
-    override fun showStops(stops: List<Stop>) {
+    override fun showStops(stops: List<ResolvedStop>) {
         Single.fromCallable { stops.map { StopItem(it) } }
                 .map { FastAdapterDiffUtil.calculateDiff(stopsAdapter, it, StopDiffCallback()) }
                 .subscribeOn(Schedulers.computation())

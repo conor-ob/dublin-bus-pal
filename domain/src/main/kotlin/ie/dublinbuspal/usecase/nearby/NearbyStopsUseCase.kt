@@ -1,7 +1,6 @@
 package ie.dublinbuspal.usecase.nearby
 
 import ie.dublinbuspal.model.stop.Stop
-import ie.dublinbuspal.model.stopservice.SmartDublinStopService
 import ie.dublinbuspal.repository.PreferencesRepository
 import ie.dublinbuspal.repository.Repository
 import ie.dublinbuspal.util.CollectionUtils
@@ -13,7 +12,6 @@ import java.util.*
 import javax.inject.Inject
 
 class NearbyStopsUseCase @Inject constructor(private val stopRepository: Repository<List<Stop>, Any>,
-                                             private val smartDublinStopServiceRepository: Repository<List<SmartDublinStopService>, Any>,
                                              private val preferences: PreferencesRepository) {
 
     fun getNearbyBusStops(coordinate: Coordinate): Observable<SortedMap<Double, Stop>> {
@@ -35,10 +33,6 @@ class NearbyStopsUseCase @Inject constructor(private val stopRepository: Reposit
 
     fun saveLastLocation(location: Pair<Coordinate, Float>): Completable {
         return preferences.saveLastLocation(location)
-    }
-
-    fun preload(): Completable {
-        return Completable.fromObservable(smartDublinStopServiceRepository.get(0))
     }
 
 }

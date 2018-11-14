@@ -5,7 +5,7 @@ import com.mikepenz.fastadapter.commons.utils.DiffCallback
 class StopDiffCallback : DiffCallback<StopItem> {
 
     override fun areItemsTheSame(oldItem: StopItem, newItem: StopItem): Boolean {
-        return oldItem.stop.id == newItem.stop.id
+        return oldItem.stop.id() == newItem.stop.id()
     }
 
     override fun areContentsTheSame(oldItem: StopItem, newItem: StopItem): Boolean {

@@ -1,14 +1,14 @@
 package ie.dublinbuspal.mapping.stop
 
-import ie.dublinbuspal.data.entity.DetailedStopEntity
+import ie.dublinbuspal.data.entity.StopEntity
 import ie.dublinbuspal.model.stop.Stop
 import ie.dublinbuspal.repository.Mapper
 import ie.dublinbuspal.util.Coordinate
 
-class StopDomainMapper : Mapper<DetailedStopEntity, Stop> {
+class StopDomainMapper : Mapper<StopEntity, Stop> {
 
-    override fun map(from: DetailedStopEntity): Stop {
-        return Stop(from.id, from.customName()!!, Coordinate(from.latitude, from.longitude), from.customRoutes()!!)
+    override fun map(from: StopEntity): Stop {
+        return Stop(from.id, from.name, Coordinate(from.latitude, from.longitude))
     }
 
 }

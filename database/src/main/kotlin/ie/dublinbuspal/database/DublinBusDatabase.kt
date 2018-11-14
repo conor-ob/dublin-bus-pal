@@ -12,17 +12,22 @@ import ie.dublinbuspal.data.entity.*
         exportSchema = true,
         entities = [
             StopEntity::class,
+            BacStopEntity::class,
+            GadStopEntity::class,
             RouteEntity::class,
             StopServiceEntity::class,
             RouteServiceEntity::class,
-            FavouriteStopEntity::class,
-            SmartDublinStopServiceEntity::class
+            FavouriteStopEntity::class
         ]
 )
 @TypeConverters(Converters::class)
 abstract class DublinBusDatabase : RoomDatabase() {
 
     abstract fun stopDao(): StopDao
+
+    abstract fun bacStopDao(): BacStopDao
+
+    abstract fun gadStopDao(): GadStopDao
 
     abstract fun routeDao(): RouteDao
 
@@ -31,9 +36,5 @@ abstract class DublinBusDatabase : RoomDatabase() {
     abstract fun routeServiceDao(): RouteServiceDao
 
     abstract fun favouriteStopDao(): FavouriteStopDao
-
-    abstract fun smartDublinStopServiceDao(): SmartDublinStopServiceDao
-
-    abstract fun detailedStopDao(): DetailedStopDao
 
 }
