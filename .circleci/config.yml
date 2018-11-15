@@ -43,34 +43,33 @@ jobs:
 #          command: ./gradlew lint
 #      - store_artifacts:
 #          path: app/build/reports
-
-      - run:
-          name: Setup emulator
-          command: sdkmanager "system-images;android-21;default;armeabi-v7a" && echo "no" | avdmanager create avd -n test -k "system-images;android-21;default;armeabi-v7a"
-      - run:
-          name: Launch emulator
-          command: export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib && emulator64-arm -avd test -noaudio -no-boot-anim -no-window -accel auto -verbose
-          background: true
-      - run:
-          name: Wait for emulator
-          command: |
-            # wait for it to have booted
-            circle-android wait-for-boot
-            # unlock the emulator screen
-            sleep 30
-            adb shell input keyevent 82
-      - run:
-          name: Run app module device tests
-          command: ./gradlew :app:connectedDebugAndroidTest
-      - store_artifacts:
-          path: app/build/reports
-      - store_test_results:
-          path: app/build/test-results
-      - run:
-          name: Run database module device tests
-          command: ./gradlew :database:connectedDebugAndroidTest
-      - store_artifacts:
-          path: database/build/reports
-      - store_test_results:
-          path: database/build/test-results
-
+#
+#      - run:
+#          name: Setup emulator
+#          command: sdkmanager "system-images;android-21;default;armeabi-v7a" && echo "no" | avdmanager create avd -n test -k "system-images;android-21;default;armeabi-v7a"
+#      - run:
+#          name: Launch emulator
+#          command: export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib && emulator64-arm -avd test -noaudio -no-boot-anim -no-window -accel auto -verbose
+#          background: true
+#      - run:
+#          name: Wait for emulator
+#          command: |
+#            # wait for it to have booted
+#            circle-android wait-for-boot
+#            # unlock the emulator screen
+#            sleep 30
+#            adb shell input keyevent 82
+#      - run:
+#          name: Run app module device tests
+#          command: ./gradlew :app:connectedDebugAndroidTest
+#      - store_artifacts:
+#          path: app/build/reports
+#      - store_test_results:
+#          path: app/build/test-results
+#      - run:
+#          name: Run database module device tests
+#          command: ./gradlew :database:connectedDebugAndroidTest
+#      - store_artifacts:
+#          path: database/build/reports
+#      - store_test_results:
+#          path: database/build/test-results
