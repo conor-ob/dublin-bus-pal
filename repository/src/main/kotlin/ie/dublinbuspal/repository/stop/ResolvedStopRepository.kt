@@ -8,6 +8,7 @@ import ie.dublinbuspal.repository.FavouriteRepository
 import ie.dublinbuspal.repository.Repository
 import io.reactivex.Observable
 import io.reactivex.functions.Function4
+import io.reactivex.schedulers.Schedulers
 
 class ResolvedStopRepository(
         private val stopRepository: Repository<List<Stop>, Any>,
@@ -17,21 +18,21 @@ class ResolvedStopRepository(
 ) : Repository<List<ResolvedStop>, Any> {
 
     override fun get(key: Any): Observable<List<ResolvedStop>> {
-        return Observable.zip(
-                stopRepository.get(0),
-                bacStopRepository.get(0),
-                gadStopRepository.get(0),
-                favouritesRepository.get(0),
+        return Observable.combineLatest(
+                stopRepository.get(0).startWith(emptyList<Stop>()).subscribeOn(Schedulers.io()),
+                bacStopRepository.get(0).startWith(emptyList<SmartDublinStop>()).subscribeOn(Schedulers.io()),
+                gadStopRepository.get(0).startWith(emptyList<SmartDublinStop>()).subscribeOn(Schedulers.io()),
+                favouritesRepository.get(0).startWith(emptyList<FavouriteStop>()).subscribeOn(Schedulers.computation()),
                 Function4 { s1, s2, s3, s4 -> resolve(s1, s2, s3, s4) }
         )
     }
 
     override fun fetch(key: Any): Observable<List<ResolvedStop>> {
-        return Observable.zip(
-                stopRepository.fetch(0),
-                bacStopRepository.fetch(0),
-                gadStopRepository.fetch(0),
-                favouritesRepository.get(0),
+        return Observable.combineLatest(
+                stopRepository.fetch(0).startWith(emptyList<Stop>()).subscribeOn(Schedulers.newThread()),
+                bacStopRepository.fetch(0).startWith(emptyList<SmartDublinStop>()).subscribeOn(Schedulers.newThread()),
+                gadStopRepository.fetch(0).startWith(emptyList<SmartDublinStop>()).subscribeOn(Schedulers.newThread()),
+                favouritesRepository.get(0).startWith(emptyList<FavouriteStop>()).subscribeOn(Schedulers.newThread()),
                 Function4 { s1, s2, s3, s4 -> resolve(s1, s2, s3, s4) }
         )
     }

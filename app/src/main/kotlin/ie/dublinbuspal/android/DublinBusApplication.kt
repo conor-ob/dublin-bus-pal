@@ -7,6 +7,10 @@ class DublinBusApplication : Application() {
 
     lateinit var applicationComponent: ApplicationComponent
 
+//    init {
+//        RxJavaPlugins.setErrorHandler(emptyConsumer())
+//    }
+
     override fun onCreate() {
         super.onCreate()
         setupDagger()

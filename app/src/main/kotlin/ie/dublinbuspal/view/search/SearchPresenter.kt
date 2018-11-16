@@ -9,7 +9,7 @@ class SearchPresenter @Inject constructor(private val useCase: SearchUseCase) : 
 
     fun start() {
         useCase.getAllStops()
-                .compose(applyObservableSchedulers())
+//                .compose(applyThreadPoolObservableSchedulers())
                 .doOnNext { ifViewAttached { view -> view.showStops(it) } }
                 .doOnError { Log.e(javaClass.simpleName, it.message, it) }
                 .subscribe()
