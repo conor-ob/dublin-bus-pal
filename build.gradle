@@ -17,6 +17,8 @@ buildscript {
                     'room_rxjava2'  : '2.0.0'  // https://mvnrepository.com/artifact/androidx.room/room-rxjava2
 
             ],
+            'android_map_utils' : '0.5', // https://mvnrepository.com/artifact/com.google.maps.android/android-maps-utils
+            'android_reactive_location2' : '2.1', // https://mvnrepository.com/artifact/pl.charmas.android/android-reactive-location2
             'adapter_rxjava2'     : '2.4.0',  // https://mvnrepository.com/artifact/com.squareup.retrofit2/adapter-rxjava2
             'mvp_conductor'       : '3.1.0',  // https://mvnrepository.com/artifact/com.hannesdorfmann.mosby3/mvp-conductor
             'converter_gson'      : '2.4.0',  // https://mvnrepository.com/artifact/com.squareup.retrofit2/converter-gson

@@ -3,6 +3,7 @@ package ie.dublinbuspal.view.search
 import android.util.Log
 import ie.dublinbuspal.usecase.search.SearchUseCase
 import ie.dublinbuspal.view.BasePresenter
+import io.reactivex.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 
 class SearchPresenter @Inject constructor(private val useCase: SearchUseCase) : BasePresenter<SearchView>() {
@@ -10,8 +11,10 @@ class SearchPresenter @Inject constructor(private val useCase: SearchUseCase) : 
     fun start() {
         useCase.getAllStops()
 //                .compose(applyThreadPoolObservableSchedulers())
+                .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext { ifViewAttached { view -> view.showStops(it) } }
                 .doOnError { Log.e(javaClass.simpleName, it.message, it) }
+                .distinctUntilChanged()
                 .subscribe()
 
 //        useCase.tempFunction2()

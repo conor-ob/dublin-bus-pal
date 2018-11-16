@@ -1,6 +1,6 @@
 package ie.dublinbuspal.usecase.nearby
 
-import ie.dublinbuspal.model.stop.Stop
+import ie.dublinbuspal.model.stop.ResolvedStop
 import ie.dublinbuspal.repository.PreferencesRepository
 import ie.dublinbuspal.repository.Repository
 import ie.dublinbuspal.util.CollectionUtils
@@ -11,20 +11,20 @@ import io.reactivex.Observable
 import java.util.*
 import javax.inject.Inject
 
-class NearbyStopsUseCase @Inject constructor(private val stopRepository: Repository<List<Stop>, Any>,
+class NearbyStopsUseCase @Inject constructor(private val stopsRepository: Repository<List<ResolvedStop>, Any>,
                                              private val preferences: PreferencesRepository) {
 
-    fun getNearbyBusStops(coordinate: Coordinate): Observable<SortedMap<Double, Stop>> {
-        return stopRepository.get(0)
+    fun getNearbyBusStops(coordinate: Coordinate): Observable<SortedMap<Double, ResolvedStop>> {
+        return stopsRepository.get(0)
                 .map { filter(it, coordinate) }
     }
 
-    private fun filter(stops: List<Stop>, coordinate: Coordinate): SortedMap<Double, Stop> {
-        val sorted = TreeMap<Double, Stop>()
+    private fun filter(stops: List<ResolvedStop>, coordinate: Coordinate): SortedMap<Double, ResolvedStop> {
+        val sorted = TreeMap<Double, ResolvedStop>()
         for (busStop in stops) {
-            sorted[LocationUtils.haversineDistance(coordinate, busStop.coordinate)] = busStop
+            sorted[LocationUtils.haversineDistance(coordinate, busStop.coordinate())] = busStop
         }
-        return CollectionUtils.headMap(sorted, 30)
+        return CollectionUtils.headMap(sorted, 7)
     }
 
     fun getLastLocation(): Observable<Pair<Coordinate, Float>> {

@@ -1,6 +1,7 @@
 package ie.dublinbuspal.di
 
 import dagger.Component
+import ie.dublinbuspal.view.nearby.NearbyPresenter
 import ie.dublinbuspal.view.search.SearchPresenter
 import javax.inject.Singleton
 
@@ -15,7 +16,7 @@ import javax.inject.Singleton
 )
 interface ApplicationComponent {
 
-//    fun nearbyPresenter(): NearbyPresenter
+    fun nearbyPresenter(): NearbyPresenter
 //
 //    fun liveDataPresenter(): LiveDataPresenter
 //

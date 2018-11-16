@@ -3,6 +3,12 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
+Properties properties = new Properties()
+if (project.rootProject.file("keys.properties").exists()) {
+    properties.load(project.rootProject.file('keys.properties').newDataInputStream())
+}
+def googleMapsApiKey = properties.getProperty('com.google.android.geo.API_KEY')
+
 android {
     compileSdkVersion buildConfig.compileSdk
 
@@ -13,6 +19,7 @@ android {
         versionCode 1000
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [ googleMapsApiKey: "$googleMapsApiKey" ]
 
 //        multiDexEnabled true
 
@@ -58,6 +65,8 @@ dependencies {
     implementation "com.mikepenz:fastadapter:${versions.fastadapter}"
     implementation "com.mikepenz:fastadapter-commons:${versions.fastadapter_commons}"
     implementation "com.hannesdorfmann.mosby3:mvp-conductor:${versions.mvp_conductor}"
+    implementation "com.google.maps.android:android-maps-utils:${versions.android_map_utils}"
+    implementation "pl.charmas.android:android-reactive-location2:${versions.android_reactive_location2}"
 //    implementation "com.nytimes.android:store3:${versions.store3}"
     implementation "com.github.conor-ob:sticky-headers-recyclerview:${versions.sticky_headers_recyclerview}"
     testImplementation "junit:junit:${testVersions.junit}"

@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
-import ie.dublinbuspal.view.search.SearchController
+import ie.dublinbuspal.view.nearby.NearbyController
 import kotlinx.android.synthetic.main.view_root.*
 
 class DublinBusActivity : AppCompatActivity() {
@@ -21,7 +21,7 @@ class DublinBusActivity : AppCompatActivity() {
     private fun setupRouter(savedInstanceState: Bundle?) {
         router = Conductor.attachRouter(this, root_container, savedInstanceState)
         if (!router.hasRootController()) {
-            router.setRoot(RouterTransaction.with(SearchController(Bundle.EMPTY)))
+            router.setRoot(RouterTransaction.with(NearbyController(Bundle.EMPTY)))
         }
     }
 

@@ -17,7 +17,13 @@ class ResolvedStopRepository(
         private val favouritesRepository: FavouriteRepository<List<FavouriteStop>, Any>
 ) : Repository<List<ResolvedStop>, Any> {
 
+    private var resolved = false
+    private var resolvedCache = emptyList<ResolvedStop>()
+
     override fun get(key: Any): Observable<List<ResolvedStop>> {
+        if (resolved && resolvedCache.isNotEmpty()) {
+            return Observable.just(resolvedCache)
+        }
         return Observable.combineLatest(
                 stopRepository.get(0).startWith(emptyList<Stop>()).subscribeOn(Schedulers.io()),
                 bacStopRepository.get(0).startWith(emptyList<SmartDublinStop>()).subscribeOn(Schedulers.io()),
@@ -43,6 +49,14 @@ class ResolvedStopRepository(
             gadStops: List<SmartDublinStop>,
             favouriteStops: List<FavouriteStop>
     ): List<ResolvedStop> {
+        return if (stops.size > 1 && bacStops.size > 1 && gadStops.size > 1) {
+            resolveInternal(stops, bacStops, gadStops, favouriteStops, true)
+        } else {
+            resolveInternal(stops, bacStops, gadStops, favouriteStops, false)
+        }
+    }
+
+    private fun resolveInternal(stops: List<Stop>, bacStops: List<SmartDublinStop>, gadStops: List<SmartDublinStop>, favouriteStops: List<FavouriteStop>, finalResolve: Boolean): List<ResolvedStop> {
         val resolvedStops = mutableMapOf<String, ResolvedStop>()
         for (stop in stops) {
             resolvedStops[stop.id] = ResolvedStop(id = stop.id, name = stop.name, coordinate = stop.coordinate)
@@ -71,6 +85,7 @@ class ResolvedStopRepository(
                 resolvedStops[stop.id] = resolvedStop.copy(favouriteName = stop.name, favouriteRoutes = stop.routes)
             }
         }
+        resolved = finalResolve
         return resolvedStops.values.toList()
     }
 
