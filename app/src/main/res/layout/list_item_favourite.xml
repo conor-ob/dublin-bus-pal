@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/listItemBackground"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:orientation="vertical"
+    android:padding="@dimen/list_item_padding">
+
+    <TextView
+        android:id="@+id/stop_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:fontFamily="@font/google_sans_regular"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/stop_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:fontFamily="@font/google_sans_regular"
+        android:textColor="@color/grey_800"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/routes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:drawableStart="@drawable/ic_bus_double_decker"
+        android:drawablePadding="4dp"
+        android:fontFamily="sans-serif-condensed"
+        android:textColor="@color/textColorSecondary"
+        android:textSize="14sp" />
+
+    <!--<include-->
+    <!--android:id="@+id/live_data"-->
+    <!--layout="@layout/list_item_live_data"-->
+    <!--app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--app:layout_constraintTop_toBottomOf="@id/routes" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/routes"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginTop="4dp"-->
+    <!--android:fontFamily="sans-serif-condensed"-->
+    <!--android:textSize="14sp"-->
+    <!--android:textColor="@color/textColorSecondary"-->
+    <!--app:layout_constraintTop_toBottomOf="@id/stop_id"-->
+    <!--app:layout_constraintLeft_toLeftOf="parent"/>-->
+
+</LinearLayout>
