@@ -8,7 +8,7 @@ import ie.dublinbuspal.service.model.stop.StopsRequestRootXml
 import ie.dublinbuspal.service.model.stop.StopsRequestXml
 import io.reactivex.Observable
 
-class StopRepository(private val store: StoreRoom<List<Stop>, StopsRequestXml>): Repository<List<Stop>, Any> {
+class StopRepository(private val store: StoreRoom<List<Stop>, StopsRequestXml>): Repository<Stop> {
 
     val key: StopsRequestXml by lazy {
         val root = StopsRequestRootXml()
@@ -16,12 +16,16 @@ class StopRepository(private val store: StoreRoom<List<Stop>, StopsRequestXml>):
         return@lazy StopsRequestXml(body)
     }
 
-    override fun get(key: Any): Observable<List<Stop>> {
+    override fun getAll(): Observable<List<Stop>> {
         return store.get(this.key)
     }
 
-    override fun fetch(key: Any): Observable<List<Stop>> {
-        return store.fetch(this.key)
+    override fun getById(id: String): Observable<Stop> {
+        throw UnsupportedOperationException()
+    }
+
+    override fun getAllById(id: String): Observable<List<Stop>> {
+        throw UnsupportedOperationException()
     }
 
 }

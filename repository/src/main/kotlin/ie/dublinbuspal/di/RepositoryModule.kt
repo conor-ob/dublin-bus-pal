@@ -66,11 +66,11 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun resolvedStopRepository(
-            stopRepository: Repository<List<Stop>, Any>,
-            @Named("bac") bacStopRepository: Repository<List<SmartDublinStop>, Any>,
-            @Named("gad") gadStopRepository: Repository<List<SmartDublinStop>, Any>,
-            favouritesRepository: FavouriteRepository<List<FavouriteStop>, Any>
-    ): Repository<List<ResolvedStop>, Any> {
+            stopRepository: Repository<Stop>,
+            @Named("bac") bacStopRepository: Repository<SmartDublinStop>,
+            @Named("gad") gadStopRepository: Repository<SmartDublinStop>,
+            favouritesRepository: FavouriteRepository<FavouriteStop>
+    ): Repository<ResolvedStop> {
         return ResolvedStopRepository(stopRepository, bacStopRepository, gadStopRepository, favouritesRepository)
     }
 
@@ -80,7 +80,7 @@ class RepositoryModule {
             api: DublinBusSoapApi,
             stopDao: StopDao,
             txRunner: TxRunner
-    ): Repository<List<Stop>, Any> {
+    ): Repository<Stop> {
 
         val fetcher = Fetcher<StopsResponseXml, StopsRequestXml> { key -> api.getStops(key) }
 
@@ -104,7 +104,7 @@ class RepositoryModule {
             api: SmartDublinRestApi,
             dao: BacStopDao,
             txRunner: TxRunner
-    ): Repository<List<SmartDublinStop>, Any> {
+    ): Repository<SmartDublinStop> {
 
         val fetcher = Fetcher<StopsResponseJson, SmartDublinKey> { key -> api.getStops(key.operator, key.format) }
 
@@ -128,7 +128,7 @@ class RepositoryModule {
             api: SmartDublinRestApi,
             dao: GadStopDao,
             txRunner: TxRunner
-    ): Repository<List<SmartDublinStop>, Any> {
+    ): Repository<SmartDublinStop> {
 
         val fetcher = Fetcher<StopsResponseJson, SmartDublinKey> { key -> api.getStops(key.operator, key.format) }
 
@@ -149,7 +149,7 @@ class RepositoryModule {
     @Singleton
     fun routeRepository(api: DublinBusSoapApi,
                         dao: RouteDao,
-                        txRunner: TxRunner): Repository<List<Route>, Any> {
+                        txRunner: TxRunner): Repository<Route> {
 
         val fetcher = Fetcher<RoutesResponseXml, RoutesRequestXml> { key -> api.getRoutes(key) }
 
@@ -169,7 +169,7 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun stopServiceRepository(api: DublinBusSoapApi,
-                              dao: StopServiceDao): Repository<StopService, String> {
+                              dao: StopServiceDao): Repository<StopService> {
 
         val fetcher = Fetcher<StopServiceResponseXml, StopServiceRequestXml> { key -> api.getStopService(key) }
 
@@ -189,7 +189,7 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun routeServiceRepository(api: DublinBusSoapApi,
-                               dao: RouteServiceDao): Repository<RouteService, String> {
+                               dao: RouteServiceDao): Repository<RouteService> {
 
         val fetcher = Fetcher<RouteServiceResponseXml, RouteServiceRequestXml> { key -> api.getRouteService(key) }
 
@@ -208,7 +208,7 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun liveDataRepository(api: DublinBusSoapApi): Repository<List<LiveData>, String> {
+    fun liveDataRepository(api: DublinBusSoapApi): Repository<LiveData> {
 
         val memoryPolicy = MemoryPolicy.builder()
                 .setExpireAfterWrite(30)
@@ -228,7 +228,7 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun favouritesRepository(dao: FavouriteStopDao): FavouriteRepository<List<FavouriteStop>, Any> {
+    fun favouritesRepository(dao: FavouriteStopDao): FavouriteRepository<FavouriteStop> {
 
         val domainMapper = FavouriteStopDomainMapper()
         val entityMapper = FavouriteStopEntityMapper()
@@ -238,7 +238,7 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun rssRepository(api: DublinBusRssApi): Repository<List<RssNews>, Any> {
+    fun rssRepository(api: DublinBusRssApi): Repository<RssNews> {
 
         val memoryPolicy = MemoryPolicy.builder()
                 .setExpireAfterWrite(24)

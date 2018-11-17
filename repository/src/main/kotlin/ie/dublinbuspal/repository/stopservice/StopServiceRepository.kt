@@ -8,14 +8,18 @@ import ie.dublinbuspal.service.model.stopservice.StopServiceRequestRootXml
 import ie.dublinbuspal.service.model.stopservice.StopServiceRequestXml
 import io.reactivex.Observable
 
-class StopServiceRepository(private val store: StoreRoom<StopService, StopServiceRequestXml>) : Repository<StopService, String> {
+class StopServiceRepository(private val store: StoreRoom<StopService, StopServiceRequestXml>) : Repository<StopService> {
 
-    override fun get(key: String): Observable<StopService> {
-        return store.get(buildKey(key))
+    override fun getAll(): Observable<List<StopService>> {
+        throw UnsupportedOperationException()
     }
 
-    override fun fetch(key: String): Observable<StopService> {
-        return store.fetch(buildKey(key))
+    override fun getById(id: String): Observable<StopService> {
+        return store.get(buildKey(id))
+    }
+
+    override fun getAllById(id: String): Observable<List<StopService>> {
+        throw UnsupportedOperationException()
     }
 
     private fun buildKey(stopId: String): StopServiceRequestXml {

@@ -11,36 +11,34 @@ import io.reactivex.functions.Function4
 import io.reactivex.schedulers.Schedulers
 
 class ResolvedStopRepository(
-        private val stopRepository: Repository<List<Stop>, Any>,
-        private val bacStopRepository: Repository<List<SmartDublinStop>, Any>,
-        private val gadStopRepository: Repository<List<SmartDublinStop>, Any>,
-        private val favouritesRepository: FavouriteRepository<List<FavouriteStop>, Any>
-) : Repository<List<ResolvedStop>, Any> {
+        private val stopRepository: Repository<Stop>,
+        private val bacStopRepository: Repository<SmartDublinStop>,
+        private val gadStopRepository: Repository<SmartDublinStop>,
+        private val favouritesRepository: FavouriteRepository<FavouriteStop>
+) : Repository<ResolvedStop> {
 
     private var resolved = false
     private var resolvedCache = emptyList<ResolvedStop>()
 
-    override fun get(key: Any): Observable<List<ResolvedStop>> {
+    override fun getAll(): Observable<List<ResolvedStop>> {
         if (resolved && resolvedCache.isNotEmpty()) {
             return Observable.just(resolvedCache)
         }
         return Observable.combineLatest(
-                stopRepository.get(0).startWith(emptyList<Stop>()).subscribeOn(Schedulers.io()),
-                bacStopRepository.get(0).startWith(emptyList<SmartDublinStop>()).subscribeOn(Schedulers.io()),
-                gadStopRepository.get(0).startWith(emptyList<SmartDublinStop>()).subscribeOn(Schedulers.io()),
-                favouritesRepository.get(0).startWith(emptyList<FavouriteStop>()).subscribeOn(Schedulers.computation()),
+                stopRepository.getAll().startWith(emptyList<Stop>()).subscribeOn(Schedulers.io()),
+                bacStopRepository.getAll().startWith(emptyList<SmartDublinStop>()).subscribeOn(Schedulers.io()),
+                gadStopRepository.getAll().startWith(emptyList<SmartDublinStop>()).subscribeOn(Schedulers.io()),
+                favouritesRepository.getAll().startWith(emptyList<FavouriteStop>()).subscribeOn(Schedulers.computation()),
                 Function4 { s1, s2, s3, s4 -> resolve(s1, s2, s3, s4) }
         )
     }
 
-    override fun fetch(key: Any): Observable<List<ResolvedStop>> {
-        return Observable.combineLatest(
-                stopRepository.fetch(0).startWith(emptyList<Stop>()).subscribeOn(Schedulers.newThread()),
-                bacStopRepository.fetch(0).startWith(emptyList<SmartDublinStop>()).subscribeOn(Schedulers.newThread()),
-                gadStopRepository.fetch(0).startWith(emptyList<SmartDublinStop>()).subscribeOn(Schedulers.newThread()),
-                favouritesRepository.get(0).startWith(emptyList<FavouriteStop>()).subscribeOn(Schedulers.newThread()),
-                Function4 { s1, s2, s3, s4 -> resolve(s1, s2, s3, s4) }
-        )
+    override fun getAllById(id: String): Observable<List<ResolvedStop>> {
+        throw UnsupportedOperationException()
+    }
+
+    override fun getById(id: String): Observable<ResolvedStop> {
+        throw UnsupportedOperationException()
     }
 
     private fun resolve(
@@ -49,6 +47,7 @@ class ResolvedStopRepository(
             gadStops: List<SmartDublinStop>,
             favouriteStops: List<FavouriteStop>
     ): List<ResolvedStop> {
+        //TODO need to do some synchronization here
         return if (stops.size > 1 && bacStops.size > 1 && gadStops.size > 1) {
             resolveInternal(stops, bacStops, gadStops, favouriteStops, true)
         } else {

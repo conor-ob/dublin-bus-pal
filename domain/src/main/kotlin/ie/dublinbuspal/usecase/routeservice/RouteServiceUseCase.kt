@@ -5,10 +5,10 @@ import ie.dublinbuspal.repository.Repository
 import io.reactivex.Observable
 import javax.inject.Inject
 
-class RouteServiceUseCase @Inject constructor(private val repository: Repository<RouteService, String>) {
+class RouteServiceUseCase @Inject constructor(private val repository: Repository<RouteService>) {
 
     fun getRouteService(routeId: String): Observable<RouteService> {
-        return repository.get(routeId)
+        return repository.getById(routeId)
     }
 
 }

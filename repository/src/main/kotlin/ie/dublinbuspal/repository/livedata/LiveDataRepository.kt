@@ -8,14 +8,18 @@ import ie.dublinbuspal.service.model.livedata.LiveDataRequestRootXml
 import ie.dublinbuspal.service.model.livedata.LiveDataRequestXml
 import io.reactivex.Observable
 
-class LiveDataRepository(private val store: Store<List<LiveData>, LiveDataRequestXml>) : Repository<List<LiveData>, String> {
+class LiveDataRepository(private val store: Store<List<LiveData>, LiveDataRequestXml>) : Repository<LiveData> {
 
-    override fun get(key: String): Observable<List<LiveData>> {
-        return store.get(buildLiveDataKey(key)).toObservable()
+    override fun getById(id: String): Observable<LiveData> {
+        throw UnsupportedOperationException()
     }
 
-    override fun fetch(key: String): Observable<List<LiveData>> {
-        return store.fetch(buildLiveDataKey(key)).toObservable()
+    override fun getAll(): Observable<List<LiveData>> {
+        throw UnsupportedOperationException()
+    }
+
+    override fun getAllById(id: String): Observable<List<LiveData>> {
+        return store.fetch(buildLiveDataKey(id)).toObservable()
     }
 
     private fun buildLiveDataKey(stopId: String): LiveDataRequestXml {

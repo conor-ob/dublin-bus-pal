@@ -11,11 +11,11 @@ import io.reactivex.Observable
 import java.util.*
 import javax.inject.Inject
 
-class NearbyStopsUseCase @Inject constructor(private val stopsRepository: Repository<List<ResolvedStop>, Any>,
+class NearbyStopsUseCase @Inject constructor(private val stopsRepository: Repository<ResolvedStop>,
                                              private val preferences: PreferencesRepository) {
 
     fun getNearbyBusStops(coordinate: Coordinate): Observable<SortedMap<Double, ResolvedStop>> {
-        return stopsRepository.get(0)
+        return stopsRepository.getAll()
                 .map { filter(it, coordinate) }
     }
 
@@ -24,7 +24,7 @@ class NearbyStopsUseCase @Inject constructor(private val stopsRepository: Reposi
         for (busStop in stops) {
             sorted[LocationUtils.haversineDistance(coordinate, busStop.coordinate())] = busStop
         }
-        return CollectionUtils.headMap(sorted, 7)
+        return CollectionUtils.headMap(sorted, 30)
     }
 
     fun getLastLocation(): Observable<Pair<Coordinate, Float>> {

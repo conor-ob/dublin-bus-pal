@@ -6,11 +6,11 @@ import ie.dublinbuspal.repository.Repository
 import io.reactivex.Observable
 import javax.inject.Inject
 
-class LiveDataUseCase @Inject constructor(private val liveDataRepository: Repository<List<LiveData>, String>,
-                                          private val stopServiceRepository: Repository<StopService, String>) {
+class LiveDataUseCase @Inject constructor(private val liveDataRepository: Repository<LiveData>,
+                                          private val stopServiceRepository: Repository<StopService>) {
 
     fun getLiveData(stopId: String): Observable<List<LiveData>> {
-        return liveDataRepository.get(stopId)
+        return liveDataRepository.getAllById(stopId)
     }
 
     fun getCondensedLiveData(stopId: String): Observable<Map<Pair<String, String>, List<LiveData>>> {
@@ -32,7 +32,7 @@ class LiveDataUseCase @Inject constructor(private val liveDataRepository: Reposi
     }
 
     fun getStopService(stopId: String): Observable<StopService> {
-        return stopServiceRepository.get(stopId)
+        return stopServiceRepository.getById(stopId)
     }
 
 }

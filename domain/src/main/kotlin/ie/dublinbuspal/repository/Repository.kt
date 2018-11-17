@@ -2,10 +2,12 @@ package ie.dublinbuspal.repository
 
 import io.reactivex.Observable
 
-interface Repository<T, K> {
+interface Repository<T> {
 
-    fun get(key: K): Observable<T>
+    fun getById(id: String): Observable<T>
 
-    fun fetch(key: K): Observable<T>
+    fun getAll(): Observable<List<T>>
+
+    fun getAllById(id: String): Observable<List<T>>
 
 }

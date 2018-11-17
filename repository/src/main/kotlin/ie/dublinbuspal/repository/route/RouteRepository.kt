@@ -8,14 +8,18 @@ import ie.dublinbuspal.service.model.route.RoutesRequestRootXml
 import ie.dublinbuspal.service.model.route.RoutesRequestXml
 import io.reactivex.Observable
 
-class RouteRepository(private val store: StoreRoom<List<Route>, RoutesRequestXml>) : Repository<List<Route>, Any> {
+class RouteRepository(private val store: StoreRoom<List<Route>, RoutesRequestXml>) : Repository<Route> {
 
-    override fun get(key: Any): Observable<List<Route>> {
+    override fun getAll(): Observable<List<Route>> {
         return store.get(this.key)
     }
 
-    override fun fetch(key: Any): Observable<List<Route>> {
-        return store.fetch(this.key)
+    override fun getById(id: String): Observable<Route> {
+        throw UnsupportedOperationException()
+    }
+
+    override fun getAllById(id: String): Observable<List<Route>> {
+        throw UnsupportedOperationException()
     }
 
     val key : RoutesRequestXml by lazy {
