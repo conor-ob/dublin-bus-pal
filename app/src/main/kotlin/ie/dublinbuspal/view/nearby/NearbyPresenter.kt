@@ -24,7 +24,6 @@ class NearbyPresenter @Inject constructor(private val useCase: NearbyStopsUseCas
                 .observeOn(AndroidSchedulers.mainThread())
 //                .compose(applyObservableSchedulers())
                 .doOnNext { ifViewAttached { view -> view.showBusStops(it) } }
-                .distinctUntilChanged()
 //                .doOnError { Timber.e(it) }
                 .subscribe()
     }

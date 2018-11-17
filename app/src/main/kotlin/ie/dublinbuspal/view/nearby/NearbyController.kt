@@ -1,7 +1,6 @@
 package ie.dublinbuspal.view.nearby
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +23,7 @@ class NearbyController(args: Bundle) : BaseMvpController<NearbyView, NearbyPrese
 
 //    private lateinit var bottomSheet: ViewGroup
     private lateinit var googleMap: GoogleMap
-    private val mapMarkers = hashMapOf<ResolvedStop, Marker>()
+    private val mapMarkers = hashMapOf<String, Marker>()
 
     override fun getLayoutId() = R.layout.view_nearby
 
@@ -106,7 +105,6 @@ class NearbyController(args: Bundle) : BaseMvpController<NearbyView, NearbyPrese
 //    }
 
     override fun showBusStops(stops: SortedMap<Double, ResolvedStop>) {
-        Log.d("DUBLIN", stops.values.map { it.id() }.toString() )
         focusOnNearestStop(stops.values)
         addNewMarkers(stops.values)
         removeOldMarkers(stops.values)
@@ -122,7 +120,7 @@ class NearbyController(args: Bundle) : BaseMvpController<NearbyView, NearbyPrese
 
     private fun addNewMarkers(stops: Collection<ResolvedStop>) {
         for (busStop in stops) {
-            if (mapMarkers[busStop] == null) {
+            if (mapMarkers[busStop.id()] == null) {
                 val marker = googleMap.addMarker(MarkerOptions()
                         .position(LatLng(busStop.coordinate().x, busStop.coordinate().y))
                         .anchor(0.3f, 1.0f)
@@ -130,7 +128,7 @@ class NearbyController(args: Bundle) : BaseMvpController<NearbyView, NearbyPrese
                         .title(busStop.name())
                         .icon(ImageUtils.drawableToBitmap(applicationContext!!, R.drawable.ic_map_marker_bus_double_decker_default)))
                 marker.tag = "${busStop.id()}::${busStop.name()}"
-                mapMarkers[busStop] = marker
+                mapMarkers[busStop.id()] = marker
                 AnimationUtils.fadeInMarker(marker)
             }
         }
@@ -139,7 +137,7 @@ class NearbyController(args: Bundle) : BaseMvpController<NearbyView, NearbyPrese
         val iterator = mapMarkers.entries.iterator()
         while (iterator.hasNext()) {
             val entry = iterator.next()
-            if (!stops.contains(entry.key)) {
+            if (!stops.map { it.id() }.contains(entry.key)) {
                 AnimationUtils.fadeOutMarker(entry.value)
                 iterator.remove()
             }

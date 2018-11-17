@@ -14,7 +14,6 @@ class SearchPresenter @Inject constructor(private val useCase: SearchUseCase) : 
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext { ifViewAttached { view -> view.showStops(it) } }
                 .doOnError { Log.e(javaClass.simpleName, it.message, it) }
-                .distinctUntilChanged()
                 .subscribe()
 
 //        useCase.tempFunction2()
