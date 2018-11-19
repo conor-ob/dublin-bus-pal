@@ -61,8 +61,9 @@ dependencies {
     implementation project(":repository")
     implementation project(":service")
     implementation project(':util')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
     implementation "io.reactivex.rxjava2:rxandroid:${versions.rx_android}"
+    implementation "io.reactivex.rxjava2:rxkotlin:${versions.rx_kotlin}"
     implementation "androidx.constraintlayout:constraintlayout:${versions.androidx.constraintlayout}"
     implementation "androidx.recyclerview:recyclerview:${versions.androidx.recyclerview}"
     implementation "androidx.appcompat:appcompat:${versions.androidx.appcompat}"
@@ -81,4 +82,12 @@ dependencies {
     implementation "com.google.dagger:dagger:${versions.dagger}"
     kapt "com.google.dagger:dagger-compiler:${versions.dagger_compiler}"
     implementation "com.twitter.sdk.android:tweet-ui:$versions.tweet_ui"
+    implementation "com.jakewharton.threetenabp:threetenabp:${versions.threetenabp}"
+
+    // Conflict with dependency 'blah blah' in project ':app'. Resolved versions for runtime classpath (x.x.x) and compile classpath (x.x.x) differ. This can lead to runtime crashes
+    implementation "com.squareup.retrofit2:retrofit:${versions.retrofit}"
+    implementation "com.squareup.retrofit2:converter-gson:${versions.converter_gson}"
+    implementation "com.google.code.gson:gson:${versions.gson}"
+    implementation("com.squareup.okhttp3:okhttp:3.11.0")
+    implementation("com.squareup.okio:okio:1.14.0")
 }

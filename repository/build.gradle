@@ -6,9 +6,10 @@ dependencies {
     implementation project(':data')
     implementation project(':service')
     implementation project(':util')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
     implementation "io.reactivex.rxjava2:rxkotlin:${versions.rx_kotlin}"
     implementation "com.nytimes.android:store3:${versions.store3}"
+    implementation "com.jakewharton.threetenabp:threetenabp:${versions.threetenabp}"
 //    implementation project(':base')
 //    implementation project(':domain')
 //    implementation project(':data')

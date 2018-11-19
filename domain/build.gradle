@@ -2,7 +2,8 @@ apply plugin: 'kotlin'
 
 dependencies {
     implementation project(":util")
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
+    implementation "com.jakewharton.threetenabp:threetenabp:${versions.threetenabp}"
     implementation "io.reactivex.rxjava2:rxkotlin:${versions.rx_kotlin}"
 
     implementation "com.google.dagger:dagger:${versions.dagger}"

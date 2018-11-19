@@ -2,7 +2,7 @@ apply plugin: 'kotlin'
 apply plugin: 'kotlin-kapt'
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
     implementation "com.squareup.retrofit2:adapter-rxjava2:${versions.adapter_rxjava2}"
     implementation "com.squareup.retrofit2:converter-gson:${versions.converter_gson}"
     implementation "com.squareup.retrofit2:retrofit:${versions.retrofit}"

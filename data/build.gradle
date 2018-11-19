@@ -7,7 +7,7 @@ sourceSets {
 
 dependencies {
     implementation project(":util")
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
     implementation "androidx.room:room-common:${versions.androidx.room_common}"
     implementation "io.reactivex.rxjava2:rxkotlin:${versions.rx_kotlin}"
     testImplementation project(path: ':util', configuration: 'testOutput')
