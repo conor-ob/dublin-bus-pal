@@ -59,9 +59,9 @@
     </style>
 
     <!--<style name="Widget.BottomNavigationView" parent="Widget.Design.BottomNavigationView">-->
-        <!--<item name="labelVisibilityMode">labeled</item>-->
-        <!--<item name="itemBackground">@android:color/white</item>-->
-        <!--<item name="itemHorizontalTranslationEnabled">false</item>-->
+    <!--<item name="labelVisibilityMode">labeled</item>-->
+    <!--<item name="itemBackground">@android:color/white</item>-->
+    <!--<item name="itemHorizontalTranslationEnabled">false</item>-->
     <!--</style>-->
 
     <style name="Theme.BottomNavigationView" parent="">
@@ -70,14 +70,18 @@
     </style>
 
     <!--<style name="CustomTabLayoutStyle" parent="Base.Widget.Design.TabLayout">-->
-        <!--<item name="tabSelectedTextColor">@color/colorPrimary</item>-->
-        <!--<item name="tabIndicatorColor">@color/colorPrimary</item>-->
-        <!--<item name="tabTextAppearance">@style/CustomTabTextStyle</item>-->
-        <!--<item name="colorControlHighlight">@color/colorPrimaryRipple</item>-->
+    <!--<item name="tabSelectedTextColor">@color/colorPrimary</item>-->
+    <!--<item name="tabIndicatorColor">@color/colorPrimary</item>-->
+    <!--<item name="tabTextAppearance">@style/CustomTabTextStyle</item>-->
+    <!--<item name="colorControlHighlight">@color/colorPrimaryRipple</item>-->
     <!--</style>-->
 
     <style name="CustomTabTextStyle" parent="android:TextAppearance.Widget.TabWidget">
         <item name="fontFamily">@font/google_sans_medium</item>
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>
