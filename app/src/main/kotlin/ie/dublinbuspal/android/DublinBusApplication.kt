@@ -1,7 +1,11 @@
 package ie.dublinbuspal.android
 
 import android.app.Application
+import com.twitter.sdk.android.core.Twitter
+import com.twitter.sdk.android.core.TwitterAuthConfig
+import com.twitter.sdk.android.core.TwitterConfig
 import ie.dublinbuspal.di.*
+import ie.dublinbuspal.util.MetadataUtils
 
 class DublinBusApplication : Application() {
 
@@ -14,6 +18,7 @@ class DublinBusApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         setupDagger()
+        setupTwitter()
     }
 
     private fun setupDagger() {
@@ -26,6 +31,17 @@ class DublinBusApplication : Application() {
                         resources.getString(R.string.smart_dublin_rest_api_endpoint))
                 )
                 .build()
+    }
+
+    private fun setupTwitter() {
+        val config = TwitterConfig.Builder(applicationContext)
+                .twitterAuthConfig(TwitterAuthConfig(
+                        MetadataUtils.getMetadata(applicationContext,
+                                "com.twitter.sdk.android.CONSUMER_KEY"),
+                        MetadataUtils.getMetadata(applicationContext,
+                                "com.twitter.sdk.android.CONSUMER_SECRET")))
+                .build()
+        Twitter.initialize(config)
     }
 
 }

@@ -22,6 +22,7 @@ import ie.dublinbuspal.mapping.stopservice.StopServiceDomainMapper
 import ie.dublinbuspal.mapping.stopservice.StopServiceEntityMapper
 import ie.dublinbuspal.model.favourite.FavouriteStop
 import ie.dublinbuspal.model.livedata.LiveData
+import ie.dublinbuspal.model.livedata.SmartDublinLiveDataKey
 import ie.dublinbuspal.model.route.Route
 import ie.dublinbuspal.model.routeservice.RouteService
 import ie.dublinbuspal.model.rss.RssNews
@@ -45,6 +46,7 @@ import ie.dublinbuspal.service.DublinBusRssApi
 import ie.dublinbuspal.service.DublinBusSoapApi
 import ie.dublinbuspal.service.SmartDublinRestApi
 import ie.dublinbuspal.service.model.livedata.LiveDataRequestXml
+import ie.dublinbuspal.service.model.livedata.LiveDataResponseJson
 import ie.dublinbuspal.service.model.livedata.LiveDataResponseXml
 import ie.dublinbuspal.service.model.route.RoutesRequestXml
 import ie.dublinbuspal.service.model.route.RoutesResponseXml
@@ -225,6 +227,26 @@ class RepositoryModule {
 
         return LiveDataRepository(store)
     }
+
+//    @Provides
+//    @Singleton
+//    fun smartDublinLiveDataRepository(api: SmartDublinRestApi): Repository<LiveData> {
+//
+//        val memoryPolicy = MemoryPolicy.builder()
+//                .setExpireAfterWrite(30)
+//                .setExpireAfterTimeUnit(TimeUnit.SECONDS)
+//                .build()
+//
+//        val mapper = SmartDublinLiveDataMapper()
+//        val store = StoreBuilder.parsedWithKey<SmartDublinLiveDataKey, LiveDataResponseJson, List<LiveData>>()
+//                .fetcher { key -> api.getLiveData(key.stopId, key.operator, key.format) }
+//                .parser { json -> mapper.map(json.) }
+//                .memoryPolicy(memoryPolicy)
+//                .refreshOnStale()
+//                .open()
+//
+//        return LiveDataRepository(store)
+//    }
 
     @Provides
     @Singleton

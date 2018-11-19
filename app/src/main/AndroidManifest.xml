@@ -12,9 +12,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="${googleMapsApiKey}" />
         <activity
             android:name=".DublinBusActivity"
             android:launchMode="singleTask">
@@ -23,6 +20,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${googleMapsApiKey}" />
+        <meta-data
+            android:name="com.twitter.sdk.android.CONSUMER_KEY"
+            android:value="${twitterConsumerKey}" />
+        <meta-data
+            android:name="com.twitter.sdk.android.CONSUMER_SECRET"
+            android:value="${twitterConsumerSecret}" />
     </application>
 
 </manifest>

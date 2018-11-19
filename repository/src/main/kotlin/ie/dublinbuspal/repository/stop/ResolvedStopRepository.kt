@@ -22,7 +22,7 @@ class ResolvedStopRepository(
                 stopRepository.getAll().startWith(emptyList<Stop>()).subscribeOn(Schedulers.io()),
                 bacStopRepository.getAll().startWith(emptyList<SmartDublinStop>()).subscribeOn(Schedulers.io()),
                 gadStopRepository.getAll().startWith(emptyList<SmartDublinStop>()).subscribeOn(Schedulers.io()),
-                favouritesRepository.getAll().startWith(emptyList<FavouriteStop>()).subscribeOn(Schedulers.computation()),
+                favouritesRepository.getAll().startWith(emptyList<FavouriteStop>()).subscribeOn(Schedulers.io()),
                 Function4 { s1, s2, s3, s4 -> resolve(s1, s2, s3, s4) }
         )
     }

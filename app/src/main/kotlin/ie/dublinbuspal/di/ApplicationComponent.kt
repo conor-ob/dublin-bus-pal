@@ -4,6 +4,7 @@ import dagger.Component
 import ie.dublinbuspal.view.favourites.FavouritesPresenter
 import ie.dublinbuspal.view.livedata.LiveDataPresenter
 import ie.dublinbuspal.view.nearby.NearbyPresenter
+import ie.dublinbuspal.view.news.rss.RssNewsPresenter
 import ie.dublinbuspal.view.search.SearchPresenter
 import javax.inject.Singleton
 
@@ -28,6 +29,6 @@ interface ApplicationComponent {
 
     fun favouritesPresenter(): FavouritesPresenter
 
-//    fun rssNewsPresenter(): RssNewsPresenter
+    fun rssNewsPresenter(): RssNewsPresenter
 
 }
