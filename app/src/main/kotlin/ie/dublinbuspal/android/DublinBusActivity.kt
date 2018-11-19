@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
-import ie.dublinbuspal.view.news.rss.RssNewsController
+import ie.dublinbuspal.view.news.NewsController
 import kotlinx.android.synthetic.main.view_root.*
 
 class DublinBusActivity : AppCompatActivity() {
@@ -21,7 +21,7 @@ class DublinBusActivity : AppCompatActivity() {
     private fun setupRouter(savedInstanceState: Bundle?) {
         router = Conductor.attachRouter(this, root_container, savedInstanceState)
         if (!router.hasRootController()) {
-            router.setRoot(RouterTransaction.with(RssNewsController(Bundle.EMPTY)))
+            router.setRoot(RouterTransaction.with(NewsController(Bundle.EMPTY)))
         }
     }
 

@@ -21,9 +21,9 @@ android {
         versionCode 1000
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        manifestPlaceholders = [ googleMapsApiKey: "$googleMapsApiKey",
-                                 twitterConsumerKey: "$twitterConsumerKey",
-                                 twitterConsumerSecret: "$twitterConsumerSecret" ]
+        manifestPlaceholders = [googleMapsApiKey     : "$googleMapsApiKey",
+                                twitterConsumerKey   : "$twitterConsumerKey",
+                                twitterConsumerSecret: "$twitterConsumerSecret"]
 
 //        multiDexEnabled true
 
@@ -61,28 +61,30 @@ dependencies {
     implementation project(":repository")
     implementation project(":service")
     implementation project(':util')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
-    implementation "io.reactivex.rxjava2:rxandroid:${versions.rx_android}"
-    implementation "io.reactivex.rxjava2:rxkotlin:${versions.rx_kotlin}"
+
+    implementation "androidx.appcompat:appcompat:${versions.androidx.appcompat}"
     implementation "androidx.constraintlayout:constraintlayout:${versions.androidx.constraintlayout}"
     implementation "androidx.recyclerview:recyclerview:${versions.androidx.recyclerview}"
-    implementation "androidx.appcompat:appcompat:${versions.androidx.appcompat}"
+    implementation "androidx.room:room-runtime:${versions.androidx.room_runtime}"
+    implementation "com.github.conor-ob:sticky-headers-recyclerview:${versions.sticky_headers_recyclerview}"
+    implementation "com.google.android.material:material:${versions.material}"
+    implementation "com.google.dagger:dagger:${versions.dagger}"
+    implementation "com.google.maps.android:android-maps-utils:${versions.android_map_utils}"
+    implementation "com.hannesdorfmann.mosby3:mvp-conductor:${versions.mvp_conductor}"
+    implementation "com.jakewharton.threetenabp:threetenabp:${versions.threetenabp}"
     implementation "com.mikepenz:fastadapter:${versions.fastadapter}"
     implementation "com.mikepenz:fastadapter-commons:${versions.fastadapter_commons}"
-    implementation "com.hannesdorfmann.mosby3:mvp-conductor:${versions.mvp_conductor}"
-    implementation "com.google.maps.android:android-maps-utils:${versions.android_map_utils}"
+    implementation "com.twitter.sdk.android:tweet-ui:$versions.tweet_ui"
+    implementation "io.reactivex.rxjava2:rxandroid:${versions.rx_android}"
+    implementation "io.reactivex.rxjava2:rxkotlin:${versions.rx_kotlin}"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
     implementation "pl.charmas.android:android-reactive-location2:${versions.android_reactive_location2}"
-//    implementation "com.nytimes.android:store3:${versions.store3}"
-    implementation "com.github.conor-ob:sticky-headers-recyclerview:${versions.sticky_headers_recyclerview}"
-    testImplementation "junit:junit:${testVersions.junit}"
+    kapt "com.google.dagger:dagger-compiler:${versions.dagger_compiler}"
+
     androidTestImplementation "androidx.test:core:${testVersions.androidx.core}"
     androidTestImplementation "androidx.test.ext:junit:${testVersions.androidx.junit}"
     androidTestImplementation "androidx.test:runner:${testVersions.androidx.runner}"
-    implementation "androidx.room:room-runtime:${versions.androidx.room_runtime}"
-    implementation "com.google.dagger:dagger:${versions.dagger}"
-    kapt "com.google.dagger:dagger-compiler:${versions.dagger_compiler}"
-    implementation "com.twitter.sdk.android:tweet-ui:$versions.tweet_ui"
-    implementation "com.jakewharton.threetenabp:threetenabp:${versions.threetenabp}"
+    testImplementation "junit:junit:${testVersions.junit}"
 
     // Conflict with dependency 'blah blah' in project ':app'. Resolved versions for runtime classpath (x.x.x) and compile classpath (x.x.x) differ. This can lead to runtime crashes
     implementation "com.squareup.retrofit2:retrofit:${versions.retrofit}"
