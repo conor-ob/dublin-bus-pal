@@ -2,11 +2,29 @@ package ie.dublinbuspal.view.livedata
 
 import android.os.Bundle
 import android.view.*
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.mikepenz.fastadapter.FastAdapter
+import com.mikepenz.fastadapter.IItem
+import com.mikepenz.fastadapter.adapters.ItemAdapter
+import com.mikepenz.fastadapter.commons.utils.FastAdapterDiffUtil
 import ie.dublinbuspal.android.R
 import ie.dublinbuspal.model.livedata.LiveData
+import ie.dublinbuspal.model.stop.ResolvedStop
 import ie.dublinbuspal.view.BaseMvpController
+import ie.dublinbuspal.view.livedata.adapter.LiveDataDiffCallback
+import ie.dublinbuspal.view.livedata.adapter.LiveDataItem
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.view_favourites.view.*
+import java.util.*
 
 class LiveDataController(args: Bundle) : BaseMvpController<LiveDataView, LiveDataPresenter>(args) , LiveDataView {
+
+    private lateinit var fastAdapter: FastAdapter<IItem<Any, RecyclerView.ViewHolder>>
+    private lateinit var liveDataAdapter: ItemAdapter<LiveDataItem>
 
     override fun getLayoutId() = R.layout.view_live_data
 
@@ -30,6 +48,14 @@ class LiveDataController(args: Bundle) : BaseMvpController<LiveDataView, LiveDat
     private fun setupView(view: View) {
 //        view.toolbar.stop_name.text = args.getString(NAME)
 //        view.toolbar.stop_id.text = resources?.getString(R.string.formatted_stop_id, args.getString(ID))
+        liveDataAdapter = ItemAdapter()
+        fastAdapter = FastAdapter.with(Collections.singletonList(liveDataAdapter))
+        fastAdapter.withSelectable(true)
+        view.recycler_view.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context)
+            adapter = fastAdapter
+        }
     }
 
     override fun onAttach(view: View) {
@@ -38,7 +64,16 @@ class LiveDataController(args: Bundle) : BaseMvpController<LiveDataView, LiveDat
     }
 
     override fun showLiveData(liveData: List<LiveData>) {
+        Single.fromCallable { liveData.map { LiveDataItem(it) } }
+                .map { FastAdapterDiffUtil.calculateDiff(liveDataAdapter, it, LiveDataDiffCallback()) }
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSuccess { FastAdapterDiffUtil.set(liveDataAdapter, it) }
+                .subscribe()
+    }
 
+    override fun showBusStop(stop: ResolvedStop) {
+//        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

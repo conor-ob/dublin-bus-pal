@@ -2,6 +2,7 @@ apply plugin: 'kotlin'
 apply plugin: 'kotlin-kapt'
 
 dependencies {
+    implementation "at.favre.lib:slf4j-timber:${versions.slf4j_timber}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
     implementation "com.squareup.retrofit2:adapter-rxjava2:${versions.adapter_rxjava2}"
     implementation "com.squareup.retrofit2:converter-gson:${versions.converter_gson}"

@@ -1,14 +1,35 @@
 package ie.dublinbuspal.repository.livedata
 
-import com.nytimes.android.external.store3.base.impl.Store
 import ie.dublinbuspal.model.livedata.LiveData
+import ie.dublinbuspal.model.livedata.RealTimeBusInformation
+import ie.dublinbuspal.model.livedata.RealTimeStopData
+import ie.dublinbuspal.repository.Mapper
 import ie.dublinbuspal.repository.Repository
-import ie.dublinbuspal.service.model.livedata.LiveDataRequestBodyXml
-import ie.dublinbuspal.service.model.livedata.LiveDataRequestRootXml
-import ie.dublinbuspal.service.model.livedata.LiveDataRequestXml
 import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
+import io.reactivex.schedulers.Schedulers
 
-class LiveDataRepository(private val store: Store<List<LiveData>, LiveDataRequestXml>) : Repository<LiveData> {
+class LiveDataRepository(
+        private val realTimeStopDataRepository: Repository<RealTimeStopData>,
+        private val realTimeBusInformationRepository: Repository<RealTimeBusInformation>,
+        private val realTimeStopDataMapper: Mapper<RealTimeStopData, LiveData>,
+        private val realTimeBusInformationMapper: Mapper<RealTimeBusInformation, LiveData>
+) : Repository<LiveData> {
+
+    override fun getAllById(id: String): Observable<List<LiveData>> {
+        return Observable.combineLatest(
+                realTimeStopDataRepository.getAllById(id).subscribeOn(Schedulers.io()),
+                realTimeBusInformationRepository.getAllById(id).subscribeOn(Schedulers.io()),
+                BiFunction { r1, r2 -> resolveAndSort(r1, r2) }
+        )
+    }
+
+    private fun resolveAndSort(realTimeStopData: List<RealTimeStopData>, realTimeBusInformation: List<RealTimeBusInformation>): List<LiveData> {
+        val liveData = mutableListOf<LiveData>()
+        liveData.addAll(realTimeStopDataMapper.map(realTimeStopData))
+        liveData.addAll(realTimeBusInformationMapper.map(realTimeBusInformation))
+        return liveData.sortedBy { it.dueTime.minutes }
+    }
 
     override fun getById(id: String): Observable<LiveData> {
         throw UnsupportedOperationException()
@@ -16,16 +37,6 @@ class LiveDataRepository(private val store: Store<List<LiveData>, LiveDataReques
 
     override fun getAll(): Observable<List<LiveData>> {
         throw UnsupportedOperationException()
-    }
-
-    override fun getAllById(id: String): Observable<List<LiveData>> {
-        return store.fetch(buildLiveDataKey(id)).toObservable()
-    }
-
-    private fun buildLiveDataKey(stopId: String): LiveDataRequestXml {
-        val root = LiveDataRequestRootXml(stopId, true.toString().toLowerCase())
-        val body = LiveDataRequestBodyXml(root)
-        return LiveDataRequestXml(body)
     }
 
 }

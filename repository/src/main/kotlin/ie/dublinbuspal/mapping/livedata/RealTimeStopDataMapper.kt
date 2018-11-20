@@ -1,9 +1,9 @@
 package ie.dublinbuspal.mapping.livedata
 
 import ie.dublinbuspal.model.livedata.DueTime
-import ie.dublinbuspal.model.livedata.LiveData
+import ie.dublinbuspal.model.livedata.RealTimeStopData
 import ie.dublinbuspal.repository.Mapper
-import ie.dublinbuspal.service.model.livedata.LiveDataXml
+import ie.dublinbuspal.service.model.livedata.RealTimeStopDataDataXml
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
@@ -11,10 +11,10 @@ import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.temporal.ChronoUnit
 import java.util.*
 
-class LiveDataMapper : Mapper<LiveDataXml, LiveData> {
+class RealTimeStopDataMapper : Mapper<RealTimeStopDataDataXml, RealTimeStopData> {
 
-    override fun map(from: LiveDataXml): LiveData {
-        return LiveData(from.routeId!!, from.destination!!, mapDueTime(from.timestamp!!, from.expectedTimestamp!!))
+    override fun map(from: RealTimeStopDataDataXml): RealTimeStopData {
+        return RealTimeStopData(from.routeId!!, from.destination!!, mapDueTime(from.timestamp!!, from.expectedTimestamp!!))
     }
 
     private fun mapDueTime(timestamp: String, expectedTime: String): DueTime {

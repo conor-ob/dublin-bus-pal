@@ -20,7 +20,7 @@ class LiveDataItem(val livedata: LiveData) : AbstractItem<LiveDataItem, LiveData
         override fun bindView(item: LiveDataItem, payloads: MutableList<Any>?) {
             itemView.route_id.text = item.livedata.routeId
             itemView.destination.text = item.livedata.destination
-            itemView.expected_time.text = item.livedata.dueTime.minutes.toString()
+            itemView.expected_time.text = item.livedata.dueTime.minutes()
         }
 
         override fun unbindView(item: LiveDataItem?) {

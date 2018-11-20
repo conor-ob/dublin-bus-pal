@@ -1,11 +1,13 @@
 package ie.dublinbuspal.android
 
 import android.app.Application
+import com.jakewharton.threetenabp.AndroidThreeTen
 import com.twitter.sdk.android.core.Twitter
 import com.twitter.sdk.android.core.TwitterAuthConfig
 import com.twitter.sdk.android.core.TwitterConfig
 import ie.dublinbuspal.di.*
 import ie.dublinbuspal.util.MetadataUtils
+import timber.log.Timber
 
 class DublinBusApplication : Application() {
 
@@ -17,8 +19,20 @@ class DublinBusApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        setupTimber()
+        setupThreeTen()
         setupDagger()
         setupTwitter()
+    }
+
+    private fun setupTimber() {
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
+    }
+
+    private fun setupThreeTen() {
+        AndroidThreeTen.init(applicationContext)
     }
 
     private fun setupDagger() {

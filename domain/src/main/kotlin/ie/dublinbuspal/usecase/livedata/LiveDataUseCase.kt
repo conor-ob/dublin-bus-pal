@@ -1,13 +1,19 @@
 package ie.dublinbuspal.usecase.livedata
 
 import ie.dublinbuspal.model.livedata.LiveData
+import ie.dublinbuspal.model.stop.ResolvedStop
 import ie.dublinbuspal.model.stopservice.StopService
 import ie.dublinbuspal.repository.Repository
 import io.reactivex.Observable
 import javax.inject.Inject
 
 class LiveDataUseCase @Inject constructor(private val liveDataRepository: Repository<LiveData>,
+                                          private val stopRepository: Repository<ResolvedStop>,
                                           private val stopServiceRepository: Repository<StopService>) {
+
+    fun getBusStop(stopId: String): Observable<ResolvedStop> {
+        return stopRepository.getById(stopId)
+    }
 
     fun getLiveData(stopId: String): Observable<List<LiveData>> {
         return liveDataRepository.getAllById(stopId)

@@ -72,6 +72,7 @@ dependencies {
     implementation "com.google.maps.android:android-maps-utils:${versions.android_map_utils}"
     implementation "com.hannesdorfmann.mosby3:mvp-conductor:${versions.mvp_conductor}"
     implementation "com.jakewharton.threetenabp:threetenabp:${versions.threetenabp}"
+    implementation "com.jakewharton.timber:timber:${versions.timber}"
     implementation "com.mikepenz:fastadapter:${versions.fastadapter}"
     implementation "com.mikepenz:fastadapter-commons:${versions.fastadapter_commons}"
     implementation "com.twitter.sdk.android:tweet-ui:$versions.tweet_ui"

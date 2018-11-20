@@ -27,12 +27,21 @@ class ResolvedStopRepository(
         )
     }
 
+    override fun getById(id: String): Observable<ResolvedStop> {
+        return getAll().map { findMatching(id, it) }
+    }
+
     override fun getAllById(id: String): Observable<List<ResolvedStop>> {
         throw UnsupportedOperationException()
     }
 
-    override fun getById(id: String): Observable<ResolvedStop> {
-        throw UnsupportedOperationException()
+    private fun findMatching(id: String, resolvedStops: List<ResolvedStop>): ResolvedStop? {
+        for (stop in resolvedStops) {
+            if (id == stop.id()) {
+                return stop
+            }
+        }
+        return ResolvedStop(id = "-1")
     }
 
     private fun resolve(

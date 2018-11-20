@@ -36,9 +36,11 @@ buildscript {
             'rx_android'                 : '2.1.0',   // https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxandroid
             'rx_kotlin'                  : '2.3.0',   // https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxkotlin
             'slf4j_api'                  : '1.7.25',  // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+            'slf4j_timber'               : '1.0.1',   // https://mvnrepository.com/artifact/at.favre.lib/slf4j-timber
             'sticky_headers_recyclerview': '27f63c0', // https://github.com/conor-ob/sticky-headers-recyclerview
             'store3'                     : '3.1.0',   // https://mvnrepository.com/artifact/com.nytimes.android/store3
             'threetenabp'                : '1.1.1',   // https://mvnrepository.com/artifact/com.jakewharton.threetenabp/threetenabp
+            'timber'                     : '4.7.1',   // https://mvnrepository.com/artifact/com.jakewharton.timber/timber
             'tweet_ui'                   : '3.3.0',   // https://mvnrepository.com/artifact/com.twitter.sdk.android/tweet-ui
             //'slf4j_timber'                  : '1.0.1'    // https://mvnrepository.com/artifact/at.favre.lib/slf4j-timber
     ]

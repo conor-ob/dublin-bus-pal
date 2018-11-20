@@ -11,7 +11,10 @@ import ie.dublinbuspal.data.TxRunner
 import ie.dublinbuspal.data.dao.*
 import ie.dublinbuspal.mapping.favourite.FavouriteStopDomainMapper
 import ie.dublinbuspal.mapping.favourite.FavouriteStopEntityMapper
-import ie.dublinbuspal.mapping.livedata.LiveDataMapper
+import ie.dublinbuspal.mapping.livedata.RealTimeBusInformationLiveDataMapper
+import ie.dublinbuspal.mapping.livedata.RealTimeBusInformationMapper
+import ie.dublinbuspal.mapping.livedata.RealTimeStopDataLiveDataMapper
+import ie.dublinbuspal.mapping.livedata.RealTimeStopDataMapper
 import ie.dublinbuspal.mapping.route.RouteDomainMapper
 import ie.dublinbuspal.mapping.route.RouteEntityMapper
 import ie.dublinbuspal.mapping.routeservice.RouteServiceDomainMapper
@@ -22,6 +25,8 @@ import ie.dublinbuspal.mapping.stopservice.StopServiceDomainMapper
 import ie.dublinbuspal.mapping.stopservice.StopServiceEntityMapper
 import ie.dublinbuspal.model.favourite.FavouriteStop
 import ie.dublinbuspal.model.livedata.LiveData
+import ie.dublinbuspal.model.livedata.RealTimeBusInformation
+import ie.dublinbuspal.model.livedata.RealTimeStopData
 import ie.dublinbuspal.model.livedata.SmartDublinLiveDataKey
 import ie.dublinbuspal.model.route.Route
 import ie.dublinbuspal.model.routeservice.RouteService
@@ -34,6 +39,8 @@ import ie.dublinbuspal.repository.FavouriteRepository
 import ie.dublinbuspal.repository.Repository
 import ie.dublinbuspal.repository.favourite.FavouriteStopRepository
 import ie.dublinbuspal.repository.livedata.LiveDataRepository
+import ie.dublinbuspal.repository.livedata.RealTimeBusInformationRepository
+import ie.dublinbuspal.repository.livedata.RealTimeStopDataRepository
 import ie.dublinbuspal.repository.route.RoutePersister
 import ie.dublinbuspal.repository.route.RouteRepository
 import ie.dublinbuspal.repository.routeservice.RouteServicePersister
@@ -46,8 +53,8 @@ import ie.dublinbuspal.service.DublinBusRssApi
 import ie.dublinbuspal.service.DublinBusSoapApi
 import ie.dublinbuspal.service.SmartDublinRestApi
 import ie.dublinbuspal.service.model.livedata.LiveDataRequestXml
-import ie.dublinbuspal.service.model.livedata.LiveDataResponseJson
 import ie.dublinbuspal.service.model.livedata.LiveDataResponseXml
+import ie.dublinbuspal.service.model.livedata.RealTimeBusInformationResponseJson
 import ie.dublinbuspal.service.model.route.RoutesRequestXml
 import ie.dublinbuspal.service.model.route.RoutesResponseXml
 import ie.dublinbuspal.service.model.routeservice.RouteServiceRequestXml
@@ -210,43 +217,54 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun liveDataRepository(api: DublinBusSoapApi): Repository<LiveData> {
+    fun liveDataRepository(
+            realTimeStopDataRepository: Repository<RealTimeStopData>,
+            realTimeBusInformationRepository: Repository<RealTimeBusInformation>
+    ): Repository<LiveData> {
+        val realTimeStopDataMapper = RealTimeStopDataLiveDataMapper()
+        val realTimeBusInformationMapper = RealTimeBusInformationLiveDataMapper()
+        return LiveDataRepository(realTimeStopDataRepository, realTimeBusInformationRepository, realTimeStopDataMapper, realTimeBusInformationMapper)
+    }
+
+    @Provides
+    @Singleton
+    fun realTimeStopDataRepository(api: DublinBusSoapApi): Repository<RealTimeStopData> {
 
         val memoryPolicy = MemoryPolicy.builder()
                 .setExpireAfterWrite(30)
                 .setExpireAfterTimeUnit(TimeUnit.SECONDS)
                 .build()
 
-        val mapper = LiveDataMapper()
-        val store = StoreBuilder.parsedWithKey<LiveDataRequestXml, LiveDataResponseXml, List<LiveData>>()
+        val mapper = RealTimeStopDataMapper()
+        val store = StoreBuilder.parsedWithKey<LiveDataRequestXml, LiveDataResponseXml, List<RealTimeStopData>>()
                 .fetcher { key -> api.getLiveData(key) }
-                .parser { xml -> mapper.map(xml.liveData) }
+                .parser { xml -> mapper.map(xml.realTimeStopData) }
                 .memoryPolicy(memoryPolicy)
                 .refreshOnStale()
                 .open()
 
-        return LiveDataRepository(store)
+        return RealTimeStopDataRepository(store)
     }
 
-//    @Provides
-//    @Singleton
-//    fun smartDublinLiveDataRepository(api: SmartDublinRestApi): Repository<LiveData> {
-//
-//        val memoryPolicy = MemoryPolicy.builder()
-//                .setExpireAfterWrite(30)
-//                .setExpireAfterTimeUnit(TimeUnit.SECONDS)
-//                .build()
-//
-//        val mapper = SmartDublinLiveDataMapper()
-//        val store = StoreBuilder.parsedWithKey<SmartDublinLiveDataKey, LiveDataResponseJson, List<LiveData>>()
-//                .fetcher { key -> api.getLiveData(key.stopId, key.operator, key.format) }
-//                .parser { json -> mapper.map(json.) }
-//                .memoryPolicy(memoryPolicy)
-//                .refreshOnStale()
-//                .open()
-//
-//        return LiveDataRepository(store)
-//    }
+    @Provides
+    @Singleton
+    fun realTimeBusInformationRepository(api: SmartDublinRestApi): Repository<RealTimeBusInformation> {
+
+        val memoryPolicy = MemoryPolicy.builder()
+                .setExpireAfterWrite(30)
+                .setExpireAfterTimeUnit(TimeUnit.SECONDS)
+                .build()
+
+        val mapper = RealTimeBusInformationMapper()
+        val store = StoreBuilder.parsedWithKey<SmartDublinLiveDataKey, RealTimeBusInformationResponseJson, List<RealTimeBusInformation>>()
+                .fetcher { key -> api.getLiveData(key.stopId, key.operator, key.format) }
+                .parser { json -> mapper.map(json.realTimeBusInformation) }
+                .memoryPolicy(memoryPolicy)
+                .refreshOnStale()
+                .open()
+
+        return RealTimeBusInformationRepository(store)
+    }
 
     @Provides
     @Singleton

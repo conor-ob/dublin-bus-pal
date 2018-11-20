@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bluelinelabs.conductor.RouterTransaction
+import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.CameraPosition
@@ -16,6 +18,7 @@ import ie.dublinbuspal.util.AnimationUtils
 import ie.dublinbuspal.util.Coordinate
 import ie.dublinbuspal.util.ImageUtils
 import ie.dublinbuspal.view.BaseMvpController
+import ie.dublinbuspal.view.livedata.LiveDataController
 import kotlinx.android.synthetic.main.view_nearby.view.*
 import java.util.*
 
@@ -55,7 +58,7 @@ class NearbyController(args: Bundle) : BaseMvpController<NearbyView, NearbyPrese
                 setOnInfoWindowClickListener { marker ->
                     val tag = marker.tag as String
                     val tags = tag.split("::")
-//                    onBusStopClicked(tags[0], tags[1])
+                    onBusStopClicked(tags[0], tags[1])
                 }
                 uiSettings.isMyLocationButtonEnabled = false
                 uiSettings.isMapToolbarEnabled = false
@@ -64,6 +67,15 @@ class NearbyController(args: Bundle) : BaseMvpController<NearbyView, NearbyPrese
                 uiSettings.isTiltGesturesEnabled = false
             }
         }
+    }
+
+    private fun onBusStopClicked(stopId: String, stopName: String) {
+        parentController?.router?.pushController(RouterTransaction
+                .with(LiveDataController
+                        .Builder(stopId, stopName)
+                        .build())
+                .pushChangeHandler(FadeChangeHandler(500L))
+                .popChangeHandler(FadeChangeHandler(500L)))
     }
 
     override fun onAttach(view: View) {

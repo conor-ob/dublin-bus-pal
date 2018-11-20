@@ -8,5 +8,5 @@ import org.simpleframework.xml.Root
 @Root(strict = false)
 data class StopServiceResponseXml(
         @field:Path("soap:Body/GetRoutesServicedByStopNumberResponse/GetRoutesServicedByStopNumberResult")
-        @field:ElementList(inline = true) var routes: List<RouteXml> = mutableListOf()
+        @field:ElementList(inline = true, required = false) var routes: List<RouteXml> = mutableListOf()
 )

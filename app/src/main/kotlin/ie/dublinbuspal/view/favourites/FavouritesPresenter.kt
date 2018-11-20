@@ -14,7 +14,7 @@ class FavouritesPresenter @Inject constructor(private val favouritesUseCase: Fav
                 .compose(applyObservableSchedulers())
                 .doOnNext {
                     ifViewAttached { view -> view.showFavourites(it) }
-//                    getLiveData(it)
+//                    getRealTimeStopData(it)
                 }
 //                .doOnError { Timber.e(it) }
                 .subscribe()
