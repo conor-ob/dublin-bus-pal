@@ -5,11 +5,12 @@ import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
 import ie.dublinbuspal.android.R
 import ie.dublinbuspal.model.favourite.FavouriteStop
+import ie.dublinbuspal.model.livedata.Destination
 import ie.dublinbuspal.model.livedata.LiveData
 import ie.dublinbuspal.util.StringUtils
 import kotlinx.android.synthetic.main.list_item_favourite.view.*
 
-class FavouriteItem(val stop: FavouriteStop, var livedata: Map<Pair<String, String>, List<LiveData>> = emptyMap()) : AbstractItem<FavouriteItem, FavouriteItem.ViewHolder>() {
+class FavouriteItem(val stop: FavouriteStop, var livedata: Map<Pair<String, Destination>, List<LiveData>> = emptyMap()) : AbstractItem<FavouriteItem, FavouriteItem.ViewHolder>() {
 
     override fun getType() = R.id.view_favourite_stop_item
 

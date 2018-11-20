@@ -4,7 +4,7 @@ import java.util.*
 
 data class RealTimeBusInformation(
         val routeId: String,
-        val destination: String,
+        val destination: Destination,
         val dueTime: DueTime
 ) {
 

@@ -19,6 +19,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.view_favourites.view.*
+import timber.log.Timber
 import java.util.*
 
 class LiveDataController(args: Bundle) : BaseMvpController<LiveDataView, LiveDataPresenter>(args) , LiveDataView {
@@ -61,6 +62,11 @@ class LiveDataController(args: Bundle) : BaseMvpController<LiveDataView, LiveDat
     override fun onAttach(view: View) {
         super.onAttach(view)
         presenter.start(args.getString(ID))
+    }
+
+    override fun onDestroyView(view: View) {
+        presenter.stop()
+        super.onDestroyView(view)
     }
 
     override fun showLiveData(liveData: List<LiveData>) {

@@ -12,6 +12,7 @@ import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.mikepenz.fastadapter.commons.utils.FastAdapterDiffUtil
 import ie.dublinbuspal.android.R
 import ie.dublinbuspal.model.favourite.FavouriteStop
+import ie.dublinbuspal.model.livedata.Destination
 import ie.dublinbuspal.model.livedata.LiveData
 import ie.dublinbuspal.view.BaseMvpController
 import ie.dublinbuspal.view.favourites.adapter.FavouriteItem
@@ -64,7 +65,7 @@ class FavouritesController(args: Bundle) : BaseMvpController<FavouritesView, Fav
                 .subscribeBy { FastAdapterDiffUtil.set(stopsAdapter, it) }
     }
 
-    override fun showLiveData(favourites: List<FavouriteStop>, favouriteId: String, livedata: Map<Pair<String, String>, List<LiveData>>) {
+    override fun showLiveData(favourites: List<FavouriteStop>, favouriteId: String, livedata: Map<Pair<String, Destination>, List<LiveData>>) {
         Single.fromCallable {
             favourites.map {
                 if (it.id == favouriteId) {

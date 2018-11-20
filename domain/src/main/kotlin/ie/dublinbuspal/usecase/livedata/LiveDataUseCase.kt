@@ -1,5 +1,6 @@
 package ie.dublinbuspal.usecase.livedata
 
+import ie.dublinbuspal.model.livedata.Destination
 import ie.dublinbuspal.model.livedata.LiveData
 import ie.dublinbuspal.model.stop.ResolvedStop
 import ie.dublinbuspal.model.stopservice.StopService
@@ -19,12 +20,12 @@ class LiveDataUseCase @Inject constructor(private val liveDataRepository: Reposi
         return liveDataRepository.getAllById(stopId)
     }
 
-    fun getCondensedLiveData(stopId: String): Observable<Map<Pair<String, String>, List<LiveData>>> {
+    fun getCondensedLiveData(stopId: String): Observable<Map<Pair<String, Destination>, List<LiveData>>> {
         return getLiveData(stopId).map { condenseLiveData(it) }
     }
 
-    private fun condenseLiveData(liveData: List<LiveData>): Map<Pair<String, String>, List<LiveData>>? {
-        val condensedLivedata = LinkedHashMap<Pair<String, String>, MutableList<LiveData>>()
+    private fun condenseLiveData(liveData: List<LiveData>): Map<Pair<String, Destination>, List<LiveData>>? {
+        val condensedLivedata = LinkedHashMap<Pair<String, Destination>, MutableList<LiveData>>()
         for (data in liveData) {
             val key = Pair(data.routeId, data.destination)
             var liveDataForRoute = condensedLivedata[key]
