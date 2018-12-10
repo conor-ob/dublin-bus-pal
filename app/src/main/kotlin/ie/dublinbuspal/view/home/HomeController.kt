@@ -25,6 +25,16 @@ class HomeController(args: Bundle) : BaseController(args) {
         return view
     }
 
+    override fun onRestoreViewState(view: View, savedViewState: Bundle) {
+        super.onRestoreViewState(view, savedViewState)
+        view.bottom_navigation.selectedItemId = savedViewState.getInt("screen")
+    }
+
+    override fun onSaveViewState(view: View, outState: Bundle) {
+        outState.putInt("screen", view.bottom_navigation.selectedItemId)
+        super.onSaveViewState(view, outState)
+    }
+
     private fun setupBottomNavigation(view: View) {
         view.bottom_navigation.setOnNavigationItemSelectedListener {
             return@setOnNavigationItemSelectedListener when (it.itemId) {

@@ -27,7 +27,7 @@
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/bac_routes"
+        android:id="@+id/routes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -38,16 +38,28 @@
         android:textColor="@color/textColorSecondary"
         android:textSize="14sp" />
 
-    <TextView
-        android:id="@+id/gad_routes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:drawableStart="@drawable/ic_gad_bus_double_decker"
-        android:drawablePadding="4dp"
-        android:fontFamily="sans-serif-condensed"
-        android:textColor="@color/textColorSecondary"
-        android:textSize="14sp" />
+    <!--<TextView-->
+        <!--android:id="@+id/bac_routes"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="4dp"-->
+        <!--android:layout_marginBottom="4dp"-->
+        <!--android:drawableStart="@drawable/ic_bus_double_decker"-->
+        <!--android:drawablePadding="4dp"-->
+        <!--android:fontFamily="sans-serif-condensed"-->
+        <!--android:textColor="@color/textColorSecondary"-->
+        <!--android:textSize="14sp" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/gad_routes"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="4dp"-->
+        <!--android:drawableStart="@drawable/ic_gad_bus_double_decker"-->
+        <!--android:drawablePadding="4dp"-->
+        <!--android:fontFamily="sans-serif-condensed"-->
+        <!--android:textColor="@color/textColorSecondary"-->
+        <!--android:textSize="14sp" />-->
 
     <!--<TextView-->
     <!--android:id="@+id/walk_time"-->
