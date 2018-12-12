@@ -45,7 +45,7 @@ public class SearchFragment
         if (presenter == null) {
             if (getActivity() != null) {
                 DublinBusApplication application = (DublinBusApplication) getActivity().getApplication();
-                application.getApplicationComponent().inject(this);
+                application.getOldApplicationComponent().inject(this);
             }
         }
         return presenter;
@@ -107,8 +107,7 @@ public class SearchFragment
         RecyclerView recyclerView = searchFragment.findViewById(R.id.recycler_view);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),
-                LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         swipeRefreshLayout = searchFragment.findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setEnabled(false);

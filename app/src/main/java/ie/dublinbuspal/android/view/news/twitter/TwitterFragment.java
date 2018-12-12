@@ -34,7 +34,7 @@ public class TwitterFragment extends MvpFragment<TwitterView, TwitterPresenter>
         if (presenter == null && getActivity() != null) {
             DublinBusApplication application = (DublinBusApplication)
                     getActivity().getApplication();
-            application.getApplicationComponent().inject(this);
+            application.getOldApplicationComponent().inject(this);
         }
         return presenter;
     }

@@ -100,7 +100,7 @@ public class RealTimeActivity
     public RealTimePresenter createPresenter() {
         if (presenter == null) {
             DublinBusApplication application = (DublinBusApplication) getApplication();
-            application.getApplicationComponent().inject(this);
+            application.getOldApplicationComponent().inject(this);
         }
         return presenter;
     }
@@ -480,8 +480,7 @@ public class RealTimeActivity
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setNestedScrollingEnabled(false);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this,
-                LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         swipeRefreshLayout = findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);

@@ -78,7 +78,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             if (getActivity() != null) {
                 DublinBusApplication application = (DublinBusApplication)
                         getActivity().getApplication();
-                application.getApplicationComponent().inject(this);
+                application.getOldApplicationComponent().inject(this);
             }
         }
 

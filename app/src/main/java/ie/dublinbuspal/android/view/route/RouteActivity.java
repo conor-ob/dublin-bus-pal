@@ -75,7 +75,7 @@ public class RouteActivity extends MvpActivity<RouteView, RoutePresenter>
     public RoutePresenter createPresenter() {
         if (presenter == null) {
             DublinBusApplication application = (DublinBusApplication) getApplication();
-            application.getApplicationComponent().inject(this);
+            application.getOldApplicationComponent().inject(this);
         }
         return presenter;
     }
@@ -179,8 +179,7 @@ public class RouteActivity extends MvpActivity<RouteView, RoutePresenter>
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(),
-                LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         swapDirectionButton = findViewById(R.id.button_swap);
         swipeRefresh = findViewById(R.id.swipe_refresh);

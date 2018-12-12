@@ -11,6 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.hannesdorfmann.mosby3.mvp.MvpFragment;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -24,14 +32,6 @@ import ie.dublinbuspal.android.util.CollectionUtilities;
 import ie.dublinbuspal.android.view.home.HomeActivity;
 import ie.dublinbuspal.android.view.realtime.RealTimeActivity;
 import ie.dublinbuspal.android.view.settings.SettingsActivity;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.hannesdorfmann.mosby3.mvp.MvpFragment;
-
-import java.util.List;
-
-import javax.inject.Inject;
 
 public class FavouritesFragment extends MvpFragment<FavouritesView, FavouritesPresenter>
         implements FavouritesView {
@@ -48,7 +48,7 @@ public class FavouritesFragment extends MvpFragment<FavouritesView, FavouritesPr
     public FavouritesPresenter createPresenter() {
         if (getActivity() != null) {
             DublinBusApplication application = (DublinBusApplication) getActivity().getApplication();
-            application.getApplicationComponent().inject(this);
+            application.getOldApplicationComponent().inject(this);
         }
         return presenter;
     }
@@ -143,7 +143,7 @@ public class FavouritesFragment extends MvpFragment<FavouritesView, FavouritesPr
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setEnabled(false);

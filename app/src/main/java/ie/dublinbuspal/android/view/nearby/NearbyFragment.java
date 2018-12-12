@@ -109,7 +109,7 @@ public class NearbyFragment
             if (getActivity() != null) {
                 DublinBusApplication application = (DublinBusApplication)
                         getActivity().getApplication();
-                application.getApplicationComponent().inject(this);
+                application.getOldApplicationComponent().inject(this);
             }
         }
         return presenter;
@@ -235,8 +235,7 @@ public class NearbyFragment
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),
-                LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         showNearbyStopsButton = view.findViewById(R.id.show_nearby_stops_button);
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh);

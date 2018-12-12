@@ -35,7 +35,7 @@ public class RssFragment extends MvpFragment<RssView, RssPresenter> implements R
         if (rssPresenter == null && getActivity() != null) {
             DublinBusApplication application = (DublinBusApplication)
                     getActivity().getApplication();
-            application.getApplicationComponent().inject(this);
+            application.getOldApplicationComponent().inject(this);
         }
         return rssPresenter;
     }
@@ -72,8 +72,7 @@ public class RssFragment extends MvpFragment<RssView, RssPresenter> implements R
         RecyclerView recyclerView = newsFragment.findViewById(R.id.recycler_view);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),
-                LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         swipeRefreshLayout = newsFragment.findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);
