@@ -71,6 +71,8 @@ import ie.dublinbuspal.android.util.GoogleMapConstants;
 import ie.dublinbuspal.android.util.SVGUtils;
 import ie.dublinbuspal.android.view.route.RouteActivity;
 import ie.dublinbuspal.android.view.settings.SettingsActivity;
+import ie.dublinbuspal.model.livedata.LiveData;
+import ie.dublinbuspal.model.stop.ResolvedStop;
 
 public class RealTimeActivity
         extends MvpActivity<RealTimeView, RealTimePresenter>
@@ -98,11 +100,7 @@ public class RealTimeActivity
     @NonNull
     @Override
     public RealTimePresenter createPresenter() {
-        if (presenter == null) {
-            DublinBusApplication application = (DublinBusApplication) getApplication();
-            application.getOldApplicationComponent().inject(this);
-        }
-        return presenter;
+        return ((DublinBusApplication) getApplication()).getApplicationComponent().liveDataPresenter();
     }
 
     public static Intent newIntent(Context context, String stopId) {
@@ -287,12 +285,12 @@ public class RealTimeActivity
     }
 
     @Override
-    public void presentSaveFavouriteDialog(DetailedBusStop busStop, BusStopService service) {
+    public void presentSaveFavouriteDialog(ResolvedStop busStop, BusStopService service) {
         Set<String> routesToSave = new HashSet<>();
         FrameLayout frameView = new FrameLayout(this);
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_save_favourite, frameView);
         EditText editText = dialogView.findViewById(R.id.custom_name);
-        editText.setHint(busStop.getName());
+        editText.setHint(busStop.name());
 
         GridView gridView = dialogView.findViewById(R.id.grid_view);
         gridView.setAdapter(new ArrayAdapter<>(this,
@@ -338,7 +336,8 @@ public class RealTimeActivity
                             Snackbar.LENGTH_SHORT).show();
                 } else {
                     String editedText = editText.getText().toString();
-                    String name = editedText.isEmpty() ? busStop.getRealName() : editedText;
+//                    String name = editedText.isEmpty() ? busStop.getRealName() : editedText; //TODO
+                    String name = editedText.isEmpty() ? busStop.name() : editedText;
                     List<String> routes = new ArrayList<>(routesToSave);
                     Collections.sort(routes, AlphanumComparator.getInstance());
                     presenter.saveFavourite(name, routes);
@@ -352,14 +351,14 @@ public class RealTimeActivity
     private Marker busStopMarker;
 
     @Override
-    public void showBusStop(DetailedBusStop busStop) {
+    public void showBusStop(ResolvedStop busStop) {
         invalidateOptionsMenu(); //make sure we set default/favourite correctly
         TextView name = toolbar.findViewById(R.id.stop_name);
         TextView id = toolbar.findViewById(R.id.stop_id);
-        name.setText(busStop.getName());
-        id.setText(String.format(Locale.UK, "Stop %s", busStop.getId()));
+        name.setText(busStop.name());
+        id.setText(String.format(Locale.UK, "Stop %s", busStop.id()));
         CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(new LatLng(busStop.getLatitude(), busStop.getLongitude()))
+                .target(new LatLng(busStop.coordinate().getX(), busStop.coordinate().getY()))
                 .zoom(GoogleMapConstants.DEFAULT_ZOOM)
                 .build();
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
@@ -367,17 +366,17 @@ public class RealTimeActivity
             busStopMarker.remove();
         }
         busStopMarker = googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(busStop.getLatitude(), busStop.getLongitude()))
+                .position(new LatLng(busStop.coordinate().getX(), busStop.coordinate().getY()))
                 .anchor(0.3f, 1.0f)
                 .icon(SVGUtils.vectorToBitmap(getApplicationContext(), R.drawable.ic_map_marker_bus_double_decker_default)));
 
         if (streetViewPanorama != null) {
-            streetViewPanorama.setPosition(new LatLng(busStop.getLatitude(), busStop.getLongitude()));
+            streetViewPanorama.setPosition(new LatLng(busStop.coordinate().getX(), busStop.coordinate().getY()));
         }
     }
 
     @Override
-    public void showRealTimeData(List<RealTimeData> realTimeData) {
+    public void showRealTimeData(List<LiveData> realTimeData) {
         adapter.setRealTimeData(realTimeData);
     }
 
@@ -430,7 +429,7 @@ public class RealTimeActivity
     }
 
     @Override
-    public void showStreetView(DetailedBusStop busStop) {
+    public void showStreetView(ResolvedStop busStop) {
 
     }
 

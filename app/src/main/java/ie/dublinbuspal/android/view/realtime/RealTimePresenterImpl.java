@@ -9,6 +9,8 @@ import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import ie.dublinbuspal.android.R;
 import ie.dublinbuspal.android.data.DublinBusRepository;
 import ie.dublinbuspal.android.data.local.entity.BusStopService;
@@ -16,6 +18,9 @@ import ie.dublinbuspal.android.data.local.entity.DetailedBusStop;
 import ie.dublinbuspal.android.data.local.entity.RealTimeData;
 import ie.dublinbuspal.android.data.remote.soap.SoapServiceUnavailableException;
 import ie.dublinbuspal.android.util.ErrorLog;
+import ie.dublinbuspal.model.livedata.LiveData;
+import ie.dublinbuspal.model.stop.ResolvedStop;
+import ie.dublinbuspal.usecase.livedata.LiveDataUseCase;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -26,12 +31,13 @@ public class RealTimePresenterImpl extends MvpBasePresenter<RealTimeView>
         implements RealTimePresenter {
 
     private RealTimeModel model;
-    private final DublinBusRepository repository;
+    private final LiveDataUseCase useCase;
     private CompositeDisposable disposables;
 
-    public RealTimePresenterImpl(DublinBusRepository repository, RealTimeModel model) {
-        this.repository = repository;
-        this.model = model;
+    @Inject
+    public RealTimePresenterImpl(LiveDataUseCase useCase) {
+        this.useCase = useCase;
+        this.model = new RealTimeModelImpl();
     }
 
     @Override
@@ -56,8 +62,7 @@ public class RealTimePresenterImpl extends MvpBasePresenter<RealTimeView>
 
     private void getBusStop() {
         if (getModel().getBusStop() == null) {
-            getDisposables().add(Single.fromCallable(() ->
-                    getRepository().getDetailedBusStop(getModel().getStopId()))
+            getDisposables().add(useCase.getBusStop(getModel().getStopId())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(this::onGetBusStop, this::onError));
@@ -68,8 +73,8 @@ public class RealTimePresenterImpl extends MvpBasePresenter<RealTimeView>
 
     private void getBusStopService() {
         if (getModel().getBusStopService() == null) {
-            getDisposables().add(Single.fromCallable(() ->
-                    getRepository().getBusStopService(getModel().getStopId()))
+            getDisposables().add(useCase.getBusStop(getModel().getStopId())
+                    .map(stop -> new BusStopService(stop.id(), stop.routes()))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(this::onGetBusStopService, this::onError));
@@ -79,18 +84,17 @@ public class RealTimePresenterImpl extends MvpBasePresenter<RealTimeView>
     }
 
     private void getRealTimeData() {
-        getDisposables().add(Single.fromCallable(() ->
-                getRepository().getRealTimeData(getModel().getStopId()))
+        getDisposables().add(useCase.getLiveData(getModel().getStopId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetRealTimeData, this::onError));
     }
 
-    private void onGetBusStop(DetailedBusStop busStop) {
+    private void onGetBusStop(ResolvedStop busStop) {
         getModel().setBusStop(busStop);
         if (busStop.isFavourite()) {
-            getModel().setAdjustedBusStopService(new BusStopService(busStop.getId(),
-                    busStop.getRoutes()));
+            getModel().setAdjustedBusStopService(new BusStopService(busStop.id(),
+                    busStop.routes()));
         }
         showBusStop();
         getBusStopService();
@@ -102,7 +106,7 @@ public class RealTimePresenterImpl extends MvpBasePresenter<RealTimeView>
         getRealTimeData();
     }
 
-    private void onGetRealTimeData(List<RealTimeData> realTimeData) {
+    private void onGetRealTimeData(List<LiveData> realTimeData) {
         getModel().setRealTimeData(realTimeData);
         showRealTimeData();
     }
@@ -142,21 +146,22 @@ public class RealTimePresenterImpl extends MvpBasePresenter<RealTimeView>
 
     @Override
     public void saveFavourite(String customName, List<String> customRoutes) {
-        getDisposables().add(Observable.fromCallable(() ->
-                getRepository().saveBusStopAsFavourite(getModel().getStopId(), customName,
-                        customRoutes))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onSaveFavourite));
+        //TODO
+//        getDisposables().add(Observable.fromCallable(() ->
+//                getRepository().saveBusStopAsFavourite(getModel().getStopId(), customName,
+//                        customRoutes))
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(this::onSaveFavourite));
     }
 
     @Override
     public void removeFavourite() {
-        getDisposables().add(Observable.fromCallable(() ->
-                getRepository().removeFavourite(getModel().getBusStop().getId()))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onRemovedFavourite));
+//        getDisposables().add(Observable.fromCallable(() ->
+//                getRepository().removeFavourite(getModel().getBusStop().getId()))
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(this::onRemovedFavourite));
     }
 
     private void onSaveFavourite(Boolean saved) {
@@ -205,10 +210,6 @@ public class RealTimePresenterImpl extends MvpBasePresenter<RealTimeView>
 
     private RealTimeModel getModel() {
         return model;
-    }
-
-    private DublinBusRepository getRepository() {
-        return repository;
     }
 
     private CompositeDisposable getDisposables() {

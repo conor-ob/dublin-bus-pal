@@ -125,13 +125,13 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         public void bind(Route route) {
             routeId.setText(route.getId());
-            if (route.getOperator().equals(Operator.GO_AHEAD_DUBLIN)) {
-                routeId.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.textColorPrimaryInverse));
-                routeId.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(itemView.getContext(), R.color.colorPrimary)));
-            } else {
-                routeId.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.textColorPrimary));
-                routeId.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(itemView.getContext(), R.color.colorAccent)));
-            }
+//            if (route.getOperator().equals(Operator.GO_AHEAD_DUBLIN)) {
+//                routeId.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.textColorPrimaryInverse));
+//                routeId.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(itemView.getContext(), R.color.colorPrimary)));
+//            } else {
+//                routeId.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.textColorPrimary));
+//                routeId.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(itemView.getContext(), R.color.colorAccent)));
+//            }
             routeDescription.setText(String.format(Locale.UK, "%s - %s",
                     route.getVariants().get(0).getOrigin(), route.getVariants().get(0).getDestination()));
         }

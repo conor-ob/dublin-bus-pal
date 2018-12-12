@@ -2,6 +2,8 @@ package ie.dublinbuspal.android.di;
 
 import android.content.Context;
 
+import dagger.Module;
+import dagger.Provides;
 import ie.dublinbuspal.android.data.DublinBusRepository;
 import ie.dublinbuspal.android.view.favourite.FavouritesModelImpl;
 import ie.dublinbuspal.android.view.favourite.FavouritesPresenter;
@@ -15,18 +17,9 @@ import ie.dublinbuspal.android.view.news.rss.RssPresenterImpl;
 import ie.dublinbuspal.android.view.news.twitter.TwitterModelImpl;
 import ie.dublinbuspal.android.view.news.twitter.TwitterPresenter;
 import ie.dublinbuspal.android.view.news.twitter.TwitterPresenterImpl;
-import ie.dublinbuspal.android.view.realtime.RealTimeModelImpl;
-import ie.dublinbuspal.android.view.realtime.RealTimePresenter;
-import ie.dublinbuspal.android.view.realtime.RealTimePresenterImpl;
 import ie.dublinbuspal.android.view.route.RouteModelImpl;
 import ie.dublinbuspal.android.view.route.RoutePresenter;
 import ie.dublinbuspal.android.view.route.RoutePresenterImpl;
-import ie.dublinbuspal.android.view.search.SearchModelImpl;
-import ie.dublinbuspal.android.view.search.SearchPresenter;
-import ie.dublinbuspal.android.view.search.SearchPresenterImpl;
-
-import dagger.Module;
-import dagger.Provides;
 
 @Module
 class PresenterModule {
@@ -56,10 +49,10 @@ class PresenterModule {
 //        return new SearchPresenterImpl(repository, new SearchModelImpl());
 //    }
 
-    @Provides
-    RealTimePresenter provideRealTimePresenter(DublinBusRepository repository) {
-        return new RealTimePresenterImpl(repository, new RealTimeModelImpl());
-    }
+//    @Provides
+//    RealTimePresenter provideRealTimePresenter(DublinBusRepository repository) {
+//        return new RealTimePresenterImpl(repository, new RealTimeModelImpl());
+//    }
 
     @Provides
     RoutePresenter provideRoutePresenter(DublinBusRepository repository) {

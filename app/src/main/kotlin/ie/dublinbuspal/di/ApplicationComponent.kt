@@ -1,6 +1,7 @@
 package ie.dublinbuspal.di
 
 import dagger.Component
+import ie.dublinbuspal.android.view.realtime.RealTimePresenterImpl
 import ie.dublinbuspal.android.view.search.SearchPresenterImpl
 import javax.inject.Singleton
 
@@ -17,7 +18,7 @@ interface ApplicationComponent {
 
 //    fun nearbyPresenter(): NearbyPresenter
 
-//    fun liveDataPresenter(): LiveDataPresenter
+    fun liveDataPresenter(): RealTimePresenterImpl
 
     fun searchPresenter(): SearchPresenterImpl
 

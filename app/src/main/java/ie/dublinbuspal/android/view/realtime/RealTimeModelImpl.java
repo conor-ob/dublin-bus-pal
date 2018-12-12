@@ -1,22 +1,22 @@
 package ie.dublinbuspal.android.view.realtime;
 
-import ie.dublinbuspal.android.data.local.entity.BusStopService;
-import ie.dublinbuspal.android.data.local.entity.DetailedBusStop;
-import ie.dublinbuspal.android.data.local.entity.RealTimeData;
-import ie.dublinbuspal.android.util.CollectionUtilities;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import ie.dublinbuspal.android.data.local.entity.BusStopService;
+import ie.dublinbuspal.android.util.CollectionUtilities;
+import ie.dublinbuspal.model.livedata.LiveData;
+import ie.dublinbuspal.model.stop.ResolvedStop;
+
 public class RealTimeModelImpl implements RealTimeModel {
 
     private String stopId;
-    private DetailedBusStop busStop;
+    private ResolvedStop busStop;
     private BusStopService busStopService;
     private BusStopService adjustedBusStopService;
-    private List<RealTimeData> realTimeData;
+    private List<LiveData> realTimeData;
     private Set<String> routeFilters;
 
     public RealTimeModelImpl() {
@@ -29,7 +29,7 @@ public class RealTimeModelImpl implements RealTimeModel {
     }
 
     @Override
-    public void setBusStop(DetailedBusStop busStop) {
+    public void setBusStop(ResolvedStop busStop) {
         this.busStop = busStop;
     }
 
@@ -44,7 +44,7 @@ public class RealTimeModelImpl implements RealTimeModel {
     }
 
     @Override
-    public void setRealTimeData(List<RealTimeData> realTimeData) {
+    public void setRealTimeData(List<LiveData> realTimeData) {
         this.realTimeData = realTimeData;
     }
 
@@ -54,7 +54,7 @@ public class RealTimeModelImpl implements RealTimeModel {
     }
 
     @Override
-    public DetailedBusStop getBusStop() {
+    public ResolvedStop getBusStop() {
         return busStop;
     }
 
@@ -72,7 +72,7 @@ public class RealTimeModelImpl implements RealTimeModel {
     }
 
     @Override
-    public List<RealTimeData> getRealTimeData() {
+    public List<LiveData> getRealTimeData() {
         if (CollectionUtilities.isNullOrEmpty(getRouteFilters())) {
             return filterOn(CollectionUtilities.toSet(getAdjustedBusStopService().getRoutes()));
         }
@@ -87,10 +87,10 @@ public class RealTimeModelImpl implements RealTimeModel {
         return routeFilters;
     }
 
-    private List<RealTimeData> filterOn(Set<String> routeFilters) {
-        List<RealTimeData> filtered = new ArrayList<>();
-        for (RealTimeData realTimeData : this.realTimeData) {
-            if (routeFilters.contains(realTimeData.getRoute())) {
+    private List<LiveData> filterOn(Set<String> routeFilters) {
+        List<LiveData> filtered = new ArrayList<>();
+        for (LiveData realTimeData : this.realTimeData) {
+            if (routeFilters.contains(realTimeData.getRouteId())) {
                 filtered.add(realTimeData);
             }
         }

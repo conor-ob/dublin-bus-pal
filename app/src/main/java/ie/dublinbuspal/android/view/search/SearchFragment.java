@@ -44,7 +44,10 @@ public class SearchFragment
     @NonNull
     @Override
     public SearchPresenter createPresenter() {
-        return ((DublinBusApplication) getActivity().getApplication()).getApplicationComponent().searchPresenter();
+        if (getActivity() != null) {
+            return ((DublinBusApplication) getActivity().getApplication()).getApplicationComponent().searchPresenter();
+        }
+        return null;
     }
 
     @Override
