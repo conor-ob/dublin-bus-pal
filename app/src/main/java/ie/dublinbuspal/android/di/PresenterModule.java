@@ -51,10 +51,10 @@ class PresenterModule {
         return new FavouritesPresenterImpl(repository, new FavouritesModelImpl());
     }
 
-    @Provides
-    SearchPresenter provideSearchPresenter(DublinBusRepository repository) {
-        return new SearchPresenterImpl(repository, new SearchModelImpl());
-    }
+//    @Provides
+//    SearchPresenter provideSearchPresenter(DublinBusRepository repository) {
+//        return new SearchPresenterImpl(repository, new SearchModelImpl());
+//    }
 
     @Provides
     RealTimePresenter provideRealTimePresenter(DublinBusRepository repository) {

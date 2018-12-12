@@ -7,7 +7,7 @@ public final class DbInfo {
     }
 
     //Database
-    public static final String DB_NAME = "dublinbus.db";
+    public static final String DB_NAME = "dublinbusold.db";
 
     //Tables
     public static final String BUS_STOP_TABLE = "tb_bus_stops";

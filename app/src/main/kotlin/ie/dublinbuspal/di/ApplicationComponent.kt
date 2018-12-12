@@ -1,6 +1,7 @@
 package ie.dublinbuspal.di
 
 import dagger.Component
+import ie.dublinbuspal.android.view.search.SearchPresenterImpl
 import javax.inject.Singleton
 
 @Singleton
@@ -18,7 +19,7 @@ interface ApplicationComponent {
 
 //    fun liveDataPresenter(): LiveDataPresenter
 
-//    fun searchPresenter(): SearchPresenter
+    fun searchPresenter(): SearchPresenterImpl
 
 //    fun routePresenter(): RouteServicePresenter
 

@@ -25,7 +25,7 @@ public interface ApplicationComponent {
 
     void inject(FavouritesFragment favouritesFragment);
 
-    void inject(SearchFragment searchFragment);
+//    void inject(SearchFragment searchFragment);
 
     void inject(RealTimeActivity realTimeActivity);
 

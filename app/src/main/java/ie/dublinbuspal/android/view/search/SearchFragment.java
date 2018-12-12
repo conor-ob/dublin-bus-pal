@@ -11,6 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.hannesdorfmann.mosby3.mvp.MvpFragment;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
@@ -24,11 +29,9 @@ import ie.dublinbuspal.android.view.home.HomeActivity;
 import ie.dublinbuspal.android.view.realtime.RealTimeActivity;
 import ie.dublinbuspal.android.view.route.RouteActivity;
 import ie.dublinbuspal.android.view.settings.SettingsActivity;
-import com.hannesdorfmann.mosby3.mvp.MvpFragment;
-
-import java.util.List;
-
-import javax.inject.Inject;
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import kotlin.jvm.internal.Intrinsics;
 
 public class SearchFragment
         extends MvpFragment<SearchQueryView, SearchPresenter> implements SearchQueryView {
@@ -37,18 +40,11 @@ public class SearchFragment
     private SearchView searchView;
     private TextView noResultsMessage;
     private SwipeRefreshLayout swipeRefreshLayout;
-    @Inject SearchPresenter presenter;
 
     @NonNull
     @Override
     public SearchPresenter createPresenter() {
-        if (presenter == null) {
-            if (getActivity() != null) {
-                DublinBusApplication application = (DublinBusApplication) getActivity().getApplication();
-                application.getOldApplicationComponent().inject(this);
-            }
-        }
-        return presenter;
+        return ((DublinBusApplication) getActivity().getApplication()).getApplicationComponent().searchPresenter();
     }
 
     @Override
@@ -116,11 +112,35 @@ public class SearchFragment
         noResultsMessage = searchFragment.findViewById(R.id.no_results_message);
     }
 
-    public void setupSearch(View searchFragment) {
+    private void setupSearch(View searchFragment) {
         searchView = searchFragment.findViewById(R.id.search_view);
         searchView.setQueryHint(getString(R.string.search_hint));
         searchView.setIconifiedByDefault(false);
-        searchView.setOnQueryTextListener(getPresenter());
+
+        Disposable disposable = Observable.create(subscriber -> searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            public boolean onQueryTextChange(@Nullable String newText) {
+                if (newText == null) {
+                    Intrinsics.throwNpe();
+                }
+
+                subscriber.onNext(newText);
+                return false;
+            }
+
+            public boolean onQueryTextSubmit(@Nullable String query) {
+                if (query == null) {
+                    Intrinsics.throwNpe();
+                }
+
+                subscriber.onNext(query);
+                return false;
+            }
+        }))
+                .map(string -> string.toString().toLowerCase().trim())
+                .debounce(400L, TimeUnit.MILLISECONDS)
+                .distinctUntilChanged()
+                .subscribe(string -> getPresenter().onResume(string));
     }
 
     @Override
