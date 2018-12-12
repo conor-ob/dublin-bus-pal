@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#346AC2</color>
     <color name="colorAccent">#ffd740</color>
 
+    <color name="colorGoAheadDublin">#90caf9</color>
+
     <color name="colorPrimaryRipple">#804286f5</color>
 
     <color name="textColorPrimary">@color/grey_900</color>

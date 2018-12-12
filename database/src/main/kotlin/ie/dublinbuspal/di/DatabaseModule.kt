@@ -37,7 +37,7 @@ class DatabaseModule(private val databaseName: String) {
 
     @Provides
     @Singleton
-    fun routeDao(database: DublinBusDatabase): RouteDao = database.routeDao()
+    fun routeDao(database: DublinBusDatabase): DefaultRouteDao = database.routeDao()
 
     @Provides
     @Singleton

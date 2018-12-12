@@ -14,6 +14,7 @@ import ie.dublinbuspal.view.nearby.NearbyController
 import ie.dublinbuspal.view.news.NewsController
 import ie.dublinbuspal.view.search.SearchController
 import kotlinx.android.synthetic.main.view_home.view.*
+import timber.log.Timber
 
 class HomeController(args: Bundle) : BaseController(args) {
 
@@ -23,16 +24,6 @@ class HomeController(args: Bundle) : BaseController(args) {
         val view = super.onCreateView(inflater, container)
         setupBottomNavigation(view)
         return view
-    }
-
-    override fun onRestoreViewState(view: View, savedViewState: Bundle) {
-        super.onRestoreViewState(view, savedViewState)
-        view.bottom_navigation.selectedItemId = savedViewState.getInt("screen")
-    }
-
-    override fun onSaveViewState(view: View, outState: Bundle) {
-        outState.putInt("screen", view.bottom_navigation.selectedItemId)
-        super.onSaveViewState(view, outState)
     }
 
     private fun setupBottomNavigation(view: View) {
@@ -56,7 +47,7 @@ class HomeController(args: Bundle) : BaseController(args) {
         if (!childRouter.hasRootController()) {
             childRouter.setRoot(RouterTransaction.with(controller))
         } else {
-            childRouter.replaceTopController(RouterTransaction
+            childRouter.pushController(RouterTransaction
                     .with(controller)
                     .pushChangeHandler(FadeChangeHandler(500L))
                     .popChangeHandler(FadeChangeHandler(500L))

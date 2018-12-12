@@ -29,7 +29,7 @@ abstract class DublinBusDatabase : RoomDatabase() {
 
     abstract fun gadStopDao(): GadStopDao
 
-    abstract fun routeDao(): RouteDao
+    abstract fun routeDao(): DefaultRouteDao
 
     abstract fun stopServiceDao(): StopServiceDao
 

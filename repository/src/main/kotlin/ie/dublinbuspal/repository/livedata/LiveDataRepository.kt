@@ -18,8 +18,8 @@ class LiveDataRepository(
 
     override fun getAllById(id: String): Observable<List<LiveData>> {
         return Observable.combineLatest(
-                realTimeStopDataRepository.getAllById(id).subscribeOn(Schedulers.io()),
-                realTimeBusInformationRepository.getAllById(id).subscribeOn(Schedulers.io()),
+                realTimeStopDataRepository.getAllById(id).startWith(emptyList<RealTimeStopData>()).subscribeOn(Schedulers.io()),
+                realTimeBusInformationRepository.getAllById(id).startWith(emptyList<RealTimeBusInformation>()).subscribeOn(Schedulers.io()),
                 BiFunction { r1, r2 -> resolveAndSort(r1, r2) }
         )
     }

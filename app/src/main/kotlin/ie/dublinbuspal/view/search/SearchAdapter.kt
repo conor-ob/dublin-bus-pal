@@ -1,11 +1,14 @@
 package ie.dublinbuspal.view.search
 
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import ie.dublinbuspal.android.R
 import ie.dublinbuspal.model.route.Route
+import ie.dublinbuspal.model.service.Operator
 import ie.dublinbuspal.model.stop.ResolvedStop
 import ie.dublinbuspal.util.CollectionUtils
 import ie.dublinbuspal.util.StringUtils
@@ -92,8 +95,15 @@ class SearchAdapter(
 
         fun bind(route: Route) {
             itemView.route_id.text = route.id
+            if (route.operator == Operator.GO_AHEAD_DUBLIN) {
+                itemView.route_id.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
+                itemView.route_id.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(itemView.context, R.color.colorPrimary))
+            } else {
+                itemView.route_id.setTextColor(ContextCompat.getColor(itemView.context, R.color.textColorPrimary))
+                itemView.route_id.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(itemView.context, R.color.colorAccent))
+            }
             itemView.route_description.text = String.format(Locale.UK, "%s - %s",
-                    route.origin, route.destination)
+                    route.variants[0].origin, route.variants[0].destination) //TODO
         }
 
         override fun onClick(itemView: View) {

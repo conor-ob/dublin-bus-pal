@@ -6,7 +6,7 @@ import ie.dublinbuspal.data.entity.RouteEntity
 import io.reactivex.Maybe
 
 @Dao
-interface RouteDao : BaseDao<RouteEntity> {
+interface DefaultRouteDao : BaseDao<RouteEntity> {
 
     @Query("SELECT * FROM routes")
     fun selectAll(): Maybe<List<RouteEntity>>

@@ -1,6 +1,7 @@
 package ie.dublinbuspal.service
 
 import ie.dublinbuspal.service.model.livedata.RealTimeBusInformationResponseJson
+import ie.dublinbuspal.service.model.route.RouteListInformationWithVariantsResponseJson
 import ie.dublinbuspal.service.model.stop.StopsResponseJson
 import io.reactivex.Single
 import retrofit2.http.GET
@@ -11,6 +12,9 @@ interface SmartDublinRestApi {
     @GET("busstopinformation")
     fun getStops(@Query("operator") operator: String,
                  @Query("format") format: String): Single<StopsResponseJson>
+
+    @GET("routelistinformation/withvariants")
+    fun getRoutes(@Query("format") format: String): Single<RouteListInformationWithVariantsResponseJson>
 
     @GET("realtimebusinformation")
     fun getLiveData(@Query("stopid") id: String,

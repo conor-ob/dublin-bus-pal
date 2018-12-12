@@ -7,13 +7,12 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import com.hannesdorfmann.mosby3.mvp.MvpPresenter
 import com.hannesdorfmann.mosby3.mvp.MvpView
 import com.hannesdorfmann.mosby3.mvp.conductor.MvpController
 import ie.dublinbuspal.android.DublinBusApplication
-import ie.dublinbuspal.android.R
 import ie.dublinbuspal.di.ApplicationComponent
+import timber.log.Timber
 
 abstract class BaseMvpController<V : MvpView, P : MvpPresenter<V>>(args: Bundle) : MvpController<V, P>(args) {
 
@@ -26,6 +25,27 @@ abstract class BaseMvpController<V : MvpView, P : MvpPresenter<V>>(args: Bundle)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         return inflater.inflate(getLayoutId(), container, false)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        Timber.d("${javaClass.simpleName}.${object{}.javaClass.enclosingMethod?.name}")
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        Timber.d("${javaClass.simpleName}.${object{}.javaClass.enclosingMethod?.name}")
+        super.onRestoreInstanceState(savedInstanceState)
+    }
+
+    override fun onSaveViewState(view: View, outState: Bundle) {
+        outState.putString("TEST", "TEST")
+        Timber.d("${javaClass.simpleName}.${object{}.javaClass.enclosingMethod?.name}")
+        super.onSaveViewState(view, outState)
+    }
+
+    override fun onRestoreViewState(view: View, savedViewState: Bundle) {
+        Timber.d("${javaClass.simpleName}.${object{}.javaClass.enclosingMethod?.name}")
+        super.onRestoreViewState(view, savedViewState)
     }
 
 //    protected fun setupActionBar(view: View) {

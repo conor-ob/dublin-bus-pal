@@ -28,9 +28,13 @@ import ie.dublinbuspal.model.livedata.LiveData
 import ie.dublinbuspal.model.livedata.RealTimeBusInformation
 import ie.dublinbuspal.model.livedata.RealTimeStopData
 import ie.dublinbuspal.model.livedata.SmartDublinLiveDataKey
+import ie.dublinbuspal.model.route.DefaultRoute
+import ie.dublinbuspal.model.route.GoAheadDublinRoute
 import ie.dublinbuspal.model.route.Route
+import ie.dublinbuspal.model.route.RouteVariant
 import ie.dublinbuspal.model.routeservice.RouteService
 import ie.dublinbuspal.model.rss.RssNews
+import ie.dublinbuspal.model.service.Operator
 import ie.dublinbuspal.model.stop.ResolvedStop
 import ie.dublinbuspal.model.stop.SmartDublinStop
 import ie.dublinbuspal.model.stop.Stop
@@ -41,8 +45,7 @@ import ie.dublinbuspal.repository.favourite.FavouriteStopRepository
 import ie.dublinbuspal.repository.livedata.LiveDataRepository
 import ie.dublinbuspal.repository.livedata.RealTimeBusInformationRepository
 import ie.dublinbuspal.repository.livedata.RealTimeStopDataRepository
-import ie.dublinbuspal.repository.route.RoutePersister
-import ie.dublinbuspal.repository.route.RouteRepository
+import ie.dublinbuspal.repository.route.*
 import ie.dublinbuspal.repository.routeservice.RouteServicePersister
 import ie.dublinbuspal.repository.routeservice.RouteServiceRepository
 import ie.dublinbuspal.repository.rss.RssNewsRepository
@@ -55,6 +58,7 @@ import ie.dublinbuspal.service.SmartDublinRestApi
 import ie.dublinbuspal.service.model.livedata.LiveDataRequestXml
 import ie.dublinbuspal.service.model.livedata.LiveDataResponseXml
 import ie.dublinbuspal.service.model.livedata.RealTimeBusInformationResponseJson
+import ie.dublinbuspal.service.model.route.RouteListInformationWithVariantsResponseJson
 import ie.dublinbuspal.service.model.route.RoutesRequestXml
 import ie.dublinbuspal.service.model.route.RoutesResponseXml
 import ie.dublinbuspal.service.model.routeservice.RouteServiceRequestXml
@@ -65,6 +69,7 @@ import ie.dublinbuspal.service.model.stop.StopsResponseJson
 import ie.dublinbuspal.service.model.stop.StopsResponseXml
 import ie.dublinbuspal.service.model.stopservice.StopServiceRequestXml
 import ie.dublinbuspal.service.model.stopservice.StopServiceResponseXml
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
@@ -156,9 +161,20 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun routeRepository(api: DublinBusSoapApi,
-                        dao: RouteDao,
-                        txRunner: TxRunner): Repository<Route> {
+    fun routeRepository(
+            defaultRouteRepository: Repository<DefaultRoute>,
+            goAheadDublinRouteRepository: Repository<GoAheadDublinRoute>
+    ): Repository<Route> {
+        return RouteRepository(defaultRouteRepository, goAheadDublinRouteRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun defaultRouteRepository(
+            api: DublinBusSoapApi,
+            dao: DefaultRouteDao,
+            txRunner: TxRunner
+    ): Repository<DefaultRoute> {
 
         val fetcher = Fetcher<RoutesResponseXml, RoutesRequestXml> { key -> api.getRoutes(key) }
 
@@ -172,7 +188,35 @@ class RepositoryModule {
         val persister = RoutePersister(dao, txRunner, entityMapper, domainMapper)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
 
-        return RouteRepository(store)
+        return DefaultRouteRepository(store)
+    }
+
+    @Provides
+    @Singleton
+    fun gadRouteRepository(
+            api: SmartDublinRestApi,
+//            dao: GadRouteDao,
+            txRunner: TxRunner
+    ): Repository<GoAheadDublinRoute> {
+        val fetcher = Fetcher<RouteListInformationWithVariantsResponseJson, GadRouteKey> { key -> api.getRoutes(key.format) }
+
+        val memoryPolicy = MemoryPolicy.builder()
+                .setExpireAfterWrite(24)
+                .setExpireAfterTimeUnit(TimeUnit.HOURS)
+                .build()
+
+        val store = StoreBuilder.parsedWithKey<GadRouteKey, RouteListInformationWithVariantsResponseJson, List<GoAheadDublinRoute>>()
+                .fetcher { key -> api.getRoutes(key.format) }
+                .parser {
+                    json -> json.routes!!
+                        .filter { it.operator!!.toLowerCase().trim() == Operator.GO_AHEAD_DUBLIN.code }
+                        .map { it -> GoAheadDublinRoute(it.route!!, Collections.singletonList(RouteVariant(it.variants!![0].origin!!, it.variants!![0].destination!!))) }
+                }
+                .memoryPolicy(memoryPolicy)
+                .refreshOnStale()
+                .open()
+
+        return GadRouteRepository(store)
     }
 
     @Provides
