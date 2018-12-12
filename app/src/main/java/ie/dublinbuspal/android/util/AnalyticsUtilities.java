@@ -1,7 +1,7 @@
 package ie.dublinbuspal.android.util;
 
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.ContentViewEvent;
+//import com.crashlytics.android.answers.Answers;
+//import com.crashlytics.android.answers.ContentViewEvent;
 
 import java.util.Map;
 
@@ -16,16 +16,16 @@ public final class AnalyticsUtilities {
 
     public static void logScreenViewedEvent(String screenName,
                                                         Map<String, String> customAttributes) {
-        ContentViewEvent contentViewEvent = new ContentViewEvent()
-                .putContentId(SCREEN_VIEWED_EVENT_ID)
-                .putContentType(SCREEN_VIEWED_EVENT_TYPE)
-                .putContentName(screenName);
-
-        for (Map.Entry<String, String> entry : customAttributes.entrySet()) {
-            contentViewEvent.putCustomAttribute(entry.getKey(), entry.getValue());
-        }
-
-        Answers.getInstance().logContentView(contentViewEvent);
+//        ContentViewEvent contentViewEvent = new ContentViewEvent()
+//                .putContentId(SCREEN_VIEWED_EVENT_ID)
+//                .putContentType(SCREEN_VIEWED_EVENT_TYPE)
+//                .putContentName(screenName);
+//
+//        for (Map.Entry<String, String> entry : customAttributes.entrySet()) {
+//            contentViewEvent.putCustomAttribute(entry.getKey(), entry.getValue());
+//        }
+//
+//        Answers.getInstance().logContentView(contentViewEvent);
     }
 
 }

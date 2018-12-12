@@ -11,9 +11,10 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.MenuItem;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.net.SocketException;
 import java.net.SocketTimeoutException;

@@ -1,11 +1,11 @@
 package ie.dublinbuspal.android.view.search;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
 import ie.dublinbuspal.android.R;
 import ie.dublinbuspal.android.data.local.entity.DetailedBusStop;
 import ie.dublinbuspal.android.data.local.entity.Route;

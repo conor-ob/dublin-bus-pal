@@ -1,17 +1,17 @@
 package ie.dublinbuspal.android.view.route;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.List;
+import java.util.Locale;
+
+import androidx.recyclerview.widget.RecyclerView;
 import ie.dublinbuspal.android.R;
 import ie.dublinbuspal.android.data.local.entity.BusStop;
 import ie.dublinbuspal.android.data.local.entity.DetailedBusStop;
-
-import java.util.List;
-import java.util.Locale;
 
 public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> {
 

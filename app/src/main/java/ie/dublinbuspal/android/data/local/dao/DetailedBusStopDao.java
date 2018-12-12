@@ -1,9 +1,8 @@
 package ie.dublinbuspal.android.data.local.dao;
 
-import android.arch.persistence.room.Dao;
-import android.arch.persistence.room.Query;
-import android.arch.persistence.room.RoomWarnings;
-
+import androidx.room.Dao;
+import androidx.room.Query;
+import androidx.room.RoomWarnings;
 import ie.dublinbuspal.android.data.local.DbInfo;
 import ie.dublinbuspal.android.data.local.entity.DetailedBusStop;
 

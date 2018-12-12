@@ -1,8 +1,8 @@
 package ie.dublinbuspal.android.di;
 
-import android.arch.persistence.room.Room;
 import android.content.Context;
 
+import androidx.room.Room;
 import ie.dublinbuspal.android.data.DublinBusRepository;
 import ie.dublinbuspal.android.data.DublinBusRepositoryImpl;
 import ie.dublinbuspal.android.data.local.DbInfo;

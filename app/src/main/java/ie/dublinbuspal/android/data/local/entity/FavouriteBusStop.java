@@ -1,16 +1,15 @@
 package ie.dublinbuspal.android.data.local.entity;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
-import android.support.annotation.NonNull;
-
-import ie.dublinbuspal.android.data.local.DbInfo;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import ie.dublinbuspal.android.data.local.DbInfo;
 
 @Entity(tableName = DbInfo.FAVOURITES_TABLE)
 public class FavouriteBusStop {

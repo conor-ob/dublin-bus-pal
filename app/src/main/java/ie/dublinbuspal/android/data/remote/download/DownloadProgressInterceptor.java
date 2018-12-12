@@ -1,9 +1,8 @@
 package ie.dublinbuspal.android.data.remote.download;
 
-import android.support.annotation.NonNull;
-
 import java.io.IOException;
 
+import androidx.annotation.NonNull;
 import okhttp3.Interceptor;
 import okhttp3.Response;
 

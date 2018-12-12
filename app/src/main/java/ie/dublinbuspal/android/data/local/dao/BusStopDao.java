@@ -1,13 +1,13 @@
 package ie.dublinbuspal.android.data.local.dao;
 
-import android.arch.persistence.room.Dao;
-import android.arch.persistence.room.Query;
-import android.arch.persistence.room.Transaction;
-
-import ie.dublinbuspal.android.data.local.DbInfo;
-import ie.dublinbuspal.android.data.local.entity.BusStop;
 
 import java.util.List;
+
+import androidx.room.Dao;
+import androidx.room.Query;
+import androidx.room.Transaction;
+import ie.dublinbuspal.android.data.local.DbInfo;
+import ie.dublinbuspal.android.data.local.entity.BusStop;
 
 @Dao
 public abstract class BusStopDao implements BaseDao<BusStop> {

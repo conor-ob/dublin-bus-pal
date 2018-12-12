@@ -1,13 +1,12 @@
 package ie.dublinbuspal.android.data.local.entity;
 
-import android.support.annotation.NonNull;
-
-import ie.dublinbuspal.android.util.CollectionUtilities;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import ie.dublinbuspal.android.util.CollectionUtilities;
 
 public class DetailedBusStop extends BusStop {
 

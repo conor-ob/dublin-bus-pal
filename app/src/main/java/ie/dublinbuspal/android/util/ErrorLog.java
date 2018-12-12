@@ -2,7 +2,7 @@ package ie.dublinbuspal.android.util;
 
 import android.util.Log;
 
-import com.crashlytics.android.Crashlytics;
+//import com.crashlytics.android.Crashlytics;
 
 public final class ErrorLog {
 
@@ -19,7 +19,7 @@ public final class ErrorLog {
 
     public static void u(Throwable throwable) {
         l(UNHANDLED_ERROR, throwable);
-        Crashlytics.logException(throwable);
+//        Crashlytics.logException(throwable);
     }
 
     private static void l(String tag, Throwable throwable) {

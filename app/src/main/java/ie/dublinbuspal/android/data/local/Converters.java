@@ -1,7 +1,6 @@
 package ie.dublinbuspal.android.data.local;
 
-import android.arch.persistence.room.TypeConverter;
-
+import androidx.room.TypeConverter;
 import ie.dublinbuspal.android.util.CollectionUtilities;
 import ie.dublinbuspal.android.util.StringUtilities;
 

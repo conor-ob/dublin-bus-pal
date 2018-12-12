@@ -2,7 +2,6 @@ package ie.dublinbuspal.android.view.news.rss;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
@@ -10,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
 import ie.dublinbuspal.android.R;
 import ie.dublinbuspal.android.data.remote.rss.xml.Item;
 import ie.dublinbuspal.android.util.DateUtilities;

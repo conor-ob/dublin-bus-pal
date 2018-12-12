@@ -1,9 +1,8 @@
 package ie.dublinbuspal.android.data.local;
 
-import android.arch.persistence.room.Database;
-import android.arch.persistence.room.RoomDatabase;
-import android.arch.persistence.room.TypeConverters;
-
+import androidx.room.Database;
+import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import ie.dublinbuspal.android.data.local.dao.DetailedBusStopDao;
 import ie.dublinbuspal.android.data.local.dao.RouteDao;
 import ie.dublinbuspal.android.data.local.dao.RouteServiceDao;

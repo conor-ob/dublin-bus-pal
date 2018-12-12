@@ -3,8 +3,8 @@ package ie.dublinbuspal.android;
 import android.app.Application;
 import android.preference.PreferenceManager;
 
-import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.answers.Answers;
+//import com.crashlytics.android.Crashlytics;
+//import com.crashlytics.android.answers.Answers;
 import ie.dublinbuspal.android.di.ApplicationComponent;
 import ie.dublinbuspal.android.di.ApplicationModule;
 import ie.dublinbuspal.android.di.DaggerApplicationComponent;
@@ -14,7 +14,7 @@ import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterConfig;
 
-import io.fabric.sdk.android.Fabric;
+//import io.fabric.sdk.android.Fabric;
 import io.reactivex.plugins.RxJavaPlugins;
 
 public class DublinBusApplication extends Application {
@@ -52,7 +52,7 @@ public class DublinBusApplication extends Application {
     }
 
     private void setupAnalytics() {
-        Fabric.with(getApplicationContext(), new Crashlytics(), new Answers());
+//        Fabric.with(getApplicationContext(), new Crashlytics(), new Answers());
     }
 
     private void setupPreferences() {
