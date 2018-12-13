@@ -126,4 +126,6 @@
     <string name="preference_key_nearby_map_latitude">preference_nearby_map_latitude</string>
     <string name="preference_key_nearby_map_longitude">preference_nearby_map_longitude</string>
     <string name="preference_key_nearby_map_zoom">preference_nearby_map_zoom</string>
+
+    <string name="linkedin_url">https://www.linkedin.com/in/conor-ob/</string>
 </resources>
