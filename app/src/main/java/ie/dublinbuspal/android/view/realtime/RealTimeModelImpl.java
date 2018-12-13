@@ -8,12 +8,12 @@ import java.util.Set;
 import ie.dublinbuspal.android.data.local.entity.BusStopService;
 import ie.dublinbuspal.android.util.CollectionUtilities;
 import ie.dublinbuspal.model.livedata.LiveData;
-import ie.dublinbuspal.model.stop.ResolvedStop;
+import ie.dublinbuspal.model.stop.Stop;
 
 public class RealTimeModelImpl implements RealTimeModel {
 
     private String stopId;
-    private ResolvedStop busStop;
+    private Stop busStop;
     private BusStopService busStopService;
     private BusStopService adjustedBusStopService;
     private List<LiveData> realTimeData;
@@ -29,7 +29,7 @@ public class RealTimeModelImpl implements RealTimeModel {
     }
 
     @Override
-    public void setBusStop(ResolvedStop busStop) {
+    public void setBusStop(Stop busStop) {
         this.busStop = busStop;
     }
 
@@ -54,7 +54,7 @@ public class RealTimeModelImpl implements RealTimeModel {
     }
 
     @Override
-    public ResolvedStop getBusStop() {
+    public Stop getBusStop() {
         return busStop;
     }
 

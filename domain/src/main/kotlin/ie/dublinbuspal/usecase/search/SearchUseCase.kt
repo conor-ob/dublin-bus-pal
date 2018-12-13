@@ -1,7 +1,7 @@
 package ie.dublinbuspal.usecase.search
 
 import ie.dublinbuspal.model.route.Route
-import ie.dublinbuspal.model.stop.ResolvedStop
+import ie.dublinbuspal.model.stop.Stop
 import ie.dublinbuspal.repository.Repository
 import ie.dublinbuspal.util.AlphanumComparator
 import ie.dublinbuspal.util.CollectionUtils
@@ -12,7 +12,7 @@ import java.util.*
 import javax.inject.Inject
 
 class SearchUseCase @Inject constructor(
-        private val stopsRepository: Repository<ResolvedStop>,
+        private val stopsRepository: Repository<Stop>,
         private val routesRepository: Repository<Route>
 ) {
 
@@ -24,7 +24,7 @@ class SearchUseCase @Inject constructor(
         )
     }
 
-    private fun aggregate(stops: List<ResolvedStop>, routes: List<Route>): List<Any> {
+    private fun aggregate(stops: List<Stop>, routes: List<Route>): List<Any> {
         val searchResult = mutableListOf<Any>()
 
         if (!CollectionUtils.isNullOrEmpty(routes)) {
@@ -52,8 +52,8 @@ class SearchUseCase @Inject constructor(
         return searchResult
     }
 
-    private fun searchStops(value: String?, stops: List<ResolvedStop>): List<ResolvedStop> {
-        val result = mutableListOf<ResolvedStop>()
+    private fun searchStops(value: String?, stops: List<Stop>): List<Stop> {
+        val result = mutableListOf<Stop>()
         for (stop in stops) {
             if (String.format("%s %s", stop.id(), stop.name()).toLowerCase().contains(value!!)) {
                 result.add(stop)

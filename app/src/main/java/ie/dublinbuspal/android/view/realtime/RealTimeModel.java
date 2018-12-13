@@ -5,13 +5,13 @@ import java.util.Set;
 
 import ie.dublinbuspal.android.data.local.entity.BusStopService;
 import ie.dublinbuspal.model.livedata.LiveData;
-import ie.dublinbuspal.model.stop.ResolvedStop;
+import ie.dublinbuspal.model.stop.Stop;
 
 public interface RealTimeModel {
 
     void setStopId(String stopId);
 
-    void setBusStop(ResolvedStop busStop);
+    void setBusStop(Stop busStop);
 
     void setBusStopService(BusStopService busStopService);
 
@@ -23,7 +23,7 @@ public interface RealTimeModel {
 
     String getStopId();
 
-    ResolvedStop getBusStop();
+    Stop getBusStop();
 
     BusStopService getBusStopService();
 

@@ -2,16 +2,16 @@ package ie.dublinbuspal.data.dao
 
 import androidx.room.Dao
 import androidx.room.Query
-import ie.dublinbuspal.data.entity.RouteEntity
+import ie.dublinbuspal.data.entity.DefaultRouteEntity
 import io.reactivex.Maybe
 
 @Dao
-interface DefaultRouteDao : BaseDao<RouteEntity> {
+interface DefaultRouteDao : BaseDao<DefaultRouteEntity> {
 
-    @Query("SELECT * FROM routes")
-    fun selectAll(): Maybe<List<RouteEntity>>
+    @Query("SELECT * FROM default_routes")
+    fun selectAll(): Maybe<List<DefaultRouteEntity>>
 
-    @Query("DELETE FROM routes")
+    @Query("DELETE FROM default_routes")
     fun deleteAll()
 
 }

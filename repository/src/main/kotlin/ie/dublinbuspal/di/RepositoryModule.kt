@@ -11,21 +11,21 @@ import ie.dublinbuspal.data.TxRunner
 import ie.dublinbuspal.data.dao.*
 import ie.dublinbuspal.mapping.favourite.FavouriteStopDomainMapper
 import ie.dublinbuspal.mapping.favourite.FavouriteStopEntityMapper
-import ie.dublinbuspal.mapping.livedata.RealTimeBusInformationLiveDataMapper
-import ie.dublinbuspal.mapping.livedata.RealTimeBusInformationMapper
-import ie.dublinbuspal.mapping.livedata.RealTimeStopDataLiveDataMapper
-import ie.dublinbuspal.mapping.livedata.RealTimeStopDataMapper
-import ie.dublinbuspal.mapping.route.RouteDomainMapper
-import ie.dublinbuspal.mapping.route.RouteEntityMapper
-import ie.dublinbuspal.mapping.routeservice.RouteServiceDomainMapper
-import ie.dublinbuspal.mapping.routeservice.RouteServiceEntityMapper
+import ie.dublinbuspal.mapping.livedata.DublinBusGoAheadDublinLiveDataDomainMapper
+import ie.dublinbuspal.mapping.livedata.DublinBusGoAheadDublinLiveDataEntityMapper
+import ie.dublinbuspal.mapping.livedata.DefaultLiveDataDomainMapper
+import ie.dublinbuspal.mapping.livedata.DefaultLiveDataEntityMapper
+import ie.dublinbuspal.mapping.route.DefaultRouteDomainMapper
+import ie.dublinbuspal.mapping.route.DefaultRouteEntityMapper
+import ie.dublinbuspal.mapping.routeservice.DefaultRouteServiceDomainMapper
+import ie.dublinbuspal.mapping.routeservice.DefaultRouteServiceEntityMapper
 import ie.dublinbuspal.mapping.rss.RssMapper
 import ie.dublinbuspal.mapping.stop.*
-import ie.dublinbuspal.mapping.stopservice.StopServiceDomainMapper
-import ie.dublinbuspal.mapping.stopservice.StopServiceEntityMapper
+import ie.dublinbuspal.mapping.stopservice.DefaultStopServiceDomainMapper
+import ie.dublinbuspal.mapping.stopservice.DefaultStopServiceEntityMapper
 import ie.dublinbuspal.model.favourite.FavouriteStop
+import ie.dublinbuspal.model.livedata.DublinBusGoAheadDublinLiveData
 import ie.dublinbuspal.model.livedata.LiveData
-import ie.dublinbuspal.model.livedata.RealTimeBusInformation
 import ie.dublinbuspal.model.livedata.RealTimeStopData
 import ie.dublinbuspal.model.route.DefaultRoute
 import ie.dublinbuspal.model.route.GoAheadDublinRoute
@@ -33,26 +33,26 @@ import ie.dublinbuspal.model.route.Route
 import ie.dublinbuspal.model.route.RouteVariant
 import ie.dublinbuspal.model.routeservice.RouteService
 import ie.dublinbuspal.model.rss.RssNews
-import ie.dublinbuspal.model.stop.ResolvedStop
-import ie.dublinbuspal.model.stop.SmartDublinStop
+import ie.dublinbuspal.model.stop.DefaultStop
+import ie.dublinbuspal.model.stop.DublinBusGoAheadDublinStop
 import ie.dublinbuspal.model.stop.Stop
-import ie.dublinbuspal.model.stopservice.StopService
-import ie.dublinbuspal.repository.FavouriteRepository
+import ie.dublinbuspal.model.stopservice.DefaultStopService
+import ie.dublinbuspal.repository.FavouriteStopRepository
 import ie.dublinbuspal.repository.Repository
-import ie.dublinbuspal.repository.favourite.FavouriteStopRepository
+import ie.dublinbuspal.repository.favourite.DefaultFavouriteStopRepository
+import ie.dublinbuspal.repository.livedata.DefaultLiveDataRepository
+import ie.dublinbuspal.repository.livedata.GoAheadDublinLiveDataRepository
 import ie.dublinbuspal.repository.livedata.LiveDataRepository
-import ie.dublinbuspal.repository.livedata.RealTimeBusInformationRepository
-import ie.dublinbuspal.repository.livedata.RealTimeStopDataRepository
+import ie.dublinbuspal.repository.route.DefaultRoutePersister
 import ie.dublinbuspal.repository.route.DefaultRouteRepository
-import ie.dublinbuspal.repository.route.GadRouteRepository
-import ie.dublinbuspal.repository.route.RoutePersister
+import ie.dublinbuspal.repository.route.GoAheadDublinRouteRepository
 import ie.dublinbuspal.repository.route.RouteRepository
-import ie.dublinbuspal.repository.routeservice.RouteServicePersister
-import ie.dublinbuspal.repository.routeservice.RouteServiceRepository
+import ie.dublinbuspal.repository.routeservice.DefaultRouteServicePersister
+import ie.dublinbuspal.repository.routeservice.DefaultRouteServiceRepository
 import ie.dublinbuspal.repository.rss.RssNewsRepository
 import ie.dublinbuspal.repository.stop.*
-import ie.dublinbuspal.repository.stopservice.StopServicePersister
-import ie.dublinbuspal.repository.stopservice.StopServiceRepository
+import ie.dublinbuspal.repository.stopservice.DefaultStopServicePersister
+import ie.dublinbuspal.repository.stopservice.DefaultStopServiceRepository
 import ie.dublinbuspal.service.model.livedata.LiveDataResponseXml
 import ie.dublinbuspal.service.model.livedata.RealTimeBusInformationResponseJson
 import ie.dublinbuspal.service.model.route.RouteListInformationWithVariantsResponseJson
@@ -62,9 +62,9 @@ import ie.dublinbuspal.service.model.rss.RssResponseXml
 import ie.dublinbuspal.service.model.stop.StopsResponseJson
 import ie.dublinbuspal.service.model.stop.StopsResponseXml
 import ie.dublinbuspal.service.model.stopservice.StopServiceResponseXml
+import ie.dublinbuspal.service.resource.DublinBusGoAheadDublinRestResource
 import ie.dublinbuspal.service.resource.DublinBusRssResource
 import ie.dublinbuspal.service.resource.DublinBusSoapResource
-import ie.dublinbuspal.service.resource.SmartDublinRestResource
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
@@ -75,22 +75,22 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun resolvedStopRepository(
-            stopRepository: Repository<Stop>,
-            @Named("bac") bacStopRepository: Repository<SmartDublinStop>,
-            @Named("gad") gadStopRepository: Repository<SmartDublinStop>,
-            favouritesRepository: FavouriteRepository<FavouriteStop>
-    ): Repository<ResolvedStop> {
-        return ResolvedStopRepository(stopRepository, bacStopRepository, gadStopRepository, favouritesRepository)
+    fun stopRepository(
+            defaultStopRepository: Repository<DefaultStop>,
+            @Named("bac") dublinBusStopRepository: Repository<DublinBusGoAheadDublinStop>,
+            @Named("gad") goAheadDublinStopRepository: Repository<DublinBusGoAheadDublinStop>,
+            favouriteStopRepository: FavouriteStopRepository<FavouriteStop>
+    ): Repository<Stop> {
+        return StopRepository(defaultStopRepository, dublinBusStopRepository, goAheadDublinStopRepository, favouriteStopRepository)
     }
 
     @Provides
     @Singleton
-    fun stopRepository(
+    fun defaultStopRepository(
             api: DublinBusSoapResource,
-            stopDao: StopDao,
+            dao: DefaultStopDao,
             txRunner: TxRunner
-    ): Repository<Stop> {
+    ): Repository<DefaultStop> {
 
         val fetcher = Fetcher<StopsResponseXml, String> { api.getDublinBusStops() }
 
@@ -99,22 +99,22 @@ class RepositoryModule {
                 .setExpireAfterTimeUnit(TimeUnit.HOURS)
                 .build()
 
-        val domainMapper = StopDomainMapper()
-        val entityMapper = StopEntityMapper()
-        val persister = StopPersister(stopDao, txRunner, entityMapper, domainMapper)
+        val domainMapper = DefaultStopDomainMapper()
+        val entityMapper = DefaultStopEntityMapper()
+        val persister = DefaultStopPersister(dao, txRunner, entityMapper, domainMapper)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
 
-        return StopRepository(store)
+        return DefaultStopRepository(store)
     }
 
     @Provides
     @Singleton
     @Named("bac")
-    fun bacStopRepository(
-            api: SmartDublinRestResource,
-            dao: BacStopDao,
+    fun dublinBusStopRepository(
+            api: DublinBusGoAheadDublinRestResource,
+            dao: DublinBusStopDao,
             txRunner: TxRunner
-    ): Repository<SmartDublinStop> {
+    ): Repository<DublinBusGoAheadDublinStop> {
 
         val fetcher = Fetcher<StopsResponseJson, String> { api.getDublinBusStops() }
 
@@ -123,22 +123,22 @@ class RepositoryModule {
                 .setExpireAfterTimeUnit(TimeUnit.HOURS)
                 .build()
 
-        val domainMapper = BacStopDomainMapper()
-        val entityMapper = BacStopEntityMapper()
-        val persister = BacStopPersister(dao, txRunner, entityMapper, domainMapper)
+        val domainMapper = DublinBusStopDomainMapper()
+        val entityMapper = DublinBusStopEntityMapper()
+        val persister = DublinBusStopPersister(dao, txRunner, entityMapper, domainMapper)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
 
-        return BacStopRepository(store)
+        return DublinBusStopRepository(store)
     }
 
     @Provides
     @Singleton
     @Named("gad")
-    fun gadStopRepository(
-            api: SmartDublinRestResource,
-            dao: GadStopDao,
+    fun goAheadDublinStopRepository(
+            api: DublinBusGoAheadDublinRestResource,
+            dao: GoAheadDublinStopDao,
             txRunner: TxRunner
-    ): Repository<SmartDublinStop> {
+    ): Repository<DublinBusGoAheadDublinStop> {
 
         val fetcher = Fetcher<StopsResponseJson, String> { api.getGoAheadDublinStops() }
 
@@ -147,12 +147,12 @@ class RepositoryModule {
                 .setExpireAfterTimeUnit(TimeUnit.HOURS)
                 .build()
 
-        val domainMapper = GadStopDomainMapper()
-        val entityMapper = GadStopEntityMapper()
-        val persister = GadStopPersister(dao, txRunner, entityMapper, domainMapper)
+        val domainMapper = GoAheadDublinStopDomainMapper()
+        val entityMapper = GoAheadDublinStopEntityMapper()
+        val persister = GoAheadDublinStopPersister(dao, txRunner, entityMapper, domainMapper)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
 
-        return GadStopRepository(store)
+        return GoAheadDublinStopRepository(store)
     }
 
     @Provides
@@ -179,9 +179,9 @@ class RepositoryModule {
                 .setExpireAfterTimeUnit(TimeUnit.HOURS)
                 .build()
 
-        val domainMapper = RouteDomainMapper()
-        val entityMapper = RouteEntityMapper()
-        val persister = RoutePersister(dao, txRunner, entityMapper, domainMapper)
+        val domainMapper = DefaultRouteDomainMapper()
+        val entityMapper = DefaultRouteEntityMapper()
+        val persister = DefaultRoutePersister(dao, txRunner, entityMapper, domainMapper)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
 
         return DefaultRouteRepository(store)
@@ -189,9 +189,9 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun gadRouteRepository(
-            resource: SmartDublinRestResource,
-//            dao: GadRouteDao,
+    fun goAheadDublinRouteRepository(
+            resource: DublinBusGoAheadDublinRestResource,
+//            dao: GoAheadDublinRouteDao,
             txRunner: TxRunner
     ): Repository<GoAheadDublinRoute> {
 //        val fetcher = Fetcher<RouteListInformationWithVariantsResponseJson, Any> { key -> api.getRoutes(key.format) }
@@ -211,13 +211,15 @@ class RepositoryModule {
                 .refreshOnStale()
                 .open()
 
-        return GadRouteRepository(store)
+        return GoAheadDublinRouteRepository(store)
     }
 
     @Provides
     @Singleton
-    fun stopServiceRepository(api: DublinBusSoapResource,
-                              dao: StopServiceDao): Repository<StopService> {
+    fun defaultStopServiceRepository(
+            api: DublinBusSoapResource,
+            dao: DefaultStopServiceDao
+    ): Repository<DefaultStopService> {
 
         val fetcher = Fetcher<StopServiceResponseXml, String> { key -> api.getDublinBusStopService(key) }
 
@@ -226,18 +228,20 @@ class RepositoryModule {
                 .setExpireAfterTimeUnit(TimeUnit.HOURS)
                 .build()
 
-        val domainMapper = StopServiceDomainMapper()
-        val entityMapper = StopServiceEntityMapper()
-        val persister = StopServicePersister(dao, entityMapper, domainMapper)
+        val domainMapper = DefaultStopServiceDomainMapper()
+        val entityMapper = DefaultStopServiceEntityMapper()
+        val persister = DefaultStopServicePersister(dao, entityMapper, domainMapper)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
 
-        return StopServiceRepository(store)
+        return DefaultStopServiceRepository(store)
     }
 
     @Provides
     @Singleton
-    fun routeServiceRepository(api: DublinBusSoapResource,
-                               dao: RouteServiceDao): Repository<RouteService> {
+    fun defaultRouteServiceRepository(
+            api: DublinBusSoapResource,
+            dao: DefaultRouteServiceDao
+    ): Repository<RouteService> {
 
         val fetcher = Fetcher<RouteServiceResponseXml, String> { key -> api.getDublinBusRouteService(key) }
 
@@ -246,35 +250,35 @@ class RepositoryModule {
                 .setExpireAfterTimeUnit(TimeUnit.HOURS)
                 .build()
 
-        val domainMapper = RouteServiceDomainMapper()
-        val entityMapper = RouteServiceEntityMapper()
-        val persister = RouteServicePersister(dao, entityMapper, domainMapper)
+        val domainMapper = DefaultRouteServiceDomainMapper()
+        val entityMapper = DefaultRouteServiceEntityMapper()
+        val persister = DefaultRouteServicePersister(dao, entityMapper, domainMapper)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
 
-        return RouteServiceRepository(store)
+        return DefaultRouteServiceRepository(store)
     }
 
     @Provides
     @Singleton
     fun liveDataRepository(
-            realTimeStopDataRepository: Repository<RealTimeStopData>,
-            realTimeBusInformationRepository: Repository<RealTimeBusInformation>
+            defaultLiveDataRepository: Repository<RealTimeStopData>,
+            goAheadDublinLiveDataRepository: Repository<DublinBusGoAheadDublinLiveData>
     ): Repository<LiveData> {
-        val realTimeStopDataMapper = RealTimeStopDataLiveDataMapper()
-        val realTimeBusInformationMapper = RealTimeBusInformationLiveDataMapper()
-        return LiveDataRepository(realTimeStopDataRepository, realTimeBusInformationRepository, realTimeStopDataMapper, realTimeBusInformationMapper)
+        val defaultLiveDataMapper = DefaultLiveDataDomainMapper()
+        val goAheadDublinLiveDataMapper = DublinBusGoAheadDublinLiveDataDomainMapper()
+        return LiveDataRepository(defaultLiveDataRepository, goAheadDublinLiveDataRepository, defaultLiveDataMapper, goAheadDublinLiveDataMapper)
     }
 
     @Provides
     @Singleton
-    fun realTimeStopDataRepository(api: DublinBusSoapResource): Repository<RealTimeStopData> {
+    fun defaultLiveDataRepository(api: DublinBusSoapResource): Repository<RealTimeStopData> {
 
         val memoryPolicy = MemoryPolicy.builder()
                 .setExpireAfterWrite(30)
                 .setExpireAfterTimeUnit(TimeUnit.SECONDS)
                 .build()
 
-        val mapper = RealTimeStopDataMapper()
+        val mapper = DefaultLiveDataEntityMapper()
         val store = StoreBuilder.parsedWithKey<String, LiveDataResponseXml, List<RealTimeStopData>>()
                 .fetcher { key -> api.getDublinBusLiveData(key) }
                 .parser { xml -> mapper.map(xml.realTimeStopData) }
@@ -282,37 +286,37 @@ class RepositoryModule {
                 .refreshOnStale()
                 .open()
 
-        return RealTimeStopDataRepository(store)
+        return DefaultLiveDataRepository(store)
     }
 
     @Provides
     @Singleton
-    fun realTimeBusInformationRepository(api: SmartDublinRestResource): Repository<RealTimeBusInformation> {
+    fun goAheadDublinLiveDataRepository(api: DublinBusGoAheadDublinRestResource): Repository<DublinBusGoAheadDublinLiveData> {
 
         val memoryPolicy = MemoryPolicy.builder()
                 .setExpireAfterWrite(30)
                 .setExpireAfterTimeUnit(TimeUnit.SECONDS)
                 .build()
 
-        val mapper = RealTimeBusInformationMapper()
-        val store = StoreBuilder.parsedWithKey<String, RealTimeBusInformationResponseJson, List<RealTimeBusInformation>>()
+        val mapper = DublinBusGoAheadDublinLiveDataEntityMapper()
+        val store = StoreBuilder.parsedWithKey<String, RealTimeBusInformationResponseJson, List<DublinBusGoAheadDublinLiveData>>()
                 .fetcher { key -> api.getGoAheadDublinLiveData(key) }
                 .parser { json -> mapper.map(json.realTimeBusInformation) }
                 .memoryPolicy(memoryPolicy)
                 .refreshOnStale()
                 .open()
 
-        return RealTimeBusInformationRepository(store)
+        return GoAheadDublinLiveDataRepository(store)
     }
 
     @Provides
     @Singleton
-    fun favouritesRepository(dao: FavouriteStopDao): FavouriteRepository<FavouriteStop> {
+    fun favouritesRepository(dao: FavouriteStopDao): FavouriteStopRepository<FavouriteStop> {
 
         val domainMapper = FavouriteStopDomainMapper()
         val entityMapper = FavouriteStopEntityMapper()
 
-        return FavouriteStopRepository(dao, entityMapper, domainMapper)
+        return DefaultFavouriteStopRepository(dao, entityMapper, domainMapper)
     }
 
     @Provides

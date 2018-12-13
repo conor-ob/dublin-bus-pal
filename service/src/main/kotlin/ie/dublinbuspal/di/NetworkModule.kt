@@ -4,7 +4,7 @@ import dagger.Module
 import dagger.Provides
 import ie.dublinbuspal.service.api.DublinBusRssApi
 import ie.dublinbuspal.service.api.DublinBusSoapApi
-import ie.dublinbuspal.service.api.SmartDublinRestApi
+import ie.dublinbuspal.service.api.DublinBusGoAheadDublinRestApi
 import ie.dublinbuspal.service.interceptor.NetworkLoggingInterceptor
 import ie.dublinbuspal.service.resource.*
 import okhttp3.OkHttpClient
@@ -53,15 +53,15 @@ class NetworkModule(
 
     @Provides
     @Singleton
-    fun smartDublinRestResource(): SmartDublinRestResource {
+    fun smartDublinRestResource(): DublinBusGoAheadDublinRestResource {
         val retrofit = Retrofit.Builder()
                 .baseUrl(restApiEndpoint)
                 .client(okHttpClient)
                 .addConverterFactory(jsonDeserializer)
                 .addCallAdapterFactory(callAdapter)
                 .build()
-        val api = retrofit.create(SmartDublinRestApi::class.java)
-        return SmartDublinRestResourceAdapter(api)
+        val api = retrofit.create(DublinBusGoAheadDublinRestApi::class.java)
+        return DublinBusGoAheadDublinRestResourceAdapter(api)
     }
 
     @Provides

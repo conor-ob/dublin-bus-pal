@@ -62,17 +62,14 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import ie.dublinbuspal.android.DublinBusApplication;
 import ie.dublinbuspal.android.R;
 import ie.dublinbuspal.android.data.local.entity.BusStopService;
-import ie.dublinbuspal.android.data.local.entity.DetailedBusStop;
-import ie.dublinbuspal.android.data.local.entity.RealTimeData;
 import ie.dublinbuspal.android.util.AlphanumComparator;
-import ie.dublinbuspal.android.util.AnalyticsUtilities;
 import ie.dublinbuspal.android.util.CollectionUtilities;
 import ie.dublinbuspal.android.util.GoogleMapConstants;
 import ie.dublinbuspal.android.util.SVGUtils;
 import ie.dublinbuspal.android.view.route.RouteActivity;
 import ie.dublinbuspal.android.view.settings.SettingsActivity;
 import ie.dublinbuspal.model.livedata.LiveData;
-import ie.dublinbuspal.model.stop.ResolvedStop;
+import ie.dublinbuspal.model.stop.Stop;
 
 public class RealTimeActivity
         extends MvpActivity<RealTimeView, RealTimePresenter>
@@ -285,7 +282,7 @@ public class RealTimeActivity
     }
 
     @Override
-    public void presentSaveFavouriteDialog(ResolvedStop busStop, BusStopService service) {
+    public void presentSaveFavouriteDialog(Stop busStop, BusStopService service) {
         Set<String> routesToSave = new HashSet<>();
         FrameLayout frameView = new FrameLayout(this);
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_save_favourite, frameView);
@@ -351,7 +348,7 @@ public class RealTimeActivity
     private Marker busStopMarker;
 
     @Override
-    public void showBusStop(ResolvedStop busStop) {
+    public void showBusStop(Stop busStop) {
         invalidateOptionsMenu(); //make sure we set default/favourite correctly
         TextView name = toolbar.findViewById(R.id.stop_name);
         TextView id = toolbar.findViewById(R.id.stop_id);
@@ -429,7 +426,7 @@ public class RealTimeActivity
     }
 
     @Override
-    public void showStreetView(ResolvedStop busStop) {
+    public void showStreetView(Stop busStop) {
 
     }
 

@@ -1,19 +1,16 @@
 package ie.dublinbuspal.android.view.search;
 
-import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import ie.dublinbuspal.android.R;
 import ie.dublinbuspal.android.util.CollectionUtilities;
 import ie.dublinbuspal.android.util.StringUtilities;
 import ie.dublinbuspal.model.route.Route;
-import ie.dublinbuspal.model.service.Operator;
-import ie.dublinbuspal.model.stop.ResolvedStop;
+import ie.dublinbuspal.model.stop.Stop;
 
 import java.util.List;
 import java.util.Locale;
@@ -67,8 +64,8 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             Route route = (Route) searchResult;
             RouteViewHolder routeViewHolder = (RouteViewHolder) holder;
             routeViewHolder.bind(route);
-        } else if (searchResult instanceof ResolvedStop && holder instanceof BusStopViewHolder) {
-            ResolvedStop busStop = (ResolvedStop) searchResult;
+        } else if (searchResult instanceof Stop && holder instanceof BusStopViewHolder) {
+            Stop busStop = (Stop) searchResult;
             BusStopViewHolder busStopViewHolder = (BusStopViewHolder) holder;
             busStopViewHolder.bind(busStop);
         }
@@ -86,7 +83,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             return TITLE;
         } else if (searchResult instanceof Route) {
             return ROUTE;
-        } else if (searchResult instanceof ResolvedStop) {
+        } else if (searchResult instanceof Stop) {
             return BUS_STOP;
         }
         return super.getItemViewType(position);
@@ -162,7 +159,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             formattedStopId = itemView.getContext().getString(R.string.formatted_stop_id);
         }
 
-        public void bind(ResolvedStop busStop) {
+        public void bind(Stop busStop) {
             stopID.setText(String.format(Locale.UK, formattedStopId, busStop.id()));
             stopName.setText(busStop.name());
             if (CollectionUtilities.isNullOrEmpty(busStop.routes())) {
@@ -177,8 +174,8 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         @Override
         public void onClick(View itemView) {
             Object searchResult = searchResults.get(getAdapterPosition());
-            if (searchResult instanceof ResolvedStop) {
-                ResolvedStop busStop = (ResolvedStop) searchResult;
+            if (searchResult instanceof Stop) {
+                Stop busStop = (Stop) searchResult;
                 view.launchRealTimeActivity(busStop.id());
             }
         }

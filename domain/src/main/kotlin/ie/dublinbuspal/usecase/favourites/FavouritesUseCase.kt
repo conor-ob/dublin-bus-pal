@@ -1,12 +1,11 @@
 package ie.dublinbuspal.usecase.favourites
 
 import ie.dublinbuspal.model.favourite.FavouriteStop
-import ie.dublinbuspal.model.stop.Stop
-import ie.dublinbuspal.repository.FavouriteRepository
+import ie.dublinbuspal.repository.FavouriteStopRepository
 import io.reactivex.Observable
 import javax.inject.Inject
 
-class FavouritesUseCase @Inject constructor(private val repository: FavouriteRepository<FavouriteStop>) {
+class FavouritesUseCase @Inject constructor(private val repository: FavouriteStopRepository<FavouriteStop>) {
 
     fun getFavourites(): Observable<List<FavouriteStop>> {
         return repository.getAll()

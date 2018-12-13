@@ -1,6 +1,6 @@
 package ie.dublinbuspal.usecase.nearby
 
-import ie.dublinbuspal.model.stop.ResolvedStop
+import ie.dublinbuspal.model.stop.Stop
 import ie.dublinbuspal.repository.PreferencesRepository
 import ie.dublinbuspal.repository.Repository
 import ie.dublinbuspal.util.CollectionUtils
@@ -11,16 +11,16 @@ import io.reactivex.Observable
 import java.util.*
 import javax.inject.Inject
 
-class NearbyStopsUseCase @Inject constructor(private val stopsRepository: Repository<ResolvedStop>,
+class NearbyStopsUseCase @Inject constructor(private val stopsRepository: Repository<Stop>,
                                              private val preferences: PreferencesRepository) {
 
-    fun getNearbyBusStops(coordinate: Coordinate): Observable<SortedMap<Double, ResolvedStop>> {
+    fun getNearbyBusStops(coordinate: Coordinate): Observable<SortedMap<Double, Stop>> {
         return stopsRepository.getAll()
                 .map { filter(it, coordinate) }
     }
 
-    private fun filter(stops: List<ResolvedStop>, coordinate: Coordinate): SortedMap<Double, ResolvedStop> {
-        val sorted = TreeMap<Double, ResolvedStop>()
+    private fun filter(stops: List<Stop>, coordinate: Coordinate): SortedMap<Double, Stop> {
+        val sorted = TreeMap<Double, Stop>()
         for (busStop in stops) {
             sorted[LocationUtils.haversineDistance(coordinate, busStop.coordinate())] = busStop
         }

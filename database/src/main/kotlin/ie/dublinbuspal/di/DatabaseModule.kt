@@ -25,27 +25,27 @@ class DatabaseModule(private val databaseName: String) {
 
     @Provides
     @Singleton
-    fun stopDao(database: DublinBusDatabase): StopDao = database.stopDao()
+    fun defaultStopDao(database: DublinBusDatabase): DefaultStopDao = database.defaultStopDao()
 
     @Provides
     @Singleton
-    fun bacStopDao(database: DublinBusDatabase): BacStopDao = database.bacStopDao()
+    fun dublinBusStopDao(database: DublinBusDatabase): DublinBusStopDao = database.dublinBusStopDao()
 
     @Provides
     @Singleton
-    fun gadStopDao(database: DublinBusDatabase): GadStopDao = database.gadStopDao()
+    fun goAheadDublinStopDao(database: DublinBusDatabase): GoAheadDublinStopDao = database.goAheadDublinStopDao()
 
     @Provides
     @Singleton
-    fun routeDao(database: DublinBusDatabase): DefaultRouteDao = database.routeDao()
+    fun defaultRouteDao(database: DublinBusDatabase): DefaultRouteDao = database.defaultRouteDao()
 
     @Provides
     @Singleton
-    fun stopServiceDao(database: DublinBusDatabase): StopServiceDao = database.stopServiceDao()
+    fun defaultStopServiceDao(database: DublinBusDatabase): DefaultStopServiceDao = database.defaultStopServiceDao()
 
     @Provides
     @Singleton
-    fun routeServiceDao(database: DublinBusDatabase): RouteServiceDao = database.routeServiceDao()
+    fun defaultRouteServiceDao(database: DublinBusDatabase): DefaultRouteServiceDao = database.defaultRouteServiceDao()
 
     @Provides
     @Singleton

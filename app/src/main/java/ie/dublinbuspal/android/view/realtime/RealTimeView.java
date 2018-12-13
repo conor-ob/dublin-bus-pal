@@ -9,11 +9,11 @@ import java.util.Set;
 
 import ie.dublinbuspal.android.data.local.entity.BusStopService;
 import ie.dublinbuspal.model.livedata.LiveData;
-import ie.dublinbuspal.model.stop.ResolvedStop;
+import ie.dublinbuspal.model.stop.Stop;
 
 public interface RealTimeView extends MvpView {
 
-    void showBusStop(ResolvedStop busStop);
+    void showBusStop(Stop busStop);
 
     void showRealTimeData(List<LiveData> realTimeData);
 
@@ -33,11 +33,11 @@ public interface RealTimeView extends MvpView {
 
     void onCreateDefaultOptionsMenu(Menu menu);
 
-    void presentSaveFavouriteDialog(ResolvedStop busStop, BusStopService service);
+    void presentSaveFavouriteDialog(Stop busStop, BusStopService service);
 
     void onFavouriteRemoved();
 
-    void showStreetView(ResolvedStop busStop);
+    void showStreetView(Stop busStop);
 
     void showError(int stringId);
 

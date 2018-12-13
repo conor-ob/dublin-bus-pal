@@ -2,10 +2,10 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "c86cd014c45a8cb05bbc4e83448b8743",
+    "identityHash": "87102959394e901d1c585be20ea6823e",
     "entities": [
       {
-        "tableName": "stops",
+        "tableName": "default_stops",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
@@ -43,7 +43,7 @@
         "foreignKeys": []
       },
       {
-        "tableName": "bac_stops",
+        "tableName": "dublin_bus_stops",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, `routes` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
@@ -87,7 +87,7 @@
         "foreignKeys": []
       },
       {
-        "tableName": "gad_stops",
+        "tableName": "go_ahead_dublin_stops",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, `routes` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
@@ -131,7 +131,7 @@
         "foreignKeys": []
       },
       {
-        "tableName": "routes",
+        "tableName": "default_routes",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `origin` TEXT NOT NULL, `destination` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
@@ -163,7 +163,7 @@
         "foreignKeys": []
       },
       {
-        "tableName": "stop_services",
+        "tableName": "default_stop_services",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `routes` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
@@ -189,7 +189,7 @@
         "foreignKeys": []
       },
       {
-        "tableName": "route_services",
+        "tableName": "default_route_services",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `origin` TEXT NOT NULL, `destination` TEXT NOT NULL, `inbound_stops` TEXT NOT NULL, `outbound_stops` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
@@ -279,7 +279,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"c86cd014c45a8cb05bbc4e83448b8743\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"87102959394e901d1c585be20ea6823e\")"
     ]
   }
 }
