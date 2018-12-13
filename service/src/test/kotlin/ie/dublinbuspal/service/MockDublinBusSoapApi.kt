@@ -1,5 +1,6 @@
 package ie.dublinbuspal.service
 
+import ie.dublinbuspal.service.api.DublinBusSoapApi
 import ie.dublinbuspal.service.model.livedata.LiveDataRequestXml
 import ie.dublinbuspal.service.model.livedata.LiveDataResponseXml
 import ie.dublinbuspal.service.model.route.RoutesRequestXml

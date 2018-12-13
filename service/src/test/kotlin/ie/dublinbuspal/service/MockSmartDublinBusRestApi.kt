@@ -1,5 +1,6 @@
 package ie.dublinbuspal.service
 
+import ie.dublinbuspal.service.api.SmartDublinRestApi
 import ie.dublinbuspal.service.model.livedata.RealTimeBusInformationResponseJson
 import ie.dublinbuspal.service.model.stop.StopsResponseJson
 import io.reactivex.Single

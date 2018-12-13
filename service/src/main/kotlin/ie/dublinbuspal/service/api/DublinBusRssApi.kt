@@ -1,4 +1,4 @@
-package ie.dublinbuspal.service
+package ie.dublinbuspal.service.api
 
 import ie.dublinbuspal.service.model.rss.RssResponseXml
 import io.reactivex.Single

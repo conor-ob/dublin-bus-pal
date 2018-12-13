@@ -50,8 +50,9 @@ class DublinBusApplication : Application() {
                 .databaseModule(DatabaseModule(resources.getString(R.string.dublin_bus_database_name))) //TODO check database name of existing app
                 .networkModule(NetworkModule(
                         resources.getString(R.string.dublin_bus_soap_api_endpoint),
-                        resources.getString(R.string.dublin_bus_rss_api_endpoint),
-                        resources.getString(R.string.smart_dublin_rest_api_endpoint))
+                        resources.getString(R.string.smart_dublin_rest_api_endpoint),
+                        resources.getString(R.string.dublin_bus_rss_api_endpoint)
+                )
                 )
                 .build()
     }

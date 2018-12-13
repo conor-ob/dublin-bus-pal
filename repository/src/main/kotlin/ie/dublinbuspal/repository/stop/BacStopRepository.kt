@@ -6,10 +6,10 @@ import ie.dublinbuspal.repository.Repository
 import io.reactivex.Observable
 
 class BacStopRepository(
-        private val store: StoreRoom<List<SmartDublinStop>, SmartDublinKey>
+        private val store: StoreRoom<List<SmartDublinStop>, String>
 ) : Repository<SmartDublinStop> {
 
-    private val key : SmartDublinKey by lazy { SmartDublinKey("bac", "json") }
+    private val key = javaClass.simpleName
 
     override fun getById(id: String): Observable<SmartDublinStop> {
         throw UnsupportedOperationException()
@@ -20,7 +20,7 @@ class BacStopRepository(
     }
 
     override fun getAll(): Observable<List<SmartDublinStop>> {
-        return store.get(this.key)
+        return store.get(key)
     }
 
 }

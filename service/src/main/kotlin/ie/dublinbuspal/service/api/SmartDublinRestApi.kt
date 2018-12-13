@@ -1,4 +1,4 @@
-package ie.dublinbuspal.service
+package ie.dublinbuspal.service.api
 
 import ie.dublinbuspal.service.model.livedata.RealTimeBusInformationResponseJson
 import ie.dublinbuspal.service.model.route.RouteListInformationWithVariantsResponseJson

@@ -5,10 +5,12 @@ import ie.dublinbuspal.model.rss.RssNews
 import ie.dublinbuspal.repository.Repository
 import io.reactivex.Observable
 
-class RssNewsRepository(private val store: Store<List<RssNews>, Any>) : Repository<RssNews> {
+class RssNewsRepository(private val store: Store<List<RssNews>, String>) : Repository<RssNews> {
+
+    private val key = javaClass.simpleName
 
     override fun getAll(): Observable<List<RssNews>> {
-        return store.get(RssNews::class.java.simpleName).toObservable()
+        return store.get(key).toObservable()
     }
 
     override fun getById(id: String): Observable<RssNews> {

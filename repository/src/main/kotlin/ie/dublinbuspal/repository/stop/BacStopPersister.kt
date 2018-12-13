@@ -15,15 +15,15 @@ class BacStopPersister(
         private val txRunner: TxRunner,
         private val entityMapper: Mapper<StopJson, BacStopEntity>,
         private val domainMapper: Mapper<BacStopEntity, SmartDublinStop>
-) : RoomPersister<StopsResponseJson, List<SmartDublinStop>, SmartDublinKey> {
+) : RoomPersister<StopsResponseJson, List<SmartDublinStop>, String> {
 
-    override fun read(key: SmartDublinKey): Observable<List<SmartDublinStop>> {
+    override fun read(key: String): Observable<List<SmartDublinStop>> {
         return dao.selectAll()
                 .map { domainMapper.map(it) }
                 .toObservable()
     }
 
-    override fun write(key: SmartDublinKey, json: StopsResponseJson) {
+    override fun write(key: String, json: StopsResponseJson) {
         txRunner.runInTx {
             dao.deleteAll()
             dao.insertAll(entityMapper.map(json.stops!!))
