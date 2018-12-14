@@ -1,5 +1,6 @@
 package ie.dublinbuspal.model.stop
 
+import ie.dublinbuspal.util.AlphanumComparator
 import ie.dublinbuspal.util.CollectionUtils
 import ie.dublinbuspal.util.Coordinate
 import ie.dublinbuspal.util.StringUtils
@@ -55,13 +56,17 @@ data class Stop(
 
     fun routes(): List<String> {
         if (!CollectionUtils.isNullOrEmpty(favouriteRoutes)) {
-            return favouriteRoutes
+            val routes = favouriteRoutes.toMutableList()
+            routes.sortWith(Comparator { thisRoute, thatRoute -> AlphanumComparator.getInstance().compare(thisRoute, thatRoute) } )
+            return routes
         }
         val uniques = mutableSetOf<String>()
         uniques.addAll(defaultRoutes)
         uniques.addAll(dublinBusRoutes)
         uniques.addAll(goAheadDublinRoutes)
-        return uniques.toList()
+        val routes = uniques.toMutableList()
+        routes.sortWith(Comparator { thisRoute, thatRoute -> AlphanumComparator.getInstance().compare(thisRoute, thatRoute) } )
+        return routes
     }
 
     fun isFavourite(): Boolean {
