@@ -8,8 +8,8 @@ import java.net.UnknownHostException;
 
 import javax.inject.Inject;
 
+import ie.dublinbuspal.SoapServiceUnavailableException;
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.data.remote.soap.SoapServiceUnavailableException;
 import ie.dublinbuspal.android.util.ErrorLog;
 import ie.dublinbuspal.model.routeservice.RouteService;
 import ie.dublinbuspal.usecase.routeservice.RouteServiceUseCase;

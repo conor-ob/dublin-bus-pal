@@ -11,7 +11,6 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -21,22 +20,14 @@ import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.Locale;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import javax.inject.Inject;
 
 import ie.dublinbuspal.android.BuildConfig;
 import ie.dublinbuspal.android.DublinBusApplication;
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.data.DublinBusRepository;
-import ie.dublinbuspal.android.data.remote.download.DownloadProgressListener;
 import ie.dublinbuspal.android.util.DateUtilities;
 import ie.dublinbuspal.android.util.ErrorLog;
 import ie.dublinbuspal.android.util.StringUtilities;
 import ie.dublinbuspal.android.view.web.WebViewActivity;
-import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
@@ -61,8 +52,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     public static class MainPreferenceFragment extends PreferenceFragment {
 
-        @Inject DublinBusRepository repository;
-        @Inject DownloadProgressListener listener;
+//        @Inject DublinBusRepository repository;
+//        @Inject DownloadProgressListener listener;
 
         @Override
         public void onCreate(final Bundle savedInstanceState) {
@@ -78,7 +69,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             if (getActivity() != null) {
                 DublinBusApplication application = (DublinBusApplication)
                         getActivity().getApplication();
-                application.getOldApplicationComponent().inject(this);
+                application.getApplicationComponent().inject(this);
             }
         }
 
@@ -108,69 +99,69 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             });
             SyncPreference updatePreference = (SyncPreference) findPreference(
                     getString(R.string.preference_key_update_database));
-            updatePreference.setOnPreferenceClickListener(preference -> {
-
-                if (!updatePreference.isRefreshing()) {
-                    updatePreference.setRefreshing(true);
-                    AtomicInteger total = new AtomicInteger(0);
-                    AtomicInteger totalPercent = new AtomicInteger(0);
-                    listener.registerObserver(percent -> {
-                        totalPercent.incrementAndGet();
-                        if (totalPercent.get() % 3 == 0) {
-                            int update = Math.min(totalPercent.get() / 3, 100);
-                            updatePreference.setSummary("Downloading " + String.valueOf(update) + " %");
-                        }
-                        if (percent == 100) {
-                            total.incrementAndGet();
-                            Log.d("DOWNLOADING", String.valueOf(percent));
-                        }
-                        if (total.get() == 3) {
-                            //TODO fix bugs around here (see crashlytics report) refactor into MVP
-                            updatePreference.setRefreshing(false);
-                            PreferenceManager.getDefaultSharedPreferences(updatePreference.getContext())
-                                    .edit()
-                                    .putLong(getString(R.string.preference_key_update_database), new Date().getTime())
-                                    .apply();
-                            bindLastUpdatedTimestampSummaryToValue(updatePreference);
-                        }
-                    });
-
-                    repository.invalidateCache();
-
-                    //TODO check lifecycle methods and dispose of singles appropriately. make sure update can continue if screen pauses
-                    Single.fromCallable(repository::getBusStopsRemote)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(busStops -> {
-                                // ok
-                            }, throwable -> {
-                                updatePreference.setRefreshing(false);
-                                handleError(throwable);
-                            });
-
-                    Single.fromCallable(repository::getRoutesRemote)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(routes -> {
-                                // ok
-                            }, throwable -> {
-                                updatePreference.setRefreshing(false);
-                                handleError(throwable);
-                            });
-
-                    Single.fromCallable(repository::getBusStopServicesRemote)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(busStopsServices -> {
-                                // ok
-                            }, throwable -> {
-                                updatePreference.setRefreshing(false);
-                                handleError(throwable);
-                            });
-
-                }
-                return true;
-            });
+//            updatePreference.setOnPreferenceClickListener(preference -> {
+//
+//                if (!updatePreference.isRefreshing()) {
+//                    updatePreference.setRefreshing(true);
+//                    AtomicInteger total = new AtomicInteger(0);
+//                    AtomicInteger totalPercent = new AtomicInteger(0);
+//                    listener.registerObserver(percent -> {
+//                        totalPercent.incrementAndGet();
+//                        if (totalPercent.get() % 3 == 0) {
+//                            int update = Math.min(totalPercent.get() / 3, 100);
+//                            updatePreference.setSummary("Downloading " + String.valueOf(update) + " %");
+//                        }
+//                        if (percent == 100) {
+//                            total.incrementAndGet();
+//                            Log.d("DOWNLOADING", String.valueOf(percent));
+//                        }
+//                        if (total.get() == 3) {
+//                            //TODO fix bugs around here (see crashlytics report) refactor into MVP
+//                            updatePreference.setRefreshing(false);
+//                            PreferenceManager.getDefaultSharedPreferences(updatePreference.getContext())
+//                                    .edit()
+//                                    .putLong(getString(R.string.preference_key_update_database), new Date().getTime())
+//                                    .apply();
+//                            bindLastUpdatedTimestampSummaryToValue(updatePreference);
+//                        }
+//                    });
+//
+//                    repository.invalidateCache();
+//
+//                    //TODO check lifecycle methods and dispose of singles appropriately. make sure update can continue if screen pauses
+//                    Single.fromCallable(repository::getBusStopsRemote)
+//                            .subscribeOn(Schedulers.io())
+//                            .observeOn(AndroidSchedulers.mainThread())
+//                            .subscribe(busStops -> {
+//                                // ok
+//                            }, throwable -> {
+//                                updatePreference.setRefreshing(false);
+//                                handleError(throwable);
+//                            });
+//
+//                    Single.fromCallable(repository::getRoutesRemote)
+//                            .subscribeOn(Schedulers.io())
+//                            .observeOn(AndroidSchedulers.mainThread())
+//                            .subscribe(routes -> {
+//                                // ok
+//                            }, throwable -> {
+//                                updatePreference.setRefreshing(false);
+//                                handleError(throwable);
+//                            });
+//
+//                    Single.fromCallable(repository::getBusStopServicesRemote)
+//                            .subscribeOn(Schedulers.io())
+//                            .observeOn(AndroidSchedulers.mainThread())
+//                            .subscribe(busStopsServices -> {
+//                                // ok
+//                            }, throwable -> {
+//                                updatePreference.setRefreshing(false);
+//                                handleError(throwable);
+//                            });
+//
+//                }
+//                return true;
+//            });
 
             Preference share = findPreference(getString(R.string.preference_key_share));
             share.setOnPreferenceClickListener(preference -> {

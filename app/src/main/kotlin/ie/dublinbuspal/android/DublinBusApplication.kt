@@ -14,7 +14,6 @@ import timber.log.Timber
 
 class DublinBusApplication : Application() {
 
-    lateinit var oldApplicationComponent: ie.dublinbuspal.android.di.ApplicationComponent
     lateinit var applicationComponent: ApplicationComponent
 
     init {
@@ -42,9 +41,6 @@ class DublinBusApplication : Application() {
     }
 
     private fun setupDagger() {
-        oldApplicationComponent = ie.dublinbuspal.android.di.DaggerApplicationComponent.builder()
-                .applicationModule(ie.dublinbuspal.android.di.ApplicationModule(applicationContext))
-                .build()
         applicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule(ApplicationModule(applicationContext))
                 .databaseModule(DatabaseModule(resources.getString(R.string.dublin_bus_database_name))) //TODO check database name of existing app

@@ -3,7 +3,6 @@ package ie.dublinbuspal.android.view.realtime;
 import java.util.List;
 import java.util.Set;
 
-import ie.dublinbuspal.android.data.local.entity.BusStopService;
 import ie.dublinbuspal.model.livedata.LiveData;
 import ie.dublinbuspal.model.stop.Stop;
 
@@ -13,9 +12,9 @@ public interface RealTimeModel {
 
     void setBusStop(Stop busStop);
 
-    void setBusStopService(BusStopService busStopService);
+    void setBusStopService(List<String> busStopService);
 
-    void setAdjustedBusStopService(BusStopService service);
+    void setAdjustedBusStopService(List<String> service);
 
     void setRealTimeData(List<LiveData> realTimeData);
 
@@ -25,9 +24,9 @@ public interface RealTimeModel {
 
     Stop getBusStop();
 
-    BusStopService getBusStopService();
+    List<String> getBusStopService();
 
-    BusStopService getAdjustedBusStopService();
+    List<String> getAdjustedBusStopService();
 
     List<LiveData> getRealTimeData();
 

@@ -68,7 +68,7 @@ public class RealTimeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public int getItemViewType(int position) {
         Object data = realTimeData.get(position);
-        if (data instanceof EmptyRealTimeData) {
+        if (data instanceof String) {
             return EMPTY;
         }
         return DEFAULT;
@@ -79,7 +79,7 @@ public class RealTimeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (realTimeData == null) {
             return;
         } else if (CollectionUtilities.isNullOrEmpty(realTimeData)) {
-            copy.add(new EmptyRealTimeData());
+            copy.add("EMPTY");
         }
         copy.addAll(realTimeData);
         this.realTimeData = copy;

@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import ie.dublinbuspal.android.data.local.entity.BusStopService;
 import ie.dublinbuspal.android.util.CollectionUtilities;
 import ie.dublinbuspal.model.livedata.LiveData;
 import ie.dublinbuspal.model.stop.Stop;
@@ -14,8 +13,8 @@ public class RealTimeModelImpl implements RealTimeModel {
 
     private String stopId;
     private Stop busStop;
-    private BusStopService busStopService;
-    private BusStopService adjustedBusStopService;
+    private List<String> busStopService;
+    private List<String> adjustedBusStopService;
     private List<LiveData> realTimeData;
     private Set<String> routeFilters;
 
@@ -34,12 +33,12 @@ public class RealTimeModelImpl implements RealTimeModel {
     }
 
     @Override
-    public void setBusStopService(BusStopService busStopService) {
+    public void setBusStopService(List<String> busStopService) {
         this.busStopService = busStopService;
     }
 
     @Override
-    public void setAdjustedBusStopService(BusStopService adjustedBusStopService) {
+    public void setAdjustedBusStopService(List<String> adjustedBusStopService) {
         this.adjustedBusStopService = adjustedBusStopService;
     }
 
@@ -59,12 +58,12 @@ public class RealTimeModelImpl implements RealTimeModel {
     }
 
     @Override
-    public BusStopService getBusStopService() {
+    public List<String> getBusStopService() {
         return busStopService;
     }
 
     @Override
-    public BusStopService getAdjustedBusStopService() {
+    public List<String> getAdjustedBusStopService() {
         if (adjustedBusStopService == null) {
             return busStopService;
         }
@@ -74,7 +73,7 @@ public class RealTimeModelImpl implements RealTimeModel {
     @Override
     public List<LiveData> getRealTimeData() {
         if (CollectionUtilities.isNullOrEmpty(getRouteFilters())) {
-            return filterOn(CollectionUtilities.toSet(getAdjustedBusStopService().getRoutes()));
+            return filterOn(CollectionUtilities.toSet(getAdjustedBusStopService()));
         }
         return filterOn(getRouteFilters());
     }

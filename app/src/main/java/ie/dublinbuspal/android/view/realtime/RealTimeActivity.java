@@ -61,7 +61,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import ie.dublinbuspal.android.DublinBusApplication;
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.data.local.entity.BusStopService;
 import ie.dublinbuspal.android.util.AlphanumComparator;
 import ie.dublinbuspal.android.util.CollectionUtilities;
 import ie.dublinbuspal.android.util.GoogleMapConstants;
@@ -281,7 +280,7 @@ public class RealTimeActivity
     }
 
     @Override
-    public void presentSaveFavouriteDialog(Stop busStop, BusStopService service) {
+    public void presentSaveFavouriteDialog(Stop busStop, List<String> service) {
         Set<String> routesToSave = new HashSet<>();
         FrameLayout frameView = new FrameLayout(this);
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_save_favourite, frameView);
@@ -290,15 +289,15 @@ public class RealTimeActivity
 
         GridView gridView = dialogView.findViewById(R.id.grid_view);
         gridView.setAdapter(new ArrayAdapter<>(this,
-                R.layout.dialog_save_favourite_grid_item, R.id.route, service.getRoutes()));
+                R.layout.dialog_save_favourite_grid_item, R.id.route, service));
         gridView.setOnItemClickListener((parent, view, position, id) -> {
-            String route = service.getRoutes().get(position);
+            String route = service.get(position);
             CheckBox checkbox = view.findViewById(R.id.checkbox);
             if (routesToSave.contains(route)) {
                 routesToSave.remove(route);
                 checkbox.setChecked(false);
             } else {
-                routesToSave.add(service.getRoutes().get(position));
+                routesToSave.add(service.get(position));
                 checkbox.setChecked(true);
             }
         });
@@ -319,7 +318,7 @@ public class RealTimeActivity
                     CheckBox check = child.findViewById(R.id.checkbox);
                     check.setChecked(true);
                     routesToSave.clear();
-                    routesToSave.addAll(service.getRoutes());
+                    routesToSave.addAll(service);
                 }
             });
             Button negativeButton = ((AlertDialog) dialog1).getButton(AlertDialog.BUTTON_NEGATIVE);
@@ -377,7 +376,7 @@ public class RealTimeActivity
     }
 
     @Override
-    public void showBusStopService(BusStopService busStopService) {
+    public void showBusStopService(List<String> busStopService) {
         int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics());
         int min = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics());
         LinearLayout routeButtonContainer = findViewById(R.id.routes_for_stop);
@@ -386,7 +385,7 @@ public class RealTimeActivity
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         MarginLayoutParamsCompat.setMarginEnd(layoutParams, px);
         routeFilters = new ArrayList<>();
-        for (String route : busStopService.getRoutes()) {
+        for (String route : busStopService) {
             TextView routeView = new TextView(this);
             routeView.setLayoutParams(layoutParams);
             routeView.setPadding(px, 0, px, 0);

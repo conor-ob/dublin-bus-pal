@@ -8,6 +8,7 @@ import ie.dublinbuspal.android.view.news.twitter.TwitterPresenterImpl
 import ie.dublinbuspal.android.view.realtime.RealTimePresenterImpl
 import ie.dublinbuspal.android.view.route.RoutePresenterImpl
 import ie.dublinbuspal.android.view.search.SearchPresenterImpl
+import ie.dublinbuspal.android.view.settings.SettingsActivity
 import javax.inject.Singleton
 
 @Singleton
@@ -34,5 +35,7 @@ interface ApplicationComponent {
     fun rssNewsPresenter(): RssPresenterImpl
 
     fun twitterPresenter(): TwitterPresenterImpl
+
+    fun inject(mainPreferenceFragment: SettingsActivity.MainPreferenceFragment)
 
 }

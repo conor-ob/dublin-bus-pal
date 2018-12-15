@@ -2,7 +2,6 @@ package ie.dublinbuspal.android.view.favourite;
 
 import java.util.List;
 
-import ie.dublinbuspal.android.data.local.entity.DetailedBusStop;
 import ie.dublinbuspal.model.favourite.FavouriteStop;
 
 public class FavouritesModelImpl implements FavouritesModel {

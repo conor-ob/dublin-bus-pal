@@ -7,7 +7,6 @@ import com.hannesdorfmann.mosby3.mvp.MvpView;
 import java.util.List;
 import java.util.Set;
 
-import ie.dublinbuspal.android.data.local.entity.BusStopService;
 import ie.dublinbuspal.model.livedata.LiveData;
 import ie.dublinbuspal.model.stop.Stop;
 
@@ -17,7 +16,7 @@ public interface RealTimeView extends MvpView {
 
     void showRealTimeData(List<LiveData> realTimeData);
 
-    void showBusStopService(BusStopService busStopService);
+    void showBusStopService(List<String> busStopService);
 
     void launchRouteActivity(String routeId);
 
@@ -33,7 +32,7 @@ public interface RealTimeView extends MvpView {
 
     void onCreateDefaultOptionsMenu(Menu menu);
 
-    void presentSaveFavouriteDialog(Stop busStop, BusStopService service);
+    void presentSaveFavouriteDialog(Stop busStop, List<String> service);
 
     void onFavouriteRemoved();
 

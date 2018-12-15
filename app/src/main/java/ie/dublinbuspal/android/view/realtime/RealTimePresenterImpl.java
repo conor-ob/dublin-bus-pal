@@ -11,9 +11,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import ie.dublinbuspal.SoapServiceUnavailableException;
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.data.local.entity.BusStopService;
-import ie.dublinbuspal.android.data.remote.soap.SoapServiceUnavailableException;
 import ie.dublinbuspal.android.util.ErrorLog;
 import ie.dublinbuspal.model.livedata.LiveData;
 import ie.dublinbuspal.model.stop.Stop;
@@ -73,7 +72,7 @@ public class RealTimePresenterImpl extends MvpBasePresenter<RealTimeView>
     private void getBusStopService() {
         if (getModel().getBusStopService() == null) {
             getDisposables().add(liveDataUseCase.getBusStop(getModel().getStopId())
-                    .map(stop -> new BusStopService(stop.id(), stop.routes()))
+                    .map(Stop::routes)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(this::onGetBusStopService, this::onError));
@@ -92,14 +91,13 @@ public class RealTimePresenterImpl extends MvpBasePresenter<RealTimeView>
     private void onGetBusStop(Stop busStop) {
         getModel().setBusStop(busStop);
         if (busStop.isFavourite()) {
-            getModel().setAdjustedBusStopService(new BusStopService(busStop.id(),
-                    busStop.routes()));
+            getModel().setAdjustedBusStopService(busStop.routes());
         }
         showBusStop();
         getBusStopService();
     }
 
-    private void onGetBusStopService(BusStopService service) {
+    private void onGetBusStopService(List<String> service) {
         getModel().setBusStopService(service);
         showBusStopService();
         getRealTimeData();

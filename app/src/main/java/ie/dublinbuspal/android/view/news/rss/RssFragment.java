@@ -5,6 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.snackbar.Snackbar;
+import com.hannesdorfmann.mosby3.mvp.MvpFragment;
+
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -13,15 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import ie.dublinbuspal.android.DublinBusApplication;
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.data.remote.rss.xml.Item;
 import ie.dublinbuspal.model.rss.RssNews;
-
-import com.google.android.material.snackbar.Snackbar;
-import com.hannesdorfmann.mosby3.mvp.MvpFragment;
-
-import java.util.List;
-
-import javax.inject.Inject;
 
 public class RssFragment extends MvpFragment<RssView, RssPresenter> implements RssView {
 
