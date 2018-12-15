@@ -1,16 +1,16 @@
 package ie.dublinbuspal.android.view.route;
 
-import ie.dublinbuspal.android.data.local.entity.DetailedBusStop;
-import ie.dublinbuspal.android.data.local.entity.DetailedRouteService;
-import ie.dublinbuspal.android.util.CollectionUtilities;
-
 import java.util.List;
+
+import ie.dublinbuspal.android.util.CollectionUtilities;
+import ie.dublinbuspal.model.routeservice.RouteService;
+import ie.dublinbuspal.model.stop.Stop;
 
 import static ie.dublinbuspal.android.util.ObjectUtilities.safeEquals;
 
 public class RouteModelImpl implements RouteModel {
 
-    private DetailedRouteService routeService;
+    private RouteService routeService;
     private String routeId;
     private String stopId;
     private boolean isDisplayOutboundStops;
@@ -25,7 +25,7 @@ public class RouteModelImpl implements RouteModel {
     }
 
     @Override
-    public void setRouteService(DetailedRouteService routeService) {
+    public void setRouteService(RouteService routeService) {
         if (safeEquals(this.routeService, routeService)) {
             return;
         }
@@ -34,14 +34,14 @@ public class RouteModelImpl implements RouteModel {
     }
 
     @Override
-    public DetailedRouteService getRouteService() {
+    public RouteService getRouteService() {
         return routeService;
     }
 
     @Override
-    public List<DetailedBusStop> getDetailedBusStops() {
-        return isDisplayOutboundStops ? routeService.getOutboundBusStops()
-                : routeService.getInboundBusStops();
+    public List<Stop> getDetailedBusStops() {
+        return isDisplayOutboundStops ? routeService.getOutboundStops()
+                : routeService.getInboundStops();
     }
 
     @Override
@@ -53,9 +53,9 @@ public class RouteModelImpl implements RouteModel {
 
     @Override
     public boolean isBiDirectional() {
-        return !CollectionUtilities.isNullOrEmpty(routeService.getRouteService()
+        return !CollectionUtilities.isNullOrEmpty(routeService
                 .getInboundStopIds()) && !CollectionUtilities
-                .isNullOrEmpty(routeService.getRouteService().getOutboundStopIds());
+                .isNullOrEmpty(routeService.getOutboundStopIds());
     }
 
     @Override
@@ -75,10 +75,10 @@ public class RouteModelImpl implements RouteModel {
 
     private boolean isDisplayOutboundStops() {
         if (stopId == null) {
-          return !routeService.getRouteService().getOutboundStopIds().isEmpty();
+          return !routeService.getOutboundStopIds().isEmpty();
         }
-        return routeService.getRouteService().getOutboundStopIds().contains(stopId)
-                && !routeService.getRouteService().getOutboundStopIds().isEmpty();
+        return routeService.getOutboundStopIds().contains(stopId)
+                && !routeService.getOutboundStopIds().isEmpty();
     }
 
     @Override

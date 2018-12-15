@@ -4,7 +4,9 @@ import dagger.Component
 import ie.dublinbuspal.android.view.favourite.FavouritesPresenterImpl
 import ie.dublinbuspal.android.view.nearby.NearbyPresenterImpl
 import ie.dublinbuspal.android.view.news.rss.RssPresenterImpl
+import ie.dublinbuspal.android.view.news.twitter.TwitterPresenterImpl
 import ie.dublinbuspal.android.view.realtime.RealTimePresenterImpl
+import ie.dublinbuspal.android.view.route.RoutePresenterImpl
 import ie.dublinbuspal.android.view.search.SearchPresenterImpl
 import javax.inject.Singleton
 
@@ -25,10 +27,12 @@ interface ApplicationComponent {
 
     fun searchPresenter(): SearchPresenterImpl
 
-//    fun routePresenter(): RouteServicePresenter
+    fun routeServicePresenter(): RoutePresenterImpl
 
     fun favouritesPresenter(): FavouritesPresenterImpl
 
     fun rssNewsPresenter(): RssPresenterImpl
+
+    fun twitterPresenter(): TwitterPresenterImpl
 
 }

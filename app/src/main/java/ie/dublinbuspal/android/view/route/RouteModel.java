@@ -1,19 +1,19 @@
 package ie.dublinbuspal.android.view.route;
 
-import ie.dublinbuspal.android.data.local.entity.DetailedBusStop;
-import ie.dublinbuspal.android.data.local.entity.DetailedRouteService;
-
 import java.util.List;
+
+import ie.dublinbuspal.model.routeservice.RouteService;
+import ie.dublinbuspal.model.stop.Stop;
 
 public interface RouteModel {
 
     String getRouteId();
 
-    void setRouteService(DetailedRouteService routeService);
+    void setRouteService(RouteService routeService);
 
-    DetailedRouteService getRouteService();
+    RouteService getRouteService();
 
-    List<DetailedBusStop> getDetailedBusStops();
+    List<Stop> getDetailedBusStops();
 
     void changeDirection();
 

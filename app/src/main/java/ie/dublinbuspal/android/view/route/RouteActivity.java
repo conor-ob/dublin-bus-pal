@@ -45,11 +45,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import ie.dublinbuspal.android.DublinBusApplication;
 import ie.dublinbuspal.android.R;
 import ie.dublinbuspal.android.data.local.entity.BusStop;
-import ie.dublinbuspal.android.data.local.entity.DetailedBusStop;
 import ie.dublinbuspal.android.util.GoogleMapConstants;
 import ie.dublinbuspal.android.util.SVGUtils;
 import ie.dublinbuspal.android.view.realtime.RealTimeActivity;
 import ie.dublinbuspal.android.view.settings.SettingsActivity;
+import ie.dublinbuspal.model.stop.Stop;
 
 public class RouteActivity extends MvpActivity<RouteView, RoutePresenter>
         implements RouteView, OnMapReadyCallback {
@@ -68,16 +68,11 @@ public class RouteActivity extends MvpActivity<RouteView, RoutePresenter>
     private List<Marker> markers = new ArrayList<>();
     private List<Polyline> polylines = new ArrayList<>();
     private SwipeRefreshLayout swipeRefresh;
-    @Inject RoutePresenter presenter;
 
     @NonNull
     @Override
     public RoutePresenter createPresenter() {
-        if (presenter == null) {
-            DublinBusApplication application = (DublinBusApplication) getApplication();
-            application.getOldApplicationComponent().inject(this);
-        }
-        return presenter;
+        return ((DublinBusApplication) getApplication()).getApplicationComponent().routeServicePresenter();
     }
 
     @Override
@@ -223,21 +218,21 @@ public class RouteActivity extends MvpActivity<RouteView, RoutePresenter>
     }
 
     @Override
-    public void displayBusStops(List<DetailedBusStop> busStops) {
+    public void displayBusStops(List<Stop> busStops) {
         clearMap();
         adapter.setBusStops(busStops);
         PolylineOptions polylineOptions = new PolylineOptions();
         polylineOptions.width(8);
         polylineOptions.color(ContextCompat.getColor(getBaseContext(), R.color.colorPrimary));
-        for (BusStop busStop : busStops) {
+        for (Stop busStop : busStops) {
             markers.add(googleMap.addMarker(newMarkerOptions(busStop)));
-            polylineOptions.add(new LatLng(busStop.getLatitude(), busStop.getLongitude()));
+            polylineOptions.add(new LatLng(busStop.coordinate().getX(), busStop.coordinate().getY()));
         }
         polylines.add(googleMap.addPolyline(polylineOptions));
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        for (BusStop busStop : busStops) {
-            builder.include(new LatLng(busStop.getLatitude(), busStop.getLongitude()));
+        for (Stop busStop : busStops) {
+            builder.include(new LatLng(busStop.coordinate().getX(), busStop.coordinate().getY()));
         }
         LatLngBounds bounds = builder.build();
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 64);
@@ -275,12 +270,12 @@ public class RouteActivity extends MvpActivity<RouteView, RoutePresenter>
         startActivity(intent);
     }
 
-    private MarkerOptions newMarkerOptions(BusStop busStop) {
+    private MarkerOptions newMarkerOptions(Stop busStop) {
         return new MarkerOptions()
-                .position(new LatLng(busStop.getLatitude(), busStop.getLongitude()))
+                .position(new LatLng(busStop.coordinate().getX(), busStop.coordinate().getY()))
                 .anchor(0.5f, 0.5f)
-                .title(busStop.getName())
-                .snippet(String.format(Locale.UK, getString(R.string.formatted_stop_id), busStop.getId()))
+                .title(busStop.name())
+                .snippet(String.format(Locale.UK, getString(R.string.formatted_stop_id), busStop.id()))
                 .icon(SVGUtils.vectorToBitmap(getApplicationContext(),
                         R.drawable.ic_map_marker_route_stop));
     }

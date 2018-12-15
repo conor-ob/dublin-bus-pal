@@ -1,15 +1,16 @@
 package ie.dublinbuspal.android.view.route;
 
-import ie.dublinbuspal.android.data.local.entity.DetailedBusStop;
 import com.hannesdorfmann.mosby3.mvp.MvpView;
 
 import java.util.List;
+
+import ie.dublinbuspal.model.stop.Stop;
 
 public interface RouteView extends MvpView {
 
     void setTitle(String origin, String destination);
 
-    void displayBusStops(List<DetailedBusStop> busStops);
+    void displayBusStops(List<Stop> busStops);
 
     void setTowards(String towards);
 

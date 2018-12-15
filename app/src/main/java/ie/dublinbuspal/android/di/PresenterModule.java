@@ -18,10 +18,10 @@ import ie.dublinbuspal.android.view.route.RoutePresenterImpl;
 @Module
 class PresenterModule {
 
-    @Provides
-    TwitterPresenter provideTwitterPresenter(Context context) {
-        return new TwitterPresenterImpl(context, new TwitterModelImpl());
-    }
+//    @Provides
+//    TwitterPresenter provideTwitterPresenter(Context context) {
+//        return new TwitterPresenterImpl(context, new TwitterModelImpl());
+//    }
 
 //    @Provides
 //    RssPresenter provideRssPresenter(DublinBusRepository repository) {
@@ -48,9 +48,5 @@ class PresenterModule {
 //        return new RealTimePresenterImpl(repository, new RealTimeModelImpl());
 //    }
 
-    @Provides
-    RoutePresenter provideRoutePresenter(DublinBusRepository repository) {
-        return new RoutePresenterImpl(repository, new RouteModelImpl());
-    }
 
 }

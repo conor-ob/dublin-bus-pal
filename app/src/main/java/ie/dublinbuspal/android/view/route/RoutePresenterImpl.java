@@ -6,12 +6,13 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
+import javax.inject.Inject;
+
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.data.DublinBusRepository;
-import ie.dublinbuspal.android.data.local.entity.DetailedRouteService;
 import ie.dublinbuspal.android.data.remote.soap.SoapServiceUnavailableException;
 import ie.dublinbuspal.android.util.ErrorLog;
-import io.reactivex.Single;
+import ie.dublinbuspal.model.routeservice.RouteService;
+import ie.dublinbuspal.usecase.routeservice.RouteServiceUseCase;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -19,26 +20,26 @@ import io.reactivex.schedulers.Schedulers;
 public class RoutePresenterImpl extends MvpBasePresenter<RouteView> implements RoutePresenter {
 
     private final RouteModel model;
-    private final DublinBusRepository repository;
+    private final RouteServiceUseCase useCase;
     private CompositeDisposable disposables;
 
-    public RoutePresenterImpl(DublinBusRepository repository, RouteModel model) {
-        this.repository = repository;
-        this.model = model;
+    @Inject
+    public RoutePresenterImpl(RouteServiceUseCase useCase) {
+        this.useCase = useCase;
+        this.model = new RouteModelImpl();
     }
 
     @Override
     public void onResume(String routeId, String stopId) {
         getModel().setRouteId(routeId);
         getModel().setStopId(stopId);
-        getDisposables().add(Single.fromCallable(() ->
-                getRepository().getDetailedRouteService(getModel().getRouteId()))
+        getDisposables().add(useCase.getRouteService(getModel().getRouteId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetRouteService, this::onError));
     }
 
-    private void onGetRouteService(DetailedRouteService routeService) {
+    private void onGetRouteService(RouteService routeService) {
         getModel().setRouteService(routeService);
         showRouteService();
     }
@@ -85,10 +86,6 @@ public class RoutePresenterImpl extends MvpBasePresenter<RouteView> implements R
 
     private RouteModel getModel() {
         return model;
-    }
-
-    private DublinBusRepository getRepository() {
-        return repository;
     }
 
     private CompositeDisposable getDisposables() {

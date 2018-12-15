@@ -26,17 +26,14 @@ public class TwitterFragment extends MvpFragment<TwitterView, TwitterPresenter>
     private ConstraintLayout root;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
-    @Inject TwitterPresenter presenter;
 
     @NonNull
     @Override
     public TwitterPresenter createPresenter() {
-        if (presenter == null && getActivity() != null) {
-            DublinBusApplication application = (DublinBusApplication)
-                    getActivity().getApplication();
-            application.getOldApplicationComponent().inject(this);
+        if (getActivity() != null) {
+            return ((DublinBusApplication) getActivity().getApplication()).getApplicationComponent().twitterPresenter();
         }
-        return presenter;
+        return null;
     }
 
     @Nullable
