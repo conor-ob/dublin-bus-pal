@@ -16,6 +16,7 @@ import ie.dublinbuspal.android.R;
 import ie.dublinbuspal.android.util.CollectionUtilities;
 import ie.dublinbuspal.android.util.StringUtilities;
 import ie.dublinbuspal.model.livedata.LiveData;
+import ie.dublinbuspal.util.StringUtils;
 
 public class RealTimeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -114,6 +115,9 @@ public class RealTimeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             if (!StringUtilities.isNullOrEmpty(realTimeData.getDestination().getVia())) {
                 via.setText(realTimeData.getDestination().getVia());
                 via.setVisibility(View.VISIBLE);
+            } else {
+                via.setText(StringUtils.EMPTY_STRING);
+                via.setVisibility(View.GONE);
             }
             if (showArrivalTime) {
                 expectedTime.setText(realTimeData.getDueTime().getTime());

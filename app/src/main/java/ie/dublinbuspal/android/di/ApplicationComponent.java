@@ -20,7 +20,7 @@ public interface ApplicationComponent {
 
     void inject(NearbyFragment nearbyFragment);
 
-    void inject(FavouritesFragment favouritesFragment);
+//    void inject(FavouritesFragment favouritesFragment);
 
 //    void inject(SearchFragment searchFragment);
 

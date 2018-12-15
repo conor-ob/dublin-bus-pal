@@ -16,4 +16,6 @@ interface FavouriteStopRepository<T> {
 
     fun updateAll(entities: List<T>)
 
+    fun delete(id: String)
+
 }

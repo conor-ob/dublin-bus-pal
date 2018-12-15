@@ -1,14 +1,15 @@
 package ie.dublinbuspal.android.view.favourite;
 
-import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.data.DublinBusRepository;
-import ie.dublinbuspal.android.data.local.entity.DetailedBusStop;
-import ie.dublinbuspal.android.util.ErrorLog;
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 
 import java.util.List;
 
-import io.reactivex.Single;
+import javax.inject.Inject;
+
+import ie.dublinbuspal.android.R;
+import ie.dublinbuspal.android.util.ErrorLog;
+import ie.dublinbuspal.model.favourite.FavouriteStop;
+import ie.dublinbuspal.usecase.favourites.FavouritesUseCase;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -17,17 +18,18 @@ public class FavouritesPresenterImpl extends MvpBasePresenter<FavouritesView>
         implements FavouritesPresenter {
 
     private final FavouritesModel model;
-    private final DublinBusRepository repository;
+    private final FavouritesUseCase useCase;
     private CompositeDisposable disposables;
 
-    public FavouritesPresenterImpl(DublinBusRepository repository, FavouritesModel model) {
-        this.repository = repository;
-        this.model = model;
+    @Inject
+    public FavouritesPresenterImpl(FavouritesUseCase useCase) {
+        this.useCase = useCase;
+        this.model = new FavouritesModelImpl();
     }
 
     @Override
     public void onResume() {
-        getDisposables().add(Single.fromCallable(getRepository()::getFavourites)
+        getDisposables().add(useCase.getFavourites()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onFavouritesReceived, this::onError));
@@ -47,7 +49,7 @@ public class FavouritesPresenterImpl extends MvpBasePresenter<FavouritesView>
         });
     }
 
-    private void onFavouritesReceived(List<DetailedBusStop> favourites) {
+    private void onFavouritesReceived(List<FavouriteStop> favourites) {
         getModel().setFavourites(favourites);
         ifViewAttached(view -> {
             view.hideProgress();
@@ -57,10 +59,6 @@ public class FavouritesPresenterImpl extends MvpBasePresenter<FavouritesView>
 
     private FavouritesModel getModel() {
         return model;
-    }
-
-    private DublinBusRepository getRepository() {
-        return repository;
     }
 
     private CompositeDisposable getDisposables() {

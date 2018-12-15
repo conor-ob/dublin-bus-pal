@@ -41,4 +41,8 @@ class DefaultFavouriteStopRepository(
         dao.updateAll(entityMapper.map(entities))
     }
 
+    override fun delete(id: String) {
+        dao.delete(id)
+    }
+
 }

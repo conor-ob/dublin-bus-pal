@@ -92,7 +92,6 @@ public class RealTimeActivity
     private FloatingActionButton mapSwitcherButton;
     //private ViewFlipper viewFlipper;
     private Timer autoRefreshTimer;
-    @Inject RealTimePresenter presenter;
 
     @NonNull
     @Override

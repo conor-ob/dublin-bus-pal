@@ -1,9 +1,9 @@
 package ie.dublinbuspal.repository.stop
 
 import ie.dublinbuspal.model.favourite.FavouriteStop
-import ie.dublinbuspal.model.stop.Stop
-import ie.dublinbuspal.model.stop.DublinBusGoAheadDublinStop
 import ie.dublinbuspal.model.stop.DefaultStop
+import ie.dublinbuspal.model.stop.DublinBusGoAheadDublinStop
+import ie.dublinbuspal.model.stop.Stop
 import ie.dublinbuspal.repository.FavouriteStopRepository
 import ie.dublinbuspal.repository.Repository
 import io.reactivex.Observable
@@ -37,7 +37,7 @@ class StopRepository(
         throw UnsupportedOperationException()
     }
 
-    private fun findMatching(id: String, stops: List<Stop>): Stop? {
+    private fun findMatching(id: String, stops: List<Stop>): Stop {
         for (stop in stops) {
             if (id == stop.id()) {
                 return stop
@@ -74,9 +74,7 @@ class StopRepository(
         }
         for (stop in favouriteStops) {
             val aggregatedStop = aggregatedStops[stop.id]
-            if (aggregatedStop == null) {
-                // uh oh!
-            } else {
+            if (aggregatedStop != null) {
                 aggregatedStops[stop.id] = aggregatedStop.copy(favouriteName = stop.name, favouriteRoutes = stop.routes)
             }
         }

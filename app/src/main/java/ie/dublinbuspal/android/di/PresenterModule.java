@@ -39,10 +39,10 @@ class PresenterModule {
         return new NearbyPresenterImpl(repository, new NearbyModelImpl());
     }
 
-    @Provides
-    FavouritesPresenter provideFavouritesPresenter(DublinBusRepository repository) {
-        return new FavouritesPresenterImpl(repository, new FavouritesModelImpl());
-    }
+//    @Provides
+//    FavouritesPresenter provideFavouritesPresenter(DublinBusRepository repository) {
+//        return new FavouritesPresenterImpl(repository, new FavouritesModelImpl());
+//    }
 
 //    @Provides
 //    SearchPresenter provideSearchPresenter(DublinBusRepository repository) {

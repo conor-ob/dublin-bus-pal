@@ -27,11 +27,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import ie.dublinbuspal.android.DublinBusApplication;
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.data.local.entity.DetailedBusStop;
 import ie.dublinbuspal.android.util.CollectionUtilities;
 import ie.dublinbuspal.android.view.home.HomeActivity;
 import ie.dublinbuspal.android.view.realtime.RealTimeActivity;
 import ie.dublinbuspal.android.view.settings.SettingsActivity;
+import ie.dublinbuspal.model.favourite.FavouriteStop;
 
 public class FavouritesFragment extends MvpFragment<FavouritesView, FavouritesPresenter>
         implements FavouritesView {
@@ -47,10 +47,9 @@ public class FavouritesFragment extends MvpFragment<FavouritesView, FavouritesPr
     @Override
     public FavouritesPresenter createPresenter() {
         if (getActivity() != null) {
-            DublinBusApplication application = (DublinBusApplication) getActivity().getApplication();
-            application.getOldApplicationComponent().inject(this);
+            return ((DublinBusApplication) getActivity().getApplication()).getApplicationComponent().favouritesPresenter();
         }
-        return presenter;
+        return null;
     }
 
     @Nullable
@@ -106,7 +105,7 @@ public class FavouritesFragment extends MvpFragment<FavouritesView, FavouritesPr
     }
 
     @Override
-    public void showFavourites(List<DetailedBusStop> favourites) {
+    public void showFavourites(List<FavouriteStop> favourites) {
         adapter.setFavourites(favourites);
         if (CollectionUtilities.isNullOrEmpty(favourites)) {
             swipeRefreshLayout.setVisibility(View.GONE);
