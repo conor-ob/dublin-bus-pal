@@ -40,27 +40,6 @@
             android:title="@string/preference_title_update_database"
             android:widgetLayout="@layout/preference_update" />
 
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="@string/preference_key_auto_update"
-            android:summary="@string/preference_summary_auto_update"
-            android:title="@string/preference_title_auto_update" />
-
-        <ListPreference
-            android:defaultValue="7"
-            android:dialogTitle="@string/preference_dialog_title_auto_update_frequency"
-            android:entries="@array/preference_auto_update_frequency_entries"
-            android:entryValues="@array/preference_auto_update_frequency_values"
-            android:key="@string/preference_key_auto_update_frequency"
-            android:title="@string/preference_title_auto_update_frequency" />
-
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="@string/preference_key_auto_update_only_on_good_connection"
-            android:summary="@string/preference_summary_auto_update_only_on_good_connection"
-            android:title="@string/preference_title_auto_update_only_on_good_connection" />
-
-
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/preference_category_connect">

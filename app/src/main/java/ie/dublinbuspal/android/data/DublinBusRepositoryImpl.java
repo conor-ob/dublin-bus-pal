@@ -1,7 +1,11 @@
 package ie.dublinbuspal.android.data;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import ie.dublinbuspal.android.data.local.LocalDataSource;
-import ie.dublinbuspal.android.data.local.PreferencesDataSource;
 import ie.dublinbuspal.android.data.local.entity.BusStop;
 import ie.dublinbuspal.android.data.local.entity.BusStopService;
 import ie.dublinbuspal.android.data.local.entity.DetailedBusStop;
@@ -18,12 +22,6 @@ import ie.dublinbuspal.android.data.remote.rss.RssDataSource;
 import ie.dublinbuspal.android.data.remote.rss.xml.Rss;
 import ie.dublinbuspal.android.util.InternetManager;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import static ie.dublinbuspal.android.util.CollectionUtilities.isNullOrEmpty;
 
 public class DublinBusRepositoryImpl extends DublinBusRepositoryLocks
@@ -34,12 +32,11 @@ public class DublinBusRepositoryImpl extends DublinBusRepositoryLocks
     private final RemoteDataSource soapService;
     private final RestDataSource restApi;
     private final RssDataSource rssFeed;
-    private final PreferencesDataSource preferences;
     private final InternetManager internetManager;
 
     public DublinBusRepositoryImpl(CacheDataSource cache, LocalDataSource database,
                                    RemoteDataSource soapService, RestDataSource restApi,
-                                   RssDataSource rssFeed, PreferencesDataSource preferences,
+                                   RssDataSource rssFeed,
                                    InternetManager internetManager) {
         super();
         this.cache = cache;
@@ -47,7 +44,6 @@ public class DublinBusRepositoryImpl extends DublinBusRepositoryLocks
         this.soapService = soapService;
         this.restApi = restApi;
         this.rssFeed = rssFeed;
-        this.preferences = preferences;
         this.internetManager = internetManager;
     }
 
@@ -55,7 +51,7 @@ public class DublinBusRepositoryImpl extends DublinBusRepositoryLocks
     public List<BusStop> getBusStops() throws Exception {
         synchronized (getBusStopsLock()) {
             List<BusStop> busStops = database.getBusStops();
-            if (isNullOrEmpty(busStops) || needsUpdate()) {
+            if (isNullOrEmpty(busStops)) {
                 busStops = getBusStopsRemote();
             }
             return busStops;
@@ -66,7 +62,6 @@ public class DublinBusRepositoryImpl extends DublinBusRepositoryLocks
     public List<BusStop> getBusStopsRemote() throws Exception {
         List<BusStop> busStops = soapService.getBusStops();
         database.replaceBusStops(busStops);
-        preferences.setDatabaseLastUpdatedTime(new Date().getTime());
         return busStops;
     }
 
@@ -76,7 +71,7 @@ public class DublinBusRepositoryImpl extends DublinBusRepositoryLocks
             List<Route> routes = cache.getRoutes();
             if (isNullOrEmpty(routes)) {
                 routes = database.getRoutes();
-                if (isNullOrEmpty(routes) || needsUpdate()) {
+                if (isNullOrEmpty(routes)) {
                     routes = getRoutesRemote();
                 }
                 cache.cacheRoutes(routes);
@@ -96,7 +91,7 @@ public class DublinBusRepositoryImpl extends DublinBusRepositoryLocks
     public List<UncheckedBusStopService> getBusStopServices() throws Exception {
         List<UncheckedBusStopService> uncheckedBusStopServices =
                 database.getUncheckedBusStopServices();
-        if (isNullOrEmpty(uncheckedBusStopServices) || needsUpdate()) {
+        if (isNullOrEmpty(uncheckedBusStopServices)) {
             uncheckedBusStopServices = getBusStopServicesRemote();
             cache.invalidateDetailedBusStops();
         }
@@ -117,7 +112,7 @@ public class DublinBusRepositoryImpl extends DublinBusRepositoryLocks
             List<DetailedBusStop> detailedBusStops = cache.getDetailedBusStops();
             if (isNullOrEmpty(detailedBusStops)) {
                 detailedBusStops = database.getDetailedBusStops();
-                if (isNullOrEmpty(detailedBusStops) || needsUpdate()) {
+                if (isNullOrEmpty(detailedBusStops)) {
                     getBusStops();
                     detailedBusStops = database.getDetailedBusStops();
                 }
@@ -150,7 +145,7 @@ public class DublinBusRepositoryImpl extends DublinBusRepositoryLocks
         BusStopService busStopService = cache.getBusStopService(stopId);
         if (busStopService == null) {
             busStopService = database.getBusStopService(stopId);
-            if (busStopService == null || needsUpdate()) {
+            if (busStopService == null) {
                 busStopService = soapService.getBusStopService(stopId);
                 if (busStopService != null) {
                     database.insertBusStopService(busStopService);
@@ -166,7 +161,7 @@ public class DublinBusRepositoryImpl extends DublinBusRepositoryLocks
         RouteService routeService = cache.getRouteService(routeId);
         if (routeService == null) {
             routeService = database.getRouteService(routeId);
-            if (routeService == null || needsUpdate()) {
+            if (routeService == null) {
                 routeService = soapService.getRouteService(routeId);
                 if (routeService != null) {
                     database.insertRouteService(routeService);
@@ -244,26 +239,6 @@ public class DublinBusRepositoryImpl extends DublinBusRepositoryLocks
     @Override
     public void invalidateCache() {
         cache.invalidate();
-    }
-
-    private boolean needsUpdate() {
-        return preferences.isDatabaseAutoUpdate() && databaseNeedsUpdate() && canUpdate();
-    }
-
-    private boolean databaseNeedsUpdate() {
-        long databaseLastUpdatedTime = preferences.getDatabaseLastUpdatedTime();
-        long databaseUpdateFrequency = preferences.getDatabaseUpdateFrequency();
-        long now = System.currentTimeMillis();
-        long timeSinceLastUpdate = now - databaseLastUpdatedTime;
-        return timeSinceLastUpdate > databaseUpdateFrequency;
-    }
-
-    private boolean canUpdate() {
-        boolean updateOnlyOnGoodConnection = preferences.isUpdateDatabaseOnlyOnGoodConnection();
-        if (updateOnlyOnGoodConnection) {
-            return internetManager.hasGoodConnection();
-        }
-        return internetManager.hasOkConnection();
     }
 
 }

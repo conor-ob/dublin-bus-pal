@@ -89,8 +89,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     getString(R.string.preference_key_auto_refresh_interval)));
             bindLastUpdatedTimestampSummaryToValue(findPreference(
                     getString(R.string.preference_key_update_database)));
-            bindPreferenceSummaryToValue(findPreference(
-                    getString(R.string.preference_key_auto_update_frequency)));
             bindAppVersionSummaryToValue(findPreference(
                     getString(R.string.preference_key_app_version)));
         }
@@ -98,11 +96,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         private void bindSwitchEnabledPreferences() {
             bindSwitchEnabledPair(findPreference(getString(R.string.preference_key_auto_refresh)),
                     findPreference(getString(R.string.preference_key_auto_refresh_interval)));
-            bindSwitchEnabledPair(findPreference(getString(R.string.preference_key_auto_update)),
-                    findPreference(getString(R.string.preference_key_auto_update_frequency)));
-            bindSwitchEnabledPair(findPreference(getString(R.string.preference_key_auto_update)),
-                    findPreference(getString(
-                            R.string.preference_key_auto_update_only_on_good_connection)));
         }
 
         private void bindListeners() {
@@ -113,16 +106,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         getString(R.string.preference_key_auto_refresh_interval)));
                 return true;
             });
-            Preference autoUpdatePreference = findPreference(
-                    getString(R.string.preference_key_auto_update));
-            autoUpdatePreference.setOnPreferenceClickListener(preference -> {
-                bindSwitchEnabledPair(autoUpdatePreference, findPreference(
-                        getString(R.string.preference_key_auto_update_frequency)));
-                bindSwitchEnabledPair(autoUpdatePreference, findPreference(
-                        getString(R.string.preference_key_auto_update_only_on_good_connection)));
-                return true;
-            });
-
             SyncPreference updatePreference = (SyncPreference) findPreference(
                     getString(R.string.preference_key_update_database));
             updatePreference.setOnPreferenceClickListener(preference -> {

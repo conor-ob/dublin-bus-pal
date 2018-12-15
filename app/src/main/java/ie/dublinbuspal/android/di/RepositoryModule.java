@@ -2,15 +2,25 @@ package ie.dublinbuspal.android.di;
 
 import android.content.Context;
 
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.convert.AnnotationStrategy;
+import org.simpleframework.xml.core.Persister;
+import org.simpleframework.xml.strategy.Strategy;
+
+import java.util.concurrent.TimeUnit;
+
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import androidx.room.Room;
+import dagger.Module;
+import dagger.Provides;
 import ie.dublinbuspal.android.data.DublinBusRepository;
 import ie.dublinbuspal.android.data.DublinBusRepositoryImpl;
 import ie.dublinbuspal.android.data.local.DbInfo;
 import ie.dublinbuspal.android.data.local.DublinBusDatabase;
 import ie.dublinbuspal.android.data.local.LocalDataSource;
 import ie.dublinbuspal.android.data.local.LocalDataSourceImpl;
-import ie.dublinbuspal.android.data.local.PreferencesDataSource;
-import ie.dublinbuspal.android.data.local.PreferencesDataSourceImpl;
 import ie.dublinbuspal.android.data.memory.CacheDataSource;
 import ie.dublinbuspal.android.data.memory.CacheDataSourceImpl;
 import ie.dublinbuspal.android.data.remote.RemoteDataSource;
@@ -27,19 +37,6 @@ import ie.dublinbuspal.android.data.remote.rss.RssDataSource;
 import ie.dublinbuspal.android.data.remote.soap.DublinBusSoapServiceAdapter;
 import ie.dublinbuspal.android.data.remote.soap.DublinBusSoapServiceApi;
 import ie.dublinbuspal.android.util.InternetManager;
-
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.convert.AnnotationStrategy;
-import org.simpleframework.xml.core.Persister;
-import org.simpleframework.xml.strategy.Strategy;
-
-import java.util.concurrent.TimeUnit;
-
-import javax.inject.Named;
-import javax.inject.Singleton;
-
-import dagger.Module;
-import dagger.Provides;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.Interceptor;
@@ -71,11 +68,10 @@ public class RepositoryModule {
                                                    RemoteDataSource soapService,
                                                    RestDataSource restApi,
                                                    RssDataSource rssFeed,
-                                                   PreferencesDataSource preferences,
                                                    InternetManager internetManager) {
 
         DublinBusRepository repository = new DublinBusRepositoryImpl(cache, database, soapService,
-                restApi, rssFeed, preferences, internetManager);
+                restApi, rssFeed, internetManager);
 
         Single.fromCallable(repository::getBusStops)
                 .subscribeOn(Schedulers.io())
@@ -276,12 +272,6 @@ public class RepositoryModule {
     @Named(RSS_SERVICE_BASE_URL)
     String provideRssApiBaseUrl() {
         return DublinBusRssApi.BASE_URL;
-    }
-
-    @Provides
-    @Singleton
-    PreferencesDataSource preferencesHelper(Context context) {
-        return new PreferencesDataSourceImpl(context);
     }
 
     @Provides
