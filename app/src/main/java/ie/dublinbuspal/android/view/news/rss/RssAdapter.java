@@ -9,18 +9,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.RecyclerView;
-import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.data.remote.rss.xml.Item;
-import ie.dublinbuspal.android.util.DateUtilities;
-import ie.dublinbuspal.android.util.StringUtilities;
-
 import java.util.List;
 import java.util.Locale;
 
+import androidx.recyclerview.widget.RecyclerView;
+import ie.dublinbuspal.android.R;
+import ie.dublinbuspal.android.util.StringUtilities;
+import ie.dublinbuspal.model.rss.RssNews;
+
 public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssViewHolder> {
 
-    private List<Item> items;
+    private List<RssNews> items;
 
     RssAdapter() {
         super();
@@ -37,7 +36,7 @@ public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssViewHolder> {
 
     @Override
     public void onBindViewHolder(RssViewHolder holder, int position) {
-        Item item = items.get(position);
+        RssNews item = items.get(position);
         holder.bind(item);
     }
 
@@ -46,7 +45,7 @@ public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssViewHolder> {
         return items == null ? 0 : items.size();
     }
 
-    void setItems(List<Item> items) {
+    void setItems(List<RssNews> items) {
         this.items = items;
         notifyDataSetChanged();
     }
@@ -68,7 +67,7 @@ public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssViewHolder> {
             publishDate = itemView.findViewById(R.id.publish_date);
         }
 
-        void bind(Item item) {
+        void bind(RssNews item) {
             String url = item.getLink();
             String link = String.format(Locale.UK, LINK_HTML, url, item.getTitle());
             title.setText(Html.fromHtml(link));
@@ -77,12 +76,12 @@ public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssViewHolder> {
                     .replace(WHITE_SPACE, StringUtilities.EMPTY_STRING)
                     .replace(AMPERSAND, StringUtilities.AMPERSAND);
             description.setText(desc);
-            publishDate.setText(DateUtilities.getRssItemAge(item.getPubDate()));
+            publishDate.setText(item.getTimestamp().toString());
         }
 
         @Override
         public void onClick(View view) {
-            Item item = items.get(getAdapterPosition());
+            RssNews item = items.get(getAdapterPosition());
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse(item.getLink()));
             view.getContext().startActivity(intent);

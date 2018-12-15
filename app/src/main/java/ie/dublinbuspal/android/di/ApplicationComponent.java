@@ -16,7 +16,7 @@ public interface ApplicationComponent {
 
     void inject(TwitterFragment twitterFragment);
 
-    void inject(RssFragment rssFragment);
+//    void inject(RssFragment rssFragment);
 
 //    void inject(NearbyFragment nearbyFragment);
 

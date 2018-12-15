@@ -14,6 +14,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import ie.dublinbuspal.android.DublinBusApplication;
 import ie.dublinbuspal.android.R;
 import ie.dublinbuspal.android.data.remote.rss.xml.Item;
+import ie.dublinbuspal.model.rss.RssNews;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.hannesdorfmann.mosby3.mvp.MvpFragment;
@@ -27,17 +28,14 @@ public class RssFragment extends MvpFragment<RssView, RssPresenter> implements R
     private ConstraintLayout root;
     private RssAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
-    @Inject RssPresenter rssPresenter;
 
     @NonNull
     @Override
     public RssPresenter createPresenter() {
-        if (rssPresenter == null && getActivity() != null) {
-            DublinBusApplication application = (DublinBusApplication)
-                    getActivity().getApplication();
-            application.getOldApplicationComponent().inject(this);
+        if (getActivity() != null) {
+            return ((DublinBusApplication) getActivity().getApplication()).getApplicationComponent().rssNewsPresenter();
         }
-        return rssPresenter;
+        return null;
     }
 
     @Nullable
@@ -84,7 +82,7 @@ public class RssFragment extends MvpFragment<RssView, RssPresenter> implements R
     }
 
     @Override
-    public void showRss(List<Item> items) {
+    public void showRss(List<RssNews> items) {
         adapter.setItems(items);
     }
 

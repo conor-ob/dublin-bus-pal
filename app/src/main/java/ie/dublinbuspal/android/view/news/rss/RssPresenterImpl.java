@@ -1,38 +1,38 @@
 package ie.dublinbuspal.android.view.news.rss;
 
-import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.data.DublinBusRepository;
-import ie.dublinbuspal.android.data.remote.rss.xml.Item;
-import ie.dublinbuspal.android.data.remote.rss.xml.Rss;
-import ie.dublinbuspal.android.util.ErrorLog;
-import ie.dublinbuspal.android.util.RssDateComparator;
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.util.Collections;
 import java.util.List;
 
-import io.reactivex.Single;
+import javax.inject.Inject;
+
+import ie.dublinbuspal.android.R;
+import ie.dublinbuspal.android.util.ErrorLog;
+import ie.dublinbuspal.model.rss.RssNews;
+import ie.dublinbuspal.usecase.rss.RssNewsUseCase;
+import ie.dublinbuspal.util.CollectionUtils;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class RssPresenterImpl extends MvpBasePresenter<RssView> implements RssPresenter {
 
-    private final DublinBusRepository repository;
+    private final RssNewsUseCase useCase;
     private final RssModel model;
     private CompositeDisposable disposables;
 
-    public RssPresenterImpl(DublinBusRepository repository, RssModel model) {
-        this.repository = repository;
-        this.model = model;
+    @Inject
+    public RssPresenterImpl(RssNewsUseCase useCase) {
+        this.useCase = useCase;
+        this.model = new RssModelImpl();
     }
 
     @Override
     public void onResume() {
-        if (getModel().getRss() == null) {
+        if (CollectionUtils.isNullOrEmpty(getModel().getRss())) {
             getRss();
         } else {
             onGetRss(getModel().getRss());
@@ -45,24 +45,17 @@ public class RssPresenterImpl extends MvpBasePresenter<RssView> implements RssPr
     }
 
     private void getRss() {
-        getDisposables().add(Single.fromCallable(getRepository()::getRss)
+        getDisposables().add(useCase.getRssNews()
                 .subscribeOn(Schedulers.io())
-                .map(this::sortRss)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetRss, this::onGetRssError));
     }
 
-    private Rss sortRss(Rss rss) {
-        List<Item> items = rss.getChannel().getItems();
-        Collections.sort(items, RssDateComparator.getInstance());
-        return rss;
-    }
-
-    private void onGetRss(Rss rss) {
+    private void onGetRss(List<RssNews> rss) {
         getModel().setRss(rss);
         ifViewAttached(view -> {
             view.hideProgress();
-            view.showRss(getModel().getRss().getChannel().getItems());
+            view.showRss(rss);
         });
     }
 
@@ -86,10 +79,6 @@ public class RssPresenterImpl extends MvpBasePresenter<RssView> implements RssPr
     public void onDestroy() {
         getDisposables().clear();
         getDisposables().dispose();
-    }
-
-    private DublinBusRepository getRepository() {
-        return repository;
     }
 
     private RssModel getModel() {

@@ -4,6 +4,7 @@ import java.util.*
 
 object CollectionUtils {
 
+    @JvmStatic
     fun <T> isNullOrEmpty(collection: Collection<T>?): Boolean {
         return collection == null || collection.isEmpty()
     }

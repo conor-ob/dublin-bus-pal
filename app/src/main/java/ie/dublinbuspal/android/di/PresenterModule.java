@@ -23,10 +23,10 @@ class PresenterModule {
         return new TwitterPresenterImpl(context, new TwitterModelImpl());
     }
 
-    @Provides
-    RssPresenter provideRssPresenter(DublinBusRepository repository) {
-        return new RssPresenterImpl(repository, new RssModelImpl());
-    }
+//    @Provides
+//    RssPresenter provideRssPresenter(DublinBusRepository repository) {
+//        return new RssPresenterImpl(repository, new RssModelImpl());
+//    }
 
 //    @Provides
 //    NearbyPresenter provideNearbyPresenter(DublinBusRepository repository) {

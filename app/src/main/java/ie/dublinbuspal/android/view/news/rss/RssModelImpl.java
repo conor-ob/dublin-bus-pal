@@ -1,22 +1,24 @@
 package ie.dublinbuspal.android.view.news.rss;
 
-import ie.dublinbuspal.android.data.remote.rss.xml.Rss;
+import java.util.List;
+
+import ie.dublinbuspal.model.rss.RssNews;
 
 public class RssModelImpl implements RssModel {
 
-    private Rss rss;
+    private List<RssNews> rss;
 
     public RssModelImpl() {
         super();
     }
 
     @Override
-    public Rss getRss() {
+    public List<RssNews> getRss() {
         return rss;
     }
 
     @Override
-    public void setRss(Rss rss) {
+    public void setRss(List<RssNews> rss) {
         this.rss = rss;
     }
 
