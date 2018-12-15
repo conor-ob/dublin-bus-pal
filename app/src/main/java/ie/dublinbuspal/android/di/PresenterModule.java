@@ -5,12 +5,6 @@ import android.content.Context;
 import dagger.Module;
 import dagger.Provides;
 import ie.dublinbuspal.android.data.DublinBusRepository;
-import ie.dublinbuspal.android.view.favourite.FavouritesModelImpl;
-import ie.dublinbuspal.android.view.favourite.FavouritesPresenter;
-import ie.dublinbuspal.android.view.favourite.FavouritesPresenterImpl;
-import ie.dublinbuspal.android.view.nearby.NearbyModelImpl;
-import ie.dublinbuspal.android.view.nearby.NearbyPresenter;
-import ie.dublinbuspal.android.view.nearby.NearbyPresenterImpl;
 import ie.dublinbuspal.android.view.news.rss.RssModelImpl;
 import ie.dublinbuspal.android.view.news.rss.RssPresenter;
 import ie.dublinbuspal.android.view.news.rss.RssPresenterImpl;
@@ -34,10 +28,10 @@ class PresenterModule {
         return new RssPresenterImpl(repository, new RssModelImpl());
     }
 
-    @Provides
-    NearbyPresenter provideNearbyPresenter(DublinBusRepository repository) {
-        return new NearbyPresenterImpl(repository, new NearbyModelImpl());
-    }
+//    @Provides
+//    NearbyPresenter provideNearbyPresenter(DublinBusRepository repository) {
+//        return new NearbyPresenterImpl(repository, new NearbyModelImpl());
+//    }
 
 //    @Provides
 //    FavouritesPresenter provideFavouritesPresenter(DublinBusRepository repository) {

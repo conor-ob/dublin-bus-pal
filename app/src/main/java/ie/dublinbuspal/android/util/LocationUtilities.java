@@ -2,10 +2,10 @@ package ie.dublinbuspal.android.util;
 
 import android.location.Location;
 
-import ie.dublinbuspal.android.data.local.entity.DetailedBusStop;
 import com.google.android.gms.maps.model.LatLng;
 
 import ie.dublinbuspal.android.data.local.entity.BusStop;
+import ie.dublinbuspal.model.stop.Stop;
 
 public final class LocationUtilities {
 
@@ -55,8 +55,8 @@ public final class LocationUtilities {
         return ">1 hour walk";
     }
 
-    public static String getCoarseAddress(DetailedBusStop busStop) {
-        String address = busStop.getRealName();
+    public static String getCoarseAddress(Stop busStop) {
+        String address = busStop.name();
         if (address.contains(",")) {
             String[] split = address.split(",");
             return split[0];
