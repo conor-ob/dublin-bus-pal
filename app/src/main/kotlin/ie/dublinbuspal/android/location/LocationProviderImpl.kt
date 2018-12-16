@@ -4,23 +4,25 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
 import com.google.android.gms.location.LocationRequest
+import ie.dublinbuspal.location.LocationProvider
 import ie.dublinbuspal.util.Coordinate
 import io.reactivex.Observable
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
+import javax.inject.Inject
 
 @SuppressLint("MissingPermission")
-class LocationProviderImpl(context: Context) /*: LocationProvider*/{
+class LocationProviderImpl @Inject constructor(context: Context) : LocationProvider {
 
     private val locationProvider = ReactiveLocationProvider(context)
     private var lastKnownLocation: Location? = null
 
-    /*override*/fun getLastKnownLocation(): Observable<Coordinate> {
+    override fun getLastKnownLocation(): Observable<Coordinate> {
         return locationProvider.lastKnownLocation
                 .filter { isBetterLocation(it) }
                 .map { Coordinate(it.latitude, it.longitude) }
     }
 
-    /*override*/fun getLocationUpdates(): Observable<Coordinate> {
+    override fun getLocationUpdates(): Observable<Coordinate> {
         return locationProvider.getUpdatedLocation(newRequest())
                 .filter { isBetterLocation(it) }
                 .map { Coordinate(it.latitude, it.longitude) }

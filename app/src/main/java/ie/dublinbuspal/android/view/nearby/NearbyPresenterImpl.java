@@ -20,6 +20,7 @@ public class NearbyPresenterImpl extends MvpBasePresenter<NearbyView> implements
 
     private final NearbyStopsUseCase useCase;
     private CompositeDisposable disposables;
+    private CompositeDisposable locationDisposables;
 
     @Inject
     public NearbyPresenterImpl(NearbyStopsUseCase useCase) {
@@ -58,6 +59,34 @@ public class NearbyPresenterImpl extends MvpBasePresenter<NearbyView> implements
             disposables = new CompositeDisposable();
         }
         return disposables;
+    }
+
+    public CompositeDisposable getLocationDisposables() {
+        if (locationDisposables == null || locationDisposables.isDisposed()) {
+            locationDisposables = new CompositeDisposable();
+        }
+        return locationDisposables;
+    }
+
+    @Override
+    public void onLocationRequested() {
+        getLocationDisposables().add(useCase.getLocationUpdates()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onLocationReceived, this::onLocationError));
+    }
+
+    @Override
+    public void onRemoveLocationUpdates() {
+        getLocationDisposables().clear();
+    }
+
+    private void onLocationReceived(Coordinate coordinate) {
+        ifViewAttached(view -> view.updateLocation(coordinate));
+    }
+
+    private void onLocationError(Throwable throwable) {
+
     }
 
 }

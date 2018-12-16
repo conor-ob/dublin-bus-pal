@@ -5,6 +5,7 @@ import com.hannesdorfmann.mosby3.mvp.MvpView;
 import java.util.SortedMap;
 
 import ie.dublinbuspal.model.stop.Stop;
+import ie.dublinbuspal.util.Coordinate;
 
 public interface NearbyView extends MvpView {
 
@@ -15,5 +16,7 @@ public interface NearbyView extends MvpView {
     void hideProgress();
 
     void showButton();
+
+    void updateLocation(Coordinate coordinate);
 
 }

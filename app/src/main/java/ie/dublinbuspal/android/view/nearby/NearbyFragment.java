@@ -4,13 +4,13 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -24,7 +24,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -39,7 +38,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hannesdorfmann.mosby3.mvp.MvpFragment;
-import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -69,8 +67,7 @@ import ie.dublinbuspal.android.view.realtime.RealTimeActivity;
 import ie.dublinbuspal.android.view.settings.SettingsActivity;
 import ie.dublinbuspal.model.stop.Stop;
 import ie.dublinbuspal.util.CollectionUtils;
-import io.reactivex.disposables.CompositeDisposable;
-import pl.charmas.android.reactivelocation2.ReactiveLocationProvider;
+import ie.dublinbuspal.util.Coordinate;
 
 import static android.graphics.Paint.ANTI_ALIAS_FLAG;
 
@@ -80,8 +77,6 @@ public class NearbyFragment
 
     private static final int BOTTOM_SHEET_PEEK_HEIGHT_DP = 250;
     public static boolean mapIsTouched;
-    private RxPermissions rxPermissions;
-    private ReactiveLocationProvider locationProvider;
     private int bottomSheetPeekHeightPx;
     private SupportMapFragment googleMapFragment;
     private GoogleMap googleMap;
@@ -95,8 +90,6 @@ public class NearbyFragment
     private FloatingActionButton gps;
     private FloatingActionButton traffic;
     private boolean showTraffic;
-    private CompositeDisposable disposables;
-    private Location currentLocation;
     private ImageView crosshair;
 
     @NonNull
@@ -269,77 +262,44 @@ public class NearbyFragment
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED));
     }
 
-    public RxPermissions getRxPermissions() {
-        if (rxPermissions == null) {
-            rxPermissions = new RxPermissions(getActivity());
-        }
-        return rxPermissions;
-    }
-
-    public ReactiveLocationProvider getLocationProvider() {
-        if (locationProvider == null) {
-            locationProvider = new ReactiveLocationProvider(getContext());
-        }
-        return locationProvider;
-    }
-
-    //TODO fix this mess
-    @SuppressLint("MissingPermission")
     private void requestLocationUpdates() {
-        getDisposables().add(getRxPermissions().request(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
-                .subscribe(granted -> {
-                    if (granted) {
-                        if (currentLocation == null) {
-                            getDisposables().add(getLocationProvider().getLastKnownLocation()
-                                    .subscribe(location -> {
-                                        if (googleMap != null) {
-                                            Log.d("LOCATION_UPDATE", "better location");
-                                            currentLocation = location;
-                                            googleMap.setMyLocationEnabled(true);
-                                            CameraPosition cameraPosition = new CameraPosition.Builder()
-                                                    .target(LocationUtilities.toLatLng(location))
-                                                    .zoom(googleMap.getCameraPosition().zoom)
-                                                    .build();
-                                            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                                        }
-                                    }));
-                        } else {
-                            if (googleMap != null) {
-                                Log.d("LOCATION_UPDATE", "better location");
-                                googleMap.setMyLocationEnabled(true);
-                                CameraPosition cameraPosition = new CameraPosition.Builder()
-                                        .target(LocationUtilities.toLatLng(currentLocation))
-                                        .zoom(googleMap.getCameraPosition().zoom)
-                                        .build();
-                                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                            }
-                        }
-                        gps.setImageResource(R.drawable.ic_gps_fixed_blue);
-                        LocationRequest request = LocationRequest.create()
-                                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                                .setInterval(500L);
-                        getDisposables().add(getLocationProvider().getUpdatedLocation(request)
-                                .subscribe(location -> {
-                                    if (isBetterLocation(location, currentLocation) && googleMap != null) {
-                                        Log.d("LOCATION_UPDATE", "better location");
-                                        currentLocation = location;
-                                        googleMap.setMyLocationEnabled(true);
-                                        CameraPosition cameraPosition = new CameraPosition.Builder()
-                                                .target(LocationUtilities.toLatLng(location))
-                                                .zoom(googleMap.getCameraPosition().zoom)
-                                                .build();
-                                        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                                    }
-                                }));
-                    }
-                }));
+        if (locationPermissionsAreGranted()) {
+            startLocationUpdates();
+        } else {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 0);
+        }
     }
 
-    public CompositeDisposable getDisposables() {
-        if (disposables == null || disposables.isDisposed()) {
-            disposables = new CompositeDisposable();
+    private void startLocationUpdates() {
+        gps.setImageResource(R.drawable.ic_gps_fixed_blue);
+        presenter.onLocationRequested();
+    }
+
+    private boolean locationPermissionsAreGranted() {
+        return ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (permissions.length == 2 && grantResults.length == 2)
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                startLocationUpdates();
+            } else if (shouldShowRequestPermissionRationale(permissions[0])) {
+
+            }
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void updateLocation(Coordinate coordinate) {
+        if (!googleMap.isMyLocationEnabled()) {
+            googleMap.setMyLocationEnabled(true);
         }
-        return disposables;
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
+                .target(new LatLng(coordinate.getX(), coordinate.getY()))
+                .zoom(googleMap.getCameraPosition().zoom)
+                .build()));
     }
 
     @Override
@@ -352,8 +312,7 @@ public class NearbyFragment
     public void showNearbyStops(SortedMap<Double, Stop> busStops) {
         List<Stop> nearbyStops = new ArrayList<>(busStops.values());
         toolbar.setTitle(String.format(Locale.UK, "Stops near %s",
-                LocationUtilities.getCoarseAddress(CollectionUtils
-                        .safeFirstElement(nearbyStops))));
+                LocationUtilities.getCoarseAddress(CollectionUtils.safeFirstElement(nearbyStops))));
         adapter.setDistances(new ArrayList<>(busStops.keySet()));
         adapter.setBusStops(new ArrayList<>(nearbyStops));
         mapMarkerManager.update(nearbyStops);
@@ -363,19 +322,6 @@ public class NearbyFragment
     @Override
     public void onCameraIdle() {
         getPresenter().refreshNearby(LocationUtilities.toLocation(this.googleMap.getCameraPosition().target));
-        checkLocation();
-    }
-
-    private void checkLocation() {
-        if (currentLocation != null) {
-            Location newLocation = LocationUtilities.toLocation(googleMap.getCameraPosition().target);
-            double distance = currentLocation.distanceTo(newLocation);
-            if (distance > 100) {
-                crosshair.setVisibility(View.VISIBLE);
-            } else {
-                crosshair.setVisibility(View.GONE);
-            }
-        }
     }
 
     private void setShowNearbyStopsButtonVisibility(int visibility) {
@@ -384,64 +330,9 @@ public class NearbyFragment
         }
     }
 
-    private boolean removeLocationUpdates() {
-        Log.d("LOCATION_UPDATE", "remove location updates");
+    private void removeLocationUpdates() {
         gps.setImageResource(R.drawable.ic_gps_fixed_grey);
-        getDisposables().clear();
-        getDisposables().dispose();
-        return true;
-    }
-
-    private static final int TWO_MINUTES = 1000 * 60 * 2;
-
-    protected boolean isBetterLocation(Location location, Location currentBestLocation) {
-        if (currentBestLocation == null) {
-            // A new location is always better than no location
-            return true;
-        }
-
-        // Check whether the new location fix is newer or older
-        long timeDelta = location.getTime() - currentBestLocation.getTime();
-        boolean isSignificantlyNewer = timeDelta > TWO_MINUTES;
-        boolean isSignificantlyOlder = timeDelta < -TWO_MINUTES;
-        boolean isNewer = timeDelta > 0;
-
-        // If it's been more than two minutes since the current location, use the new location
-        // because the user has likely moved
-        if (isSignificantlyNewer) {
-            return true;
-            // If the new location is more than two minutes older, it must be worse
-        } else if (isSignificantlyOlder) {
-            return false;
-        }
-
-        // Check whether the new location fix is more or less accurate
-        int accuracyDelta = (int) (location.getAccuracy() - currentBestLocation.getAccuracy());
-        boolean isLessAccurate = accuracyDelta > 0;
-        boolean isMoreAccurate = accuracyDelta < 0;
-        boolean isSignificantlyLessAccurate = accuracyDelta > 200;
-
-        // Check if the old and new location are from the same provider
-        boolean isFromSameProvider = isSameProvider(location.getProvider(),
-                currentBestLocation.getProvider());
-
-        // Determine location quality using a combination of timeliness and accuracy
-        if (isMoreAccurate) {
-            return true;
-        } else if (isNewer && !isLessAccurate) {
-            return true;
-        } else if (isNewer && !isSignificantlyLessAccurate && isFromSameProvider) {
-            return true;
-        }
-        return false;
-    }
-
-    /** Checks whether two providers are the same */
-    private boolean isSameProvider(String provider1, String provider2) {
-        if (provider1 == null) {
-            return provider2 == null;
-        }
-        return provider1.equals(provider2);
+        presenter.onRemoveLocationUpdates();
     }
 
     public boolean canGoBack() {

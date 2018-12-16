@@ -10,4 +10,8 @@ public interface NearbyPresenter extends MvpPresenter<NearbyView> {
 
     void onPause();
 
+    void onLocationRequested();
+
+    void onRemoveLocationUpdates();
+
 }
