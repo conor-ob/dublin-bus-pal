@@ -1,8 +1,10 @@
 apply plugin: 'kotlin'
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
+    implementation "at.favre.lib:slf4j-timber:${versions.slf4j_timber}"
     implementation "com.jakewharton.threetenabp:threetenabp:${versions.threetenabp}"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
+    implementation "org.slf4j:slf4j-api:${versions.slf4j_api}"
     testImplementation "junit:junit:${testVersions.junit}"
 }
 

@@ -76,7 +76,7 @@ public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssViewHolder> {
                     .replace(WHITE_SPACE, StringUtils.EMPTY_STRING)
                     .replace(AMPERSAND, StringUtils.AMPERSAND);
             description.setText(desc);
-            publishDate.setText(item.getTimestamp().toString());
+            publishDate.setText(item.getTimestamp());
         }
 
         @Override

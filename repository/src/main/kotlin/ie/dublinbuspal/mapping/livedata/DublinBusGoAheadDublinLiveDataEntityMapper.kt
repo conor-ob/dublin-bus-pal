@@ -5,13 +5,9 @@ import ie.dublinbuspal.model.livedata.DueTime
 import ie.dublinbuspal.model.livedata.DublinBusGoAheadDublinLiveData
 import ie.dublinbuspal.repository.Mapper
 import ie.dublinbuspal.service.model.livedata.RealTimeBusInformationJson
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.temporal.ChronoUnit
+import ie.dublinbuspal.util.TimeUtils
 
 class DublinBusGoAheadDublinLiveDataEntityMapper : Mapper<RealTimeBusInformationJson, DublinBusGoAheadDublinLiveData> {
-
-    private val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
 
     override fun map(from: RealTimeBusInformationJson): DublinBusGoAheadDublinLiveData {
         return DublinBusGoAheadDublinLiveData(from.route!!, mapDestination(from.destination!!), mapDueTime(from.duetime!!, from.expectedTime!!))
@@ -22,7 +18,8 @@ class DublinBusGoAheadDublinLiveDataEntityMapper : Mapper<RealTimeBusInformation
     }
 
     private fun mapDueTime(duetime: String, expectedTime: String): DueTime {
-        val time = LocalDateTime.parse(expectedTime, formatter).toLocalTime().truncatedTo(ChronoUnit.MINUTES).toString()
+        val expectedTimeInstant = TimeUtils.toInstant(expectedTime)
+        val time = TimeUtils.toStringHoursMinutes(expectedTimeInstant)
         if (duetime == "Due") {
             return DueTime(0L, time)
         }

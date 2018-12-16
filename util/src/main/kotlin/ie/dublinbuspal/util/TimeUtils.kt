@@ -1,16 +1,70 @@
 package ie.dublinbuspal.util
 
-import org.threeten.bp.LocalDateTime
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import org.threeten.bp.*
 import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.DateTimeParseException
+import org.threeten.bp.temporal.ChronoUnit
 import java.util.*
 
 object TimeUtils {
 
-    private val formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss z", Locale.UK)
+    private val logger: Logger = LoggerFactory.getLogger(javaClass)
+    private val zoneId: ZoneId = ZoneId.of(TimeZone.getDefault().id)
+    private val zoneOffset: ZoneOffset = ZoneOffset.systemDefault().rules.getOffset(Instant.now())
+    private val parsers: List<DateTimeFormatter> = listOf(
+            DateTimeFormatter.ISO_DATE_TIME,
+            DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"),
+            DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss VV")
+    )
+    private val formatters: List<DateTimeFormatter> = listOf(
+            DateTimeFormatter.ofPattern("dd MMM yyyy"),
+            DateTimeFormatter.ofPattern("dd MMM")
+    )
 
     @JvmStatic
-    fun parse(timestamp: String): LocalDateTime {
-        return LocalDateTime.parse(timestamp, formatter)
+    fun toInstant(timestamp: String): Instant {
+        for (parser in parsers) {
+            try {
+                return LocalDateTime.parse(timestamp, parser).toInstant(zoneOffset)
+            } catch (e: DateTimeParseException) {
+                logger.debug("parser [$parser] failed to parse timestamp [$timestamp]")
+            }
+        }
+        throw Exception("Unable to parse timestamp [$timestamp]")
+    }
+
+    @JvmStatic
+    fun minutesBetween(earlierInstant: Instant, laterInstant: Instant): Long {
+        return ChronoUnit.MINUTES.between(earlierInstant, laterInstant)
+    }
+
+    @JvmStatic
+    fun toStringHoursMinutes(instant: Instant): String {
+        return ZonedDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalTime().truncatedTo(ChronoUnit.MINUTES).toString()
+    }
+
+    @JvmStatic
+    fun toString(instantNow: Instant, instantInThePast: Instant): String {
+        val days = ChronoUnit.DAYS.between(instantInThePast, instantNow)
+        if (days > 365) {
+            val dateTime = LocalDateTime.ofInstant(instantInThePast, zoneId)
+            return formatters[0].format(dateTime)
+        }
+        val hours = ChronoUnit.HOURS.between(instantInThePast, instantNow)
+        if (hours > 23) {
+            val dateTime = LocalDateTime.ofInstant(instantInThePast, zoneId)
+            return formatters[1].format(dateTime)
+        }
+        if (hours >= 1) {
+            return "${hours}h"
+        }
+        val minutes = minutesBetween(instantInThePast, instantNow)
+        if (minutes > 1) {
+            return "${minutes}m"
+        }
+        return "Just now"
     }
 
 }
