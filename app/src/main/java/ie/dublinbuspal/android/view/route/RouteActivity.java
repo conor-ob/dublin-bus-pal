@@ -43,7 +43,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import ie.dublinbuspal.android.DublinBusApplication;
 import ie.dublinbuspal.android.R;
 import ie.dublinbuspal.android.util.GoogleMapConstants;
-import ie.dublinbuspal.android.util.SVGUtils;
+import ie.dublinbuspal.android.util.ImageUtils;
 import ie.dublinbuspal.android.view.realtime.RealTimeActivity;
 import ie.dublinbuspal.android.view.settings.SettingsActivity;
 import ie.dublinbuspal.model.stop.Stop;
@@ -273,7 +273,7 @@ public class RouteActivity extends MvpActivity<RouteView, RoutePresenter>
                 .anchor(0.5f, 0.5f)
                 .title(busStop.name())
                 .snippet(String.format(Locale.UK, getString(R.string.formatted_stop_id), busStop.id()))
-                .icon(SVGUtils.vectorToBitmap(getApplicationContext(),
+                .icon(ImageUtils.drawableToBitmap(getApplicationContext(),
                         R.drawable.ic_map_marker_route_stop));
     }
 

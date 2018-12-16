@@ -2,11 +2,9 @@ package ie.dublinbuspal.android.view.route;
 
 import java.util.List;
 
-import ie.dublinbuspal.util.CollectionUtilities;
 import ie.dublinbuspal.model.routeservice.RouteService;
 import ie.dublinbuspal.model.stop.Stop;
-
-import static ie.dublinbuspal.util.ObjectUtilities.safeEquals;
+import ie.dublinbuspal.util.CollectionUtils;
 
 public class RouteModelImpl implements RouteModel {
 
@@ -26,9 +24,6 @@ public class RouteModelImpl implements RouteModel {
 
     @Override
     public void setRouteService(RouteService routeService) {
-        if (safeEquals(this.routeService, routeService)) {
-            return;
-        }
         this.routeService = routeService;
         this.isDisplayOutboundStops = isDisplayOutboundStops();
     }
@@ -53,8 +48,8 @@ public class RouteModelImpl implements RouteModel {
 
     @Override
     public boolean isBiDirectional() {
-        return !CollectionUtilities.isNullOrEmpty(routeService
-                .getInboundStopIds()) && !CollectionUtilities
+        return !CollectionUtils.isNullOrEmpty(routeService
+                .getInboundStopIds()) && !CollectionUtils
                 .isNullOrEmpty(routeService.getOutboundStopIds());
     }
 

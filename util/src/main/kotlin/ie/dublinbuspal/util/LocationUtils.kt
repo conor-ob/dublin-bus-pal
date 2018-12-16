@@ -4,6 +4,7 @@ object LocationUtils {
 
     private const val EARTH_RADIUS = 6371001
 
+    @JvmStatic
     fun haversineDistance(coordinate1: Coordinate, coordinate2: Coordinate): Double {
         val dLat = Math.toRadians(coordinate2.x - coordinate1.x)
         val dLong = Math.toRadians(coordinate2.y - coordinate1.y)
@@ -17,6 +18,7 @@ object LocationUtils {
         return EARTH_RADIUS * c
     }
 
+    @JvmStatic
     private fun haversine(value: Double): Double {
         return Math.pow(Math.sin(value / 2), 2.0)
     }

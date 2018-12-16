@@ -1,12 +1,4 @@
-package ie.dublinbuspal.prefs
-
-import android.content.Context
-import android.preference.PreferenceManager
-import ie.dublinbuspal.android.R
-import ie.dublinbuspal.repository.PreferencesRepository
-import ie.dublinbuspal.util.Coordinate
-import io.reactivex.Completable
-import io.reactivex.Observable
+package ie.dublinbuspal.android.prefs
 
 //class DefaultPreferencesRepository(context: Context) : PreferencesRepository {
 //

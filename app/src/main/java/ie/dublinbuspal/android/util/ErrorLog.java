@@ -1,4 +1,4 @@
-package ie.dublinbuspal.util;
+package ie.dublinbuspal.android.util;
 
 import android.util.Log;
 

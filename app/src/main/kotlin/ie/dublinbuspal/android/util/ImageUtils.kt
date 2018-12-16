@@ -1,4 +1,4 @@
-package ie.dublinbuspal.util
+package ie.dublinbuspal.android.util
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -10,6 +10,7 @@ object ImageUtils {
 
     private val bitmapCache = HashMap<Int, BitmapDescriptor>()
 
+    @JvmStatic
     fun drawableToBitmap(context: Context, drawableId: Int) : BitmapDescriptor {
         val cachedValue = bitmapCache[drawableId]
         if (cachedValue != null) {

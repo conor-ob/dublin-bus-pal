@@ -6,10 +6,12 @@ object StringUtils {
     const val AMPERSAND = "&"
     const val MIDDLE_DOT = "\u00B7"
 
+    @JvmStatic
     fun isNullOrEmpty(string: String?): Boolean {
         return string == null || EMPTY_STRING == string.trim { it <= ' ' }
     }
 
+    @JvmStatic
     fun join(strings: List<String>, delimeter: String): String {
         val stringBuilder = StringBuilder()
         for (i in strings.indices) {

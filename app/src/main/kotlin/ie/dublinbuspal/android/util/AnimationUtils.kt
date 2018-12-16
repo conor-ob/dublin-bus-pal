@@ -1,4 +1,4 @@
-package ie.dublinbuspal.util
+package ie.dublinbuspal.android.util
 
 import android.animation.Animator
 import android.animation.ObjectAnimator
@@ -12,10 +12,12 @@ object AnimationUtils {
     private const val TRANSPARENT = 0f
     private const val OPAQUE = 1f
 
+    @JvmStatic
     fun fadeInMarker(marker: Marker) {
         ObjectAnimator.ofFloat(marker, "alpha", TRANSPARENT, OPAQUE).setDuration(HALF_SECOND).start()
     }
 
+    @JvmStatic
     fun fadeOutMarker(marker: Marker) {
         val animator = ObjectAnimator.ofFloat(marker, "alpha", OPAQUE, TRANSPARENT)
         animator.addListener(object : Animator.AnimatorListener {
@@ -30,6 +32,7 @@ object AnimationUtils {
         animator.setDuration(HALF_SECOND).start()
     }
 
+    @JvmStatic
     fun fadeViewColour(drawable: Drawable, fromColour: Int, toColour: Int) {
         val colorFade = ObjectAnimator.ofObject(drawable, "tint", ArgbEvaluator(), fromColour, toColour)
         colorFade.duration = HALF_SECOND

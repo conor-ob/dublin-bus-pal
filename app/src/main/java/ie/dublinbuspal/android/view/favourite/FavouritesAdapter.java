@@ -10,9 +10,9 @@ import java.util.Locale;
 
 import androidx.recyclerview.widget.RecyclerView;
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.util.CollectionUtilities;
-import ie.dublinbuspal.util.StringUtilities;
 import ie.dublinbuspal.model.favourite.FavouriteStop;
+import ie.dublinbuspal.util.CollectionUtils;
+import ie.dublinbuspal.util.StringUtils;
 
 public class FavouritesAdapter
         extends RecyclerView.Adapter<FavouritesAdapter.FavouritesViewHolder> {
@@ -68,12 +68,12 @@ public class FavouritesAdapter
         public void bind(FavouriteStop busStop) {
             favouriteID.setText(String.format(Locale.UK, formattedStopId, busStop.getId()));
             favouriteName.setText(busStop.getName());
-            if (CollectionUtilities.isNullOrEmpty(busStop.getRoutes())) {
+            if (CollectionUtils.isNullOrEmpty(busStop.getRoutes())) {
                 routes.setVisibility(View.GONE);
             } else {
                 String middleDot = String.format(Locale.UK, " %s ",
-                        StringUtilities.MIDDLE_DOT);
-                routes.setText(StringUtilities.join(busStop.getRoutes(), middleDot));
+                        StringUtils.MIDDLE_DOT);
+                routes.setText(StringUtils.join(busStop.getRoutes(), middleDot));
             }
         }
 

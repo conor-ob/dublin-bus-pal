@@ -13,9 +13,8 @@ import java.util.Locale;
 
 import androidx.recyclerview.widget.RecyclerView;
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.util.CollectionUtilities;
-import ie.dublinbuspal.util.StringUtilities;
 import ie.dublinbuspal.model.livedata.LiveData;
+import ie.dublinbuspal.util.CollectionUtils;
 import ie.dublinbuspal.util.StringUtils;
 
 public class RealTimeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -78,7 +77,7 @@ public class RealTimeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         List<Object> copy = new ArrayList<>();
         if (realTimeData == null) {
             return;
-        } else if (CollectionUtilities.isNullOrEmpty(realTimeData)) {
+        } else if (CollectionUtils.isNullOrEmpty(realTimeData)) {
             copy.add("EMPTY");
         }
         copy.addAll(realTimeData);
@@ -112,7 +111,7 @@ public class RealTimeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public void bind(LiveData realTimeData) {
             route.setText(realTimeData.getRouteId());
             destination.setText(realTimeData.getDestination().getDestination());
-            if (!StringUtilities.isNullOrEmpty(realTimeData.getDestination().getVia())) {
+            if (!StringUtils.isNullOrEmpty(realTimeData.getDestination().getVia())) {
                 via.setText(realTimeData.getDestination().getVia());
                 via.setVisibility(View.VISIBLE);
             } else {
@@ -133,7 +132,7 @@ public class RealTimeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public void onClick(View viewItem) {
             int adapterPosition = getAdapterPosition();
             List<Object> allData =  realTimeData;
-            if (!CollectionUtilities.isNullOrEmpty(allData)
+            if (!CollectionUtils.isNullOrEmpty(allData)
                     && adapterPosition > -1) {
                 LiveData realTimeData = (LiveData) allData.get(adapterPosition);
                 String routeId = realTimeData.getRouteId();

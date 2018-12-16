@@ -60,13 +60,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import ie.dublinbuspal.android.DublinBusApplication;
 import ie.dublinbuspal.android.R;
 import ie.dublinbuspal.android.util.GoogleMapConstants;
-import ie.dublinbuspal.android.util.SVGUtils;
+import ie.dublinbuspal.android.util.ImageUtils;
 import ie.dublinbuspal.android.view.route.RouteActivity;
 import ie.dublinbuspal.android.view.settings.SettingsActivity;
 import ie.dublinbuspal.model.livedata.LiveData;
 import ie.dublinbuspal.model.stop.Stop;
 import ie.dublinbuspal.util.AlphanumComparator;
-import ie.dublinbuspal.util.CollectionUtilities;
+import ie.dublinbuspal.util.CollectionUtils;
 
 public class RealTimeActivity
         extends MvpActivity<RealTimeView, RealTimePresenter>
@@ -323,7 +323,7 @@ public class RealTimeActivity
             negativeButton.setOnClickListener(view -> dialog1.dismiss());
             Button positiveButton = ((AlertDialog) dialog1).getButton(AlertDialog.BUTTON_POSITIVE);
             positiveButton.setOnClickListener(view -> {
-                if (CollectionUtilities.isNullOrEmpty(routesToSave)) {
+                if (CollectionUtils.isNullOrEmpty(routesToSave)) {
                     Snackbar.make(dialogView,
                             getString(R.string.error_not_enough_routes),
                             Snackbar.LENGTH_SHORT).show();
@@ -361,7 +361,7 @@ public class RealTimeActivity
         busStopMarker = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(busStop.coordinate().getX(), busStop.coordinate().getY()))
                 .anchor(0.3f, 1.0f)
-                .icon(SVGUtils.vectorToBitmap(getApplicationContext(), R.drawable.ic_map_marker_bus_double_decker_default)));
+                .icon(ImageUtils.drawableToBitmap(getApplicationContext(), R.drawable.ic_map_marker_bus_double_decker_default)));
 
         if (streetViewPanorama != null) {
             streetViewPanorama.setPosition(new LatLng(busStop.coordinate().getX(), busStop.coordinate().getY()));

@@ -5,15 +5,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.RecyclerView;
-import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.util.CollectionUtilities;
-import ie.dublinbuspal.util.StringUtilities;
-import ie.dublinbuspal.model.route.Route;
-import ie.dublinbuspal.model.stop.Stop;
-
 import java.util.List;
 import java.util.Locale;
+
+import androidx.recyclerview.widget.RecyclerView;
+import ie.dublinbuspal.android.R;
+import ie.dublinbuspal.model.route.Route;
+import ie.dublinbuspal.model.stop.Stop;
+import ie.dublinbuspal.util.CollectionUtils;
+import ie.dublinbuspal.util.StringUtils;
 
 public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
@@ -162,12 +162,12 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         public void bind(Stop busStop) {
             stopID.setText(String.format(Locale.UK, formattedStopId, busStop.id()));
             stopName.setText(busStop.name());
-            if (CollectionUtilities.isNullOrEmpty(busStop.routes())) {
+            if (CollectionUtils.isNullOrEmpty(busStop.routes())) {
                 routes.setVisibility(View.GONE);
             } else {
                 String middleDot = String.format(Locale.UK, " %s ",
-                        StringUtilities.MIDDLE_DOT);
-                routes.setText(StringUtilities.join(busStop.routes(), middleDot));
+                        StringUtils.MIDDLE_DOT);
+                routes.setText(StringUtils.join(busStop.routes(), middleDot));
             }
         }
 

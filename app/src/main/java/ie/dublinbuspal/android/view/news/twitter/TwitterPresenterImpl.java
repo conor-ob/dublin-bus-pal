@@ -18,7 +18,7 @@ import java.net.UnknownHostException;
 import javax.inject.Inject;
 
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.util.ErrorLog;
+import ie.dublinbuspal.android.util.ErrorLog;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;

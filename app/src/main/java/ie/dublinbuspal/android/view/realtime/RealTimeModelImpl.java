@@ -5,9 +5,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import ie.dublinbuspal.util.CollectionUtilities;
 import ie.dublinbuspal.model.livedata.LiveData;
 import ie.dublinbuspal.model.stop.Stop;
+import ie.dublinbuspal.util.CollectionUtils;
 
 public class RealTimeModelImpl implements RealTimeModel {
 
@@ -72,8 +72,8 @@ public class RealTimeModelImpl implements RealTimeModel {
 
     @Override
     public List<LiveData> getRealTimeData() {
-        if (CollectionUtilities.isNullOrEmpty(getRouteFilters())) {
-            return filterOn(CollectionUtilities.toSet(getAdjustedBusStopService()));
+        if (CollectionUtils.isNullOrEmpty(getRouteFilters())) {
+            return filterOn(CollectionUtils.toSet(getAdjustedBusStopService()));
         }
         return filterOn(getRouteFilters());
     }

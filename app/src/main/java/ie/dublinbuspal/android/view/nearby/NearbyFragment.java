@@ -60,15 +60,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import ie.dublinbuspal.android.DublinBusApplication;
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.util.AnimationUtilities;
-import ie.dublinbuspal.util.CollectionUtilities;
+import ie.dublinbuspal.android.util.AnimationUtils;
 import ie.dublinbuspal.android.util.GoogleMapConstants;
+import ie.dublinbuspal.android.util.ImageUtils;
 import ie.dublinbuspal.android.util.LocationUtilities;
-import ie.dublinbuspal.android.util.SVGUtils;
 import ie.dublinbuspal.android.view.home.HomeActivity;
 import ie.dublinbuspal.android.view.realtime.RealTimeActivity;
 import ie.dublinbuspal.android.view.settings.SettingsActivity;
 import ie.dublinbuspal.model.stop.Stop;
+import ie.dublinbuspal.util.CollectionUtils;
 import io.reactivex.disposables.CompositeDisposable;
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider;
 
@@ -352,7 +352,7 @@ public class NearbyFragment
     public void showNearbyStops(SortedMap<Double, Stop> busStops) {
         List<Stop> nearbyStops = new ArrayList<>(busStops.values());
         toolbar.setTitle(String.format(Locale.UK, "Stops near %s",
-                LocationUtilities.getCoarseAddress(CollectionUtilities
+                LocationUtilities.getCoarseAddress(CollectionUtils
                         .safeFirstElement(nearbyStops))));
         adapter.setDistances(new ArrayList<>(busStops.keySet()));
         adapter.setBusStops(new ArrayList<>(nearbyStops));
@@ -523,8 +523,8 @@ public class NearbyFragment
                     marker.setIcon(icon);
                     Marker textMarker = googleMap.addMarker(getTextMarkerOptions(busStop));
                     textMarker.setVisible(googleMap.getCameraPosition().zoom >= TEXT_VISIBILITY_ZOOM);
-                    AnimationUtilities.fadeInMarker(marker);
-                    AnimationUtilities.fadeInMarker(textMarker);
+                    AnimationUtils.fadeInMarker(marker);
+                    AnimationUtils.fadeInMarker(textMarker);
                     getGoogleMapMarkers().put(busStop, marker);
                     getGoogleMapTextMarkers().put(busStop, textMarker);
                 }
@@ -538,7 +538,7 @@ public class NearbyFragment
                 Stop busStop = entry.getKey();
                 if (!busStops.contains(busStop)) {
                     final Marker marker = entry.getValue();
-                    AnimationUtilities.fadeOutMarker(marker);
+                    AnimationUtils.fadeOutMarker(marker);
                     iterator.remove();
                 }
             }
@@ -548,7 +548,7 @@ public class NearbyFragment
                 Stop busStop = entry.getKey();
                 if (!busStops.contains(busStop)) {
                     final Marker marker = entry.getValue();
-                    AnimationUtilities.fadeOutMarker(marker);
+                    AnimationUtils.fadeOutMarker(marker);
                     iterator2.remove();
                 }
             }
@@ -614,14 +614,14 @@ public class NearbyFragment
 
         private BitmapDescriptor getDefaultIcon() {
             if (defaultIcon == null) {
-                defaultIcon = SVGUtils.vectorToBitmap(getContext(), R.drawable.ic_map_marker_bus_double_decker_default);
+                defaultIcon = ImageUtils.drawableToBitmap(getContext(), R.drawable.ic_map_marker_bus_double_decker_default);
             }
             return defaultIcon;
         }
 
         private BitmapDescriptor getZoomedOutIcon() {
             if (zoomedOutIcon == null) {
-                zoomedOutIcon = SVGUtils.vectorToBitmap(getContext(), R.drawable.ic_map_marker_bus_double_decker_far);
+                zoomedOutIcon = ImageUtils.drawableToBitmap(getContext(), R.drawable.ic_map_marker_bus_double_decker_far);
             }
             return zoomedOutIcon;
         }

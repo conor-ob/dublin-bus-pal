@@ -1,4 +1,4 @@
-package ie.dublinbuspal.location
+package ie.dublinbuspal.android.location
 
 import android.annotation.SuppressLint
 import android.content.Context

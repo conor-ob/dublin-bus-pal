@@ -10,10 +10,10 @@ import java.util.Locale;
 
 import androidx.recyclerview.widget.RecyclerView;
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.util.CollectionUtilities;
 import ie.dublinbuspal.android.util.LocationUtilities;
-import ie.dublinbuspal.util.StringUtilities;
 import ie.dublinbuspal.model.stop.Stop;
+import ie.dublinbuspal.util.CollectionUtils;
+import ie.dublinbuspal.util.StringUtils;
 
 public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.ViewHolder> {
 
@@ -75,12 +75,12 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.ViewHolder
         public void bind(Stop busStop, String walkTime) {
             stopID.setText(String.format(Locale.UK, formattedStopId, busStop.id()));
             stopAddress.setText(busStop.name());
-            if (CollectionUtilities.isNullOrEmpty(busStop.routes())) {
+            if (CollectionUtils.isNullOrEmpty(busStop.routes())) {
                 routes.setVisibility(View.GONE);
             } else {
                 String middleDot = String.format(Locale.UK, " %s ",
-                        StringUtilities.MIDDLE_DOT);
-                routes.setText(StringUtilities.join(busStop.routes(), middleDot));
+                        StringUtils.MIDDLE_DOT);
+                routes.setText(StringUtils.join(busStop.routes(), middleDot));
             }
             this.walkTime.setVisibility(View.VISIBLE);
             this.walkTime.setText(walkTime);

@@ -9,6 +9,7 @@ object CollectionUtils {
         return collection == null || collection.isEmpty()
     }
 
+    @JvmStatic
     fun <K, V> headMap(map: SortedMap<K, V>, limit: Int): SortedMap<K, V> {
         var count = 0
         val headMap = TreeMap<K, V>()
@@ -22,11 +23,22 @@ object CollectionUtils {
         return headMap
     }
 
+    @JvmStatic
     fun <T> safeFirstElement(collection: Collection<T>?): T? {
         if (isNullOrEmpty(collection)) {
             return null
         }
         return collection!!.iterator().next()
+    }
+
+    @JvmStatic
+    fun <T> toSet(collection: Collection<T>): Set<T> {
+        val set = mutableSetOf<T>()
+        if (isNullOrEmpty(collection)) {
+            return set
+        }
+        set.addAll(collection)
+        return set
     }
 
 }

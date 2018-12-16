@@ -1,11 +1,12 @@
-package ie.dublinbuspal.util
+package ie.dublinbuspal.android.util
 
 import android.content.Context
 import android.content.pm.PackageManager
 
 object MetadataUtils {
 
-    fun getMetadata(context: Context, name: String): String {
+    @JvmStatic
+    fun getMetadata(context: Context, name: String): String? {
         try {
             val appInfo = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
             return if (appInfo.metaData == null) {

@@ -24,10 +24,10 @@ import java.util.Locale;
 import ie.dublinbuspal.android.BuildConfig;
 import ie.dublinbuspal.android.DublinBusApplication;
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.util.DateUtilities;
-import ie.dublinbuspal.util.ErrorLog;
-import ie.dublinbuspal.util.StringUtilities;
+import ie.dublinbuspal.android.util.ErrorLog;
 import ie.dublinbuspal.android.view.web.WebViewActivity;
+import ie.dublinbuspal.util.DateUtilities;
+import ie.dublinbuspal.util.StringUtils;
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
@@ -217,7 +217,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             preference.setOnPreferenceChangeListener(preferenceSummaryListener);
             preferenceSummaryListener.onPreferenceChange(preference,
                     PreferenceManager.getDefaultSharedPreferences(preference.getContext())
-                            .getString(preference.getKey(), StringUtilities.EMPTY_STRING));
+                            .getString(preference.getKey(), StringUtils.EMPTY_STRING));
         }
 
         private static void bindAppVersionSummaryToValue(Preference preference) {

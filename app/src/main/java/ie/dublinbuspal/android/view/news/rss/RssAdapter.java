@@ -14,8 +14,8 @@ import java.util.Locale;
 
 import androidx.recyclerview.widget.RecyclerView;
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.util.StringUtilities;
 import ie.dublinbuspal.model.rss.RssNews;
+import ie.dublinbuspal.util.StringUtils;
 
 public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssViewHolder> {
 
@@ -73,8 +73,8 @@ public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssViewHolder> {
             title.setText(Html.fromHtml(link));
             title.setMovementMethod(LinkMovementMethod.getInstance());
             String desc = item.getDescription()
-                    .replace(WHITE_SPACE, StringUtilities.EMPTY_STRING)
-                    .replace(AMPERSAND, StringUtilities.AMPERSAND);
+                    .replace(WHITE_SPACE, StringUtils.EMPTY_STRING)
+                    .replace(AMPERSAND, StringUtils.AMPERSAND);
             description.setText(desc);
             publishDate.setText(item.getTimestamp().toString());
         }

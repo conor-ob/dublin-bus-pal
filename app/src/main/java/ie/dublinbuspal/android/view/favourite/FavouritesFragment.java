@@ -27,11 +27,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import ie.dublinbuspal.android.DublinBusApplication;
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.util.CollectionUtilities;
 import ie.dublinbuspal.android.view.home.HomeActivity;
 import ie.dublinbuspal.android.view.realtime.RealTimeActivity;
 import ie.dublinbuspal.android.view.settings.SettingsActivity;
 import ie.dublinbuspal.model.favourite.FavouriteStop;
+import ie.dublinbuspal.util.CollectionUtils;
 
 public class FavouritesFragment extends MvpFragment<FavouritesView, FavouritesPresenter>
         implements FavouritesView {
@@ -107,7 +107,7 @@ public class FavouritesFragment extends MvpFragment<FavouritesView, FavouritesPr
     @Override
     public void showFavourites(List<FavouriteStop> favourites) {
         adapter.setFavourites(favourites);
-        if (CollectionUtilities.isNullOrEmpty(favourites)) {
+        if (CollectionUtils.isNullOrEmpty(favourites)) {
             swipeRefreshLayout.setVisibility(View.GONE);
             noFavouritesView.setVisibility(View.VISIBLE);
             addFavouritesButton.setVisibility(View.VISIBLE);
