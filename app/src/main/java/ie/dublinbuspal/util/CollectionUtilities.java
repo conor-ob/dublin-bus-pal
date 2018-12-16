@@ -1,4 +1,4 @@
-package ie.dublinbuspal.android.util;
+package ie.dublinbuspal.util;
 
 import java.util.Collection;
 import java.util.HashSet;

@@ -6,7 +6,7 @@ import com.jakewharton.threetenabp.AndroidThreeTen
 import com.twitter.sdk.android.core.Twitter
 import com.twitter.sdk.android.core.TwitterAuthConfig
 import com.twitter.sdk.android.core.TwitterConfig
-import ie.dublinbuspal.android.util.ErrorLog
+import ie.dublinbuspal.util.ErrorLog
 import ie.dublinbuspal.di.*
 import ie.dublinbuspal.util.MetadataUtils
 import io.reactivex.plugins.RxJavaPlugins

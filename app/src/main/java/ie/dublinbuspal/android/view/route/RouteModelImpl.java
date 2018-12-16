@@ -2,11 +2,11 @@ package ie.dublinbuspal.android.view.route;
 
 import java.util.List;
 
-import ie.dublinbuspal.android.util.CollectionUtilities;
+import ie.dublinbuspal.util.CollectionUtilities;
 import ie.dublinbuspal.model.routeservice.RouteService;
 import ie.dublinbuspal.model.stop.Stop;
 
-import static ie.dublinbuspal.android.util.ObjectUtilities.safeEquals;
+import static ie.dublinbuspal.util.ObjectUtilities.safeEquals;
 
 public class RouteModelImpl implements RouteModel {
 

@@ -61,7 +61,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import ie.dublinbuspal.android.DublinBusApplication;
 import ie.dublinbuspal.android.R;
 import ie.dublinbuspal.android.util.AnimationUtilities;
-import ie.dublinbuspal.android.util.CollectionUtilities;
+import ie.dublinbuspal.util.CollectionUtilities;
 import ie.dublinbuspal.android.util.GoogleMapConstants;
 import ie.dublinbuspal.android.util.LocationUtilities;
 import ie.dublinbuspal.android.util.SVGUtils;

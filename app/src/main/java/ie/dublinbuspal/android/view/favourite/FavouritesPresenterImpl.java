@@ -7,7 +7,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.util.ErrorLog;
+import ie.dublinbuspal.util.ErrorLog;
 import ie.dublinbuspal.model.favourite.FavouriteStop;
 import ie.dublinbuspal.usecase.favourites.FavouritesUseCase;
 import io.reactivex.android.schedulers.AndroidSchedulers;

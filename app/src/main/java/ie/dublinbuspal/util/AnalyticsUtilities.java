@@ -1,4 +1,4 @@
-package ie.dublinbuspal.android.util;
+package ie.dublinbuspal.util;
 
 //import com.crashlytics.android.answers.Answers;
 //import com.crashlytics.android.answers.ContentViewEvent;

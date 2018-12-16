@@ -24,9 +24,9 @@ import java.util.Locale;
 import ie.dublinbuspal.android.BuildConfig;
 import ie.dublinbuspal.android.DublinBusApplication;
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.util.DateUtilities;
-import ie.dublinbuspal.android.util.ErrorLog;
-import ie.dublinbuspal.android.util.StringUtilities;
+import ie.dublinbuspal.util.DateUtilities;
+import ie.dublinbuspal.util.ErrorLog;
+import ie.dublinbuspal.util.StringUtilities;
 import ie.dublinbuspal.android.view.web.WebViewActivity;
 
 public class SettingsActivity extends AppCompatPreferenceActivity {

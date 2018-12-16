@@ -10,7 +10,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.util.ErrorLog;
+import ie.dublinbuspal.util.ErrorLog;
 import ie.dublinbuspal.model.rss.RssNews;
 import ie.dublinbuspal.usecase.rss.RssNewsUseCase;
 import ie.dublinbuspal.util.CollectionUtils;

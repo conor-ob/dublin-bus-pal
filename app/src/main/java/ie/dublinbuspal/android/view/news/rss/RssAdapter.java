@@ -14,7 +14,7 @@ import java.util.Locale;
 
 import androidx.recyclerview.widget.RecyclerView;
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.util.StringUtilities;
+import ie.dublinbuspal.util.StringUtilities;
 import ie.dublinbuspal.model.rss.RssNews;
 
 public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssViewHolder> {

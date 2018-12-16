@@ -1,4 +1,4 @@
-package ie.dublinbuspal.android.util;
+package ie.dublinbuspal.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

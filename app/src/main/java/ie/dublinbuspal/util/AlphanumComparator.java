@@ -21,7 +21,7 @@
  *
  */
 
-package ie.dublinbuspal.android.util;
+package ie.dublinbuspal.util;
 
 import java.util.Comparator;
 

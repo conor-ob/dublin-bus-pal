@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import ie.dublinbuspal.android.util.CollectionUtilities;
+import ie.dublinbuspal.util.CollectionUtilities;
 import ie.dublinbuspal.model.livedata.LiveData;
 import ie.dublinbuspal.model.stop.Stop;
 

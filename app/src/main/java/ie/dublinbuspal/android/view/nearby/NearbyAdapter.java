@@ -10,9 +10,9 @@ import java.util.Locale;
 
 import androidx.recyclerview.widget.RecyclerView;
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.util.CollectionUtilities;
+import ie.dublinbuspal.util.CollectionUtilities;
 import ie.dublinbuspal.android.util.LocationUtilities;
-import ie.dublinbuspal.android.util.StringUtilities;
+import ie.dublinbuspal.util.StringUtilities;
 import ie.dublinbuspal.model.stop.Stop;
 
 public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.ViewHolder> {

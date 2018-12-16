@@ -48,8 +48,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
-import javax.inject.Inject;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
@@ -61,14 +59,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import ie.dublinbuspal.android.DublinBusApplication;
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.util.AlphanumComparator;
-import ie.dublinbuspal.android.util.CollectionUtilities;
 import ie.dublinbuspal.android.util.GoogleMapConstants;
 import ie.dublinbuspal.android.util.SVGUtils;
 import ie.dublinbuspal.android.view.route.RouteActivity;
 import ie.dublinbuspal.android.view.settings.SettingsActivity;
 import ie.dublinbuspal.model.livedata.LiveData;
 import ie.dublinbuspal.model.stop.Stop;
+import ie.dublinbuspal.util.AlphanumComparator;
+import ie.dublinbuspal.util.CollectionUtilities;
 
 public class RealTimeActivity
         extends MvpActivity<RealTimeView, RealTimePresenter>
