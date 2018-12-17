@@ -41,6 +41,7 @@ import com.hannesdorfmann.mosby3.mvp.MvpFragment;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -68,6 +69,7 @@ import ie.dublinbuspal.android.view.settings.SettingsActivity;
 import ie.dublinbuspal.model.stop.Stop;
 import ie.dublinbuspal.util.CollectionUtils;
 import ie.dublinbuspal.util.Coordinate;
+import ie.dublinbuspal.util.LocationUtils;
 
 import static android.graphics.Paint.ANTI_ALIAS_FLAG;
 
@@ -290,9 +292,11 @@ public class NearbyFragment
             }
     }
 
+    private Coordinate lastKnowLocation = null;
     @SuppressLint("MissingPermission")
     @Override
     public void updateLocation(Coordinate coordinate) {
+        lastKnowLocation = coordinate;
         if (!googleMap.isMyLocationEnabled()) {
             googleMap.setMyLocationEnabled(true);
         }
@@ -313,10 +317,21 @@ public class NearbyFragment
         List<Stop> nearbyStops = new ArrayList<>(busStops.values());
         toolbar.setTitle(String.format(Locale.UK, "Stops near %s",
                 LocationUtilities.getCoarseAddress(CollectionUtils.safeFirstElement(nearbyStops))));
-        adapter.setDistances(new ArrayList<>(busStops.keySet()));
+        adapter.setDistances(getDistances(nearbyStops));
         adapter.setBusStops(new ArrayList<>(nearbyStops));
         mapMarkerManager.update(nearbyStops);
         //resizeCircle(busStops);
+    }
+
+    private List<Double> getDistances(List<Stop> nearbyStops) {
+        if (lastKnowLocation == null) {
+            return Collections.emptyList();
+        }
+        List<Double> distances = new ArrayList<>();
+        for (Stop stop : nearbyStops) {
+            distances.add(LocationUtils.haversineDistance(lastKnowLocation, stop.coordinate()));
+        }
+        return distances;
     }
 
     @Override

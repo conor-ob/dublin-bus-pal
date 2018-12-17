@@ -37,7 +37,12 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Stop busStop = busStops.get(position);
-        String walkTime = LocationUtilities.getWalkTime(distances.get(position));
+        String walkTime;
+        if (CollectionUtils.isNullOrEmpty(distances)) {
+            walkTime = null;
+        } else {
+            walkTime = LocationUtilities.getWalkTime(distances.get(position));
+        }
         holder.bind(busStop, walkTime);
     }
 
@@ -82,8 +87,13 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.ViewHolder
                         StringUtils.MIDDLE_DOT);
                 routes.setText(StringUtils.join(busStop.routes(), middleDot));
             }
-            this.walkTime.setVisibility(View.VISIBLE);
-            this.walkTime.setText(walkTime);
+            if (walkTime != null) {
+                this.walkTime.setVisibility(View.VISIBLE);
+                this.walkTime.setText(walkTime);
+            } else {
+                this.walkTime.setVisibility(View.GONE);
+                this.walkTime.setText(StringUtils.EMPTY_STRING);
+            }
         }
 
         @Override

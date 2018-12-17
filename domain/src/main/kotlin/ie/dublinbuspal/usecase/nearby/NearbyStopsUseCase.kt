@@ -15,7 +15,8 @@ import javax.inject.Inject
 
 class NearbyStopsUseCase @Inject constructor(
         private val stopsRepository: Repository<Stop>,
-        private val locationProvider: LocationProvider) {
+        private val locationProvider: LocationProvider
+) {
 
     fun getNearbyBusStops(coordinate: Coordinate): Observable<SortedMap<Double, Stop>> {
         return stopsRepository.getAll()
