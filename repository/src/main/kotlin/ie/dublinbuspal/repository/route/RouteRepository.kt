@@ -47,4 +47,8 @@ class RouteRepository(
         throw UnsupportedOperationException()
     }
 
+    override fun refresh(): Observable<Boolean> {
+        throw UnsupportedOperationException()
+    }
+
 }

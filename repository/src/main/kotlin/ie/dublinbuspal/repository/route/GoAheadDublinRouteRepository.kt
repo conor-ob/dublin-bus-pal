@@ -15,6 +15,10 @@ class GoAheadDublinRouteRepository(
         return store.get(key).toObservable()
     }
 
+    override fun refresh(): Observable<Boolean> {
+        return store.fetch(key).toObservable().map { true }
+    }
+
     override fun getById(id: String): Observable<GoAheadDublinRoute> {
         throw UnsupportedOperationException()
     }

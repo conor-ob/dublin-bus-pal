@@ -37,6 +37,10 @@ class StopRepository(
         throw UnsupportedOperationException()
     }
 
+    override fun refresh(): Observable<Boolean> {
+        throw UnsupportedOperationException()
+    }
+
     private fun findMatching(id: String, stops: List<Stop>): Stop {
         for (stop in stops) {
             if (id == stop.id()) {

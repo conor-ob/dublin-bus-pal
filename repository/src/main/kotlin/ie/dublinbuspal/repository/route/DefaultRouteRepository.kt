@@ -13,6 +13,10 @@ class DefaultRouteRepository(private val store: StoreRoom<List<DefaultRoute>, St
         return store.get(key)
     }
 
+    override fun refresh(): Observable<Boolean> {
+        return store.get(key).map { true }
+    }
+
     override fun getById(id: String): Observable<DefaultRoute> {
         throw UnsupportedOperationException()
     }

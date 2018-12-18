@@ -21,4 +21,8 @@ class RssNewsRepository(private val store: Store<List<RssNews>, String>) : Repos
         throw UnsupportedOperationException()
     }
 
+    override fun refresh(): Observable<Boolean> {
+        throw UnsupportedOperationException()
+    }
+
 }

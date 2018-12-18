@@ -21,4 +21,8 @@ class GoAheadDublinLiveDataRepository(
         throw UnsupportedOperationException()
     }
 
+    override fun refresh(): Observable<Boolean> {
+        throw UnsupportedOperationException()
+    }
+
 }

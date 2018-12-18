@@ -13,6 +13,10 @@ class DefaultStopRepository(private val store: StoreRoom<List<DefaultStop>, Stri
         return store.get(key)
     }
 
+    override fun refresh(): Observable<Boolean> {
+        return store.fetch(key).map { true }
+    }
+
     override fun getById(id: String): Observable<DefaultStop> {
         throw UnsupportedOperationException()
     }

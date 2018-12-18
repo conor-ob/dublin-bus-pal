@@ -10,4 +10,6 @@ interface Repository<T> {
 
     fun getAllById(id: String): Observable<List<T>>
 
+    fun refresh(): Observable<Boolean>
+
 }

@@ -21,13 +21,20 @@ import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import ie.dublinbuspal.android.BuildConfig;
 import ie.dublinbuspal.android.DublinBusApplication;
 import ie.dublinbuspal.android.R;
 import ie.dublinbuspal.android.util.ErrorLog;
 import ie.dublinbuspal.android.view.web.WebViewActivity;
+import ie.dublinbuspal.usecase.update.UpdateStopsAndRoutesUseCase;
 import ie.dublinbuspal.util.DateUtilities;
 import ie.dublinbuspal.util.StringUtils;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
@@ -54,6 +61,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
 //        @Inject DublinBusRepository repository;
 //        @Inject DownloadProgressListener listener;
+
+        @Inject
+        UpdateStopsAndRoutesUseCase useCase;
 
         @Override
         public void onCreate(final Bundle savedInstanceState) {
@@ -99,6 +109,26 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             });
             SyncPreference updatePreference = (SyncPreference) findPreference(
                     getString(R.string.preference_key_update_database));
+            updatePreference.setOnPreferenceClickListener(preference -> {
+                updatePreference.setRefreshing(true);
+                Disposable disposable = useCase.update()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(result -> {
+                            updatePreference.setSummary("Downloading " + String.valueOf(result) + " %");
+                            if (result == 100) {
+                                updatePreference.setRefreshing(false);
+                                PreferenceManager.getDefaultSharedPreferences(updatePreference.getContext())
+                                        .edit()
+                                        .putLong(getString(R.string.preference_key_update_database), new Date().getTime())
+                                        .apply();
+                                bindLastUpdatedTimestampSummaryToValue(updatePreference);
+                            }
+                            Timber.d(result.toString());
+                        });
+
+                return true;
+            });
 //            updatePreference.setOnPreferenceClickListener(preference -> {
 //
 //                if (!updatePreference.isRefreshing()) {
@@ -108,8 +138,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 //                    listener.registerObserver(percent -> {
 //                        totalPercent.incrementAndGet();
 //                        if (totalPercent.get() % 3 == 0) {
-//                            int update = Math.min(totalPercent.get() / 3, 100);
-//                            updatePreference.setSummary("Downloading " + String.valueOf(update) + " %");
+//                            int refresh = Math.min(totalPercent.get() / 3, 100);
+//                            updatePreference.setSummary("Downloading " + String.valueOf(refresh) + " %");
 //                        }
 //                        if (percent == 100) {
 //                            total.incrementAndGet();
@@ -128,7 +158,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 //
 //                    repository.invalidateCache();
 //
-//                    //TODO check lifecycle methods and dispose of singles appropriately. make sure update can continue if screen pauses
+//                    //TODO check lifecycle methods and dispose of singles appropriately. make sure refresh can continue if screen pauses
 //                    Single.fromCallable(repository::getBusStopsRemote)
 //                            .subscribeOn(Schedulers.io())
 //                            .observeOn(AndroidSchedulers.mainThread())
@@ -259,16 +289,16 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     private static Preference.OnPreferenceChangeListener preferenceSummaryListener =
             (preference, newValue) -> {
-        String stringValue = newValue.toString();
-        if (preference instanceof ListPreference) {
-            ListPreference listPreference = (ListPreference) preference;
-            int index = listPreference.findIndexOfValue(stringValue);
-            preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
-        } else {
-            preference.setSummary(stringValue);
-        }
-        return true;
-    };
+                String stringValue = newValue.toString();
+                if (preference instanceof ListPreference) {
+                    ListPreference listPreference = (ListPreference) preference;
+                    int index = listPreference.findIndexOfValue(stringValue);
+                    preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
+                } else {
+                    preference.setSummary(stringValue);
+                }
+                return true;
+            };
 
     private static void shareApp(Context context) {
         Intent shareIntent = new Intent();
@@ -300,15 +330,15 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     private static void sendFeedback(Context context) {
         String emailBody =
                 "\n\n-----------------------------" +
-                "\nPlease don't remove this information" +
-                "\nApp Version: " + BuildConfig.VERSION_NAME +
-                "\nDevice OS: Android" +
-                "\nDevice OS Version: " + Build.VERSION.RELEASE +
-                "\nDevice Brand: " + Build.BRAND +
-                "\nDevice Model: " + Build.MODEL +
-                "\nDevice Manufacturer: " + Build.MANUFACTURER;
+                        "\nPlease don't remove this information" +
+                        "\nApp Version: " + BuildConfig.VERSION_NAME +
+                        "\nDevice OS: Android" +
+                        "\nDevice OS Version: " + Build.VERSION.RELEASE +
+                        "\nDevice Brand: " + Build.BRAND +
+                        "\nDevice Model: " + Build.MODEL +
+                        "\nDevice Manufacturer: " + Build.MANUFACTURER;
         Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                "mailto","dublinbuspal@gmail.com", null));
+                "mailto", "dublinbuspal@gmail.com", null));
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Dublin Bus Pal Feedback");
         emailIntent.putExtra(Intent.EXTRA_TEXT, emailBody);
         context.startActivity(Intent.createChooser(emailIntent, "Send feedback"));

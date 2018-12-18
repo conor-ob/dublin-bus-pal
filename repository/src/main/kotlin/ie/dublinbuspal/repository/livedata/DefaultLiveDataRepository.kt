@@ -9,6 +9,10 @@ class DefaultLiveDataRepository(
         private val store: Store<List<RealTimeStopData>, String>
 ) : Repository<RealTimeStopData> {
 
+    override fun getAllById(id: String): Observable<List<RealTimeStopData>> {
+        return store.get(id).toObservable()
+    }
+
     override fun getById(id: String): Observable<RealTimeStopData> {
         throw UnsupportedOperationException()
     }
@@ -17,8 +21,8 @@ class DefaultLiveDataRepository(
         throw UnsupportedOperationException()
     }
 
-    override fun getAllById(id: String): Observable<List<RealTimeStopData>> {
-        return store.get(id).toObservable()
+    override fun refresh(): Observable<Boolean> {
+        throw UnsupportedOperationException()
     }
 
 }
