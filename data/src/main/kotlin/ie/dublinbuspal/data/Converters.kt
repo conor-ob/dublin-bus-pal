@@ -3,6 +3,7 @@ package ie.dublinbuspal.data
 import androidx.room.TypeConverter
 import ie.dublinbuspal.util.CollectionUtils
 import ie.dublinbuspal.util.StringUtils
+import org.threeten.bp.Instant
 import java.util.*
 
 object Converters {
@@ -25,6 +26,24 @@ object Converters {
             return value.split(DELIMETER)
         }
         return Collections.emptyList()
+    }
+
+    @TypeConverter
+    @JvmStatic
+    fun fromInstant(instant: Instant?): Long? {
+        if (instant == null) {
+            return 0L
+        }
+        return instant.epochSecond
+    }
+
+    @TypeConverter
+    @JvmStatic
+    fun toInstant(value: Long?): Instant {
+        if (value == null) {
+            return Instant.ofEpochSecond(0L)
+        }
+        return Instant.ofEpochSecond(value)
     }
 
 }

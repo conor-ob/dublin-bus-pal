@@ -9,7 +9,7 @@ class DublinBusStopRepository(
         private val store: StoreRoom<List<DublinBusGoAheadDublinStop>, String>
 ) : Repository<DublinBusGoAheadDublinStop> {
 
-    private val key = javaClass.simpleName
+    private val key = "dublin_bus_stops"
 
     override fun getAll(): Observable<List<DublinBusGoAheadDublinStop>> {
         return store.get(key)

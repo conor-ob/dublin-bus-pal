@@ -89,6 +89,7 @@ class RepositoryModule {
     fun defaultStopRepository(
             api: DublinBusSoapResource,
             dao: DefaultStopDao,
+            persisterDao: PersisterDao,
             txRunner: TxRunner
     ): Repository<DefaultStop> {
 
@@ -101,7 +102,7 @@ class RepositoryModule {
 
         val domainMapper = DefaultStopDomainMapper()
         val entityMapper = DefaultStopEntityMapper()
-        val persister = DefaultStopPersister(dao, txRunner, entityMapper, domainMapper)
+        val persister = DefaultStopPersister(memoryPolicy, persisterDao, dao, txRunner, entityMapper, domainMapper)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
 
         return DefaultStopRepository(store)
@@ -113,6 +114,7 @@ class RepositoryModule {
     fun dublinBusStopRepository(
             api: DublinBusGoAheadDublinRestResource,
             dao: DublinBusStopDao,
+            persisterDao: PersisterDao,
             txRunner: TxRunner
     ): Repository<DublinBusGoAheadDublinStop> {
 
@@ -125,7 +127,7 @@ class RepositoryModule {
 
         val domainMapper = DublinBusStopDomainMapper()
         val entityMapper = DublinBusStopEntityMapper()
-        val persister = DublinBusStopPersister(dao, txRunner, entityMapper, domainMapper)
+        val persister = DublinBusStopPersister(memoryPolicy, persisterDao, dao, txRunner, entityMapper, domainMapper)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
 
         return DublinBusStopRepository(store)
@@ -137,6 +139,7 @@ class RepositoryModule {
     fun goAheadDublinStopRepository(
             api: DublinBusGoAheadDublinRestResource,
             dao: GoAheadDublinStopDao,
+            persisterDao: PersisterDao,
             txRunner: TxRunner
     ): Repository<DublinBusGoAheadDublinStop> {
 
@@ -149,7 +152,7 @@ class RepositoryModule {
 
         val domainMapper = GoAheadDublinStopDomainMapper()
         val entityMapper = GoAheadDublinStopEntityMapper()
-        val persister = GoAheadDublinStopPersister(dao, txRunner, entityMapper, domainMapper)
+        val persister = GoAheadDublinStopPersister(memoryPolicy, persisterDao, dao, txRunner, entityMapper, domainMapper)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
 
         return GoAheadDublinStopRepository(store)
@@ -169,6 +172,7 @@ class RepositoryModule {
     fun defaultRouteRepository(
             api: DublinBusSoapResource,
             dao: DefaultRouteDao,
+            persisterDao: PersisterDao,
             txRunner: TxRunner
     ): Repository<DefaultRoute> {
 
@@ -181,7 +185,7 @@ class RepositoryModule {
 
         val domainMapper = DefaultRouteDomainMapper()
         val entityMapper = DefaultRouteEntityMapper()
-        val persister = DefaultRoutePersister(dao, txRunner, entityMapper, domainMapper)
+        val persister = DefaultRoutePersister(memoryPolicy, persisterDao, dao, txRunner, entityMapper, domainMapper)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
 
         return DefaultRouteRepository(store)
@@ -218,7 +222,9 @@ class RepositoryModule {
     @Singleton
     fun defaultStopServiceRepository(
             api: DublinBusSoapResource,
-            dao: DefaultStopServiceDao
+            dao: DefaultStopServiceDao,
+            persisterDao: PersisterDao,
+            txRunner: TxRunner
     ): Repository<DefaultStopService> {
 
         val fetcher = Fetcher<StopServiceResponseXml, String> { key -> api.getDublinBusStopService(key) }
@@ -230,7 +236,7 @@ class RepositoryModule {
 
         val domainMapper = DefaultStopServiceDomainMapper()
         val entityMapper = DefaultStopServiceEntityMapper()
-        val persister = DefaultStopServicePersister(dao, entityMapper, domainMapper)
+        val persister = DefaultStopServicePersister(memoryPolicy, persisterDao, dao, txRunner, entityMapper, domainMapper)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
 
         return DefaultStopServiceRepository(store)
@@ -240,7 +246,9 @@ class RepositoryModule {
     @Singleton
     fun defaultRouteServiceRepository(
             api: DublinBusSoapResource,
-            dao: DefaultRouteServiceDao
+            dao: DefaultRouteServiceDao,
+            persisterDao: PersisterDao,
+            txRunner: TxRunner
     ): Repository<RouteService> {
 
         val fetcher = Fetcher<RouteServiceResponseXml, String> { key -> api.getDublinBusRouteService(key) }
@@ -252,7 +260,7 @@ class RepositoryModule {
 
         val domainMapper = DefaultRouteServiceDomainMapper()
         val entityMapper = DefaultRouteServiceEntityMapper()
-        val persister = DefaultRouteServicePersister(dao, entityMapper, domainMapper)
+        val persister = DefaultRouteServicePersister(memoryPolicy, persisterDao, dao, txRunner, entityMapper, domainMapper)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
 
         return DefaultRouteServiceRepository(store)

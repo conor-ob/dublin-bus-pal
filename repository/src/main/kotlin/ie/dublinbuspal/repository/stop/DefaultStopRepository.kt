@@ -7,7 +7,7 @@ import io.reactivex.Observable
 
 class DefaultStopRepository(private val store: StoreRoom<List<DefaultStop>, String>): Repository<DefaultStop> {
 
-    private val key = javaClass.simpleName
+    private val key = "default_stops"
 
     override fun getAll(): Observable<List<DefaultStop>> {
         return store.get(key)

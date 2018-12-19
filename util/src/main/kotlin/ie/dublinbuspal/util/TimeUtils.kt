@@ -24,6 +24,13 @@ object TimeUtils {
     )
 
     @JvmStatic
+    fun now(): Instant {
+        val instant = Instant.now()
+        val zonedDateTime = instant.atZone(zoneId)
+        return zonedDateTime.toInstant()
+    }
+
+    @JvmStatic
     fun toInstant(timestamp: String): Instant {
         for (parser in parsers) {
             try {

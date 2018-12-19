@@ -17,7 +17,8 @@ import ie.dublinbuspal.data.entity.*
             DefaultRouteEntity::class,
             DefaultStopServiceEntity::class,
             DefaultRouteServiceEntity::class,
-            FavouriteStopEntity::class
+            FavouriteStopEntity::class,
+            PersisterEntity::class
         ]
 )
 @TypeConverters(Converters::class)
@@ -36,5 +37,7 @@ abstract class DublinBusDatabase : RoomDatabase() {
     abstract fun defaultRouteServiceDao(): DefaultRouteServiceDao
 
     abstract fun favouriteStopDao(): FavouriteStopDao
+
+    abstract fun persisterDao(): PersisterDao
 
 }

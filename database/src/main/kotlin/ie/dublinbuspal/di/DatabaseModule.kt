@@ -53,6 +53,10 @@ class DatabaseModule(private val databaseName: String) {
 
     @Provides
     @Singleton
+    fun persisterDao(database: DublinBusDatabase): PersisterDao = database.persisterDao()
+
+    @Provides
+    @Singleton
     fun txRunner(database: DublinBusDatabase): TxRunner = DatabaseTxRunner(database)
 
 }
