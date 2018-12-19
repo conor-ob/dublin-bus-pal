@@ -10,6 +10,11 @@ object CollectionUtils {
     }
 
     @JvmStatic
+    fun <T> isNotNullOrEmpty(collection: Collection<T>?): Boolean {
+        return !isNullOrEmpty(collection)
+    }
+
+    @JvmStatic
     fun <K, V> headMap(map: SortedMap<K, V>, limit: Int): SortedMap<K, V> {
         var count = 0
         val headMap = TreeMap<K, V>()

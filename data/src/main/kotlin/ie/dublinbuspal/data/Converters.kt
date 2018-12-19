@@ -12,37 +12,31 @@ object Converters {
 
     @TypeConverter
     @JvmStatic
-    fun fromList(list: List<String>): String? {
+    fun fromList(list: List<String>): String {
         if (CollectionUtils.isNullOrEmpty(list)) {
-            return null //TODO
+            return DELIMETER
         }
         return StringUtils.join(list, DELIMETER)
     }
 
     @TypeConverter
     @JvmStatic
-    fun toList(value: String?): List<String> {
-        if (value != null) {
-            return value.split(DELIMETER)
+    fun toList(value: String): List<String> {
+        if (value == DELIMETER) {
+            return Collections.emptyList()
         }
-        return Collections.emptyList()
+        return value.split(DELIMETER)
     }
 
     @TypeConverter
     @JvmStatic
-    fun fromInstant(instant: Instant?): Long? {
-        if (instant == null) {
-            return 0L
-        }
+    fun fromInstant(instant: Instant): Long {
         return instant.epochSecond
     }
 
     @TypeConverter
     @JvmStatic
-    fun toInstant(value: Long?): Instant {
-        if (value == null) {
-            return Instant.ofEpochSecond(0L)
-        }
+    fun toInstant(value: Long): Instant {
         return Instant.ofEpochSecond(value)
     }
 

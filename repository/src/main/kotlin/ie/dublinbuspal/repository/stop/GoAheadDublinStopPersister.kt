@@ -31,7 +31,7 @@ class GoAheadDublinStopPersister(
     override fun write(key: String, json: StopsResponseJson) {
         txRunner.runInTx {
             dao.deleteAll()
-            dao.insertAll(entityMapper.map(json.stops!!))
+            dao.insertAll(entityMapper.map(json.stops))
             persisterDao.insert(PersisterEntity(key))
         }
     }

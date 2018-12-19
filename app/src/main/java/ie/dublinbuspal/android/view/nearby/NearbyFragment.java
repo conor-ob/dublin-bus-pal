@@ -315,8 +315,10 @@ public class NearbyFragment
     @Override
     public void showNearbyStops(SortedMap<Double, Stop> busStops) {
         List<Stop> nearbyStops = new ArrayList<>(busStops.values());
-        toolbar.setTitle(String.format(Locale.UK, "Stops near %s",
-                LocationUtilities.getCoarseAddress(CollectionUtils.safeFirstElement(nearbyStops))));
+        if (CollectionUtils.isNotNullOrEmpty(nearbyStops)) {
+            toolbar.setTitle(String.format(Locale.UK, "Stops near %s",
+                    LocationUtilities.getCoarseAddress(nearbyStops.get(0))));
+        }
         adapter.setDistances(getDistances(nearbyStops));
         adapter.setBusStops(new ArrayList<>(nearbyStops));
         mapMarkerManager.update(nearbyStops);

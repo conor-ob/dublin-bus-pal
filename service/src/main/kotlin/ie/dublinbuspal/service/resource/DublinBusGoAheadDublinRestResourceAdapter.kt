@@ -5,6 +5,7 @@ import ie.dublinbuspal.service.model.livedata.RealTimeBusInformationResponseJson
 import ie.dublinbuspal.service.model.route.RouteListInformationVariantJson
 import ie.dublinbuspal.service.model.route.RouteListInformationWithVariantsJson
 import ie.dublinbuspal.service.model.route.RouteListInformationWithVariantsResponseJson
+import ie.dublinbuspal.service.model.stop.StopJson
 import ie.dublinbuspal.service.model.stop.StopsResponseJson
 import io.reactivex.Single
 
@@ -18,10 +19,12 @@ class DublinBusGoAheadDublinRestResourceAdapter(
 
     override fun getDublinBusStops(): Single<StopsResponseJson> {
         return api.getStops(dublinBus, defaultFormat)
+                .map { adaptDublinBusGoAheadDublinStopsResponse(it) }
     }
 
     override fun getGoAheadDublinStops(): Single<StopsResponseJson> {
         return api.getStops(goAheadDublin, defaultFormat)
+                .map { adaptDublinBusGoAheadDublinStopsResponse(it) }
     }
 
     override fun getGoAheadDublinRoutes(): Single<RouteListInformationWithVariantsResponseJson> {
@@ -29,10 +32,25 @@ class DublinBusGoAheadDublinRestResourceAdapter(
                 .map { adaptGoAheadDublinRoutesResponse(it) }
     }
 
+    override fun getDublinBusLiveData(id: String): Single<RealTimeBusInformationResponseJson> {
+        return api.getLiveData(id, dublinBus, defaultFormat)
+    }
+
+    override fun getGoAheadDublinLiveData(id: String): Single<RealTimeBusInformationResponseJson> {
+        return api.getLiveData(id, goAheadDublin, defaultFormat)
+    }
+
+    private fun adaptDublinBusGoAheadDublinStopsResponse(response: StopsResponseJson): StopsResponseJson {
+        val filtered = response.stops
+                .filter { it.displayId != null && it.fullName != null && it.latitude != null && it.longitude != null }
+                .map { it.copy(displayId = it.displayId!!.trim(), fullName = it.fullName!!.trim(), latitude = it.latitude!!.trim(), longitude = it.longitude!!.trim()) }
+        return response.copy(stops = filtered)
+    }
+
     private fun adaptGoAheadDublinRoutesResponse(response: RouteListInformationWithVariantsResponseJson): RouteListInformationWithVariantsResponseJson {
-        val goAheadDublinRoutes = response.routes!!.filter { goAheadDublin == it.operator!!.toLowerCase().trim() }
+        val filtered = response.routes.filter { it.route != null && it.operator != null && (goAheadDublin == it.operator!!.toLowerCase().trim()) }
         val uniques = mutableMapOf<String, List<RouteListInformationVariantJson>>()
-        for (route in goAheadDublinRoutes) {
+        for (route in filtered) {
             val result = uniques[route.route]
             if (result == null) {
                 uniques[route.route!!] = route.variants!!
@@ -44,14 +62,6 @@ class DublinBusGoAheadDublinRestResourceAdapter(
         }
         val adapted = uniques.map { RouteListInformationWithVariantsJson(goAheadDublin, it.key, it.value) }
         return response.copy(routes = adapted)
-    }
-
-    override fun getDublinBusLiveData(id: String): Single<RealTimeBusInformationResponseJson> {
-        return api.getLiveData(id, dublinBus, defaultFormat)
-    }
-
-    override fun getGoAheadDublinLiveData(id: String): Single<RealTimeBusInformationResponseJson> {
-        return api.getLiveData(id, goAheadDublin, defaultFormat)
     }
 
 }
