@@ -5,10 +5,12 @@ import ie.dublinbuspal.repository.Repository
 import io.reactivex.Observable
 import javax.inject.Inject
 
-class RssNewsUseCase @Inject constructor(private val repository: Repository<RssNews>) {
+class RssNewsUseCase @Inject constructor(
+        private val repository: Repository<RssNews>
+) {
 
     fun getRssNews(): Observable<List<RssNews>> {
-        return repository.getAll()
+        return repository.getAll().map { rssNews -> rssNews.sortedBy { it.age.ageInSeconds } }
     }
 
 }

@@ -30,15 +30,7 @@ class StopRepository(
     }
 
     override fun getById(id: String): Observable<Stop> {
-        return getAll().map { findMatching(id, it) }
-    }
-
-    override fun getAllById(id: String): Observable<List<Stop>> {
-        throw UnsupportedOperationException()
-    }
-
-    override fun refresh(): Observable<Boolean> {
-        throw UnsupportedOperationException()
+        return getAll().map { stops -> findMatching(id, stops) }.distinctUntilChanged()
     }
 
     private fun findMatching(id: String, stops: List<Stop>): Stop {
@@ -83,6 +75,14 @@ class StopRepository(
             }
         }
         return aggregatedStops.values.toList()
+    }
+
+    override fun getAllById(id: String): Observable<List<Stop>> {
+        throw UnsupportedOperationException()
+    }
+
+    override fun refresh(): Observable<Boolean> {
+        throw UnsupportedOperationException()
     }
 
 }

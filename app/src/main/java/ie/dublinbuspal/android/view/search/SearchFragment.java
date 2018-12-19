@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.hannesdorfmann.mosby3.mvp.MvpFragment;
 
 import java.util.List;
@@ -36,6 +37,7 @@ import kotlin.jvm.internal.Intrinsics;
 public class SearchFragment
         extends MvpFragment<SearchQueryView, SearchPresenter> implements SearchQueryView {
 
+    private View root;
     private SearchAdapter adapter;
     private SearchView searchView;
     private TextView noResultsMessage;
@@ -102,6 +104,7 @@ public class SearchFragment
     }
 
     private void setupLayout(View searchFragment) {
+        root = searchFragment.findViewById(R.id.root);
         adapter = new SearchAdapter(this);
         RecyclerView recyclerView = searchFragment.findViewById(R.id.recycler_view);
         recyclerView.setAdapter(adapter);
@@ -178,6 +181,11 @@ public class SearchFragment
     @Override
     public void hideLoading() {
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void showError(int stringResource) {
+        Snackbar.make(root, stringResource, Snackbar.LENGTH_LONG).show();
     }
 
 }

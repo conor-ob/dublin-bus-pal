@@ -12,6 +12,11 @@ object StringUtils {
     }
 
     @JvmStatic
+    fun isNotNullOrEmpty(string: String?): Boolean {
+        return !isNullOrEmpty(string)
+    }
+
+    @JvmStatic
     fun join(strings: List<String>, delimeter: String): String {
         val stringBuilder = StringBuilder()
         for (i in strings.indices) {

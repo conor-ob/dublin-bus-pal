@@ -94,10 +94,10 @@ public class TwitterPresenterImpl extends MvpBasePresenter<TwitterView>
 
     private void onGetAdapter(TweetTimelineRecyclerViewAdapter adapter) {
         getModel().setAdapter(adapter);
-        if (isViewAttached()) {
-            getView().hideProgress();
-            getView().showTweets(getModel().getAdapter());
-        }
+        ifViewAttached(view -> {
+            view.hideProgress();
+            view.showTweets(getModel().getAdapter());
+        });
     }
 
     private void onError(Throwable throwable) {

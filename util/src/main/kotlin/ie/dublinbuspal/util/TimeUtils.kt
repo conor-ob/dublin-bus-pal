@@ -10,18 +10,22 @@ import java.util.*
 
 object TimeUtils {
 
-    private val logger: Logger = LoggerFactory.getLogger(javaClass)
-    private val zoneId: ZoneId = ZoneId.of(TimeZone.getDefault().id)
-    private val zoneOffset: ZoneOffset = ZoneOffset.systemDefault().rules.getOffset(Instant.now())
-    private val parsers: List<DateTimeFormatter> = listOf(
-            DateTimeFormatter.ISO_DATE_TIME,
-            DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"),
-            DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss VV")
-    )
-    private val formatters: List<DateTimeFormatter> = listOf(
-            DateTimeFormatter.ofPattern("dd MMM yyyy"),
-            DateTimeFormatter.ofPattern("dd MMM")
-    )
+    private val logger: Logger by lazy { LoggerFactory.getLogger(javaClass) }
+    private val zoneId: ZoneId by lazy { ZoneId.of(TimeZone.getDefault().id) }
+    private val zoneOffset: ZoneOffset by lazy { ZoneOffset.systemDefault().rules.getOffset(Instant.now()) }
+    private val parsers: List<DateTimeFormatter> by lazy {
+        listOf(
+                DateTimeFormatter.ISO_DATE_TIME,
+                DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"),
+                DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss VV")
+        )
+    }
+    private val formatters: List<DateTimeFormatter> by lazy {
+        listOf(
+                DateTimeFormatter.ofPattern("dd MMM yyyy"),
+                DateTimeFormatter.ofPattern("dd MMM")
+        )
+    }
 
     @JvmStatic
     fun now(): Instant {
@@ -40,6 +44,11 @@ object TimeUtils {
             }
         }
         throw Exception("Unable to parse timestamp [$timestamp]")
+    }
+
+    @JvmStatic
+    fun secondsBetween(earlierInstant: Instant, laterInstant: Instant): Long {
+        return ChronoUnit.SECONDS.between(earlierInstant, laterInstant)
     }
 
     @JvmStatic

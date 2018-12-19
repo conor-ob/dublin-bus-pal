@@ -6,23 +6,23 @@ import ie.dublinbuspal.util.Coordinate
 import ie.dublinbuspal.util.StringUtils
 
 data class Stop(
-        private var defaultId: String? = null,
-        private var dublinBusId: String? = null,
-        private var goAheadDublinId: String? = null,
+        private val defaultId: String? = null,
+        private val dublinBusId: String? = null,
+        private val goAheadDublinId: String? = null,
 
-        private var favouriteName: String? = null,
-        private var defaultName: String? = null,
-        private var dublinBusName: String? = null,
-        private var goAheadDublinName: String? = null,
+        private val favouriteName: String? = null,
+        private val defaultName: String? = null,
+        private val dublinBusName: String? = null,
+        private val goAheadDublinName: String? = null,
 
-        private var defaultCoordinate: Coordinate? = null,
-        private var dublinBusCoordinate: Coordinate? = null,
-        private var goAheadDublinCoordinate: Coordinate? = null,
+        private val defaultCoordinate: Coordinate? = null,
+        private val dublinBusCoordinate: Coordinate? = null,
+        private val goAheadDublinCoordinate: Coordinate? = null,
 
-        private var favouriteRoutes: List<String> = emptyList(),
-        private var defaultRoutes: List<String> = emptyList(),
-        private var dublinBusRoutes: List<String> = emptyList(),
-        private var goAheadDublinRoutes: List<String> = emptyList()
+        private val favouriteRoutes: List<String> = emptyList(),
+        private val defaultRoutes: List<String> = emptyList(),
+        private val dublinBusRoutes: List<String> = emptyList(),
+        private val goAheadDublinRoutes: List<String> = emptyList()
 ) {
 
     fun id(): String {
@@ -70,27 +70,31 @@ data class Stop(
     }
 
     fun isFavourite(): Boolean {
-        return !StringUtils.isNullOrEmpty(favouriteName)
+        return StringUtils.isNotNullOrEmpty(favouriteName)
     }
 
     fun isDublinBusOnly(): Boolean {
-        return isDublinBus() && !isGoAheadDublin()
+        return (isDefault() || isDublinBus()) && !isGoAheadDublin()
     }
 
     fun isGoAheadDublinOnly(): Boolean {
-        return isGoAheadDublin() && !isDublinBus()
+        return !isDefault() && !isDublinBus() && isGoAheadDublin()
     }
 
     fun isDublinBusAndGoAheadDublin(): Boolean {
-        return isDublinBus() && isGoAheadDublin()
+        return (isDefault() || isDublinBus()) && isGoAheadDublin()
+    }
+
+    private fun isDefault(): Boolean {
+        return StringUtils.isNotNullOrEmpty(defaultId)
     }
 
     private fun isDublinBus(): Boolean {
-        return !StringUtils.isNullOrEmpty(defaultId) || !StringUtils.isNullOrEmpty(dublinBusId)
+        return StringUtils.isNotNullOrEmpty(dublinBusId)
     }
 
     private fun isGoAheadDublin(): Boolean {
-        return !StringUtils.isNullOrEmpty(goAheadDublinId)
+        return StringUtils.isNotNullOrEmpty(goAheadDublinId)
     }
 
 }

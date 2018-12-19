@@ -217,6 +217,7 @@ public class RouteActivity extends MvpActivity<RouteView, RoutePresenter>
     @Override
     public void displayBusStops(List<Stop> busStops) {
         clearMap();
+        setShowBusTimesButtonVisibility(View.VISIBLE);
         adapter.setBusStops(busStops);
         PolylineOptions polylineOptions = new PolylineOptions();
         polylineOptions.width(8);

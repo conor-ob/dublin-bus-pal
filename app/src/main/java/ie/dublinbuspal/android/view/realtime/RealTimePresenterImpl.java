@@ -149,15 +149,15 @@ public class RealTimePresenterImpl extends MvpBasePresenter<RealTimeView>
         getDisposables().add(Observable.fromCallable(() -> favouritesUseCase.saveFavourite(getModel().getStopId(), customName, customRoutes))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onSaveFavourite));
+                .subscribe(this::onSaveFavourite, this::onError));
     }
 
     @Override
     public void removeFavourite() {
-                getDisposables().add(Observable.fromCallable(() -> favouritesUseCase.removeFavourite(getModel().getStopId()))
+        getDisposables().add(Observable.fromCallable(() -> favouritesUseCase.removeFavourite(getModel().getStopId()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onRemovedFavourite));
+                .subscribe(this::onRemovedFavourite, this::onError));
     }
 
     private void onSaveFavourite(boolean saved) {

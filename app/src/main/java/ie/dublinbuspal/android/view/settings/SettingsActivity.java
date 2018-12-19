@@ -32,7 +32,7 @@ import ie.dublinbuspal.usecase.update.UpdateStopsAndRoutesUseCase;
 import ie.dublinbuspal.util.DateUtilities;
 import ie.dublinbuspal.util.StringUtils;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -62,8 +62,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 //        @Inject DublinBusRepository repository;
 //        @Inject DownloadProgressListener listener;
 
-        @Inject
-        UpdateStopsAndRoutesUseCase useCase;
+        @Inject UpdateStopsAndRoutesUseCase useCase;
+        private CompositeDisposable disposables = new CompositeDisposable();
 
         @Override
         public void onCreate(final Bundle savedInstanceState) {
@@ -73,6 +73,13 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             bindDynamicSummaries();
             bindSwitchEnabledPreferences();
             bindListeners();
+        }
+
+        @Override
+        public void onDestroy() {
+            disposables.clear();
+            disposables.dispose();
+            super.onDestroy();
         }
 
         private void setupInjection() {
@@ -111,7 +118,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     getString(R.string.preference_key_update_database));
             updatePreference.setOnPreferenceClickListener(preference -> {
                 updatePreference.setRefreshing(true);
-                Disposable disposable = useCase.update()
+                disposables.add(useCase.update()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(result -> {
@@ -122,10 +129,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                                         .edit()
                                         .putLong(getString(R.string.preference_key_update_database), new Date().getTime())
                                         .apply();
-                                bindLastUpdatedTimestampSummaryToValue(updatePreference);
+                                try {
+                                    bindLastUpdatedTimestampSummaryToValue(updatePreference);
+                                } catch (Exception e) {
+                                    //TODO check if view is attached
+                                }
                             }
                             Timber.d(result.toString());
-                        });
+                        }));
 
                 return true;
             });

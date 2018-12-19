@@ -16,4 +16,5 @@ public interface SearchQueryView extends MvpView {
 
     void hideLoading();
 
+    void showError(int stringResource);
 }
