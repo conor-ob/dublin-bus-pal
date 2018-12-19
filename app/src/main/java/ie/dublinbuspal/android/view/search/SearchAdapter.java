@@ -163,11 +163,13 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             stopID.setText(String.format(Locale.UK, formattedStopId, busStop.id()));
             stopName.setText(busStop.name());
             if (CollectionUtils.isNullOrEmpty(busStop.routes())) {
+                routes.setText(StringUtils.EMPTY_STRING);
                 routes.setVisibility(View.GONE);
             } else {
                 String middleDot = String.format(Locale.UK, " %s ",
                         StringUtils.MIDDLE_DOT);
                 routes.setText(StringUtils.join(busStop.routes(), middleDot));
+                routes.setVisibility(View.VISIBLE);
             }
         }
 
