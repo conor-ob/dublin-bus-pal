@@ -15,10 +15,11 @@ import android.view.MenuItem;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import org.threeten.bp.Instant;
+
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.util.Date;
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -29,8 +30,8 @@ import ie.dublinbuspal.android.R;
 import ie.dublinbuspal.android.util.ErrorLog;
 import ie.dublinbuspal.android.view.web.WebViewActivity;
 import ie.dublinbuspal.usecase.update.UpdateStopsAndRoutesUseCase;
-import ie.dublinbuspal.util.DateUtilities;
 import ie.dublinbuspal.util.StringUtils;
+import ie.dublinbuspal.util.TimeUtils;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -127,7 +128,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                                 updatePreference.setRefreshing(false);
                                 PreferenceManager.getDefaultSharedPreferences(updatePreference.getContext())
                                         .edit()
-                                        .putLong(getString(R.string.preference_key_update_database), new Date().getTime())
+                                        .putLong(getString(R.string.preference_key_update_database), TimeUtils.now().toEpochMilli())
                                         .apply();
                                 try {
                                     bindLastUpdatedTimestampSummaryToValue(updatePreference);
@@ -267,9 +268,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         private static void bindLastUpdatedTimestampSummaryToValue(Preference lastUpdated) {
             long time = PreferenceManager.getDefaultSharedPreferences(lastUpdated.getContext())
-                    .getLong(lastUpdated.getKey(), 0L);
+                    .getLong(lastUpdated.getKey(), TimeUtils.now().toEpochMilli());
             String format = String.format(Locale.UK, "Last updated %s",
-                    DateUtilities.formatLastUpdatedTime(new Date(time)));
+                    TimeUtils.formatAsDate(Instant.ofEpochMilli(time)));
             preferenceSummaryListener.onPreferenceChange(lastUpdated, format);
         }
 

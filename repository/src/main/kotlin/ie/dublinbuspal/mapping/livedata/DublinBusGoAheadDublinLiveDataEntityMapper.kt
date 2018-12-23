@@ -19,7 +19,7 @@ class DublinBusGoAheadDublinLiveDataEntityMapper : Mapper<RealTimeBusInformation
 
     private fun mapDueTime(duetime: String, expectedTime: String): DueTime {
         val expectedTimeInstant = TimeUtils.toInstant(expectedTime)
-        val time = TimeUtils.toStringHoursMinutes(expectedTimeInstant)
+        val time = TimeUtils.formateAsTime(expectedTimeInstant)
         if (duetime == "Due") {
             return DueTime(0L, time)
         }

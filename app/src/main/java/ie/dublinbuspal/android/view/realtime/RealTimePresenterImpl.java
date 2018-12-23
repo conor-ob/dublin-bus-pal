@@ -89,9 +89,6 @@ public class RealTimePresenterImpl extends MvpBasePresenter<RealTimeView>
     }
 
     private void onGetBusStop(Stop busStop) {
-        if (busStop.id().equals("-1")) {
-            return;
-        }
         getModel().setBusStop(busStop);
         if (busStop.isFavourite()) {
             getModel().setAdjustedBusStopService(busStop.routes());

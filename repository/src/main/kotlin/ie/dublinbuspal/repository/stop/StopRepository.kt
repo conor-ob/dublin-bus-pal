@@ -30,7 +30,10 @@ class StopRepository(
     }
 
     override fun getById(id: String): Observable<Stop> {
-        return getAll().map { stops -> findMatching(id, stops) }.distinctUntilChanged()
+        return getAll()
+                .map { stops -> findMatching(id, stops) }
+                .filter { stop -> stop.id() != "-1" }
+                .distinctUntilChanged()
     }
 
     private fun findMatching(id: String, stops: List<Stop>): Stop {

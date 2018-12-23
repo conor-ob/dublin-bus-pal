@@ -23,7 +23,8 @@ object TimeUtils {
     private val formatters: List<DateTimeFormatter> by lazy {
         listOf(
                 DateTimeFormatter.ofPattern("dd MMM yyyy"),
-                DateTimeFormatter.ofPattern("dd MMM")
+                DateTimeFormatter.ofPattern("dd MMM"),
+                DateTimeFormatter.ofPattern("d MMM, HH:mm")
         )
     }
 
@@ -57,12 +58,12 @@ object TimeUtils {
     }
 
     @JvmStatic
-    fun toStringHoursMinutes(instant: Instant): String {
+    fun formateAsTime(instant: Instant): String {
         return ZonedDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalTime().truncatedTo(ChronoUnit.MINUTES).toString()
     }
 
     @JvmStatic
-    fun toString(instantNow: Instant, instantInThePast: Instant): String {
+    fun formatAsAge(instantNow: Instant, instantInThePast: Instant): String {
         val days = ChronoUnit.DAYS.between(instantInThePast, instantNow)
         if (days > 365) {
             val dateTime = LocalDateTime.ofInstant(instantInThePast, zoneId)
@@ -81,6 +82,12 @@ object TimeUtils {
             return "${minutes}m"
         }
         return "Just now"
+    }
+
+    @JvmStatic
+    fun formatAsDate(instant: Instant): String {
+        val dateTime = LocalDateTime.ofInstant(instant, zoneId)
+        return formatters[2].format(dateTime)
     }
 
 }

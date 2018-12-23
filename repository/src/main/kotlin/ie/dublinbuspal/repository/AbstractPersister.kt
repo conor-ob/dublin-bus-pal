@@ -13,7 +13,6 @@ abstract class AbstractPersister<Raw, Parsed, Key>(
         private val persisterDao: PersisterDao
 ) : RoomPersister<Raw, Parsed, Key>, RecordProvider<Key> {
 
-    //TODO clean the memory policy stuff up. See how the cache expiry is done in Store
     private val lifespan: Long by lazy { memoryPolicy.expireAfterTimeUnit.toSeconds(memoryPolicy.expireAfterWrite) }
 
     override fun getRecordState(key: Key): RecordState {
