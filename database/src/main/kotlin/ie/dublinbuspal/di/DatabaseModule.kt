@@ -43,6 +43,10 @@ class DatabaseModule(
 
     @Provides
     @Singleton
+    fun goAheadDublinRouteDao(database: DublinBusDatabase): GoAheadDublinRouteDao = database.goAheadDublinRouteDao()
+
+    @Provides
+    @Singleton
     fun favouriteStopDao(database: DublinBusDatabase): FavouriteStopDao = database.favouriteStopDao()
 
     @Provides

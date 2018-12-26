@@ -5,7 +5,9 @@ import ie.dublinbuspal.model.route.DefaultRoute
 import ie.dublinbuspal.repository.Repository
 import io.reactivex.Observable
 
-class DefaultRouteRepository(private val store: StoreRoom<List<DefaultRoute>, String>) : Repository<DefaultRoute> {
+class DefaultRouteRepository(
+        private val store: StoreRoom<List<DefaultRoute>, String>
+) : Repository<DefaultRoute> {
 
     private val key = "default_routes"
 

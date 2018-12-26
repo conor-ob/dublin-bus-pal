@@ -15,6 +15,7 @@ import ie.dublinbuspal.data.entity.*
             DublinBusStopEntity::class,
             GoAheadDublinStopEntity::class,
             DefaultRouteEntity::class,
+            GoAheadDublinRouteEntity::class,
             FavouriteStopEntity::class,
             PersisterEntity::class
         ]
@@ -29,6 +30,8 @@ abstract class DublinBusDatabase : RoomDatabase() {
     abstract fun goAheadDublinStopDao(): GoAheadDublinStopDao
 
     abstract fun defaultRouteDao(): DefaultRouteDao
+
+    abstract fun goAheadDublinRouteDao(): GoAheadDublinRouteDao
 
     abstract fun favouriteStopDao(): FavouriteStopDao
 

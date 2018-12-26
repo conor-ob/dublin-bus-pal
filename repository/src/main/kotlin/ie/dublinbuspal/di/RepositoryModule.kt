@@ -17,6 +17,8 @@ import ie.dublinbuspal.mapping.livedata.DublinBusGoAheadDublinLiveDataDomainMapp
 import ie.dublinbuspal.mapping.livedata.DublinBusGoAheadDublinLiveDataEntityMapper
 import ie.dublinbuspal.mapping.route.DefaultRouteDomainMapper
 import ie.dublinbuspal.mapping.route.DefaultRouteEntityMapper
+import ie.dublinbuspal.mapping.route.GoAheadDublinRouteDomainMapper
+import ie.dublinbuspal.mapping.route.GoAheadDublinRouteEntityMapper
 import ie.dublinbuspal.mapping.routeservice.DefaultRouteServiceMapper
 import ie.dublinbuspal.mapping.rss.RssMapper
 import ie.dublinbuspal.mapping.stop.*
@@ -27,11 +29,11 @@ import ie.dublinbuspal.model.livedata.RealTimeStopData
 import ie.dublinbuspal.model.route.DefaultRoute
 import ie.dublinbuspal.model.route.GoAheadDublinRoute
 import ie.dublinbuspal.model.route.Route
-import ie.dublinbuspal.model.route.RouteVariant
 import ie.dublinbuspal.model.routeservice.RouteService
 import ie.dublinbuspal.model.rss.RssNews
 import ie.dublinbuspal.model.stop.DefaultStop
-import ie.dublinbuspal.model.stop.DublinBusGoAheadDublinStop
+import ie.dublinbuspal.model.stop.DublinBusStop
+import ie.dublinbuspal.model.stop.GoAheadDublinStop
 import ie.dublinbuspal.model.stop.Stop
 import ie.dublinbuspal.repository.FavouriteStopRepository
 import ie.dublinbuspal.repository.Repository
@@ -39,10 +41,7 @@ import ie.dublinbuspal.repository.favourite.DefaultFavouriteStopRepository
 import ie.dublinbuspal.repository.livedata.DefaultLiveDataRepository
 import ie.dublinbuspal.repository.livedata.GoAheadDublinLiveDataRepository
 import ie.dublinbuspal.repository.livedata.LiveDataRepository
-import ie.dublinbuspal.repository.route.DefaultRoutePersister
-import ie.dublinbuspal.repository.route.DefaultRouteRepository
-import ie.dublinbuspal.repository.route.GoAheadDublinRouteRepository
-import ie.dublinbuspal.repository.route.RouteRepository
+import ie.dublinbuspal.repository.route.*
 import ie.dublinbuspal.repository.routeservice.DefaultRouteServiceRepository
 import ie.dublinbuspal.repository.rss.RssNewsRepository
 import ie.dublinbuspal.repository.stop.*
@@ -57,9 +56,7 @@ import ie.dublinbuspal.service.model.stop.StopsResponseXml
 import ie.dublinbuspal.service.resource.DublinBusGoAheadDublinRestResource
 import ie.dublinbuspal.service.resource.DublinBusRssResource
 import ie.dublinbuspal.service.resource.DublinBusSoapResource
-import java.util.*
 import java.util.concurrent.TimeUnit
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -69,8 +66,8 @@ class RepositoryModule {
     @Singleton
     fun stopRepository(
             defaultStopRepository: Repository<DefaultStop>,
-            @Named("bac") dublinBusStopRepository: Repository<DublinBusGoAheadDublinStop>,
-            @Named("gad") goAheadDublinStopRepository: Repository<DublinBusGoAheadDublinStop>,
+            dublinBusStopRepository: Repository<DublinBusStop>,
+            goAheadDublinStopRepository: Repository<GoAheadDublinStop>,
             favouriteStopRepository: FavouriteStopRepository<FavouriteStop>
     ): Repository<Stop> {
         return StopRepository(defaultStopRepository, dublinBusStopRepository, goAheadDublinStopRepository, favouriteStopRepository)
@@ -79,13 +76,13 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun defaultStopRepository(
-            api: DublinBusSoapResource,
+            resource: DublinBusSoapResource,
             dao: DefaultStopDao,
             persisterDao: PersisterDao,
             txRunner: TxRunner
     ): Repository<DefaultStop> {
 
-        val fetcher = Fetcher<StopsResponseXml, String> { api.getDublinBusStops() }
+        val fetcher = Fetcher<StopsResponseXml, String> { resource.getDublinBusStops() }
 
         val memoryPolicy = MemoryPolicy.builder()
                 .setExpireAfterWrite(24)
@@ -102,15 +99,14 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    @Named("bac")
     fun dublinBusStopRepository(
-            api: DublinBusGoAheadDublinRestResource,
+            resource: DublinBusGoAheadDublinRestResource,
             dao: DublinBusStopDao,
             persisterDao: PersisterDao,
             txRunner: TxRunner
-    ): Repository<DublinBusGoAheadDublinStop> {
+    ): Repository<DublinBusStop> {
 
-        val fetcher = Fetcher<StopsResponseJson, String> { api.getDublinBusStops() }
+        val fetcher = Fetcher<StopsResponseJson, String> { resource.getDublinBusStops() }
 
         val memoryPolicy = MemoryPolicy.builder()
                 .setExpireAfterWrite(24)
@@ -127,15 +123,14 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    @Named("gad")
     fun goAheadDublinStopRepository(
-            api: DublinBusGoAheadDublinRestResource,
+            resource: DublinBusGoAheadDublinRestResource,
             dao: GoAheadDublinStopDao,
             persisterDao: PersisterDao,
             txRunner: TxRunner
-    ): Repository<DublinBusGoAheadDublinStop> {
+    ): Repository<GoAheadDublinStop> {
 
-        val fetcher = Fetcher<StopsResponseJson, String> { api.getGoAheadDublinStops() }
+        val fetcher = Fetcher<StopsResponseJson, String> { resource.getGoAheadDublinStops() }
 
         val memoryPolicy = MemoryPolicy.builder()
                 .setExpireAfterWrite(24)
@@ -162,13 +157,13 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun defaultRouteRepository(
-            api: DublinBusSoapResource,
+            resource: DublinBusSoapResource,
             dao: DefaultRouteDao,
             persisterDao: PersisterDao,
             txRunner: TxRunner
     ): Repository<DefaultRoute> {
 
-        val fetcher = Fetcher<RoutesResponseXml, String> { api.getDublinBusRoutes() }
+        val fetcher = Fetcher<RoutesResponseXml, String> { resource.getDublinBusRoutes() }
 
         val memoryPolicy = MemoryPolicy.builder()
                 .setExpireAfterWrite(24)
@@ -186,25 +181,23 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun goAheadDublinRouteRepository(
-            resource: DublinBusGoAheadDublinRestResource
-//            dao: GoAheadDublinRouteDao,
-//            txRunner: TxRunner
+            resource: DublinBusGoAheadDublinRestResource,
+            dao: GoAheadDublinRouteDao,
+            persisterDao: PersisterDao,
+            txRunner: TxRunner
     ): Repository<GoAheadDublinRoute> {
 
+        val fetcher = Fetcher<RouteListInformationWithVariantsResponseJson, String> { resource.getGoAheadDublinRoutes() }
+        
         val memoryPolicy = MemoryPolicy.builder()
                 .setExpireAfterWrite(24)
                 .setExpireAfterTimeUnit(TimeUnit.HOURS)
                 .build()
 
-        val store = StoreBuilder.parsedWithKey<String, RouteListInformationWithVariantsResponseJson, List<GoAheadDublinRoute>>()
-                .fetcher { resource.getGoAheadDublinRoutes() }
-                .parser { json ->
-                    json.routes
-                            .map { it -> GoAheadDublinRoute(it.route!!, Collections.singletonList(RouteVariant(it.variants!![0].origin!!, it.variants!![0].destination!!))) }
-                }
-                .memoryPolicy(memoryPolicy)
-                .refreshOnStale()
-                .open()
+        val domainMapper = GoAheadDublinRouteDomainMapper()
+        val entityMapper = GoAheadDublinRouteEntityMapper()
+        val persister = GoAheadDublinRoutePersister(memoryPolicy, persisterDao, dao, txRunner, entityMapper, domainMapper)
+        val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
 
         return GoAheadDublinRouteRepository(store)
     }
@@ -244,7 +237,7 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun defaultLiveDataRepository(api: DublinBusSoapResource): Repository<RealTimeStopData> {
+    fun defaultLiveDataRepository(resource: DublinBusSoapResource): Repository<RealTimeStopData> {
 
         val memoryPolicy = MemoryPolicy.builder()
                 .setExpireAfterWrite(30)
@@ -253,7 +246,7 @@ class RepositoryModule {
 
         val mapper = DefaultLiveDataEntityMapper()
         val store = StoreBuilder.parsedWithKey<String, LiveDataResponseXml, List<RealTimeStopData>>()
-                .fetcher { key -> api.getDublinBusLiveData(key) }
+                .fetcher { key -> resource.getDublinBusLiveData(key) }
                 .parser { xml -> mapper.map(xml.realTimeStopData) }
                 .memoryPolicy(memoryPolicy)
                 .refreshOnStale()
@@ -264,7 +257,7 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun goAheadDublinLiveDataRepository(api: DublinBusGoAheadDublinRestResource): Repository<DublinBusGoAheadDublinLiveData> {
+    fun goAheadDublinLiveDataRepository(resource: DublinBusGoAheadDublinRestResource): Repository<DublinBusGoAheadDublinLiveData> {
 
         val memoryPolicy = MemoryPolicy.builder()
                 .setExpireAfterWrite(30)
@@ -273,7 +266,7 @@ class RepositoryModule {
 
         val mapper = DublinBusGoAheadDublinLiveDataEntityMapper()
         val store = StoreBuilder.parsedWithKey<String, RealTimeBusInformationResponseJson, List<DublinBusGoAheadDublinLiveData>>()
-                .fetcher { key -> api.getGoAheadDublinLiveData(key) }
+                .fetcher { key -> resource.getGoAheadDublinLiveData(key) }
                 .parser { json -> mapper.map(json.realTimeBusInformation) }
                 .memoryPolicy(memoryPolicy)
                 .refreshOnStale()
@@ -294,7 +287,7 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun rssRepository(api: DublinBusRssResource): Repository<RssNews> {
+    fun rssRepository(resource: DublinBusRssResource): Repository<RssNews> {
 
         val memoryPolicy = MemoryPolicy.builder()
                 .setExpireAfterWrite(24)
@@ -303,7 +296,7 @@ class RepositoryModule {
 
         val mapper = RssMapper()
         val store = StoreBuilder.parsedWithKey<String, RssResponseXml, List<RssNews>>()
-                .fetcher { api.getDublinBusNews() }
+                .fetcher { resource.getDublinBusNews() }
                 .parser { xml -> mapper.map(xml.channel!!.newsItems) }
                 .memoryPolicy(memoryPolicy)
                 .refreshOnStale()

@@ -3,19 +3,19 @@ package ie.dublinbuspal.usecase.update
 import ie.dublinbuspal.model.route.DefaultRoute
 import ie.dublinbuspal.model.route.GoAheadDublinRoute
 import ie.dublinbuspal.model.stop.DefaultStop
-import ie.dublinbuspal.model.stop.DublinBusGoAheadDublinStop
+import ie.dublinbuspal.model.stop.DublinBusStop
+import ie.dublinbuspal.model.stop.GoAheadDublinStop
 import ie.dublinbuspal.repository.Repository
 import io.reactivex.Observable
 import io.reactivex.functions.Function5
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
-import javax.inject.Named
 
 class UpdateStopsAndRoutesUseCase @Inject constructor(
         private val defaultStopRepository: Repository<DefaultStop>,
         private val defaultRouteRepository: Repository<DefaultRoute>,
-        @Named("bac") private val dublinBusStopRepository: Repository<DublinBusGoAheadDublinStop>,
-        @Named("gad") private val goAheadDublinStopRepository: Repository<DublinBusGoAheadDublinStop>,
+        private val dublinBusStopRepository: Repository<DublinBusStop>,
+        private val goAheadDublinStopRepository: Repository<GoAheadDublinStop>,
         private val goAheadDublinRouteRepository: Repository<GoAheadDublinRoute>
 ) {
 

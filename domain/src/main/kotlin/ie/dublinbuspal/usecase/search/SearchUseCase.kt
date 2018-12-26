@@ -65,10 +65,8 @@ class SearchUseCase @Inject constructor(
     private fun searchRoutes(value: String?, routes: List<Route>): List<Route> {
         val result = mutableListOf<Route>()
         for (route in routes) {
-            for (variant in route.variants) {
-                if (String.format("%s %s %s", route.id, variant.origin, variant.destination).toLowerCase().contains(value!!)) {
-                    result.add(route)
-                }
+            if (String.format("%s %s %s", route.id, route.origin, route.destination).toLowerCase().contains(value!!)) {
+                result.add(route)
             }
         }
         return result

@@ -15,7 +15,7 @@ import ie.dublinbuspal.model.stop.Stop;
 import ie.dublinbuspal.util.CollectionUtils;
 import ie.dublinbuspal.util.StringUtils;
 
-public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int TITLE = 0;
     private static final int ROUTE = 1;
@@ -129,8 +129,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 //                routeId.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.textColorPrimary));
 //                routeId.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(itemView.getContext(), R.color.colorAccent)));
 //            }
-            routeDescription.setText(String.format(Locale.UK, "%s - %s",
-                    route.getVariants().get(0).getOrigin(), route.getVariants().get(0).getDestination()));
+            routeDescription.setText(String.format(Locale.UK, "%s - %s", route.getOrigin(), route.getDestination()));
         }
 
         @Override

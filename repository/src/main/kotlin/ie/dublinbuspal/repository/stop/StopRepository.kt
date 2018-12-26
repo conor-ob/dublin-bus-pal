@@ -2,7 +2,8 @@ package ie.dublinbuspal.repository.stop
 
 import ie.dublinbuspal.model.favourite.FavouriteStop
 import ie.dublinbuspal.model.stop.DefaultStop
-import ie.dublinbuspal.model.stop.DublinBusGoAheadDublinStop
+import ie.dublinbuspal.model.stop.DublinBusStop
+import ie.dublinbuspal.model.stop.GoAheadDublinStop
 import ie.dublinbuspal.model.stop.Stop
 import ie.dublinbuspal.repository.FavouriteStopRepository
 import ie.dublinbuspal.repository.Repository
@@ -12,16 +13,16 @@ import io.reactivex.schedulers.Schedulers
 
 class StopRepository(
         private val defaultStopRepository: Repository<DefaultStop>,
-        private val dublinBusStopRepository: Repository<DublinBusGoAheadDublinStop>,
-        private val goAheadDublinStopRepository: Repository<DublinBusGoAheadDublinStop>,
+        private val dublinBusStopRepository: Repository<DublinBusStop>,
+        private val goAheadDublinStopRepository: Repository<GoAheadDublinStop>,
         private val favouriteStopRepository: FavouriteStopRepository<FavouriteStop>
 ) : Repository<Stop> {
 
     override fun getAll(): Observable<List<Stop>> {
         return Observable.combineLatest(
                 defaultStopRepository.getAll().startWith(emptyList<DefaultStop>()).subscribeOn(Schedulers.io()),
-                dublinBusStopRepository.getAll().startWith(emptyList<DublinBusGoAheadDublinStop>()).subscribeOn(Schedulers.io()),
-                goAheadDublinStopRepository.getAll().startWith(emptyList<DublinBusGoAheadDublinStop>()).subscribeOn(Schedulers.io()),
+                dublinBusStopRepository.getAll().startWith(emptyList<DublinBusStop>()).subscribeOn(Schedulers.io()),
+                goAheadDublinStopRepository.getAll().startWith(emptyList<GoAheadDublinStop>()).subscribeOn(Schedulers.io()),
                 favouriteStopRepository.getAll().startWith(emptyList<FavouriteStop>()).subscribeOn(Schedulers.io()),
                 Function4 { defaultStops, dublinBusStops, goAheadDublinStops, favouriteStops ->
                     aggregate(defaultStops, dublinBusStops, goAheadDublinStops, favouriteStops)
@@ -47,8 +48,8 @@ class StopRepository(
 
     private fun aggregate(
             defaultStops: List<DefaultStop>,
-            dublinBusStops: List<DublinBusGoAheadDublinStop>,
-            goAheadDublinStops: List<DublinBusGoAheadDublinStop>,
+            dublinBusStops: List<DublinBusStop>,
+            goAheadDublinStops: List<GoAheadDublinStop>,
             favouriteStops: List<FavouriteStop>
     ): List<Stop> {
         val aggregatedStops = mutableMapOf<String, Stop>()

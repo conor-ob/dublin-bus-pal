@@ -6,7 +6,7 @@ import ie.dublinbuspal.data.dao.GoAheadDublinStopDao
 import ie.dublinbuspal.data.dao.PersisterDao
 import ie.dublinbuspal.data.entity.GoAheadDublinStopEntity
 import ie.dublinbuspal.data.entity.PersisterEntity
-import ie.dublinbuspal.model.stop.DublinBusGoAheadDublinStop
+import ie.dublinbuspal.model.stop.GoAheadDublinStop
 import ie.dublinbuspal.repository.AbstractPersister
 import ie.dublinbuspal.repository.Mapper
 import ie.dublinbuspal.service.model.stop.StopJson
@@ -19,10 +19,10 @@ class GoAheadDublinStopPersister(
         private val dao: GoAheadDublinStopDao,
         private val txRunner: TxRunner,
         private val entityMapper: Mapper<StopJson, GoAheadDublinStopEntity>,
-        private val domainMapper: Mapper<GoAheadDublinStopEntity, DublinBusGoAheadDublinStop>
-) : AbstractPersister<StopsResponseJson, List<DublinBusGoAheadDublinStop>, String>(memoryPolicy, persisterDao) {
+        private val domainMapper: Mapper<GoAheadDublinStopEntity, GoAheadDublinStop>
+) : AbstractPersister<StopsResponseJson, List<GoAheadDublinStop>, String>(memoryPolicy, persisterDao) {
 
-    override fun read(key: String): Observable<List<DublinBusGoAheadDublinStop>> {
+    override fun read(key: String): Observable<List<GoAheadDublinStop>> {
         return dao.selectAll()
                 .map { domainMapper.map(it) }
                 .toObservable()

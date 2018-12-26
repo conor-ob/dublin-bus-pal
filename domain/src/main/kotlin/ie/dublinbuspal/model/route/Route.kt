@@ -1,9 +1,10 @@
 package ie.dublinbuspal.model.route
 
-import ie.dublinbuspal.model.service.Operator
+import ie.dublinbuspal.util.Operator
 
 data class Route(
         val id: String,
-        val variants: List<RouteVariant>,
+        val origin: String,
+        val destination: String,
         val operator: Operator
 )
