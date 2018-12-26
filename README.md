@@ -8,7 +8,7 @@
 
 <p align="center">
   <a href="https://play.google.com/store/apps/details?id=ie.dublinbuspal.android"><img src="https://img.shields.io/badge/version-1.0-lightgrey.svg?style=shield"></a>
-  <a href="https://circleci.com/gh/conor-ob/dublin-bus-pal/tree/kotlin-migration"><img src="https://circleci.com/gh/conor-ob/dublin-bus-pal/tree/kotlin-migration.svg?style=shield"></a>
+  <a href="https://circleci.com/gh/conor-ob/dublin-bus-pal/tree/master"><img src="https://circleci.com/gh/conor-ob/dublin-bus-pal/tree/master.svg?style=shield"></a>
   <a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/license-GPL%20v3-blue.svg?style=shield"></a>
 </p>
 
