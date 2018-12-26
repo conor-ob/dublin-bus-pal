@@ -22,11 +22,6 @@ class LiveDataRepository(
                 realTimeBusInformationRepository.getAllById(id).subscribeOn(Schedulers.io()),
                 BiFunction { r1, r2 -> resolveAndSort(r1, r2) }
         )
-//        return Observable.combineLatest(
-//                defaultLiveDataRepository.getAllById(id).startWith(emptyList<RealTimeStopData>()).subscribeOn(Schedulers.io()),
-//                goAheadDublinLiveDataRepository.getAllById(id).startWith(emptyList<DublinBusGoAheadDublinLiveData>()).subscribeOn(Schedulers.io()),
-//                BiFunction { r1, r2 -> resolveAndSort(r1, r2) }
-//        )
     }
 
     private fun resolveAndSort(realTimeStopData: List<RealTimeStopData>, realTimeBusInformation: List<DublinBusGoAheadDublinLiveData>): List<LiveData> {

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "5da130c8a4587346a4e1f2fc7629b936",
+    "identityHash": "df0b788a24e7810c8c0c2045e2b34861",
     "entities": [
       {
         "tableName": "default_stops",
@@ -163,82 +163,6 @@
         "foreignKeys": []
       },
       {
-        "tableName": "default_stop_services",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `routes` TEXT NOT NULL, PRIMARY KEY(`id`))",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "routes",
-            "columnName": "routes",
-            "affinity": "TEXT",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "id"
-          ],
-          "autoGenerate": false
-        },
-        "indices": [],
-        "foreignKeys": []
-      },
-      {
-        "tableName": "default_route_services",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `origin` TEXT NOT NULL, `destination` TEXT NOT NULL, `inbound_stops` TEXT NOT NULL, `outbound_stops` TEXT NOT NULL, PRIMARY KEY(`id`))",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "name",
-            "columnName": "name",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "origin",
-            "columnName": "origin",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "destination",
-            "columnName": "destination",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "inboundStops",
-            "columnName": "inbound_stops",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "outboundStops",
-            "columnName": "outbound_stops",
-            "affinity": "TEXT",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "id"
-          ],
-          "autoGenerate": false
-        },
-        "indices": [],
-        "foreignKeys": []
-      },
-      {
         "tableName": "favourites",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `routes` TEXT NOT NULL, `order` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
@@ -305,7 +229,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"5da130c8a4587346a4e1f2fc7629b936\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"df0b788a24e7810c8c0c2045e2b34861\")"
     ]
   }
 }

@@ -58,7 +58,7 @@ object TimeUtils {
     }
 
     @JvmStatic
-    fun formateAsTime(instant: Instant): String {
+    fun formatAsTime(instant: Instant): String {
         return ZonedDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalTime().truncatedTo(ChronoUnit.MINUTES).toString()
     }
 

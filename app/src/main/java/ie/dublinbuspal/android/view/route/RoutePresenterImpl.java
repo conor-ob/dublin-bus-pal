@@ -8,7 +8,6 @@ import java.net.UnknownHostException;
 
 import javax.inject.Inject;
 
-import ie.dublinbuspal.SoapServiceUnavailableException;
 import ie.dublinbuspal.android.R;
 import ie.dublinbuspal.android.util.ErrorLog;
 import ie.dublinbuspal.model.routeservice.RouteService;
@@ -58,9 +57,7 @@ public class RoutePresenterImpl extends MvpBasePresenter<RouteView> implements R
         ErrorLog.e(throwable);
         ifViewAttached(view -> {
             view.hideProgress();
-            if (throwable instanceof SoapServiceUnavailableException) {
-                view.showError(R.string.error_no_service);
-            } else if (throwable instanceof UnknownHostException) {
+            if (throwable instanceof UnknownHostException) {
                 view.showError(R.string.error_no_internet);
             } else if (throwable instanceof SocketException) {
                 view.showError(R.string.error_interrupted);

@@ -21,7 +21,7 @@ class DefaultLiveDataEntityMapper : Mapper<RealTimeStopDataDataXml, RealTimeStop
         val timestampInstant = TimeUtils.toInstant(timestamp)
         val expectedTimeInstant = TimeUtils.toInstant(expectedTime)
         val minutes = TimeUtils.minutesBetween(timestampInstant, expectedTimeInstant)
-        return DueTime(minutes, TimeUtils.formateAsTime(expectedTimeInstant))
+        return DueTime(minutes, TimeUtils.formatAsTime(expectedTimeInstant))
     }
 
     //TODO duplicate code

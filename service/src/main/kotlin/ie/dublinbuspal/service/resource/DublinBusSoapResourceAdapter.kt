@@ -7,15 +7,10 @@ import ie.dublinbuspal.service.model.routeservice.RouteServiceRequestBodyXml
 import ie.dublinbuspal.service.model.routeservice.RouteServiceRequestRootXml
 import ie.dublinbuspal.service.model.routeservice.RouteServiceRequestXml
 import ie.dublinbuspal.service.model.routeservice.RouteServiceResponseXml
-import ie.dublinbuspal.service.model.status.ServiceStatusRequestBodyXml
-import ie.dublinbuspal.service.model.status.ServiceStatusRequestRootXml
-import ie.dublinbuspal.service.model.status.ServiceStatusRequestXml
-import ie.dublinbuspal.service.model.status.ServiceStatusResponseXml
-import ie.dublinbuspal.service.model.stop.*
-import ie.dublinbuspal.service.model.stopservice.StopServiceRequestBodyXml
-import ie.dublinbuspal.service.model.stopservice.StopServiceRequestRootXml
-import ie.dublinbuspal.service.model.stopservice.StopServiceRequestXml
-import ie.dublinbuspal.service.model.stopservice.StopServiceResponseXml
+import ie.dublinbuspal.service.model.stop.StopsRequestBodyXml
+import ie.dublinbuspal.service.model.stop.StopsRequestRootXml
+import ie.dublinbuspal.service.model.stop.StopsRequestXml
+import ie.dublinbuspal.service.model.stop.StopsResponseXml
 import ie.dublinbuspal.util.StringUtils
 import io.reactivex.Single
 
@@ -38,18 +33,9 @@ class DublinBusSoapResourceAdapter(
                 .map { adaptDublinBusLiveDataResponse(it) }
     }
 
-    override fun getDublinBusStopService(stopId: String): Single<StopServiceResponseXml> {
-        return api.getStopService(buildDublinBusStopServiceKey(stopId))
-                .map { adaptDublinBusStopServiceResponse(it) }
-    }
-
     override fun getDublinBusRouteService(routeId: String): Single<RouteServiceResponseXml> {
         return api.getRouteService(buildDublinBusRouteServiceKey(routeId))
                 .map { adaptDublinBusRouteServiceResponse(it) }
-    }
-
-    override fun getDublinBusServiceStatus(): Single<ServiceStatusResponseXml> {
-        return api.getServiceStatus(dublinBusServiceStatusKey)
     }
 
     private fun adaptDublinBusStopsResponse(response: StopsResponseXml): StopsResponseXml {
@@ -71,13 +57,6 @@ class DublinBusSoapResourceAdapter(
                 .filter { it.routeId != null && it.destination != null && it.expectedTimestamp != null && it.timestamp != null }
                 .map { RealTimeStopDataDataXml(it.routeId!!.trim(), it.destination!!.trim(), it.timestamp!!.trim(), it.expectedTimestamp!!.trim()) }
         return response.copy(realTimeStopData = filtered)
-    }
-
-    private fun adaptDublinBusStopServiceResponse(response: StopServiceResponseXml): StopServiceResponseXml {
-        val filtered = response.routes
-                .filter { it.id != null && it.origin != null && it.destination != null }
-                .map { RouteXml(it.id!!.trim(), it.origin!!.trim(), it.destination!!.trim()) }
-        return response.copy(routes = filtered)
     }
 
     private fun adaptDublinBusRouteServiceResponse(response: RouteServiceResponseXml): RouteServiceResponseXml {
@@ -102,22 +81,10 @@ class DublinBusSoapResourceAdapter(
         return LiveDataRequestXml(body)
     }
 
-    private fun buildDublinBusStopServiceKey(stopId: String): StopServiceRequestXml {
-        val root = StopServiceRequestRootXml(stopId)
-        val body = StopServiceRequestBodyXml(root)
-        return StopServiceRequestXml(body)
-    }
-
     private fun buildDublinBusRouteServiceKey(routeId: String): RouteServiceRequestXml {
         val root = RouteServiceRequestRootXml(routeId)
         val body = RouteServiceRequestBodyXml(root)
         return RouteServiceRequestXml(body)
-    }
-
-    private val dublinBusServiceStatusKey: ServiceStatusRequestXml by lazy {
-        val root = ServiceStatusRequestRootXml()
-        val body = ServiceStatusRequestBodyXml(root)
-        return@lazy ServiceStatusRequestXml(body)
     }
 
 }

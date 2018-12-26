@@ -3,14 +3,14 @@ package ie.dublinbuspal.usecase.livedata
 import ie.dublinbuspal.model.livedata.Destination
 import ie.dublinbuspal.model.livedata.LiveData
 import ie.dublinbuspal.model.stop.Stop
-import ie.dublinbuspal.model.stopservice.DefaultStopService
 import ie.dublinbuspal.repository.Repository
 import io.reactivex.Observable
 import javax.inject.Inject
 
-class LiveDataUseCase @Inject constructor(private val liveDataRepository: Repository<LiveData>,
-                                          private val stopRepository: Repository<Stop>,
-                                          private val defaultStopServiceRepository: Repository<DefaultStopService>) {
+class LiveDataUseCase @Inject constructor(
+        private val liveDataRepository: Repository<LiveData>,
+        private val stopRepository: Repository<Stop>
+) {
 
     fun getBusStop(stopId: String): Observable<Stop> {
         return stopRepository.getById(stopId)
@@ -36,10 +36,6 @@ class LiveDataUseCase @Inject constructor(private val liveDataRepository: Reposi
             liveDataForRoute.add(data)
         }
         return condensedLivedata
-    }
-
-    fun getStopService(stopId: String): Observable<DefaultStopService> {
-        return defaultStopServiceRepository.getById(stopId)
     }
 
 }

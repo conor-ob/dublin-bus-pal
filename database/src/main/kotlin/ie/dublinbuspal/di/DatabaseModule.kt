@@ -12,7 +12,9 @@ import ie.dublinbuspal.database.migration.Migrations.MIGRATION_1_2
 import javax.inject.Singleton
 
 @Module
-class DatabaseModule(private val databaseName: String) {
+class DatabaseModule(
+        private val databaseName: String
+) {
 
     @Provides
     @Singleton
@@ -38,14 +40,6 @@ class DatabaseModule(private val databaseName: String) {
     @Provides
     @Singleton
     fun defaultRouteDao(database: DublinBusDatabase): DefaultRouteDao = database.defaultRouteDao()
-
-    @Provides
-    @Singleton
-    fun defaultStopServiceDao(database: DublinBusDatabase): DefaultStopServiceDao = database.defaultStopServiceDao()
-
-    @Provides
-    @Singleton
-    fun defaultRouteServiceDao(database: DublinBusDatabase): DefaultRouteServiceDao = database.defaultRouteServiceDao()
 
     @Provides
     @Singleton
