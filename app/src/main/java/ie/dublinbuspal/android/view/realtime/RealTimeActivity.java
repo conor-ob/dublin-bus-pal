@@ -354,17 +354,19 @@ public class RealTimeActivity
                 .target(new LatLng(busStop.coordinate().getX(), busStop.coordinate().getY()))
                 .zoom(GoogleMapConstants.DEFAULT_ZOOM)
                 .build();
-        googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        if (busStopMarker != null) {
-            busStopMarker.remove();
-        }
-        busStopMarker = googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(busStop.coordinate().getX(), busStop.coordinate().getY()))
-                .anchor(0.3f, 1.0f)
-                .icon(ImageUtils.drawableToBitmap(getApplicationContext(), R.drawable.ic_map_marker_bus_double_decker_default)));
+        if (googleMap != null) {
+            googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            if (busStopMarker != null) {
+                busStopMarker.remove();
+            }
+            busStopMarker = googleMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(busStop.coordinate().getX(), busStop.coordinate().getY()))
+                    .anchor(0.3f, 1.0f)
+                    .icon(ImageUtils.drawableToBitmap(getApplicationContext(), R.drawable.ic_map_marker_bus_double_decker_default)));
 
-        if (streetViewPanorama != null) {
-            streetViewPanorama.setPosition(new LatLng(busStop.coordinate().getX(), busStop.coordinate().getY()));
+            if (streetViewPanorama != null) {
+                streetViewPanorama.setPosition(new LatLng(busStop.coordinate().getX(), busStop.coordinate().getY()));
+            }
         }
     }
 
@@ -542,10 +544,12 @@ public class RealTimeActivity
 
         @Override
         public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-            View view = googleMapFragment.getView();
-            if (view != null) {
-                int dy = bottomSheet.getTop() - coordinatorLayout.getHeight();
-                view.setTranslationY(dy / 2);
+            if (googleMapFragment != null) {
+                View view = googleMapFragment.getView();
+                if (view != null) {
+                    int dy = bottomSheet.getTop() - coordinatorLayout.getHeight();
+                    view.setTranslationY(dy / 2);
+                }
             }
         }
 
