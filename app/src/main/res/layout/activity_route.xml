@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".view.route.RouteActivity">
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -30,43 +29,43 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:background="@drawable/text_view_rounded_corner"
                     android:gravity="center"
+                    android:minWidth="40dp"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
-                    android:minWidth="40dp"
                     android:textColor="@color/textColorPrimary"
                     android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:background="@drawable/text_view_rounded_corner"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/route_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:singleLine="true"
                     android:ellipsize="marquee"
-                    android:marqueeRepeatLimit ="1"
-                    android:scrollHorizontally="true"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
+                    android:marqueeRepeatLimit="1"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
                     android:textColor="@android:color/white"
                     android:textSize="18sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
-        </android.support.v7.widget.Toolbar>
+        </androidx.appcompat.widget.Toolbar>
 
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/google_map_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v4.widget.SwipeRefreshLayout
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -75,9 +74,9 @@
                 android:id="@+id/google_map"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
 
-        </android.support.v4.widget.SwipeRefreshLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <Button
             android:id="@+id/show_stops_button"
@@ -85,47 +84,48 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center|bottom"
             android:layout_marginBottom="8dp"
+            android:drawableEnd="@drawable/ic_arrow_up_white"
+            android:drawablePadding="4dp"
             android:paddingStart="16dp"
             android:paddingEnd="12dp"
-            android:theme="@style/ButtonPrimary"
-            android:drawableEnd="@drawable/ic_arrow_up_white"
             android:text="@string/show_route"
-            android:drawablePadding="4dp"/>
+            android:theme="@style/ButtonPrimary"
+            android:visibility="gone" />
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/button_swap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
             android:layout_marginBottom="12dp"
+            android:clickable="true"
+            android:elevation="4dp"
+            android:focusable="true"
+            android:src="@drawable/ic_swap_horizontal_white"
+            android:visibility="gone"
+            app:backgroundTint="@color/colorPrimary"
+            app:borderWidth="0dp"
+            app:elevation="4dp"
             app:layout_anchor="@id/bottom_sheet"
             app:layout_anchorGravity="end"
-            android:elevation="4dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:visibility="gone"
-            android:src="@drawable/ic_swap_horizontal_white"
-            app:borderWidth="0dp"
-            app:backgroundTint="@color/colorPrimary"
-            app:elevation="4dp"
-            app:pressedTranslationZ="12dp"/>
+            app:pressedTranslationZ="12dp" />
 
         <LinearLayout
             android:id="@+id/bottom_sheet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
+            app:behavior_hideable="true"
             app:behavior_peekHeight="250dp"
-            app:behavior_hideable="true">
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-            <android.support.design.widget.AppBarLayout
+            <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/bottom_sheet_appbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-                <android.support.v7.widget.Toolbar
+                <androidx.appcompat.widget.Toolbar
                     android:id="@+id/bottom_sheet_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -137,20 +137,20 @@
                         android:layout_height="match_parent"
                         android:textColor="@color/textColorPrimary"
                         android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
-                </android.support.v7.widget.Toolbar>
+                </androidx.appcompat.widget.Toolbar>
 
-            </android.support.design.widget.AppBarLayout>
+            </com.google.android.material.appbar.AppBarLayout>
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/grey_200"/>
+                android:background="@color/grey_200" />
 
         </LinearLayout>
 
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </LinearLayout>

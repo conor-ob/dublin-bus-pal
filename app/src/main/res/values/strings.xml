@@ -63,6 +63,12 @@
     <string name="dublin_bus_ie">dublinbus.ie</string>
     <string name="update">Update now</string>
 
+    <!-- Endpoints -->
+    <string name="dublin_bus_soap_api_endpoint">http://rtpi.dublinbus.ie/</string>
+    <string name="dublin_bus_rss_api_endpoint">http://www.dublinbus.ie/</string>
+    <string name="smart_dublin_rest_api_endpoint">https://rtpiapp.rtpi.openskydata.com/RTPIPublicService_V2/service.svc/</string>
+    <string name="dublin_bus_database_name">dublinbus.db</string>
+
     <!-- Prefs -->
     <string name="preference_category_general">General</string>
     <string name="preference_key_first_launch">first_launch</string>
@@ -81,15 +87,6 @@
     <string name="preference_category_update">Update</string>
     <string name="preference_key_update_database">preference_update_database</string>
     <string name="preference_title_update_database">Update bus stop and route data</string>
-    <string name="preference_key_auto_update">db_auto_update</string>
-    <string name="preference_summary_auto_update">Update bus stop and route data automatically</string>
-    <string name="preference_title_auto_update">Auto update</string>
-    <string name="preference_dialog_title_auto_update_frequency">Auto update</string>
-    <string name="preference_key_auto_update_frequency">db_auto_update_days</string>
-    <string name="preference_title_auto_update_frequency">Auto update frequency</string>
-    <string name="preference_key_auto_update_only_on_good_connection">db_auto_update_4g_wifi</string>
-    <string name="preference_summary_auto_update_only_on_good_connection">Only update over WiFi or 4G</string>
-    <string name="preference_title_auto_update_only_on_good_connection">Auto update on good connection</string>
     <string name="preference_category_connect">Connect</string>
     <string name="preference_title_share">Share</string>
     <string name="preference_summary_share">Let your friends know about the app</string>
@@ -120,4 +117,6 @@
     <string name="preference_key_nearby_map_latitude">preference_nearby_map_latitude</string>
     <string name="preference_key_nearby_map_longitude">preference_nearby_map_longitude</string>
     <string name="preference_key_nearby_map_zoom">preference_nearby_map_zoom</string>
+
+    <string name="linkedin_url">https://www.linkedin.com/in/conor-ob/</string>
 </resources>

@@ -2,8 +2,6 @@ package ie.dublinbuspal.android.view.news.twitter;
 
 import android.content.Context;
 
-import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.util.ErrorLog;
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -17,6 +15,10 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
+import javax.inject.Inject;
+
+import ie.dublinbuspal.android.R;
+import ie.dublinbuspal.android.util.ErrorLog;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -32,9 +34,10 @@ public class TwitterPresenterImpl extends MvpBasePresenter<TwitterView>
     private final TwitterModelImpl model;
     private CompositeDisposable disposables;
 
-    public TwitterPresenterImpl(Context context, TwitterModelImpl model) {
+    @Inject
+    public TwitterPresenterImpl(Context context) {
         this.context = context;
-        this.model = model;
+        this.model = new TwitterModelImpl();
     }
 
     @Override
@@ -91,10 +94,10 @@ public class TwitterPresenterImpl extends MvpBasePresenter<TwitterView>
 
     private void onGetAdapter(TweetTimelineRecyclerViewAdapter adapter) {
         getModel().setAdapter(adapter);
-        if (isViewAttached()) {
-            getView().hideProgress();
-            getView().showTweets(getModel().getAdapter());
-        }
+        ifViewAttached(view -> {
+            view.hideProgress();
+            view.showTweets(getModel().getAdapter());
+        });
     }
 
     private void onError(Throwable throwable) {

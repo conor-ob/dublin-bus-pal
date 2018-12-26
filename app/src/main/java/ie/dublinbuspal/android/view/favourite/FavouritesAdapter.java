@@ -1,24 +1,24 @@
 package ie.dublinbuspal.android.view.favourite;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.data.local.entity.DetailedBusStop;
-import ie.dublinbuspal.android.util.CollectionUtilities;
-import ie.dublinbuspal.android.util.StringUtilities;
-
 import java.util.List;
 import java.util.Locale;
+
+import androidx.recyclerview.widget.RecyclerView;
+import ie.dublinbuspal.android.R;
+import ie.dublinbuspal.model.favourite.FavouriteStop;
+import ie.dublinbuspal.util.CollectionUtils;
+import ie.dublinbuspal.util.StringUtils;
 
 public class FavouritesAdapter
         extends RecyclerView.Adapter<FavouritesAdapter.FavouritesViewHolder> {
 
     private final FavouritesView view;
-    private List<DetailedBusStop> favouriteBusStops;
+    private List<FavouriteStop> favouriteBusStops;
 
     FavouritesAdapter(FavouritesView view) {
         this.view = view;
@@ -35,7 +35,7 @@ public class FavouritesAdapter
 
     @Override
     public void onBindViewHolder(FavouritesViewHolder holder, int position) {
-        DetailedBusStop busStop = favouriteBusStops.get(position);
+        FavouriteStop busStop = favouriteBusStops.get(position);
         holder.bind(busStop);
     }
 
@@ -44,7 +44,7 @@ public class FavouritesAdapter
         return favouriteBusStops == null ? 0 : favouriteBusStops.size();
     }
 
-    public void setFavourites(List<DetailedBusStop> favouriteBusStops) {
+    public void setFavourites(List<FavouriteStop> favouriteBusStops) {
         this.favouriteBusStops = favouriteBusStops;
         notifyDataSetChanged();
     }
@@ -65,21 +65,23 @@ public class FavouritesAdapter
             formattedStopId = itemView.getContext().getString(R.string.formatted_stop_id);
         }
 
-        public void bind(DetailedBusStop busStop) {
+        public void bind(FavouriteStop busStop) {
             favouriteID.setText(String.format(Locale.UK, formattedStopId, busStop.getId()));
-            favouriteName.setText(busStop.getCustomName());
-            if (CollectionUtilities.isNullOrEmpty(busStop.getRoutes())) {
+            favouriteName.setText(busStop.getName());
+            if (CollectionUtils.isNullOrEmpty(busStop.getRoutes())) {
+                routes.setText(StringUtils.EMPTY_STRING);
                 routes.setVisibility(View.GONE);
             } else {
                 String middleDot = String.format(Locale.UK, " %s ",
-                        StringUtilities.MIDDLE_DOT);
-                routes.setText(StringUtilities.join(busStop.getRoutes(), middleDot));
+                        StringUtils.MIDDLE_DOT);
+                routes.setText(StringUtils.join(busStop.getRoutes(), middleDot));
+                routes.setVisibility(View.VISIBLE);
             }
         }
 
         @Override
         public void onClick(View itemView) {
-            DetailedBusStop favouriteBusStop = favouriteBusStops.get(getAdapterPosition());
+            FavouriteStop favouriteBusStop = favouriteBusStops.get(getAdapterPosition());
             view.launchRealTimeActivity(favouriteBusStop.getId());
         }
 

@@ -3,11 +3,11 @@ package ie.dublinbuspal.android.view.web;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.webkit.WebView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import ie.dublinbuspal.android.R;
 
 public class WebViewActivity extends AppCompatActivity {

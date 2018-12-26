@@ -1,25 +1,25 @@
 package ie.dublinbuspal.android.view.nearby;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.data.local.entity.DetailedBusStop;
-import ie.dublinbuspal.android.util.CollectionUtilities;
-import ie.dublinbuspal.android.util.LocationUtilities;
-import ie.dublinbuspal.android.util.StringUtilities;
-
 import java.util.List;
 import java.util.Locale;
+
+import androidx.recyclerview.widget.RecyclerView;
+import ie.dublinbuspal.android.R;
+import ie.dublinbuspal.android.util.LocationUtilities;
+import ie.dublinbuspal.model.stop.Stop;
+import ie.dublinbuspal.util.CollectionUtils;
+import ie.dublinbuspal.util.StringUtils;
 
 public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.ViewHolder> {
 
     private final NearbyView view;
     private List<Double> distances;
-    private List<DetailedBusStop> busStops;
+    private List<Stop> busStops;
 
     NearbyAdapter(NearbyView view) {
         this.view = view;
@@ -36,8 +36,13 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        DetailedBusStop busStop = busStops.get(position);
-        String walkTime = LocationUtilities.getWalkTime(distances.get(position));
+        Stop busStop = busStops.get(position);
+        String walkTime;
+        if (CollectionUtils.isNullOrEmpty(distances)) {
+            walkTime = null;
+        } else {
+            walkTime = LocationUtilities.getWalkTime(distances.get(position));
+        }
         holder.bind(busStop, walkTime);
     }
 
@@ -46,7 +51,7 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.ViewHolder
         return busStops == null ? 0 : busStops.size();
     }
 
-    public void setBusStops(List<DetailedBusStop> busStops) {
+    public void setBusStops(List<Stop> busStops) {
         this.busStops = busStops;
         notifyDataSetChanged();
     }
@@ -72,24 +77,31 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.ViewHolder
             formattedStopId = itemView.getContext().getString(R.string.formatted_stop_id);
         }
 
-        public void bind(DetailedBusStop busStop, String walkTime) {
-            stopID.setText(String.format(Locale.UK, formattedStopId, busStop.getId()));
-            stopAddress.setText(busStop.getName());
-            if (CollectionUtilities.isNullOrEmpty(busStop.getRoutes())) {
+        public void bind(Stop busStop, String walkTime) {
+            stopID.setText(String.format(Locale.UK, formattedStopId, busStop.id()));
+            stopAddress.setText(busStop.name());
+            if (CollectionUtils.isNullOrEmpty(busStop.routes())) {
+                routes.setText(StringUtils.EMPTY_STRING);
                 routes.setVisibility(View.GONE);
             } else {
                 String middleDot = String.format(Locale.UK, " %s ",
-                        StringUtilities.MIDDLE_DOT);
-                routes.setText(StringUtilities.join(busStop.getRoutes(), middleDot));
+                        StringUtils.MIDDLE_DOT);
+                routes.setText(StringUtils.join(busStop.routes(), middleDot));
+                routes.setVisibility(View.VISIBLE);
             }
-            this.walkTime.setVisibility(View.VISIBLE);
-            this.walkTime.setText(walkTime);
+            if (walkTime != null) {
+                this.walkTime.setVisibility(View.VISIBLE);
+                this.walkTime.setText(walkTime);
+            } else {
+                this.walkTime.setVisibility(View.GONE);
+                this.walkTime.setText(StringUtils.EMPTY_STRING);
+            }
         }
 
         @Override
         public void onClick(View itemView) {
-            DetailedBusStop busStop = busStops.get(getAdapterPosition());
-            view.launchRealTimeActivity(busStop.getId());
+            Stop busStop = busStops.get(getAdapterPosition());
+            view.launchRealTimeActivity(busStop.id());
         }
 
     }

@@ -1,0 +1,1423 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <soap:Body>
+        <GetStopDataByRouteResponse xmlns="http://dublinbus.ie/">
+            <GetStopDataByRouteResult>
+                <xs:schema id="StopDataByRoute" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+                    <xs:element name="StopDataByRoute" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+                        <xs:complexType>
+                            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                                <xs:element name="Route">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element name="RouteID" type="xs:int" minOccurs="0" />
+                                            <xs:element name="RouteNumber" type="xs:string" minOccurs="0" />
+                                            <xs:element name="RouteDescription" type="xs:string" minOccurs="0" />
+                                            <xs:element name="StartStageID" type="xs:int" minOccurs="0" />
+                                            <xs:element name="EndStageID" type="xs:int" minOccurs="0" />
+                                            <xs:element name="ParentRouteID" type="xs:int" minOccurs="0" />
+                                            <xs:element name="RelatedRoutesID" type="xs:string" minOccurs="0" />
+                                            <xs:element name="DepotID" type="xs:int" minOccurs="0" />
+                                            <xs:element name="IsDisabled" type="xs:boolean" minOccurs="0" />
+                                            <xs:element name="IsExpresso" type="xs:boolean" minOccurs="0" />
+                                            <xs:element name="IsNitelink" type="xs:boolean" minOccurs="0" />
+                                            <xs:element name="IsAirlink" type="xs:boolean" minOccurs="0" />
+                                            <xs:element name="IsRaillink" type="xs:boolean" minOccurs="0" />
+                                            <xs:element name="IsSchoollink" type="xs:boolean" minOccurs="0" />
+                                            <xs:element name="IsFerrylink" type="xs:boolean" minOccurs="0" />
+                                            <xs:element name="InBoundFrequency" type="xs:int" minOccurs="0" />
+                                            <xs:element name="OutBoundFrequency" type="xs:int" minOccurs="0" />
+                                            <xs:element name="IsRouteVisible" type="xs:boolean" minOccurs="0" />
+                                            <xs:element name="InBoundPattern" type="xs:string" minOccurs="0" />
+                                            <xs:element name="OutBoundPattern" type="xs:string" minOccurs="0" />
+                                            <xs:element name="RouteCategoryID" type="xs:int" minOccurs="0" />
+                                            <xs:element name="IsMinimumFare" type="xs:boolean" minOccurs="0" />
+                                            <xs:element name="StartStageName" type="xs:string" minOccurs="0" />
+                                            <xs:element name="EndStageName" type="xs:string" minOccurs="0" />
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="InboundStop">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element name="Route" type="xs:string" minOccurs="0" />
+                                            <xs:element name="Direction" type="xs:string" minOccurs="0" />
+                                            <xs:element name="StopNumber" type="xs:int" minOccurs="0" />
+                                            <xs:element name="Address" type="xs:string" minOccurs="0" />
+                                            <xs:element name="Location" type="xs:string" minOccurs="0" />
+                                            <xs:element name="SeqNumber" type="xs:int" minOccurs="0" />
+                                            <xs:element name="Latitude" type="xs:double" minOccurs="0" />
+                                            <xs:element name="Longitude" type="xs:double" minOccurs="0" />
+                                            <xs:element name="SeqNumberExt" type="xs:int" minOccurs="0" />
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="OutboundStop">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element name="Route" type="xs:string" minOccurs="0" />
+                                            <xs:element name="Direction" type="xs:string" minOccurs="0" />
+                                            <xs:element name="StopNumber" type="xs:int" minOccurs="0" />
+                                            <xs:element name="Address" type="xs:string" minOccurs="0" />
+                                            <xs:element name="Location" type="xs:string" minOccurs="0" />
+                                            <xs:element name="SeqNumber" type="xs:int" minOccurs="0" />
+                                            <xs:element name="Latitude" type="xs:double" minOccurs="0" />
+                                            <xs:element name="Longitude" type="xs:double" minOccurs="0" />
+                                            <xs:element name="SeqNumberExt" type="xs:int" minOccurs="0" />
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:choice>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:schema>
+                <diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1">
+                    <StopDataByRoute xmlns="">
+                        <Route diffgr:id="Route1" msdata:rowOrder="0">
+                            <RouteID>1846</RouteID>
+                            <RouteNumber>46a</RouteNumber>
+                            <RouteDescription>Phoenix Park To Dun Laoghaire</RouteDescription>
+                            <StartStageID>2652</StartStageID>
+                            <EndStageID>471</EndStageID>
+                            <DepotID>3</DepotID>
+                            <IsDisabled>true</IsDisabled>
+                            <IsExpresso>false</IsExpresso>
+                            <IsNitelink>false</IsNitelink>
+                            <IsAirlink>false</IsAirlink>
+                            <IsRaillink>false</IsRaillink>
+                            <IsSchoollink>false</IsSchoollink>
+                            <InBoundFrequency>5</InBoundFrequency>
+                            <OutBoundFrequency>5</OutBoundFrequency>
+                            <InBoundPattern>046A1001</InBoundPattern>
+                            <OutBoundPattern>046A0001</OutBoundPattern>
+                            <RouteCategoryID>1</RouteCategoryID>
+                            <IsMinimumFare>false</IsMinimumFare>
+                            <StartStageName>Phoenix Park </StartStageName>
+                            <EndStageName>Dun Laoghaire</EndStageName>
+                        </Route>
+                        <InboundStop diffgr:id="InboundStop1" msdata:rowOrder="0">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>2039</StopNumber>
+                            <Address>Crofton Road</Address>
+                            <Location>Railway Station</Location>
+                            <SeqNumber>10</SeqNumber>
+                            <Latitude>53.294679</Latitude>
+                            <Longitude>-6.134434</Longitude>
+                            <SeqNumberExt>10</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop2" msdata:rowOrder="1">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>2040</StopNumber>
+                            <Address>Marine Road</Address>
+                            <Location>George's Street</Location>
+                            <SeqNumber>20</SeqNumber>
+                            <Latitude>53.29274</Latitude>
+                            <Longitude>-6.135423</Longitude>
+                            <SeqNumberExt>20</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop3" msdata:rowOrder="2">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>2041</StopNumber>
+                            <Address>George's St</Address>
+                            <Location>Bloomfield</Location>
+                            <SeqNumber>30</SeqNumber>
+                            <Latitude>53.293622</Latitude>
+                            <Longitude>-6.139282</Longitude>
+                            <SeqNumberExt>30</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop4" msdata:rowOrder="3">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>2042</StopNumber>
+                            <Address>York Road</Address>
+                            <Location>Willow Bank</Location>
+                            <SeqNumber>40</SeqNumber>
+                            <Latitude>53.293649</Latitude>
+                            <Longitude>-6.14265</Longitude>
+                            <SeqNumberExt>40</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop5" msdata:rowOrder="4">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>2043</StopNumber>
+                            <Address>York Road</Address>
+                            <Location>St. Michael's Terrace</Location>
+                            <SeqNumber>50</SeqNumber>
+                            <Latitude>53.292487</Latitude>
+                            <Longitude>-6.14268</Longitude>
+                            <SeqNumberExt>50</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop6" msdata:rowOrder="5">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>2044</StopNumber>
+                            <Address>York Road</Address>
+                            <Location>Training Centre</Location>
+                            <SeqNumber>60</SeqNumber>
+                            <Latitude>53.290873</Latitude>
+                            <Longitude>-6.143702</Longitude>
+                            <SeqNumberExt>60</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop7" msdata:rowOrder="6">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>2045</StopNumber>
+                            <Address>York Road</Address>
+                            <Location>Mounttown Road</Location>
+                            <SeqNumber>70</SeqNumber>
+                            <Latitude>53.289078</Latitude>
+                            <Longitude>-6.145031</Longitude>
+                            <SeqNumberExt>70</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop8" msdata:rowOrder="7">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>2046</StopNumber>
+                            <Address>Mounttown Rd</Address>
+                            <Location>Mounttown Park</Location>
+                            <SeqNumber>80</SeqNumber>
+                            <Latitude>53.286026</Latitude>
+                            <Longitude>-6.145594</Longitude>
+                            <SeqNumberExt>80</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop9" msdata:rowOrder="8">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>4568</StopNumber>
+                            <Address>Kill Avenue</Address>
+                            <Location>Carriglea Avenue</Location>
+                            <SeqNumber>90</SeqNumber>
+                            <Latitude>53.282788</Latitude>
+                            <Longitude>-6.147346</Longitude>
+                            <SeqNumberExt>90</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop10" msdata:rowOrder="9">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>4569</StopNumber>
+                            <Address>Kill Avenue</Address>
+                            <Location>Kill O The Grange</Location>
+                            <SeqNumber>100</SeqNumber>
+                            <Latitude>53.281731</Latitude>
+                            <Longitude>-6.152563</Longitude>
+                            <SeqNumberExt>100</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop11" msdata:rowOrder="10">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>4570</StopNumber>
+                            <Address>Kill Avenue</Address>
+                            <Location>Church</Location>
+                            <SeqNumber>110</SeqNumber>
+                            <Latitude>53.280923</Latitude>
+                            <Longitude>-6.156796</Longitude>
+                            <SeqNumberExt>110</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop12" msdata:rowOrder="11">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>2056</StopNumber>
+                            <Address>Kill Lane</Address>
+                            <Location>Business Park</Location>
+                            <SeqNumber>120</SeqNumber>
+                            <Latitude>53.279437</Latitude>
+                            <Longitude>-6.162061</Longitude>
+                            <SeqNumberExt>120</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop13" msdata:rowOrder="12">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>2057</StopNumber>
+                            <Address>Kill Lane</Address>
+                            <Location>Clonkeen Drive</Location>
+                            <SeqNumber>130</SeqNumber>
+                            <Latitude>53.277744</Latitude>
+                            <Longitude>-6.164916</Longitude>
+                            <SeqNumberExt>130</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop14" msdata:rowOrder="13">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>2058</StopNumber>
+                            <Address>Kill Lane</Address>
+                            <Location>Beech Park Avenue</Location>
+                            <SeqNumber>140</SeqNumber>
+                            <Latitude>53.276604</Latitude>
+                            <Longitude>-6.167318</Longitude>
+                            <SeqNumberExt>140</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop15" msdata:rowOrder="14">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>2059</StopNumber>
+                            <Address>Kill Lane</Address>
+                            <Location>Beech Park Road</Location>
+                            <SeqNumber>150</SeqNumber>
+                            <Latitude>53.275165</Latitude>
+                            <Longitude>-6.170709</Longitude>
+                            <SeqNumberExt>150</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop16" msdata:rowOrder="15">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>2060</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>Springfield Park</Location>
+                            <SeqNumber>160</SeqNumber>
+                            <Latitude>53.273977</Latitude>
+                            <Longitude>-6.175233</Longitude>
+                            <SeqNumberExt>160</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop17" msdata:rowOrder="16">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>2061</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>Knocksinna</Location>
+                            <SeqNumber>170</SeqNumber>
+                            <Latitude>53.275755</Latitude>
+                            <Longitude>-6.180166</Longitude>
+                            <SeqNumberExt>170</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop18" msdata:rowOrder="17">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>2062</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>Rocwood</Location>
+                            <SeqNumber>180</SeqNumber>
+                            <Latitude>53.279056</Latitude>
+                            <Longitude>-6.186891</Longitude>
+                            <SeqNumberExt>180</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop19" msdata:rowOrder="18">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>2063</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>Galloping Green</Location>
+                            <SeqNumber>190</SeqNumber>
+                            <Latitude>53.280313</Latitude>
+                            <Longitude>-6.189998</Longitude>
+                            <SeqNumberExt>190</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop20" msdata:rowOrder="19">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>2064</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>Brewery Road</Location>
+                            <SeqNumber>200</SeqNumber>
+                            <Latitude>53.282753</Latitude>
+                            <Longitude>-6.193863</Longitude>
+                            <SeqNumberExt>200</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop21" msdata:rowOrder="20">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>2065</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>Merville Road</Location>
+                            <SeqNumber>210</SeqNumber>
+                            <Latitude>53.284843</Latitude>
+                            <Longitude>-6.194898</Longitude>
+                            <SeqNumberExt>210</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop22" msdata:rowOrder="21">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>4727</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>Laurence Park</Location>
+                            <SeqNumber>220</SeqNumber>
+                            <Latitude>53.290507</Latitude>
+                            <Longitude>-6.19723</Longitude>
+                            <SeqNumberExt>220</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop23" msdata:rowOrder="22">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>4728</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>Oatlands College</Location>
+                            <SeqNumber>230</SeqNumber>
+                            <Latitude>53.293334</Latitude>
+                            <Longitude>-6.201973</Longitude>
+                            <SeqNumberExt>230</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop24" msdata:rowOrder="23">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>461</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>Trees Road</Location>
+                            <SeqNumber>240</SeqNumber>
+                            <Latitude>53.294783</Latitude>
+                            <Longitude>-6.203461</Longitude>
+                            <SeqNumberExt>240</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop25" msdata:rowOrder="24">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>2068</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>Sycamore Crescent</Location>
+                            <SeqNumber>250</SeqNumber>
+                            <Latitude>53.296995</Latitude>
+                            <Longitude>-6.2042909999999996</Longitude>
+                            <SeqNumberExt>250</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop26" msdata:rowOrder="25">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>2069</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>Booterstown Ave</Location>
+                            <SeqNumber>260</SeqNumber>
+                            <Latitude>53.299896</Latitude>
+                            <Longitude>-6.205705</Longitude>
+                            <SeqNumberExt>260</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop27" msdata:rowOrder="26">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>2070</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>Fosters Avenue</Location>
+                            <SeqNumber>270</SeqNumber>
+                            <Latitude>53.303118</Latitude>
+                            <Longitude>-6.208194</Longitude>
+                            <SeqNumberExt>270</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop28" msdata:rowOrder="27">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>2084</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>Seafield Road</Location>
+                            <SeqNumber>280</SeqNumber>
+                            <Latitude>53.305549</Latitude>
+                            <Longitude>-6.211626</Longitude>
+                            <SeqNumberExt>280</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop29" msdata:rowOrder="28">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>768</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>UCD</Location>
+                            <SeqNumber>290</SeqNumber>
+                            <Latitude>53.309466</Latitude>
+                            <Longitude>-6.21888</Longitude>
+                            <SeqNumberExt>290</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop30" msdata:rowOrder="29">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>769</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>Belfield Court</Location>
+                            <SeqNumber>300</SeqNumber>
+                            <Latitude>53.311894</Latitude>
+                            <Longitude>-6.221317</Longitude>
+                            <SeqNumberExt>300</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop31" msdata:rowOrder="30">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>770</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>RTE</Location>
+                            <SeqNumber>310</SeqNumber>
+                            <Latitude>53.314675</Latitude>
+                            <Longitude>-6.225783</Longitude>
+                            <SeqNumberExt>310</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop32" msdata:rowOrder="31">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>771</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>Teresian School</Location>
+                            <SeqNumber>320</SeqNumber>
+                            <Latitude>53.315877</Latitude>
+                            <Longitude>-6.227763</Longitude>
+                            <SeqNumberExt>320</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop33" msdata:rowOrder="32">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>772</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>Bus Garage</Location>
+                            <SeqNumber>330</SeqNumber>
+                            <Latitude>53.318498</Latitude>
+                            <Longitude>-6.231315</Longitude>
+                            <SeqNumberExt>330</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop34" msdata:rowOrder="33">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>773</StopNumber>
+                            <Address>Donnybrook Rd</Address>
+                            <Location>Eglington Road</Location>
+                            <SeqNumber>340</SeqNumber>
+                            <Latitude>53.319912</Latitude>
+                            <Longitude>-6.233257</Longitude>
+                            <SeqNumberExt>340</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop35" msdata:rowOrder="34">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>774</StopNumber>
+                            <Address>Donnybrook</Address>
+                            <Location>Garda Station</Location>
+                            <SeqNumber>350</SeqNumber>
+                            <Latitude>53.321604</Latitude>
+                            <Longitude>-6.235484</Longitude>
+                            <SeqNumberExt>350</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop36" msdata:rowOrder="35">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>775</StopNumber>
+                            <Address>Morehampton Road</Address>
+                            <Location>Mount Eden Road</Location>
+                            <SeqNumber>360</SeqNumber>
+                            <Latitude>53.323481</Latitude>
+                            <Longitude>-6.239064</Longitude>
+                            <SeqNumberExt>360</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop37" msdata:rowOrder="36">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>776</StopNumber>
+                            <Address>Morehampton Road</Address>
+                            <Location>Morehampton Terrace</Location>
+                            <SeqNumber>370</SeqNumber>
+                            <Latitude>53.32549</Latitude>
+                            <Longitude>-6.241804</Longitude>
+                            <SeqNumberExt>370</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop38" msdata:rowOrder="37">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>777</StopNumber>
+                            <Address>Morehampton Road</Address>
+                            <Location>Royal Hospital</Location>
+                            <SeqNumber>380</SeqNumber>
+                            <Latitude>53.326944</Latitude>
+                            <Longitude>-6.243659</Longitude>
+                            <SeqNumberExt>380</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop39" msdata:rowOrder="38">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>906</StopNumber>
+                            <Address>Leeson Street</Address>
+                            <Location>Appian Way</Location>
+                            <SeqNumber>390</SeqNumber>
+                            <Latitude>53.328815</Latitude>
+                            <Longitude>-6.247602</Longitude>
+                            <SeqNumberExt>390</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop40" msdata:rowOrder="39">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>907</StopNumber>
+                            <Address>Leeson Street</Address>
+                            <Location>St. John's Ambulance</Location>
+                            <SeqNumber>400</SeqNumber>
+                            <Latitude>53.329727</Latitude>
+                            <Longitude>-6.25072</Longitude>
+                            <SeqNumberExt>400</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop41" msdata:rowOrder="40">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>908</StopNumber>
+                            <Address>Leeson Street</Address>
+                            <Location>Grand Parade</Location>
+                            <SeqNumber>410</SeqNumber>
+                            <Latitude>53.331159</Latitude>
+                            <Longitude>-6.252351</Longitude>
+                            <SeqNumberExt>410</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop42" msdata:rowOrder="41">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>909</StopNumber>
+                            <Address>Leeson Street</Address>
+                            <Location>Adelaide Road</Location>
+                            <SeqNumber>420</SeqNumber>
+                            <Latitude>53.333165</Latitude>
+                            <Longitude>-6.254067</Longitude>
+                            <SeqNumberExt>420</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop43" msdata:rowOrder="42">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>786</StopNumber>
+                            <Address>Leeson Street</Address>
+                            <Location>Earlsfort Terrace</Location>
+                            <SeqNumber>430</SeqNumber>
+                            <Latitude>53.335198</Latitude>
+                            <Longitude>-6.256117</Longitude>
+                            <SeqNumberExt>430</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop44" msdata:rowOrder="43">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>792</StopNumber>
+                            <Address>Dawson Street</Address>
+                            <Location>Duke Street</Location>
+                            <SeqNumber>450</SeqNumber>
+                            <Latitude>53.34005</Latitude>
+                            <Longitude>-6.258664</Longitude>
+                            <SeqNumberExt>450</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop45" msdata:rowOrder="44">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>320</StopNumber>
+                            <Address>Westmoreland Street</Address>
+                            <Location>Fleet Street</Location>
+                            <SeqNumber>470</SeqNumber>
+                            <Latitude>53.345647</Latitude>
+                            <Longitude>-6.259275</Longitude>
+                            <SeqNumberExt>470</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop46" msdata:rowOrder="45">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>278</StopNumber>
+                            <Address>O'Connell St</Address>
+                            <Location>Cathal Brugha Street</Location>
+                            <SeqNumber>480</SeqNumber>
+                            <Latitude>53.351628</Latitude>
+                            <Longitude>-6.261237</Longitude>
+                            <SeqNumberExt>480</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop47" msdata:rowOrder="46">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>2</StopNumber>
+                            <Address>Parnell Square</Address>
+                            <Location>Parnell Street</Location>
+                            <SeqNumber>490</SeqNumber>
+                            <Latitude>53.352241</Latitude>
+                            <Longitude>-6.263695</Longitude>
+                            <SeqNumberExt>490</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop48" msdata:rowOrder="47">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>192</StopNumber>
+                            <Address>Mountjoy Street</Address>
+                            <Location>Blessington Street</Location>
+                            <SeqNumber>500</SeqNumber>
+                            <Latitude>53.356439</Latitude>
+                            <Longitude>-6.268063</Longitude>
+                            <SeqNumberExt>500</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop49" msdata:rowOrder="48">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>795</StopNumber>
+                            <Address>Berkeley Road</Address>
+                            <Location>Eccles Street</Location>
+                            <SeqNumber>510</SeqNumber>
+                            <Latitude>53.358732</Latitude>
+                            <Longitude>-6.269722</Longitude>
+                            <SeqNumberExt>510</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop50" msdata:rowOrder="49">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>796</StopNumber>
+                            <Address>Berkeley Road</Address>
+                            <Location>North Circular Road</Location>
+                            <SeqNumber>520</SeqNumber>
+                            <Latitude>53.359978</Latitude>
+                            <Longitude>-6.269785</Longitude>
+                            <SeqNumberExt>520</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop51" msdata:rowOrder="50">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>797</StopNumber>
+                            <Address>North Circular Road</Address>
+                            <Location>Post Office</Location>
+                            <SeqNumber>530</SeqNumber>
+                            <Latitude>53.360699</Latitude>
+                            <Longitude>-6.274739</Longitude>
+                            <SeqNumberExt>530</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop52" msdata:rowOrder="51">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>798</StopNumber>
+                            <Address>North Circular Road</Address>
+                            <Location>Rathdown Road</Location>
+                            <SeqNumber>540</SeqNumber>
+                            <Latitude>53.359426</Latitude>
+                            <Longitude>-6.279576</Longitude>
+                            <SeqNumberExt>540</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop53" msdata:rowOrder="52">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>799</StopNumber>
+                            <Address>North Circular Road</Address>
+                            <Location>Charleville Road</Location>
+                            <SeqNumber>550</SeqNumber>
+                            <Latitude>53.358818</Latitude>
+                            <Longitude>-6.281753</Longitude>
+                            <SeqNumberExt>550</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop54" msdata:rowOrder="53">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>800</StopNumber>
+                            <Address>North Circular Road</Address>
+                            <Location>Grangegorman</Location>
+                            <SeqNumber>560</SeqNumber>
+                            <Latitude>53.358057</Latitude>
+                            <Longitude>-6.284538</Longitude>
+                            <SeqNumberExt>560</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop55" msdata:rowOrder="54">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>801</StopNumber>
+                            <Address>North Circular Road</Address>
+                            <Location>Prussia Street</Location>
+                            <SeqNumber>570</SeqNumber>
+                            <Latitude>53.357388</Latitude>
+                            <Longitude>-6.287715</Longitude>
+                            <SeqNumberExt>570</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop56" msdata:rowOrder="55">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>802</StopNumber>
+                            <Address>North Circular Road</Address>
+                            <Location>Drumalee</Location>
+                            <SeqNumber>580</SeqNumber>
+                            <Latitude>53.356496</Latitude>
+                            <Longitude>-6.291264</Longitude>
+                            <SeqNumberExt>580</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop57" msdata:rowOrder="56">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>803</StopNumber>
+                            <Address>North Circular Road</Address>
+                            <Location>Oxmanstown Rd</Location>
+                            <SeqNumber>590</SeqNumber>
+                            <Latitude>53.354735</Latitude>
+                            <Longitude>-6.29398</Longitude>
+                            <SeqNumberExt>590</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop58" msdata:rowOrder="57">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>804</StopNumber>
+                            <Address>North Circular Road</Address>
+                            <Location>O'Devaney Gardens</Location>
+                            <SeqNumber>600</SeqNumber>
+                            <Latitude>53.353694</Latitude>
+                            <Longitude>-6.295644</Longitude>
+                            <SeqNumberExt>600</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop59" msdata:rowOrder="58">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>805</StopNumber>
+                            <Address>O'Devaney Gardens</Address>
+                            <Location>Military Hospital</Location>
+                            <SeqNumber>610</SeqNumber>
+                            <Latitude>53.35157</Latitude>
+                            <Longitude>-6.294638</Longitude>
+                            <SeqNumberExt>610</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop60" msdata:rowOrder="59">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>806</StopNumber>
+                            <Address>Montpelier Gardens</Address>
+                            <Location>Infirmary Road</Location>
+                            <SeqNumber>620</SeqNumber>
+                            <Latitude>53.350315</Latitude>
+                            <Longitude>-6.29541</Longitude>
+                            <SeqNumberExt>620</SeqNumberExt>
+                        </InboundStop>
+                        <InboundStop diffgr:id="InboundStop61" msdata:rowOrder="60">
+                            <Route>46A</Route>
+                            <Direction>I</Direction>
+                            <StopNumber>807</StopNumber>
+                            <Address>Infirmary Rd</Address>
+                            <Location>Phoenix Pk Gate</Location>
+                            <SeqNumber>630</SeqNumber>
+                            <Latitude>53.3517</Latitude>
+                            <Longitude>-6.2977</Longitude>
+                            <SeqNumberExt>630</SeqNumberExt>
+                        </InboundStop>
+                        <OutboundStop diffgr:id="OutboundStop1" msdata:rowOrder="0">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>807</StopNumber>
+                            <Address>Infirmary Rd</Address>
+                            <Location>Phoenix Pk Gate</Location>
+                            <SeqNumber>10</SeqNumber>
+                            <Latitude>53.3517</Latitude>
+                            <Longitude>-6.2977</Longitude>
+                            <SeqNumberExt>10</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop2" msdata:rowOrder="1">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>808</StopNumber>
+                            <Address>North Circular Road</Address>
+                            <Location>O'Devaney Gardens</Location>
+                            <SeqNumber>20</SeqNumber>
+                            <Latitude>53.353992</Latitude>
+                            <Longitude>-6.295332</Longitude>
+                            <SeqNumberExt>20</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop3" msdata:rowOrder="2">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>809</StopNumber>
+                            <Address>North Circular Road</Address>
+                            <Location>Marlborough Road</Location>
+                            <SeqNumber>30</SeqNumber>
+                            <Latitude>53.355254</Latitude>
+                            <Longitude>-6.293359</Longitude>
+                            <SeqNumberExt>30</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop4" msdata:rowOrder="3">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>810</StopNumber>
+                            <Address>North Circular Road</Address>
+                            <Location>Ellesmere Avenue</Location>
+                            <SeqNumber>40</SeqNumber>
+                            <Latitude>53.357097</Latitude>
+                            <Longitude>-6.289978</Longitude>
+                            <SeqNumberExt>40</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop5" msdata:rowOrder="4">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>811</StopNumber>
+                            <Address>North Circular Road</Address>
+                            <Location>Annamoe Terrace</Location>
+                            <SeqNumber>50</SeqNumber>
+                            <Latitude>53.357664</Latitude>
+                            <Longitude>-6.287277</Longitude>
+                            <SeqNumberExt>50</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop6" msdata:rowOrder="5">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>812</StopNumber>
+                            <Address>North Circular Road</Address>
+                            <Location>Grangegorman</Location>
+                            <SeqNumber>60</SeqNumber>
+                            <Latitude>53.358258</Latitude>
+                            <Longitude>-6.284218</Longitude>
+                            <SeqNumberExt>60</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop7" msdata:rowOrder="6">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>813</StopNumber>
+                            <Address>North Circular Road</Address>
+                            <Location>Charleville Road</Location>
+                            <SeqNumber>70</SeqNumber>
+                            <Latitude>53.359186</Latitude>
+                            <Longitude>-6.280954</Longitude>
+                            <SeqNumberExt>70</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop8" msdata:rowOrder="7">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>814</StopNumber>
+                            <Address>North Circular Road</Address>
+                            <Location>Cabra Road</Location>
+                            <SeqNumber>80</SeqNumber>
+                            <Latitude>53.360534</Latitude>
+                            <Longitude>-6.276088</Longitude>
+                            <SeqNumberExt>80</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop9" msdata:rowOrder="8">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>81</StopNumber>
+                            <Address>North Circular Road</Address>
+                            <Location>Phibsborough Road</Location>
+                            <SeqNumber>90</SeqNumber>
+                            <Latitude>53.360872</Latitude>
+                            <Longitude>-6.271959</Longitude>
+                            <SeqNumberExt>90</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop10" msdata:rowOrder="9">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>817</StopNumber>
+                            <Address>Berkeley Road</Address>
+                            <Location>Mater Hospital</Location>
+                            <SeqNumber>100</SeqNumber>
+                            <Latitude>53.359637</Latitude>
+                            <Longitude>-6.269603</Longitude>
+                            <SeqNumberExt>100</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop11" msdata:rowOrder="10">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>818</StopNumber>
+                            <Address>Berkeley Road</Address>
+                            <Location>O'Connell Avenue</Location>
+                            <SeqNumber>110</SeqNumber>
+                            <Latitude>53.358459</Latitude>
+                            <Longitude>-6.269271</Longitude>
+                            <SeqNumberExt>110</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop12" msdata:rowOrder="11">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>819</StopNumber>
+                            <Address>Blessington Street</Address>
+                            <Location>Blessington Court</Location>
+                            <SeqNumber>120</SeqNumber>
+                            <Latitude>53.356298</Latitude>
+                            <Longitude>-6.265978</Longitude>
+                            <SeqNumberExt>120</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop13" msdata:rowOrder="12">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>264</StopNumber>
+                            <Address>Parnell Square</Address>
+                            <Location>Colaiste Mhuire</Location>
+                            <SeqNumber>130</SeqNumber>
+                            <Latitude>53.353528</Latitude>
+                            <Longitude>-6.26223</Longitude>
+                            <SeqNumberExt>130</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop14" msdata:rowOrder="13">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>6059</StopNumber>
+                            <Address>O'Connell St</Address>
+                            <Location>North Earl Street</Location>
+                            <SeqNumber>140</SeqNumber>
+                            <Latitude>53.350205</Latitude>
+                            <Longitude>-6.260253</Longitude>
+                            <SeqNumberExt>140</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop15" msdata:rowOrder="14">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>334</StopNumber>
+                            <Address>D'Olier Street</Address>
+                            <Location>Burgh Quay</Location>
+                            <SeqNumber>150</SeqNumber>
+                            <Latitude>53.346555</Latitude>
+                            <Longitude>-6.258156</Longitude>
+                            <SeqNumberExt>150</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop16" msdata:rowOrder="15">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>406</StopNumber>
+                            <Address>Nassau Street</Address>
+                            <Location>South Frederick Street</Location>
+                            <SeqNumber>160</SeqNumber>
+                            <Latitude>53.342581</Latitude>
+                            <Longitude>-6.256093</Longitude>
+                            <SeqNumberExt>160</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop17" msdata:rowOrder="16">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>747</StopNumber>
+                            <Address>Kildare Street</Address>
+                            <Location>Archbishop Statue</Location>
+                            <SeqNumber>170</SeqNumber>
+                            <Latitude>53.339928</Latitude>
+                            <Longitude>-6.255697</Longitude>
+                            <SeqNumberExt>170</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop18" msdata:rowOrder="17">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>842</StopNumber>
+                            <Address>St. Stephen's Green</Address>
+                            <Location>Hume Street</Location>
+                            <SeqNumber>180</SeqNumber>
+                            <Latitude>53.33724</Latitude>
+                            <Longitude>-6.256319</Longitude>
+                            <SeqNumberExt>180</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop19" msdata:rowOrder="18">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>845</StopNumber>
+                            <Address>Leeson Street</Address>
+                            <Location>St. Stephen's Green</Location>
+                            <SeqNumber>190</SeqNumber>
+                            <Latitude>53.335457</Latitude>
+                            <Longitude>-6.256231</Longitude>
+                            <SeqNumberExt>190</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop20" msdata:rowOrder="19">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>846</StopNumber>
+                            <Address>Leeson Street</Address>
+                            <Location>Fitzwilliam Place</Location>
+                            <SeqNumber>200</SeqNumber>
+                            <Latitude>53.333457</Latitude>
+                            <Longitude>-6.254086</Longitude>
+                            <SeqNumberExt>200</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop21" msdata:rowOrder="20">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>847</StopNumber>
+                            <Address>Leeson Street</Address>
+                            <Location>Mespil Road</Location>
+                            <SeqNumber>210</SeqNumber>
+                            <Latitude>53.331574</Latitude>
+                            <Longitude>-6.252245</Longitude>
+                            <SeqNumberExt>210</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop22" msdata:rowOrder="21">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>848</StopNumber>
+                            <Address>Sussex Road</Address>
+                            <Location>Burlington Road</Location>
+                            <SeqNumber>220</SeqNumber>
+                            <Latitude>53.329762</Latitude>
+                            <Longitude>-6.249026</Longitude>
+                            <SeqNumberExt>220</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop23" msdata:rowOrder="22">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>2795</StopNumber>
+                            <Address>Leeson St</Address>
+                            <Location>Appian Way</Location>
+                            <SeqNumber>230</SeqNumber>
+                            <Latitude>53.32852</Latitude>
+                            <Longitude>-6.246253</Longitude>
+                            <SeqNumberExt>230</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop24" msdata:rowOrder="23">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>756</StopNumber>
+                            <Address>Morehampton Road</Address>
+                            <Location>Royal Hospital</Location>
+                            <SeqNumber>240</SeqNumber>
+                            <Latitude>53.32639</Latitude>
+                            <Longitude>-6.242576</Longitude>
+                            <SeqNumberExt>240</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop25" msdata:rowOrder="24">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>757</StopNumber>
+                            <Address>Morehampton Road</Address>
+                            <Location>Brendan Road</Location>
+                            <SeqNumber>250</SeqNumber>
+                            <Latitude>53.324075</Latitude>
+                            <Longitude>-6.239574</Longitude>
+                            <SeqNumberExt>250</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop26" msdata:rowOrder="25">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>758</StopNumber>
+                            <Address>Morehampton Road</Address>
+                            <Location>Victoria Avenue</Location>
+                            <SeqNumber>260</SeqNumber>
+                            <Latitude>53.322678</Latitude>
+                            <Longitude>-6.237664</Longitude>
+                            <SeqNumberExt>260</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop27" msdata:rowOrder="26">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>759</StopNumber>
+                            <Address>Donnybrook</Address>
+                            <Location>Rugby Ground</Location>
+                            <SeqNumber>270</SeqNumber>
+                            <Latitude>53.320343</Latitude>
+                            <Longitude>-6.233324</Longitude>
+                            <SeqNumberExt>270</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop28" msdata:rowOrder="27">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>760</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>Bus Garage</Location>
+                            <SeqNumber>280</SeqNumber>
+                            <Latitude>53.318324</Latitude>
+                            <Longitude>-6.23055</Longitude>
+                            <SeqNumberExt>280</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop29" msdata:rowOrder="28">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>761</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>Donnybrook Close</Location>
+                            <SeqNumber>290</SeqNumber>
+                            <Latitude>53.316091</Latitude>
+                            <Longitude>-6.227472</Longitude>
+                            <SeqNumberExt>290</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop30" msdata:rowOrder="29">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>762</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>RTE</Location>
+                            <SeqNumber>300</SeqNumber>
+                            <Latitude>53.314516</Latitude>
+                            <Longitude>-6.224362</Longitude>
+                            <SeqNumberExt>300</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop31" msdata:rowOrder="30">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>763</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>Belfield Court</Location>
+                            <SeqNumber>310</SeqNumber>
+                            <Latitude>53.312321</Latitude>
+                            <Longitude>-6.221138</Longitude>
+                            <SeqNumberExt>310</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop32" msdata:rowOrder="31">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>2007</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>UCD</Location>
+                            <SeqNumber>320</SeqNumber>
+                            <Latitude>53.308839</Latitude>
+                            <Longitude>-6.216075</Longitude>
+                            <SeqNumberExt>320</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop33" msdata:rowOrder="32">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>2008</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>Seafield Road</Location>
+                            <SeqNumber>330</SeqNumber>
+                            <Latitude>53.305578</Latitude>
+                            <Longitude>-6.211136</Longitude>
+                            <SeqNumberExt>330</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop34" msdata:rowOrder="33">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>2009</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>Fosters Avenue</Location>
+                            <SeqNumber>340</SeqNumber>
+                            <Latitude>53.303307</Latitude>
+                            <Longitude>-6.20784</Longitude>
+                            <SeqNumberExt>340</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop35" msdata:rowOrder="34">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>2010</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>Booterstown Ave</Location>
+                            <SeqNumber>350</SeqNumber>
+                            <Latitude>53.298898</Latitude>
+                            <Longitude>-6.204663</Longitude>
+                            <SeqNumberExt>350</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop36" msdata:rowOrder="35">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>435</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>Mount Merrion Avenue</Location>
+                            <SeqNumber>360</SeqNumber>
+                            <Latitude>53.295989</Latitude>
+                            <Longitude>-6.203743</Longitude>
+                            <SeqNumberExt>360</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop37" msdata:rowOrder="36">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>7353</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>Priory Grove</Location>
+                            <SeqNumber>370</SeqNumber>
+                            <Latitude>53.293568</Latitude>
+                            <Longitude>-6.20176</Longitude>
+                            <SeqNumberExt>370</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop38" msdata:rowOrder="37">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>4571</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>Stillorgan Park</Location>
+                            <SeqNumber>380</SeqNumber>
+                            <Latitude>53.288977</Latitude>
+                            <Longitude>-6.194887</Longitude>
+                            <SeqNumberExt>380</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop39" msdata:rowOrder="38">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>2013</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>St. John of God's</Location>
+                            <SeqNumber>390</SeqNumber>
+                            <Latitude>53.285303999999996</Latitude>
+                            <Longitude>-6.194437</Longitude>
+                            <SeqNumberExt>390</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop40" msdata:rowOrder="39">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>2014</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>Beechwood Court</Location>
+                            <SeqNumber>400</SeqNumber>
+                            <Latitude>53.282111</Latitude>
+                            <Longitude>-6.192895</Longitude>
+                            <SeqNumberExt>400</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop41" msdata:rowOrder="40">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>4636</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>Galloping Green</Location>
+                            <SeqNumber>410</SeqNumber>
+                            <Latitude>53.280685</Latitude>
+                            <Longitude>-6.190096</Longitude>
+                            <SeqNumberExt>410</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop42" msdata:rowOrder="41">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>2016</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>Newtownpark Ave</Location>
+                            <SeqNumber>420</SeqNumber>
+                            <Latitude>53.278234</Latitude>
+                            <Longitude>-6.184128</Longitude>
+                            <SeqNumberExt>420</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop43" msdata:rowOrder="42">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>2015</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>Knocksinna</Location>
+                            <SeqNumber>430</SeqNumber>
+                            <Latitude>53.275566</Latitude>
+                            <Longitude>-6.179123</Longitude>
+                            <SeqNumberExt>430</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop44" msdata:rowOrder="43">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>2017</StopNumber>
+                            <Address>Stillorgan Road</Address>
+                            <Location>Foxrock Church</Location>
+                            <SeqNumber>440</SeqNumber>
+                            <Latitude>53.27419</Latitude>
+                            <Longitude>-6.175003</Longitude>
+                            <SeqNumberExt>440</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop45" msdata:rowOrder="44">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>2018</StopNumber>
+                            <Address>Kill Lane</Address>
+                            <Location>Foxrock Court</Location>
+                            <SeqNumber>450</SeqNumber>
+                            <Latitude>53.274461</Latitude>
+                            <Longitude>-6.172098</Longitude>
+                            <SeqNumberExt>450</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop46" msdata:rowOrder="45">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>2019</StopNumber>
+                            <Address>Kill Lane</Address>
+                            <Location>Foxrock Avenue</Location>
+                            <SeqNumber>460</SeqNumber>
+                            <Latitude>53.275885</Latitude>
+                            <Longitude>-6.169878</Longitude>
+                            <SeqNumberExt>460</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop47" msdata:rowOrder="46">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>2020</StopNumber>
+                            <Address>Kill Lane</Address>
+                            <Location>Foxrock Grove</Location>
+                            <SeqNumber>470</SeqNumber>
+                            <Latitude>53.277055</Latitude>
+                            <Longitude>-6.166508</Longitude>
+                            <SeqNumberExt>470</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop48" msdata:rowOrder="47">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>2021</StopNumber>
+                            <Address>Kill Lane</Address>
+                            <Location>Foxrock Close</Location>
+                            <SeqNumber>480</SeqNumber>
+                            <Latitude>53.278174</Latitude>
+                            <Longitude>-6.164411</Longitude>
+                            <SeqNumberExt>480</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop49" msdata:rowOrder="48">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>2022</StopNumber>
+                            <Address>Kill Lane</Address>
+                            <Location>Kill Abbey</Location>
+                            <SeqNumber>490</SeqNumber>
+                            <Latitude>53.28006</Latitude>
+                            <Longitude>-6.161568</Longitude>
+                            <SeqNumberExt>490</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop50" msdata:rowOrder="49">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>4565</StopNumber>
+                            <Address>Kill Avenue</Address>
+                            <Location>Rosepark</Location>
+                            <SeqNumber>500</SeqNumber>
+                            <Latitude>53.281337</Latitude>
+                            <Longitude>-6.155142</Longitude>
+                            <SeqNumberExt>500</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop51" msdata:rowOrder="50">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>4566</StopNumber>
+                            <Address>Kill Avenue</Address>
+                            <Location>Fire Station</Location>
+                            <SeqNumber>510</SeqNumber>
+                            <Latitude>53.281915</Latitude>
+                            <Longitude>-6.152093</Longitude>
+                            <SeqNumberExt>510</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop52" msdata:rowOrder="51">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>4567</StopNumber>
+                            <Address>Kill Avenue</Address>
+                            <Location>Glenageary Road</Location>
+                            <SeqNumber>520</SeqNumber>
+                            <Latitude>53.283027</Latitude>
+                            <Longitude>-6.147108</Longitude>
+                            <SeqNumberExt>520</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop53" msdata:rowOrder="52">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>2031</StopNumber>
+                            <Address>Mounttown Rd</Address>
+                            <Location>Mounttown Park</Location>
+                            <SeqNumber>530</SeqNumber>
+                            <Latitude>53.286113</Latitude>
+                            <Longitude>-6.145693</Longitude>
+                            <SeqNumberExt>530</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop54" msdata:rowOrder="53">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>2032</StopNumber>
+                            <Address>York Road</Address>
+                            <Location>Kendal House</Location>
+                            <SeqNumber>540</SeqNumber>
+                            <Latitude>53.289486</Latitude>
+                            <Longitude>-6.144775</Longitude>
+                            <SeqNumberExt>540</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop55" msdata:rowOrder="54">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>2033</StopNumber>
+                            <Address>York Road</Address>
+                            <Location>Knapton Court</Location>
+                            <SeqNumber>550</SeqNumber>
+                            <Latitude>53.291476</Latitude>
+                            <Longitude>-6.143383</Longitude>
+                            <SeqNumberExt>550</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop56" msdata:rowOrder="55">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>2034</StopNumber>
+                            <Address>York Road</Address>
+                            <Location>Vesey Place</Location>
+                            <SeqNumber>560</SeqNumber>
+                            <Latitude>53.292682</Latitude>
+                            <Longitude>-6.142763</Longitude>
+                            <SeqNumberExt>560</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop57" msdata:rowOrder="56">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>2035</StopNumber>
+                            <Address>Clarence Street</Address>
+                            <Location>Crofton House</Location>
+                            <SeqNumber>570</SeqNumber>
+                            <Latitude>53.295772</Latitude>
+                            <Longitude>-6.14266</Longitude>
+                            <SeqNumberExt>570</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop58" msdata:rowOrder="57">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>2036</StopNumber>
+                            <Address>Crofton Road</Address>
+                            <Location>Crofton Avenue</Location>
+                            <SeqNumber>580</SeqNumber>
+                            <Latitude>53.295795</Latitude>
+                            <Longitude>-6.138203</Longitude>
+                            <SeqNumberExt>580</SeqNumberExt>
+                        </OutboundStop>
+                        <OutboundStop diffgr:id="OutboundStop59" msdata:rowOrder="58">
+                            <Route>46A</Route>
+                            <Direction>O</Direction>
+                            <StopNumber>2039</StopNumber>
+                            <Address>Crofton Road</Address>
+                            <Location>Railway Station</Location>
+                            <SeqNumber>590</SeqNumber>
+                            <Latitude>53.294679</Latitude>
+                            <Longitude>-6.134434</Longitude>
+                            <SeqNumberExt>590</SeqNumberExt>
+                        </OutboundStop>
+                    </StopDataByRoute>
+                </diffgr:diffgram>
+            </GetStopDataByRouteResult>
+        </GetStopDataByRouteResponse>
+    </soap:Body>
+</soap:Envelope>

@@ -7,18 +7,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.MarginLayoutParamsCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
@@ -45,7 +33,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.common.collect.ImmutableMap;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.hannesdorfmann.mosby3.mvp.MvpActivity;
 
 import java.util.ArrayList;
@@ -58,20 +48,25 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
-import javax.inject.Inject;
-
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.MarginLayoutParamsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import ie.dublinbuspal.android.DublinBusApplication;
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.data.local.entity.BusStopService;
-import ie.dublinbuspal.android.data.local.entity.DetailedBusStop;
-import ie.dublinbuspal.android.data.local.entity.RealTimeData;
-import ie.dublinbuspal.android.util.AlphanumComparator;
-import ie.dublinbuspal.android.util.AnalyticsUtilities;
-import ie.dublinbuspal.android.util.CollectionUtilities;
 import ie.dublinbuspal.android.util.GoogleMapConstants;
-import ie.dublinbuspal.android.util.SVGUtils;
+import ie.dublinbuspal.android.util.ImageUtils;
 import ie.dublinbuspal.android.view.route.RouteActivity;
 import ie.dublinbuspal.android.view.settings.SettingsActivity;
+import ie.dublinbuspal.model.livedata.LiveData;
+import ie.dublinbuspal.model.stop.Stop;
+import ie.dublinbuspal.util.AlphanumComparator;
+import ie.dublinbuspal.util.CollectionUtils;
 
 public class RealTimeActivity
         extends MvpActivity<RealTimeView, RealTimePresenter>
@@ -94,16 +89,11 @@ public class RealTimeActivity
     private FloatingActionButton mapSwitcherButton;
     //private ViewFlipper viewFlipper;
     private Timer autoRefreshTimer;
-    @Inject RealTimePresenter presenter;
 
     @NonNull
     @Override
     public RealTimePresenter createPresenter() {
-        if (presenter == null) {
-            DublinBusApplication application = (DublinBusApplication) getApplication();
-            application.getApplicationComponent().inject(this);
-        }
-        return presenter;
+        return ((DublinBusApplication) getApplication()).getApplicationComponent().liveDataPresenter();
     }
 
     public static Intent newIntent(Context context, String stopId) {
@@ -124,8 +114,8 @@ public class RealTimeActivity
     }
 
     private void setupAnalytics() {
-        AnalyticsUtilities.logScreenViewedEvent("Real Time Screen",
-                ImmutableMap.of("Stop ID", getStopId()));
+//        AnalyticsUtilities.logScreenViewedEvent("Real Time Screen",
+//                ImmutableMap.of("Stop ID", getStopId()));
     }
 
     private void setupPreferences() {
@@ -288,24 +278,24 @@ public class RealTimeActivity
     }
 
     @Override
-    public void presentSaveFavouriteDialog(DetailedBusStop busStop, BusStopService service) {
+    public void presentSaveFavouriteDialog(Stop busStop, List<String> service) {
         Set<String> routesToSave = new HashSet<>();
         FrameLayout frameView = new FrameLayout(this);
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_save_favourite, frameView);
         EditText editText = dialogView.findViewById(R.id.custom_name);
-        editText.setHint(busStop.getName());
+        editText.setHint(busStop.name());
 
         GridView gridView = dialogView.findViewById(R.id.grid_view);
         gridView.setAdapter(new ArrayAdapter<>(this,
-                R.layout.dialog_save_favourite_grid_item, R.id.route, service.getRoutes()));
+                R.layout.dialog_save_favourite_grid_item, R.id.route, service));
         gridView.setOnItemClickListener((parent, view, position, id) -> {
-            String route = service.getRoutes().get(position);
+            String route = service.get(position);
             CheckBox checkbox = view.findViewById(R.id.checkbox);
             if (routesToSave.contains(route)) {
                 routesToSave.remove(route);
                 checkbox.setChecked(false);
             } else {
-                routesToSave.add(service.getRoutes().get(position));
+                routesToSave.add(service.get(position));
                 checkbox.setChecked(true);
             }
         });
@@ -326,20 +316,21 @@ public class RealTimeActivity
                     CheckBox check = child.findViewById(R.id.checkbox);
                     check.setChecked(true);
                     routesToSave.clear();
-                    routesToSave.addAll(service.getRoutes());
+                    routesToSave.addAll(service);
                 }
             });
             Button negativeButton = ((AlertDialog) dialog1).getButton(AlertDialog.BUTTON_NEGATIVE);
             negativeButton.setOnClickListener(view -> dialog1.dismiss());
             Button positiveButton = ((AlertDialog) dialog1).getButton(AlertDialog.BUTTON_POSITIVE);
             positiveButton.setOnClickListener(view -> {
-                if (CollectionUtilities.isNullOrEmpty(routesToSave)) {
+                if (CollectionUtils.isNullOrEmpty(routesToSave)) {
                     Snackbar.make(dialogView,
                             getString(R.string.error_not_enough_routes),
                             Snackbar.LENGTH_SHORT).show();
                 } else {
                     String editedText = editText.getText().toString();
-                    String name = editedText.isEmpty() ? busStop.getRealName() : editedText;
+//                    String name = editedText.isEmpty() ? busStop.getRealName() : editedText; //TODO
+                    String name = editedText.isEmpty() ? busStop.name() : editedText;
                     List<String> routes = new ArrayList<>(routesToSave);
                     Collections.sort(routes, AlphanumComparator.getInstance());
                     presenter.saveFavourite(name, routes);
@@ -353,14 +344,14 @@ public class RealTimeActivity
     private Marker busStopMarker;
 
     @Override
-    public void showBusStop(DetailedBusStop busStop) {
+    public void showBusStop(Stop busStop) {
         invalidateOptionsMenu(); //make sure we set default/favourite correctly
         TextView name = toolbar.findViewById(R.id.stop_name);
         TextView id = toolbar.findViewById(R.id.stop_id);
-        name.setText(busStop.getName());
-        id.setText(String.format(Locale.UK, "Stop %s", busStop.getId()));
+        name.setText(busStop.name());
+        id.setText(String.format(Locale.UK, "Stop %s", busStop.id()));
         CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(new LatLng(busStop.getLatitude(), busStop.getLongitude()))
+                .target(new LatLng(busStop.coordinate().getX(), busStop.coordinate().getY()))
                 .zoom(GoogleMapConstants.DEFAULT_ZOOM)
                 .build();
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
@@ -368,22 +359,22 @@ public class RealTimeActivity
             busStopMarker.remove();
         }
         busStopMarker = googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(busStop.getLatitude(), busStop.getLongitude()))
+                .position(new LatLng(busStop.coordinate().getX(), busStop.coordinate().getY()))
                 .anchor(0.3f, 1.0f)
-                .icon(SVGUtils.vectorToBitmap(getApplicationContext(), R.drawable.ic_map_marker_bus_double_decker_default)));
+                .icon(ImageUtils.drawableToBitmap(getApplicationContext(), R.drawable.ic_map_marker_bus_double_decker_default)));
 
         if (streetViewPanorama != null) {
-            streetViewPanorama.setPosition(new LatLng(busStop.getLatitude(), busStop.getLongitude()));
+            streetViewPanorama.setPosition(new LatLng(busStop.coordinate().getX(), busStop.coordinate().getY()));
         }
     }
 
     @Override
-    public void showRealTimeData(List<RealTimeData> realTimeData) {
+    public void showRealTimeData(List<LiveData> realTimeData) {
         adapter.setRealTimeData(realTimeData);
     }
 
     @Override
-    public void showBusStopService(BusStopService busStopService) {
+    public void showBusStopService(List<String> busStopService) {
         int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics());
         int min = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics());
         LinearLayout routeButtonContainer = findViewById(R.id.routes_for_stop);
@@ -392,7 +383,7 @@ public class RealTimeActivity
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         MarginLayoutParamsCompat.setMarginEnd(layoutParams, px);
         routeFilters = new ArrayList<>();
-        for (String route : busStopService.getRoutes()) {
+        for (String route : busStopService) {
             TextView routeView = new TextView(this);
             routeView.setLayoutParams(layoutParams);
             routeView.setPadding(px, 0, px, 0);
@@ -431,7 +422,7 @@ public class RealTimeActivity
     }
 
     @Override
-    public void showStreetView(DetailedBusStop busStop) {
+    public void showStreetView(Stop busStop) {
 
     }
 
@@ -481,8 +472,7 @@ public class RealTimeActivity
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setNestedScrollingEnabled(false);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this,
-                LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         swipeRefreshLayout = findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);

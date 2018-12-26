@@ -11,31 +11,31 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.MenuItem;
+
+import com.google.android.material.snackbar.Snackbar;
+
+import org.threeten.bp.Instant;
 
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.util.Date;
 import java.util.Locale;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.inject.Inject;
 
 import ie.dublinbuspal.android.BuildConfig;
 import ie.dublinbuspal.android.DublinBusApplication;
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.data.DublinBusRepository;
-import ie.dublinbuspal.android.data.remote.download.DownloadProgressListener;
-import ie.dublinbuspal.android.util.DateUtilities;
 import ie.dublinbuspal.android.util.ErrorLog;
-import ie.dublinbuspal.android.util.StringUtilities;
 import ie.dublinbuspal.android.view.web.WebViewActivity;
-import io.reactivex.Single;
+import ie.dublinbuspal.usecase.update.UpdateStopsAndRoutesUseCase;
+import ie.dublinbuspal.util.StringUtils;
+import ie.dublinbuspal.util.TimeUtils;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
@@ -60,8 +60,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     public static class MainPreferenceFragment extends PreferenceFragment {
 
-        @Inject DublinBusRepository repository;
-        @Inject DownloadProgressListener listener;
+//        @Inject DublinBusRepository repository;
+//        @Inject DownloadProgressListener listener;
+
+        @Inject UpdateStopsAndRoutesUseCase useCase;
+        private CompositeDisposable disposables = new CompositeDisposable();
 
         @Override
         public void onCreate(final Bundle savedInstanceState) {
@@ -71,6 +74,13 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             bindDynamicSummaries();
             bindSwitchEnabledPreferences();
             bindListeners();
+        }
+
+        @Override
+        public void onDestroy() {
+            disposables.clear();
+            disposables.dispose();
+            super.onDestroy();
         }
 
         private void setupInjection() {
@@ -88,8 +98,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     getString(R.string.preference_key_auto_refresh_interval)));
             bindLastUpdatedTimestampSummaryToValue(findPreference(
                     getString(R.string.preference_key_update_database)));
-            bindPreferenceSummaryToValue(findPreference(
-                    getString(R.string.preference_key_auto_update_frequency)));
             bindAppVersionSummaryToValue(findPreference(
                     getString(R.string.preference_key_app_version)));
         }
@@ -97,11 +105,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         private void bindSwitchEnabledPreferences() {
             bindSwitchEnabledPair(findPreference(getString(R.string.preference_key_auto_refresh)),
                     findPreference(getString(R.string.preference_key_auto_refresh_interval)));
-            bindSwitchEnabledPair(findPreference(getString(R.string.preference_key_auto_update)),
-                    findPreference(getString(R.string.preference_key_auto_update_frequency)));
-            bindSwitchEnabledPair(findPreference(getString(R.string.preference_key_auto_update)),
-                    findPreference(getString(
-                            R.string.preference_key_auto_update_only_on_good_connection)));
         }
 
         private void bindListeners() {
@@ -112,81 +115,95 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         getString(R.string.preference_key_auto_refresh_interval)));
                 return true;
             });
-            Preference autoUpdatePreference = findPreference(
-                    getString(R.string.preference_key_auto_update));
-            autoUpdatePreference.setOnPreferenceClickListener(preference -> {
-                bindSwitchEnabledPair(autoUpdatePreference, findPreference(
-                        getString(R.string.preference_key_auto_update_frequency)));
-                bindSwitchEnabledPair(autoUpdatePreference, findPreference(
-                        getString(R.string.preference_key_auto_update_only_on_good_connection)));
-                return true;
-            });
-
             SyncPreference updatePreference = (SyncPreference) findPreference(
                     getString(R.string.preference_key_update_database));
             updatePreference.setOnPreferenceClickListener(preference -> {
-
-                if (!updatePreference.isRefreshing()) {
-                    updatePreference.setRefreshing(true);
-                    AtomicInteger total = new AtomicInteger(0);
-                    AtomicInteger totalPercent = new AtomicInteger(0);
-                    listener.registerObserver(percent -> {
-                        totalPercent.incrementAndGet();
-                        if (totalPercent.get() % 3 == 0) {
-                            int update = Math.min(totalPercent.get() / 3, 100);
-                            updatePreference.setSummary("Downloading " + String.valueOf(update) + " %");
-                        }
-                        if (percent == 100) {
-                            total.incrementAndGet();
-                            Log.d("DOWNLOADING", String.valueOf(percent));
-                        }
-                        if (total.get() == 3) {
-                            //TODO fix bugs around here (see crashlytics report) refactor into MVP
-                            updatePreference.setRefreshing(false);
-                            PreferenceManager.getDefaultSharedPreferences(updatePreference.getContext())
-                                    .edit()
-                                    .putLong(getString(R.string.preference_key_update_database), new Date().getTime())
-                                    .apply();
-                            bindLastUpdatedTimestampSummaryToValue(updatePreference);
-                        }
-                    });
-
-                    repository.invalidateCache();
-
-                    //TODO check lifecycle methods and dispose of singles appropriately. make sure update can continue if screen pauses
-                    Single.fromCallable(repository::getBusStopsRemote)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(busStops -> {
-                                // ok
-                            }, throwable -> {
+                updatePreference.setRefreshing(true);
+                disposables.add(useCase.update()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(result -> {
+                            updatePreference.setSummary("Downloading " + String.valueOf(result) + " %");
+                            if (result == 100) {
                                 updatePreference.setRefreshing(false);
-                                handleError(throwable);
-                            });
+                                PreferenceManager.getDefaultSharedPreferences(updatePreference.getContext())
+                                        .edit()
+                                        .putLong(getString(R.string.preference_key_update_database), TimeUtils.now().toEpochMilli())
+                                        .apply();
+                                try {
+                                    bindLastUpdatedTimestampSummaryToValue(updatePreference);
+                                } catch (Exception e) {
+                                    //TODO check if view is attached
+                                }
+                            }
+                            Timber.d(result.toString());
+                        }));
 
-                    Single.fromCallable(repository::getRoutesRemote)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(routes -> {
-                                // ok
-                            }, throwable -> {
-                                updatePreference.setRefreshing(false);
-                                handleError(throwable);
-                            });
-
-                    Single.fromCallable(repository::getBusStopServicesRemote)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(busStopsServices -> {
-                                // ok
-                            }, throwable -> {
-                                updatePreference.setRefreshing(false);
-                                handleError(throwable);
-                            });
-
-                }
                 return true;
             });
+//            updatePreference.setOnPreferenceClickListener(preference -> {
+//
+//                if (!updatePreference.isRefreshing()) {
+//                    updatePreference.setRefreshing(true);
+//                    AtomicInteger total = new AtomicInteger(0);
+//                    AtomicInteger totalPercent = new AtomicInteger(0);
+//                    listener.registerObserver(percent -> {
+//                        totalPercent.incrementAndGet();
+//                        if (totalPercent.get() % 3 == 0) {
+//                            int refresh = Math.min(totalPercent.get() / 3, 100);
+//                            updatePreference.setSummary("Downloading " + String.valueOf(refresh) + " %");
+//                        }
+//                        if (percent == 100) {
+//                            total.incrementAndGet();
+//                            Log.d("DOWNLOADING", String.valueOf(percent));
+//                        }
+//                        if (total.get() == 3) {
+//                            //TODO fix bugs around here (see crashlytics report) refactor into MVP
+//                            updatePreference.setRefreshing(false);
+//                            PreferenceManager.getDefaultSharedPreferences(updatePreference.getContext())
+//                                    .edit()
+//                                    .putLong(getString(R.string.preference_key_update_database), new Date().getTime())
+//                                    .apply();
+//                            bindLastUpdatedTimestampSummaryToValue(updatePreference);
+//                        }
+//                    });
+//
+//                    repository.invalidateCache();
+//
+//                    //TODO check lifecycle methods and dispose of singles appropriately. make sure refresh can continue if screen pauses
+//                    Single.fromCallable(repository::getBusStopsRemote)
+//                            .subscribeOn(Schedulers.io())
+//                            .observeOn(AndroidSchedulers.mainThread())
+//                            .subscribe(busStops -> {
+//                                // ok
+//                            }, throwable -> {
+//                                updatePreference.setRefreshing(false);
+//                                handleError(throwable);
+//                            });
+//
+//                    Single.fromCallable(repository::getRoutesRemote)
+//                            .subscribeOn(Schedulers.io())
+//                            .observeOn(AndroidSchedulers.mainThread())
+//                            .subscribe(routes -> {
+//                                // ok
+//                            }, throwable -> {
+//                                updatePreference.setRefreshing(false);
+//                                handleError(throwable);
+//                            });
+//
+//                    Single.fromCallable(repository::getBusStopServicesRemote)
+//                            .subscribeOn(Schedulers.io())
+//                            .observeOn(AndroidSchedulers.mainThread())
+//                            .subscribe(busStopsServices -> {
+//                                // ok
+//                            }, throwable -> {
+//                                updatePreference.setRefreshing(false);
+//                                handleError(throwable);
+//                            });
+//
+//                }
+//                return true;
+//            });
 
             Preference share = findPreference(getString(R.string.preference_key_share));
             share.setOnPreferenceClickListener(preference -> {
@@ -242,7 +259,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             preference.setOnPreferenceChangeListener(preferenceSummaryListener);
             preferenceSummaryListener.onPreferenceChange(preference,
                     PreferenceManager.getDefaultSharedPreferences(preference.getContext())
-                            .getString(preference.getKey(), StringUtilities.EMPTY_STRING));
+                            .getString(preference.getKey(), StringUtils.EMPTY_STRING));
         }
 
         private static void bindAppVersionSummaryToValue(Preference preference) {
@@ -251,9 +268,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         private static void bindLastUpdatedTimestampSummaryToValue(Preference lastUpdated) {
             long time = PreferenceManager.getDefaultSharedPreferences(lastUpdated.getContext())
-                    .getLong(lastUpdated.getKey(), 0L);
+                    .getLong(lastUpdated.getKey(), TimeUtils.now().toEpochMilli());
             String format = String.format(Locale.UK, "Last updated %s",
-                    DateUtilities.formatLastUpdatedTime(new Date(time)));
+                    TimeUtils.formatAsDate(Instant.ofEpochMilli(time)));
             preferenceSummaryListener.onPreferenceChange(lastUpdated, format);
         }
 
@@ -284,16 +301,16 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     private static Preference.OnPreferenceChangeListener preferenceSummaryListener =
             (preference, newValue) -> {
-        String stringValue = newValue.toString();
-        if (preference instanceof ListPreference) {
-            ListPreference listPreference = (ListPreference) preference;
-            int index = listPreference.findIndexOfValue(stringValue);
-            preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
-        } else {
-            preference.setSummary(stringValue);
-        }
-        return true;
-    };
+                String stringValue = newValue.toString();
+                if (preference instanceof ListPreference) {
+                    ListPreference listPreference = (ListPreference) preference;
+                    int index = listPreference.findIndexOfValue(stringValue);
+                    preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
+                } else {
+                    preference.setSummary(stringValue);
+                }
+                return true;
+            };
 
     private static void shareApp(Context context) {
         Intent shareIntent = new Intent();
@@ -325,15 +342,15 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     private static void sendFeedback(Context context) {
         String emailBody =
                 "\n\n-----------------------------" +
-                "\nPlease don't remove this information" +
-                "\nApp Version: " + BuildConfig.VERSION_NAME +
-                "\nDevice OS: Android" +
-                "\nDevice OS Version: " + Build.VERSION.RELEASE +
-                "\nDevice Brand: " + Build.BRAND +
-                "\nDevice Model: " + Build.MODEL +
-                "\nDevice Manufacturer: " + Build.MANUFACTURER;
+                        "\nPlease don't remove this information" +
+                        "\nApp Version: " + BuildConfig.VERSION_NAME +
+                        "\nDevice OS: Android" +
+                        "\nDevice OS Version: " + Build.VERSION.RELEASE +
+                        "\nDevice Brand: " + Build.BRAND +
+                        "\nDevice Model: " + Build.MODEL +
+                        "\nDevice Manufacturer: " + Build.MANUFACTURER;
         Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                "mailto","dublinbuspal@gmail.com", null));
+                "mailto", "dublinbuspal@gmail.com", null));
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Dublin Bus Pal Feedback");
         emailIntent.putExtra(Intent.EXTRA_TEXT, emailBody);
         context.startActivity(Intent.createChooser(emailIntent, "Send feedback"));

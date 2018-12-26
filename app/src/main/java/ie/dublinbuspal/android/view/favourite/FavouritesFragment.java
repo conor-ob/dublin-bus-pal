@@ -3,14 +3,6 @@ package ie.dublinbuspal.android.view.favourite;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,18 +11,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import ie.dublinbuspal.android.DublinBusApplication;
-import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.data.local.entity.DetailedBusStop;
-import ie.dublinbuspal.android.util.CollectionUtilities;
-import ie.dublinbuspal.android.view.home.HomeActivity;
-import ie.dublinbuspal.android.view.realtime.RealTimeActivity;
-import ie.dublinbuspal.android.view.settings.SettingsActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.hannesdorfmann.mosby3.mvp.MvpFragment;
 
 import java.util.List;
 
 import javax.inject.Inject;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import ie.dublinbuspal.android.DublinBusApplication;
+import ie.dublinbuspal.android.R;
+import ie.dublinbuspal.android.view.home.HomeActivity;
+import ie.dublinbuspal.android.view.realtime.RealTimeActivity;
+import ie.dublinbuspal.android.view.settings.SettingsActivity;
+import ie.dublinbuspal.model.favourite.FavouriteStop;
+import ie.dublinbuspal.util.CollectionUtils;
 
 public class FavouritesFragment extends MvpFragment<FavouritesView, FavouritesPresenter>
         implements FavouritesView {
@@ -46,10 +47,9 @@ public class FavouritesFragment extends MvpFragment<FavouritesView, FavouritesPr
     @Override
     public FavouritesPresenter createPresenter() {
         if (getActivity() != null) {
-            DublinBusApplication application = (DublinBusApplication) getActivity().getApplication();
-            application.getApplicationComponent().inject(this);
+            return ((DublinBusApplication) getActivity().getApplication()).getApplicationComponent().favouritesPresenter();
         }
-        return presenter;
+        return null;
     }
 
     @Nullable
@@ -105,9 +105,9 @@ public class FavouritesFragment extends MvpFragment<FavouritesView, FavouritesPr
     }
 
     @Override
-    public void showFavourites(List<DetailedBusStop> favourites) {
+    public void showFavourites(List<FavouriteStop> favourites) {
         adapter.setFavourites(favourites);
-        if (CollectionUtilities.isNullOrEmpty(favourites)) {
+        if (CollectionUtils.isNullOrEmpty(favourites)) {
             swipeRefreshLayout.setVisibility(View.GONE);
             noFavouritesView.setVisibility(View.VISIBLE);
             addFavouritesButton.setVisibility(View.VISIBLE);
@@ -142,8 +142,7 @@ public class FavouritesFragment extends MvpFragment<FavouritesView, FavouritesPr
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),
-                LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setEnabled(false);

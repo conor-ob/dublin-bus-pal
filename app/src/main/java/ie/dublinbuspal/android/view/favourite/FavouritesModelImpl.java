@@ -1,24 +1,24 @@
 package ie.dublinbuspal.android.view.favourite;
 
-import ie.dublinbuspal.android.data.local.entity.DetailedBusStop;
-
 import java.util.List;
+
+import ie.dublinbuspal.model.favourite.FavouriteStop;
 
 public class FavouritesModelImpl implements FavouritesModel {
 
-    private List<DetailedBusStop> favourites;
+    private List<FavouriteStop> favourites;
 
     public FavouritesModelImpl() {
         super();
     }
 
     @Override
-    public void setFavourites(List<DetailedBusStop> favourites) {
+    public void setFavourites(List<FavouriteStop> favourites) {
         this.favourites = favourites;
     }
 
     @Override
-    public List<DetailedBusStop> getFavourites() {
+    public List<FavouriteStop> getFavourites() {
         return favourites;
     }
 

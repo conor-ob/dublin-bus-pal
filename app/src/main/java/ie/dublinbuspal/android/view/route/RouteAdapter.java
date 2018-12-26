@@ -1,17 +1,16 @@
 package ie.dublinbuspal.android.view.route;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.data.local.entity.BusStop;
-import ie.dublinbuspal.android.data.local.entity.DetailedBusStop;
-
 import java.util.List;
 import java.util.Locale;
+
+import androidx.recyclerview.widget.RecyclerView;
+import ie.dublinbuspal.android.R;
+import ie.dublinbuspal.model.stop.Stop;
 
 public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> {
 
@@ -20,7 +19,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
     private static final int DESTINATION = 2;
 
     private final RouteView view;
-    private List<DetailedBusStop> busStops;
+    private List<Stop> busStops;
 
     RouteAdapter(RouteView view) {
         this.view = view;
@@ -55,7 +54,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        BusStop busStop = busStops.get(position);
+        Stop busStop = busStops.get(position);
         holder.bind(busStop, position);
     }
 
@@ -74,7 +73,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
         return DEFAULT;
     }
 
-    public void setBusStops(List<DetailedBusStop> busStops) {
+    public void setBusStops(List<Stop> busStops) {
         this.busStops = busStops;
         notifyDataSetChanged();
     }
@@ -96,13 +95,13 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
 
         @Override
         public void onClick(View itemView) {
-            DetailedBusStop busStop = busStops.get(getAdapterPosition());
-            view.launchRealTimeActivity(busStop.getId());
+            Stop busStop = busStops.get(getAdapterPosition());
+            view.launchRealTimeActivity(busStop.id());
         }
 
-        public void bind(BusStop busStop, int position) {
-            stopName.setText(busStop.getName());
-            stopId.setText(String.format(Locale.UK, formattedStopId, busStop.getId()));
+        public void bind(Stop busStop, int position) {
+            stopName.setText(busStop.name());
+            stopId.setText(String.format(Locale.UK, formattedStopId, busStop.id()));
             stopSequence.setText(String.format(Locale.UK, "%d/%d", position + 1,
                     busStops.size()));
         }

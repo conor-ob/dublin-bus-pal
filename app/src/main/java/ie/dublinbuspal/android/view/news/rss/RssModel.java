@@ -1,11 +1,13 @@
 package ie.dublinbuspal.android.view.news.rss;
 
-import ie.dublinbuspal.android.data.remote.rss.xml.Rss;
+import java.util.List;
+
+import ie.dublinbuspal.model.rss.RssNews;
 
 public interface RssModel {
 
-    Rss getRss();
+    List<RssNews> getRss();
 
-    void setRss(Rss rss);
+    void setRss(List<RssNews> rss);
 
 }

@@ -5,16 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,22 +24,29 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.hannesdorfmann.mosby3.mvp.MvpActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import javax.inject.Inject;
-
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import ie.dublinbuspal.android.DublinBusApplication;
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.data.local.entity.BusStop;
-import ie.dublinbuspal.android.data.local.entity.DetailedBusStop;
 import ie.dublinbuspal.android.util.GoogleMapConstants;
-import ie.dublinbuspal.android.util.SVGUtils;
+import ie.dublinbuspal.android.util.ImageUtils;
 import ie.dublinbuspal.android.view.realtime.RealTimeActivity;
 import ie.dublinbuspal.android.view.settings.SettingsActivity;
+import ie.dublinbuspal.model.stop.Stop;
 
 public class RouteActivity extends MvpActivity<RouteView, RoutePresenter>
         implements RouteView, OnMapReadyCallback {
@@ -68,16 +65,11 @@ public class RouteActivity extends MvpActivity<RouteView, RoutePresenter>
     private List<Marker> markers = new ArrayList<>();
     private List<Polyline> polylines = new ArrayList<>();
     private SwipeRefreshLayout swipeRefresh;
-    @Inject RoutePresenter presenter;
 
     @NonNull
     @Override
     public RoutePresenter createPresenter() {
-        if (presenter == null) {
-            DublinBusApplication application = (DublinBusApplication) getApplication();
-            application.getApplicationComponent().inject(this);
-        }
-        return presenter;
+        return ((DublinBusApplication) getApplication()).getApplicationComponent().routeServicePresenter();
     }
 
     @Override
@@ -179,8 +171,7 @@ public class RouteActivity extends MvpActivity<RouteView, RoutePresenter>
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(),
-                LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         swapDirectionButton = findViewById(R.id.button_swap);
         swipeRefresh = findViewById(R.id.swipe_refresh);
@@ -223,22 +214,29 @@ public class RouteActivity extends MvpActivity<RouteView, RoutePresenter>
         }
     }
 
+    //TODO temporary fix blah blah
+    private boolean firstResponse = false;
+
     @Override
-    public void displayBusStops(List<DetailedBusStop> busStops) {
+    public void displayBusStops(List<Stop> busStops) {
+        if (!firstResponse) {
+            setShowBusTimesButtonVisibility(View.VISIBLE);
+        }
+        firstResponse = true;
         clearMap();
         adapter.setBusStops(busStops);
         PolylineOptions polylineOptions = new PolylineOptions();
         polylineOptions.width(8);
         polylineOptions.color(ContextCompat.getColor(getBaseContext(), R.color.colorPrimary));
-        for (BusStop busStop : busStops) {
+        for (Stop busStop : busStops) {
             markers.add(googleMap.addMarker(newMarkerOptions(busStop)));
-            polylineOptions.add(new LatLng(busStop.getLatitude(), busStop.getLongitude()));
+            polylineOptions.add(new LatLng(busStop.coordinate().getX(), busStop.coordinate().getY()));
         }
         polylines.add(googleMap.addPolyline(polylineOptions));
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        for (BusStop busStop : busStops) {
-            builder.include(new LatLng(busStop.getLatitude(), busStop.getLongitude()));
+        for (Stop busStop : busStops) {
+            builder.include(new LatLng(busStop.coordinate().getX(), busStop.coordinate().getY()));
         }
         LatLngBounds bounds = builder.build();
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 64);
@@ -276,13 +274,13 @@ public class RouteActivity extends MvpActivity<RouteView, RoutePresenter>
         startActivity(intent);
     }
 
-    private MarkerOptions newMarkerOptions(BusStop busStop) {
+    private MarkerOptions newMarkerOptions(Stop busStop) {
         return new MarkerOptions()
-                .position(new LatLng(busStop.getLatitude(), busStop.getLongitude()))
+                .position(new LatLng(busStop.coordinate().getX(), busStop.coordinate().getY()))
                 .anchor(0.5f, 0.5f)
-                .title(busStop.getName())
-                .snippet(String.format(Locale.UK, getString(R.string.formatted_stop_id), busStop.getId()))
-                .icon(SVGUtils.vectorToBitmap(getApplicationContext(),
+                .title(busStop.name())
+                .snippet(String.format(Locale.UK, getString(R.string.formatted_stop_id), busStop.id()))
+                .icon(ImageUtils.drawableToBitmap(getApplicationContext(),
                         R.drawable.ic_map_marker_route_stop));
     }
 

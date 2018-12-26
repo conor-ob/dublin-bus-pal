@@ -1,21 +1,21 @@
 package ie.dublinbuspal.android.view.search;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.data.local.entity.DetailedBusStop;
-import ie.dublinbuspal.android.data.local.entity.Route;
-import ie.dublinbuspal.android.util.CollectionUtilities;
-import ie.dublinbuspal.android.util.StringUtilities;
-
 import java.util.List;
 import java.util.Locale;
 
-public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+import androidx.recyclerview.widget.RecyclerView;
+import ie.dublinbuspal.android.R;
+import ie.dublinbuspal.model.route.Route;
+import ie.dublinbuspal.model.stop.Stop;
+import ie.dublinbuspal.util.CollectionUtils;
+import ie.dublinbuspal.util.StringUtils;
+
+public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int TITLE = 0;
     private static final int ROUTE = 1;
@@ -64,8 +64,8 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             Route route = (Route) searchResult;
             RouteViewHolder routeViewHolder = (RouteViewHolder) holder;
             routeViewHolder.bind(route);
-        } else if (searchResult instanceof DetailedBusStop && holder instanceof BusStopViewHolder) {
-            DetailedBusStop busStop = (DetailedBusStop) searchResult;
+        } else if (searchResult instanceof Stop && holder instanceof BusStopViewHolder) {
+            Stop busStop = (Stop) searchResult;
             BusStopViewHolder busStopViewHolder = (BusStopViewHolder) holder;
             busStopViewHolder.bind(busStop);
         }
@@ -83,7 +83,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             return TITLE;
         } else if (searchResult instanceof Route) {
             return ROUTE;
-        } else if (searchResult instanceof DetailedBusStop) {
+        } else if (searchResult instanceof Stop) {
             return BUS_STOP;
         }
         return super.getItemViewType(position);
@@ -121,9 +121,15 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
 
         public void bind(Route route) {
-            routeId.setText(route.getRouteId());
-            routeDescription.setText(String.format(Locale.UK, "%s - %s",
-                    route.getOrigin(), route.getDestination()));
+            routeId.setText(route.getId());
+//            if (route.getOperator().equals(Operator.GO_AHEAD_DUBLIN)) {
+//                routeId.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.textColorPrimaryInverse));
+//                routeId.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(itemView.getContext(), R.color.colorPrimary)));
+//            } else {
+//                routeId.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.textColorPrimary));
+//                routeId.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(itemView.getContext(), R.color.colorAccent)));
+//            }
+            routeDescription.setText(String.format(Locale.UK, "%s - %s", route.getOrigin(), route.getDestination()));
         }
 
         @Override
@@ -131,7 +137,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             Object searchResult = searchResults.get(getAdapterPosition());
             if (searchResult instanceof Route) {
                 Route route = (Route) searchResult;
-                view.launchRouteActivity(route.getRouteId());
+                view.launchRouteActivity(route.getId());
             }
         }
 
@@ -152,24 +158,26 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             formattedStopId = itemView.getContext().getString(R.string.formatted_stop_id);
         }
 
-        public void bind(DetailedBusStop busStop) {
-            stopID.setText(String.format(Locale.UK, formattedStopId, busStop.getId()));
-            stopName.setText(busStop.getName());
-            if (CollectionUtilities.isNullOrEmpty(busStop.getRoutes())) {
+        public void bind(Stop busStop) {
+            stopID.setText(String.format(Locale.UK, formattedStopId, busStop.id()));
+            stopName.setText(busStop.name());
+            if (CollectionUtils.isNullOrEmpty(busStop.routes())) {
+                routes.setText(StringUtils.EMPTY_STRING);
                 routes.setVisibility(View.GONE);
             } else {
                 String middleDot = String.format(Locale.UK, " %s ",
-                        StringUtilities.MIDDLE_DOT);
-                routes.setText(StringUtilities.join(busStop.getRoutes(), middleDot));
+                        StringUtils.MIDDLE_DOT);
+                routes.setText(StringUtils.join(busStop.routes(), middleDot));
+                routes.setVisibility(View.VISIBLE);
             }
         }
 
         @Override
         public void onClick(View itemView) {
             Object searchResult = searchResults.get(getAdapterPosition());
-            if (searchResult instanceof DetailedBusStop) {
-                DetailedBusStop busStop = (DetailedBusStop) searchResult;
-                view.launchRealTimeActivity(busStop.getId());
+            if (searchResult instanceof Stop) {
+                Stop busStop = (Stop) searchResult;
+                view.launchRealTimeActivity(busStop.id());
             }
         }
 

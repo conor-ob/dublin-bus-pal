@@ -4,25 +4,15 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -34,18 +24,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import ie.dublinbuspal.android.DublinBusApplication;
-import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.data.local.entity.DetailedBusStop;
-import ie.dublinbuspal.android.util.AnimationUtilities;
-import ie.dublinbuspal.android.util.CollectionUtilities;
-import ie.dublinbuspal.android.util.GoogleMapConstants;
-import ie.dublinbuspal.android.util.LocationUtilities;
-import ie.dublinbuspal.android.util.SVGUtils;
-import ie.dublinbuspal.android.view.home.HomeActivity;
-import ie.dublinbuspal.android.view.realtime.RealTimeActivity;
-import ie.dublinbuspal.android.view.settings.SettingsActivity;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -57,11 +35,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hannesdorfmann.mosby3.mvp.MvpFragment;
-import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -69,10 +49,27 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.SortedMap;
 
-import javax.inject.Inject;
-
-import io.reactivex.disposables.CompositeDisposable;
-import pl.charmas.android.reactivelocation2.ReactiveLocationProvider;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import ie.dublinbuspal.android.DublinBusApplication;
+import ie.dublinbuspal.android.R;
+import ie.dublinbuspal.android.util.AnimationUtils;
+import ie.dublinbuspal.android.util.GoogleMapConstants;
+import ie.dublinbuspal.android.util.ImageUtils;
+import ie.dublinbuspal.android.util.LocationUtilities;
+import ie.dublinbuspal.android.view.home.HomeActivity;
+import ie.dublinbuspal.android.view.realtime.RealTimeActivity;
+import ie.dublinbuspal.android.view.settings.SettingsActivity;
+import ie.dublinbuspal.model.stop.Stop;
+import ie.dublinbuspal.util.CollectionUtils;
+import ie.dublinbuspal.util.Coordinate;
+import ie.dublinbuspal.util.LocationUtils;
 
 import static android.graphics.Paint.ANTI_ALIAS_FLAG;
 
@@ -82,8 +79,6 @@ public class NearbyFragment
 
     private static final int BOTTOM_SHEET_PEEK_HEIGHT_DP = 250;
     public static boolean mapIsTouched;
-    private RxPermissions rxPermissions;
-    private ReactiveLocationProvider locationProvider;
     private int bottomSheetPeekHeightPx;
     private SupportMapFragment googleMapFragment;
     private GoogleMap googleMap;
@@ -97,22 +92,15 @@ public class NearbyFragment
     private FloatingActionButton gps;
     private FloatingActionButton traffic;
     private boolean showTraffic;
-    private CompositeDisposable disposables;
-    private Location currentLocation;
     private ImageView crosshair;
-    @Inject NearbyPresenter presenter;
 
     @NonNull
     @Override
     public NearbyPresenter createPresenter() {
-        if (presenter == null) {
-            if (getActivity() != null) {
-                DublinBusApplication application = (DublinBusApplication)
-                        getActivity().getApplication();
-                application.getApplicationComponent().inject(this);
-            }
+        if (getActivity() != null) {
+            return ((DublinBusApplication) getActivity().getApplication()).getApplicationComponent().nearbyPresenter();
         }
-        return presenter;
+        return null;
     }
 
     public NearbyFragment() {
@@ -235,8 +223,7 @@ public class NearbyFragment
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),
-                LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         showNearbyStopsButton = view.findViewById(R.id.show_nearby_stops_button);
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
@@ -277,77 +264,46 @@ public class NearbyFragment
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED));
     }
 
-    public RxPermissions getRxPermissions() {
-        if (rxPermissions == null) {
-            rxPermissions = new RxPermissions(getActivity());
-        }
-        return rxPermissions;
-    }
-
-    public ReactiveLocationProvider getLocationProvider() {
-        if (locationProvider == null) {
-            locationProvider = new ReactiveLocationProvider(getContext());
-        }
-        return locationProvider;
-    }
-
-    //TODO fix this mess
-    @SuppressLint("MissingPermission")
     private void requestLocationUpdates() {
-        getDisposables().add(getRxPermissions().request(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
-                .subscribe(granted -> {
-                    if (granted) {
-                        if (currentLocation == null) {
-                            getDisposables().add(getLocationProvider().getLastKnownLocation()
-                                    .subscribe(location -> {
-                                        if (googleMap != null) {
-                                            Log.d("LOCATION_UPDATE", "better location");
-                                            currentLocation = location;
-                                            googleMap.setMyLocationEnabled(true);
-                                            CameraPosition cameraPosition = new CameraPosition.Builder()
-                                                    .target(LocationUtilities.toLatLng(location))
-                                                    .zoom(googleMap.getCameraPosition().zoom)
-                                                    .build();
-                                            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                                        }
-                                    }));
-                        } else {
-                            if (googleMap != null) {
-                                Log.d("LOCATION_UPDATE", "better location");
-                                googleMap.setMyLocationEnabled(true);
-                                CameraPosition cameraPosition = new CameraPosition.Builder()
-                                        .target(LocationUtilities.toLatLng(currentLocation))
-                                        .zoom(googleMap.getCameraPosition().zoom)
-                                        .build();
-                                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                            }
-                        }
-                        gps.setImageResource(R.drawable.ic_gps_fixed_blue);
-                        LocationRequest request = LocationRequest.create()
-                                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                                .setInterval(500L);
-                        getDisposables().add(getLocationProvider().getUpdatedLocation(request)
-                                .subscribe(location -> {
-                                    if (isBetterLocation(location, currentLocation) && googleMap != null) {
-                                        Log.d("LOCATION_UPDATE", "better location");
-                                        currentLocation = location;
-                                        googleMap.setMyLocationEnabled(true);
-                                        CameraPosition cameraPosition = new CameraPosition.Builder()
-                                                .target(LocationUtilities.toLatLng(location))
-                                                .zoom(googleMap.getCameraPosition().zoom)
-                                                .build();
-                                        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                                    }
-                                }));
-                    }
-                }));
+        if (locationPermissionsAreGranted()) {
+            startLocationUpdates();
+        } else {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 0);
+        }
     }
 
-    public CompositeDisposable getDisposables() {
-        if (disposables == null || disposables.isDisposed()) {
-            disposables = new CompositeDisposable();
+    private void startLocationUpdates() {
+        gps.setImageResource(R.drawable.ic_gps_fixed_blue);
+        presenter.onLocationRequested();
+    }
+
+    private boolean locationPermissionsAreGranted() {
+        return ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (permissions.length == 2 && grantResults.length == 2)
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                startLocationUpdates();
+            } else if (shouldShowRequestPermissionRationale(permissions[0])) {
+
+            }
+    }
+
+    private Coordinate lastKnowLocation = null;
+    @SuppressLint("MissingPermission")
+    @Override
+    public void updateLocation(Coordinate coordinate) {
+        lastKnowLocation = coordinate;
+        if (!googleMap.isMyLocationEnabled()) {
+            googleMap.setMyLocationEnabled(true);
         }
-        return disposables;
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
+                .target(new LatLng(coordinate.getX(), coordinate.getY()))
+                .zoom(googleMap.getCameraPosition().zoom)
+                .build()));
     }
 
     @Override
@@ -357,33 +313,32 @@ public class NearbyFragment
     }
 
     @Override
-    public void showNearbyStops(SortedMap<Double, DetailedBusStop> busStops) {
-        List<DetailedBusStop> nearbyStops = new ArrayList<>(busStops.values());
-        toolbar.setTitle(String.format(Locale.UK, "Stops near %s",
-                LocationUtilities.getCoarseAddress(CollectionUtilities
-                        .safeFirstElement(nearbyStops))));
-        adapter.setDistances(new ArrayList<>(busStops.keySet()));
+    public void showNearbyStops(SortedMap<Double, Stop> busStops) {
+        List<Stop> nearbyStops = new ArrayList<>(busStops.values());
+        if (CollectionUtils.isNotNullOrEmpty(nearbyStops)) {
+            toolbar.setTitle(String.format(Locale.UK, "Stops near %s",
+                    LocationUtilities.getCoarseAddress(nearbyStops.get(0))));
+        }
+        adapter.setDistances(getDistances(nearbyStops));
         adapter.setBusStops(new ArrayList<>(nearbyStops));
         mapMarkerManager.update(nearbyStops);
         //resizeCircle(busStops);
     }
 
+    private List<Double> getDistances(List<Stop> nearbyStops) {
+        if (lastKnowLocation == null) {
+            return Collections.emptyList();
+        }
+        List<Double> distances = new ArrayList<>();
+        for (Stop stop : nearbyStops) {
+            distances.add(LocationUtils.haversineDistance(lastKnowLocation, stop.coordinate()));
+        }
+        return distances;
+    }
+
     @Override
     public void onCameraIdle() {
         getPresenter().refreshNearby(LocationUtilities.toLocation(this.googleMap.getCameraPosition().target));
-        checkLocation();
-    }
-
-    private void checkLocation() {
-        if (currentLocation != null) {
-            Location newLocation = LocationUtilities.toLocation(googleMap.getCameraPosition().target);
-            double distance = currentLocation.distanceTo(newLocation);
-            if (distance > 100) {
-                crosshair.setVisibility(View.VISIBLE);
-            } else {
-                crosshair.setVisibility(View.GONE);
-            }
-        }
     }
 
     private void setShowNearbyStopsButtonVisibility(int visibility) {
@@ -392,64 +347,9 @@ public class NearbyFragment
         }
     }
 
-    private boolean removeLocationUpdates() {
-        Log.d("LOCATION_UPDATE", "remove location updates");
+    private void removeLocationUpdates() {
         gps.setImageResource(R.drawable.ic_gps_fixed_grey);
-        getDisposables().clear();
-        getDisposables().dispose();
-        return true;
-    }
-
-    private static final int TWO_MINUTES = 1000 * 60 * 2;
-
-    protected boolean isBetterLocation(Location location, Location currentBestLocation) {
-        if (currentBestLocation == null) {
-            // A new location is always better than no location
-            return true;
-        }
-
-        // Check whether the new location fix is newer or older
-        long timeDelta = location.getTime() - currentBestLocation.getTime();
-        boolean isSignificantlyNewer = timeDelta > TWO_MINUTES;
-        boolean isSignificantlyOlder = timeDelta < -TWO_MINUTES;
-        boolean isNewer = timeDelta > 0;
-
-        // If it's been more than two minutes since the current location, use the new location
-        // because the user has likely moved
-        if (isSignificantlyNewer) {
-            return true;
-            // If the new location is more than two minutes older, it must be worse
-        } else if (isSignificantlyOlder) {
-            return false;
-        }
-
-        // Check whether the new location fix is more or less accurate
-        int accuracyDelta = (int) (location.getAccuracy() - currentBestLocation.getAccuracy());
-        boolean isLessAccurate = accuracyDelta > 0;
-        boolean isMoreAccurate = accuracyDelta < 0;
-        boolean isSignificantlyLessAccurate = accuracyDelta > 200;
-
-        // Check if the old and new location are from the same provider
-        boolean isFromSameProvider = isSameProvider(location.getProvider(),
-                currentBestLocation.getProvider());
-
-        // Determine location quality using a combination of timeliness and accuracy
-        if (isMoreAccurate) {
-            return true;
-        } else if (isNewer && !isLessAccurate) {
-            return true;
-        } else if (isNewer && !isSignificantlyLessAccurate && isFromSameProvider) {
-            return true;
-        }
-        return false;
-    }
-
-    /** Checks whether two providers are the same */
-    private boolean isSameProvider(String provider1, String provider2) {
-        if (provider1 == null) {
-            return provider2 == null;
-        }
-        return provider1.equals(provider2);
+        presenter.onRemoveLocationUpdates();
     }
 
     public boolean canGoBack() {
@@ -465,11 +365,11 @@ public class NearbyFragment
         private static final float ICON_TYPE_ZOOM = 12f;
         private static final float TEXT_VISIBILITY_ZOOM = 16f;
 
-        private Map<DetailedBusStop, Marker> googleMapMarkers;
-        private Map<DetailedBusStop, Marker> googleMapTextMarkers;
+        private Map<Stop, Marker> googleMapMarkers;
+        private Map<Stop, Marker> googleMapTextMarkers;
 
-        private Map<DetailedBusStop, MarkerOptions> googleMapMarkerOptions;
-        private Map<DetailedBusStop, MarkerOptions> googleMapTextMarkerOptions;
+        private Map<Stop, MarkerOptions> googleMapMarkerOptions;
+        private Map<Stop, MarkerOptions> googleMapTextMarkerOptions;
 
         private BitmapDescriptor defaultIcon;
         private BitmapDescriptor zoomedOutIcon;
@@ -481,7 +381,7 @@ public class NearbyFragment
             previousZoom = initialZoom;
         }
 
-        public void update(List<DetailedBusStop> busStops) {
+        public void update(List<Stop> busStops) {
             addNewMarkers(busStops);
             removeOldMarkers(busStops);
         }
@@ -518,51 +418,51 @@ public class NearbyFragment
             previousZoom = currentZoom;
         }
 
-        private void addNewMarkers(Collection<DetailedBusStop> busStops) {
+        private void addNewMarkers(Collection<Stop> busStops) {
             BitmapDescriptor icon;
             if (googleMap.getCameraPosition().zoom <= ICON_TYPE_ZOOM) {
                 icon = getZoomedOutIcon();
             } else {
                 icon = getDefaultIcon();
             }
-            for (DetailedBusStop busStop : busStops) {
+            for (Stop busStop : busStops) {
                 if (getGoogleMapMarkers().get(busStop) == null) {
                     Marker marker = googleMap.addMarker(getMarkerOptions(busStop, icon));
                     marker.setIcon(icon);
                     Marker textMarker = googleMap.addMarker(getTextMarkerOptions(busStop));
                     textMarker.setVisible(googleMap.getCameraPosition().zoom >= TEXT_VISIBILITY_ZOOM);
-                    AnimationUtilities.fadeInMarker(marker);
-                    AnimationUtilities.fadeInMarker(textMarker);
+                    AnimationUtils.fadeInMarker(marker);
+                    AnimationUtils.fadeInMarker(textMarker);
                     getGoogleMapMarkers().put(busStop, marker);
                     getGoogleMapTextMarkers().put(busStop, textMarker);
                 }
             }
         }
 
-        private void removeOldMarkers(Collection<DetailedBusStop> busStops) {
-            Iterator<Map.Entry<DetailedBusStop, Marker>> iterator = getGoogleMapMarkers().entrySet().iterator();
+        private void removeOldMarkers(Collection<Stop> busStops) {
+            Iterator<Map.Entry<Stop, Marker>> iterator = getGoogleMapMarkers().entrySet().iterator();
             while (iterator.hasNext()) {
-                Map.Entry<DetailedBusStop, Marker> entry = iterator.next();
-                DetailedBusStop busStop = entry.getKey();
+                Map.Entry<Stop, Marker> entry = iterator.next();
+                Stop busStop = entry.getKey();
                 if (!busStops.contains(busStop)) {
                     final Marker marker = entry.getValue();
-                    AnimationUtilities.fadeOutMarker(marker);
+                    AnimationUtils.fadeOutMarker(marker);
                     iterator.remove();
                 }
             }
-            Iterator<Map.Entry<DetailedBusStop, Marker>> iterator2 = getGoogleMapTextMarkers().entrySet().iterator();
+            Iterator<Map.Entry<Stop, Marker>> iterator2 = getGoogleMapTextMarkers().entrySet().iterator();
             while (iterator2.hasNext()) {
-                Map.Entry<DetailedBusStop, Marker> entry = iterator2.next();
-                DetailedBusStop busStop = entry.getKey();
+                Map.Entry<Stop, Marker> entry = iterator2.next();
+                Stop busStop = entry.getKey();
                 if (!busStops.contains(busStop)) {
                     final Marker marker = entry.getValue();
-                    AnimationUtilities.fadeOutMarker(marker);
+                    AnimationUtils.fadeOutMarker(marker);
                     iterator2.remove();
                 }
             }
         }
 
-        private MarkerOptions getMarkerOptions(DetailedBusStop busStop, BitmapDescriptor icon) {
+        private MarkerOptions getMarkerOptions(Stop busStop, BitmapDescriptor icon) {
             MarkerOptions markerOptions = getGoogleMapMarkerOptions().get(busStop);
             if (markerOptions == null) {
                 markerOptions = newMarkerOptions(busStop, icon);
@@ -571,7 +471,7 @@ public class NearbyFragment
             return markerOptions;
         }
 
-        private MarkerOptions getTextMarkerOptions(DetailedBusStop busStop) {
+        private MarkerOptions getTextMarkerOptions(Stop busStop) {
             MarkerOptions markerOptions = getGoogleMapTextMarkerOptions().get(busStop);
             if (markerOptions == null) {
                 markerOptions = newTextMarkerOptions(busStop);
@@ -580,17 +480,17 @@ public class NearbyFragment
             return markerOptions;
         }
 
-        private MarkerOptions newMarkerOptions(DetailedBusStop busStop, BitmapDescriptor icon) {
+        private MarkerOptions newMarkerOptions(Stop busStop, BitmapDescriptor icon) {
             return new MarkerOptions()
-                    .position(new LatLng(busStop.getLatitude(), busStop.getLongitude()))
+                    .position(new LatLng(busStop.coordinate().getX(), busStop.coordinate().getY()))
                     .anchor(0.3f, 1.0f)
-                    .title(busStop.getName())
-                    .snippet(String.format(Locale.UK, getString(R.string.formatted_stop_id), busStop.getId()))
+                    .title(busStop.name())
+                    .snippet(String.format(Locale.UK, getString(R.string.formatted_stop_id), busStop.id()))
                     .infoWindowAnchor(0.3f, 0.0f)
                     .icon(icon);
         }
 
-        private MarkerOptions newTextMarkerOptions(DetailedBusStop busStop) {
+        private MarkerOptions newTextMarkerOptions(Stop busStop) {
             int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14, getResources().getDisplayMetrics());
             Paint stkPaint = new Paint(ANTI_ALIAS_FLAG);
             stkPaint.setTextSize(px);
@@ -600,21 +500,21 @@ public class NearbyFragment
             stkPaint.setStrokeWidth(5);
             stkPaint.setColor(Color.WHITE);
             float baseline = -stkPaint.ascent(); // ascent() is negative
-            int width = (int) (stkPaint.measureText(busStop.getId()) + 0.5f); // round
+            int width = (int) (stkPaint.measureText(busStop.id()) + 0.5f); // round
             int height = (int) (baseline + stkPaint.descent() + 0.5f);
             Bitmap image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(image);
-            canvas.drawText(busStop.getId(), 0, baseline, stkPaint);
+            canvas.drawText(busStop.id(), 0, baseline, stkPaint);
 
             Paint fillPaint = new Paint(ANTI_ALIAS_FLAG);
             fillPaint.setTextSize(px);
             fillPaint.setColor(ContextCompat.getColor(getContext(), R.color.textColorSecondary));
             fillPaint.setTextAlign(Paint.Align.LEFT);
             fillPaint.setTypeface(Typeface.create("sans-serif-condensed", Typeface.NORMAL));
-            canvas.drawText(busStop.getId(), 0, baseline, fillPaint);
+            canvas.drawText(busStop.id(), 0, baseline, fillPaint);
 
             return new MarkerOptions()
-                    .position(new LatLng(busStop.getLatitude(), busStop.getLongitude()))
+                    .position(new LatLng(busStop.coordinate().getX(), busStop.coordinate().getY()))
                     .anchor(0.5f, -0.2f)
                     .visible(googleMap.getCameraPosition().zoom >= TEXT_VISIBILITY_ZOOM)
                     .icon(BitmapDescriptorFactory.fromBitmap(image));
@@ -622,40 +522,40 @@ public class NearbyFragment
 
         private BitmapDescriptor getDefaultIcon() {
             if (defaultIcon == null) {
-                defaultIcon = SVGUtils.vectorToBitmap(getContext(), R.drawable.ic_map_marker_bus_double_decker_default);
+                defaultIcon = ImageUtils.drawableToBitmap(getContext(), R.drawable.ic_map_marker_bus_double_decker_default);
             }
             return defaultIcon;
         }
 
         private BitmapDescriptor getZoomedOutIcon() {
             if (zoomedOutIcon == null) {
-                zoomedOutIcon = SVGUtils.vectorToBitmap(getContext(), R.drawable.ic_map_marker_bus_double_decker_far);
+                zoomedOutIcon = ImageUtils.drawableToBitmap(getContext(), R.drawable.ic_map_marker_bus_double_decker_far);
             }
             return zoomedOutIcon;
         }
 
-        private Map<DetailedBusStop, Marker> getGoogleMapMarkers() {
+        private Map<Stop, Marker> getGoogleMapMarkers() {
             if (googleMapMarkers == null) {
                 googleMapMarkers = new HashMap<>();
             }
             return googleMapMarkers;
         }
 
-        private Map<DetailedBusStop, Marker> getGoogleMapTextMarkers() {
+        private Map<Stop, Marker> getGoogleMapTextMarkers() {
             if (googleMapTextMarkers == null) {
                 googleMapTextMarkers = new HashMap<>();
             }
             return googleMapTextMarkers;
         }
 
-        private Map<DetailedBusStop, MarkerOptions> getGoogleMapMarkerOptions() {
+        private Map<Stop, MarkerOptions> getGoogleMapMarkerOptions() {
             if (googleMapMarkerOptions == null) {
                 googleMapMarkerOptions = new HashMap<>();
             }
             return googleMapMarkerOptions;
         }
 
-        private Map<DetailedBusStop, MarkerOptions> getGoogleMapTextMarkerOptions() {
+        private Map<Stop, MarkerOptions> getGoogleMapTextMarkerOptions() {
             if (googleMapTextMarkerOptions == null) {
                 googleMapTextMarkerOptions = new HashMap<>();
             }
@@ -713,7 +613,7 @@ public class NearbyFragment
     }
 
 //    Polygon polygon;
-//    private void resizeCircle(SortedMap<Double, DetailedBusStop> busStops) {
+//    private void resizeCircle(SortedMap<Double, Stop> busStops) {
 //        Double distance = CollectionUtilities.safeLastElement(busStops.keySet());
 //        Log.i("DISTANCE", String.valueOf(distance));
 //        if (distance != null) {

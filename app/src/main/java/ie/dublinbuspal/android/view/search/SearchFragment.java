@@ -3,12 +3,6 @@ package ie.dublinbuspal.android.view.search;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,38 +11,45 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
+import com.hannesdorfmann.mosby3.mvp.MvpFragment;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import ie.dublinbuspal.android.DublinBusApplication;
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.util.CollectionUtilities;
 import ie.dublinbuspal.android.view.home.HomeActivity;
 import ie.dublinbuspal.android.view.realtime.RealTimeActivity;
 import ie.dublinbuspal.android.view.route.RouteActivity;
 import ie.dublinbuspal.android.view.settings.SettingsActivity;
-import com.hannesdorfmann.mosby3.mvp.MvpFragment;
-
-import java.util.List;
-
-import javax.inject.Inject;
+import ie.dublinbuspal.util.CollectionUtils;
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import kotlin.jvm.internal.Intrinsics;
 
 public class SearchFragment
         extends MvpFragment<SearchQueryView, SearchPresenter> implements SearchQueryView {
 
+    private View root;
     private SearchAdapter adapter;
     private SearchView searchView;
     private TextView noResultsMessage;
     private SwipeRefreshLayout swipeRefreshLayout;
-    @Inject SearchPresenter presenter;
 
     @NonNull
     @Override
     public SearchPresenter createPresenter() {
-        if (presenter == null) {
-            if (getActivity() != null) {
-                DublinBusApplication application = (DublinBusApplication) getActivity().getApplication();
-                application.getApplicationComponent().inject(this);
-            }
+        if (getActivity() != null) {
+            return ((DublinBusApplication) getActivity().getApplication()).getApplicationComponent().searchPresenter();
         }
-        return presenter;
+        return null;
     }
 
     @Override
@@ -103,12 +104,12 @@ public class SearchFragment
     }
 
     private void setupLayout(View searchFragment) {
+        root = searchFragment.findViewById(R.id.root);
         adapter = new SearchAdapter(this);
         RecyclerView recyclerView = searchFragment.findViewById(R.id.recycler_view);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),
-                LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         swipeRefreshLayout = searchFragment.findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setEnabled(false);
@@ -117,11 +118,35 @@ public class SearchFragment
         noResultsMessage = searchFragment.findViewById(R.id.no_results_message);
     }
 
-    public void setupSearch(View searchFragment) {
+    private void setupSearch(View searchFragment) {
         searchView = searchFragment.findViewById(R.id.search_view);
         searchView.setQueryHint(getString(R.string.search_hint));
         searchView.setIconifiedByDefault(false);
-        searchView.setOnQueryTextListener(getPresenter());
+
+        Disposable disposable = Observable.create(subscriber -> searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            public boolean onQueryTextChange(@Nullable String newText) {
+                if (newText == null) {
+                    Intrinsics.throwNpe();
+                }
+
+                subscriber.onNext(newText);
+                return false;
+            }
+
+            public boolean onQueryTextSubmit(@Nullable String query) {
+                if (query == null) {
+                    Intrinsics.throwNpe();
+                }
+
+                subscriber.onNext(query);
+                return false;
+            }
+        }))
+                .map(string -> string.toString().toLowerCase().trim())
+                .debounce(400L, TimeUnit.MILLISECONDS)
+                .distinctUntilChanged()
+                .subscribe(string -> getPresenter().onResume(string));
     }
 
     @Override
@@ -139,7 +164,7 @@ public class SearchFragment
     @Override
     public void showSearchResult(List<Object> searchResult) {
         adapter.setSearchResult(searchResult);
-        if (CollectionUtilities.isNullOrEmpty(searchResult)) {
+        if (CollectionUtils.isNullOrEmpty(searchResult)) {
             swipeRefreshLayout.setVisibility(View.GONE);
             noResultsMessage.setVisibility(View.VISIBLE);
         } else {
@@ -156,6 +181,11 @@ public class SearchFragment
     @Override
     public void hideLoading() {
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void showError(int stringResource) {
+        Snackbar.make(root, stringResource, Snackbar.LENGTH_LONG).show();
     }
 
 }

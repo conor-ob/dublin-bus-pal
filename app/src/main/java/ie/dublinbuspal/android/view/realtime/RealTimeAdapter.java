@@ -1,28 +1,28 @@
 package ie.dublinbuspal.android.view.realtime;
 
 import android.graphics.drawable.AnimationDrawable;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.data.local.entity.RealTimeData;
-import ie.dublinbuspal.android.util.CollectionUtilities;
-import ie.dublinbuspal.android.util.RealTimeUtilities;
-import ie.dublinbuspal.android.util.StringUtilities;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import androidx.recyclerview.widget.RecyclerView;
+import ie.dublinbuspal.android.R;
+import ie.dublinbuspal.model.livedata.LiveData;
+import ie.dublinbuspal.util.CollectionUtils;
+import ie.dublinbuspal.util.StringUtils;
 
 public class RealTimeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int DEFAULT = 0;
     private static final int EMPTY = -1;
 
-    private List<RealTimeData> realTimeData;
+    private List<Object> realTimeData;
     private final RealTimeView view;
     private boolean showArrivalTime;
 
@@ -52,10 +52,10 @@ public class RealTimeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        RealTimeData realTimeData = this.realTimeData.get(position);
+        Object realTimeData = this.realTimeData.get(position);
         if (holder instanceof RealTimeStopDataViewHolder) {
             RealTimeStopDataViewHolder viewHolder = (RealTimeStopDataViewHolder) holder;
-            viewHolder.bind(realTimeData);
+            viewHolder.bind((LiveData) realTimeData);
         }
     }
 
@@ -66,20 +66,22 @@ public class RealTimeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemViewType(int position) {
-        RealTimeData data = realTimeData.get(position);
-        if (data instanceof EmptyRealTimeData) {
+        Object data = realTimeData.get(position);
+        if (data instanceof String) {
             return EMPTY;
         }
         return DEFAULT;
     }
 
-    public void setRealTimeData(List<RealTimeData> realTimeData) {
+    public void setRealTimeData(List<LiveData> realTimeData) {
+        List<Object> copy = new ArrayList<>();
         if (realTimeData == null) {
             return;
-        } else if (CollectionUtilities.isNullOrEmpty(realTimeData)) {
-            realTimeData.add(new EmptyRealTimeData());
+        } else if (CollectionUtils.isNullOrEmpty(realTimeData)) {
+            copy.add("EMPTY");
         }
-        this.realTimeData = realTimeData;
+        copy.addAll(realTimeData);
+        this.realTimeData = copy;
         notifyDataSetChanged();
     }
 
@@ -106,17 +108,20 @@ public class RealTimeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             this.animation = itemView.findViewById(R.id.animation_view);
         }
 
-        public void bind(RealTimeData realTimeData) {
-            route.setText(realTimeData.getRoute());
-            destination.setText(RealTimeUtilities.getDestination(realTimeData));
-            if (!StringUtilities.isNullOrEmpty(RealTimeUtilities.getVia(realTimeData))) {
-                via.setText(RealTimeUtilities.getVia(realTimeData));
+        public void bind(LiveData realTimeData) {
+            route.setText(realTimeData.getRouteId());
+            destination.setText(realTimeData.getDestination().getDestination());
+            if (!StringUtils.isNullOrEmpty(realTimeData.getDestination().getVia())) {
+                via.setText(realTimeData.getDestination().getVia());
                 via.setVisibility(View.VISIBLE);
+            } else {
+                via.setText(StringUtils.EMPTY_STRING);
+                via.setVisibility(View.GONE);
             }
             if (showArrivalTime) {
-                expectedTime.setText(RealTimeUtilities.get24HourTime(realTimeData));
+                expectedTime.setText(realTimeData.getDueTime().getTime());
             } else {
-                expectedTime.setText(RealTimeUtilities.getDueTime(realTimeData));
+                expectedTime.setText(realTimeData.getDueTime().minutes());
             }
             animation.setBackgroundResource(R.drawable.anim_rtpi);
             AnimationDrawable frameAnimation = (AnimationDrawable) animation.getBackground();
@@ -126,11 +131,11 @@ public class RealTimeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         @Override
         public void onClick(View viewItem) {
             int adapterPosition = getAdapterPosition();
-            List<RealTimeData> allData =  realTimeData;
-            if (!CollectionUtilities.isNullOrEmpty(allData)
+            List<Object> allData =  realTimeData;
+            if (!CollectionUtils.isNullOrEmpty(allData)
                     && adapterPosition > -1) {
-                RealTimeData realTimeData = allData.get(adapterPosition);
-                String routeId = realTimeData.getRoute();
+                LiveData realTimeData = (LiveData) allData.get(adapterPosition);
+                String routeId = realTimeData.getRouteId();
                 view.launchRouteActivity(routeId);
             }
         }
