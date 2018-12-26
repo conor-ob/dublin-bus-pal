@@ -1,15 +1,15 @@
 package ie.dublinbuspal.mapping.routeservice
 
-import ie.dublinbuspal.model.routeservice.RouteService
+import ie.dublinbuspal.model.routeservice.DefaultRouteService
 import ie.dublinbuspal.repository.Mapper
 import ie.dublinbuspal.service.model.routeservice.RouteServiceInboundStopXml
 import ie.dublinbuspal.service.model.routeservice.RouteServiceOutboundStopXml
 import ie.dublinbuspal.service.model.routeservice.RouteServiceResponseXml
 
-class DefaultRouteServiceMapper : Mapper<RouteServiceResponseXml, RouteService> {
+class DefaultRouteServiceMapper : Mapper<RouteServiceResponseXml, DefaultRouteService> {
 
-    override fun map(from: RouteServiceResponseXml): RouteService {
-        return RouteService(
+    override fun map(from: RouteServiceResponseXml): DefaultRouteService {
+        return DefaultRouteService(
                 from.routeService!!.description!!,
                 from.routeService!!.origin!!,
                 from.routeService!!.destination!!,

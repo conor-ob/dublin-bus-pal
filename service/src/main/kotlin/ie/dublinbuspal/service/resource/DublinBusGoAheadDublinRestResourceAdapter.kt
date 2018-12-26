@@ -5,6 +5,7 @@ import ie.dublinbuspal.service.model.livedata.RealTimeBusInformationResponseJson
 import ie.dublinbuspal.service.model.route.RouteListInformationVariantJson
 import ie.dublinbuspal.service.model.route.RouteListInformationWithVariantsJson
 import ie.dublinbuspal.service.model.route.RouteListInformationWithVariantsResponseJson
+import ie.dublinbuspal.service.model.routeservice.RouteInformationResponseJson
 import ie.dublinbuspal.service.model.stop.StopJson
 import ie.dublinbuspal.service.model.stop.StopsResponseJson
 import io.reactivex.Single
@@ -30,6 +31,10 @@ class DublinBusGoAheadDublinRestResourceAdapter(
     override fun getGoAheadDublinRoutes(): Single<RouteListInformationWithVariantsResponseJson> {
         return api.getRoutes(defaultFormat)
                 .map { adaptGoAheadDublinRoutesResponse(it) }
+    }
+
+    override fun getGoAheadDublinRouteService(id: String): Single<RouteInformationResponseJson> {
+        return api.getRouteService(id, goAheadDublin, defaultFormat)
     }
 
     override fun getDublinBusLiveData(id: String): Single<RealTimeBusInformationResponseJson> {

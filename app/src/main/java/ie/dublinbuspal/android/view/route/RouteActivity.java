@@ -214,10 +214,16 @@ public class RouteActivity extends MvpActivity<RouteView, RoutePresenter>
         }
     }
 
+    //TODO temporary fix blah blah
+    private boolean firstResponse = false;
+
     @Override
     public void displayBusStops(List<Stop> busStops) {
+        if (!firstResponse) {
+            setShowBusTimesButtonVisibility(View.VISIBLE);
+        }
+        firstResponse = true;
         clearMap();
-        setShowBusTimesButtonVisibility(View.VISIBLE);
         adapter.setBusStops(busStops);
         PolylineOptions polylineOptions = new PolylineOptions();
         polylineOptions.width(8);

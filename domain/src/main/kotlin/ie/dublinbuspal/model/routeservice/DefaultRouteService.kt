@@ -1,4 +1,14 @@
 package ie.dublinbuspal.model.routeservice
 
-class DefaultRouteService {
-}
+import ie.dublinbuspal.model.stop.Stop
+
+data class DefaultRouteService(
+//        val id: String,
+        val name: String,
+        val origin: String,
+        val destination: String,
+        val inboundStopIds: List<String>,
+        val outboundStopIds: List<String>,
+        val inboundStops: List<Stop>,
+        val outboundStops: List<Stop>
+)

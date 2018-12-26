@@ -20,6 +20,7 @@ import ie.dublinbuspal.mapping.route.DefaultRouteEntityMapper
 import ie.dublinbuspal.mapping.route.GoAheadDublinRouteDomainMapper
 import ie.dublinbuspal.mapping.route.GoAheadDublinRouteEntityMapper
 import ie.dublinbuspal.mapping.routeservice.DefaultRouteServiceMapper
+import ie.dublinbuspal.mapping.routeservice.GoAheadDublinRouteServiceMapper
 import ie.dublinbuspal.mapping.rss.RssMapper
 import ie.dublinbuspal.mapping.stop.*
 import ie.dublinbuspal.model.favourite.FavouriteStop
@@ -29,7 +30,8 @@ import ie.dublinbuspal.model.livedata.RealTimeStopData
 import ie.dublinbuspal.model.route.DefaultRoute
 import ie.dublinbuspal.model.route.GoAheadDublinRoute
 import ie.dublinbuspal.model.route.Route
-import ie.dublinbuspal.model.routeservice.RouteService
+import ie.dublinbuspal.model.routeservice.DefaultRouteService
+import ie.dublinbuspal.model.routeservice.GoAheadDublinRouteService
 import ie.dublinbuspal.model.rss.RssNews
 import ie.dublinbuspal.model.stop.DefaultStop
 import ie.dublinbuspal.model.stop.DublinBusStop
@@ -43,12 +45,14 @@ import ie.dublinbuspal.repository.livedata.GoAheadDublinLiveDataRepository
 import ie.dublinbuspal.repository.livedata.LiveDataRepository
 import ie.dublinbuspal.repository.route.*
 import ie.dublinbuspal.repository.routeservice.DefaultRouteServiceRepository
+import ie.dublinbuspal.repository.routeservice.GoAheadDublinRouteServiceRepository
 import ie.dublinbuspal.repository.rss.RssNewsRepository
 import ie.dublinbuspal.repository.stop.*
 import ie.dublinbuspal.service.model.livedata.LiveDataResponseXml
 import ie.dublinbuspal.service.model.livedata.RealTimeBusInformationResponseJson
 import ie.dublinbuspal.service.model.route.RouteListInformationWithVariantsResponseJson
 import ie.dublinbuspal.service.model.route.RoutesResponseXml
+import ie.dublinbuspal.service.model.routeservice.RouteInformationResponseJson
 import ie.dublinbuspal.service.model.routeservice.RouteServiceResponseXml
 import ie.dublinbuspal.service.model.rss.RssResponseXml
 import ie.dublinbuspal.service.model.stop.StopsResponseJson
@@ -206,7 +210,7 @@ class RepositoryModule {
     @Singleton
     fun defaultRouteServiceRepository(
             resource: DublinBusSoapResource
-    ): Repository<RouteService> {
+    ): Repository<DefaultRouteService> {
 
         val memoryPolicy = MemoryPolicy.builder()
                 .setExpireAfterWrite(24)
@@ -214,7 +218,7 @@ class RepositoryModule {
                 .build()
 
         val mapper = DefaultRouteServiceMapper()
-        val store = StoreBuilder.parsedWithKey<String, RouteServiceResponseXml, RouteService>()
+        val store = StoreBuilder.parsedWithKey<String, RouteServiceResponseXml, DefaultRouteService>()
                 .fetcher { key -> resource.getDublinBusRouteService(key) }
                 .parser { xml -> mapper.map(xml) }
                 .memoryPolicy(memoryPolicy)
@@ -222,6 +226,28 @@ class RepositoryModule {
                 .open()
 
         return DefaultRouteServiceRepository(store)
+    }
+
+    @Provides
+    @Singleton
+    fun goAheadDublinRouteServiceRepository(
+            resource: DublinBusGoAheadDublinRestResource
+    ): Repository<GoAheadDublinRouteService> {
+
+        val memoryPolicy = MemoryPolicy.builder()
+                .setExpireAfterWrite(24)
+                .setExpireAfterTimeUnit(TimeUnit.HOURS)
+                .build()
+
+        val mapper = GoAheadDublinRouteServiceMapper()
+        val store = StoreBuilder.parsedWithKey<String, RouteInformationResponseJson, GoAheadDublinRouteService>()
+                .fetcher { key -> resource.getGoAheadDublinRouteService(key) }
+                .parser { xml -> mapper.map(xml) }
+                .memoryPolicy(memoryPolicy)
+                .refreshOnStale()
+                .open()
+
+        return GoAheadDublinRouteServiceRepository(store)
     }
 
     @Provides
