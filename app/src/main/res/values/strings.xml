@@ -66,7 +66,7 @@
     <!-- Endpoints -->
     <string name="dublin_bus_soap_api_endpoint">http://rtpi.dublinbus.ie/</string>
     <string name="dublin_bus_rss_api_endpoint">http://www.dublinbus.ie/</string>
-    <string name="smart_dublin_rest_api_endpoint">https://rtpiapp.rtpi.openskydata.com/RTPIPublicService_V2/service.svc/</string>
+    <string name="dublin_bus_rest_api_endpoint">https://rtpiapp.rtpi.openskydata.com/RTPIPublicService_V2/service.svc/</string>
     <string name="dublin_bus_database_name">dublinbus.db</string>
 
     <!-- Prefs -->

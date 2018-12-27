@@ -1,36 +1,31 @@
 package ie.dublinbuspal.android.util;
 
-import android.util.Log;
+import com.crashlytics.android.Crashlytics;
 
-//import com.crashlytics.android.Crashlytics;
+import timber.log.Timber;
 
 public final class ErrorLog {
-
-    private static final String HANDLED_ERROR = "HANDLED_ERROR";
-    private static final String UNHANDLED_ERROR = "UNHANDLED_ERROR";
 
     private ErrorLog() {
         throw new UnsupportedOperationException();
     }
 
     public static void e(Throwable throwable) {
-        l(HANDLED_ERROR, throwable);
+        l(throwable);
     }
 
     public static void u(Throwable throwable) {
-        l(UNHANDLED_ERROR, throwable);
-//        Crashlytics.logException(throwable);
+        l(throwable);
+        Crashlytics.logException(throwable);
     }
 
-    private static void l(String tag, Throwable throwable) {
+    private static void l(Throwable throwable) {
         try {
             if (throwable != null) {
-                Log.e(tag, throwable.toString(), throwable);
-                Log.e(tag, Log.getStackTraceString(throwable), throwable);
+                Timber.e(throwable);
                 Throwable cause = throwable.getCause();
                 if (cause != null) {
-                    Log.e(tag, cause.toString(), cause);
-                    Log.e(tag, Log.getStackTraceString(cause), cause);
+                    Timber.e(cause);
                 }
             }
         } catch (Exception e) {
