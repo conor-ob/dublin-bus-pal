@@ -1,24 +1,15 @@
 <resources>
     <string name="action_settings">Settings</string>
     <string name="app_name">Dublin Bus Pal</string>
-    <string name="idiot_user_decoy_message">Seeing the wrong time for your bus?</string>
-    <string name="dublin_bus_news_twitter_handle">\@dublinbusnews</string>
-    <string name="dublin_bus_news_facebook_handle">DublinBusNews</string>
-    <string name="title_activity_home">HomeActivity</string>
     <string name="title_favourites">Favourites</string>
     <string name="title_nearby_fragment">Nearby Stops</string>
     <string name="title_search">Search</string>
     <string name="action_show_map">Show on map</string>
-    <string name="unrecoverable_error">Oops! Something went wrong. Try refreshing the page</string>
     <string name="no_buses">There are no buses due at this stop</string>
-    <string name="no_bus_stops">No bus stops were found in the Dublin Bus database. Try restarting the app</string>
-    <string name="maybe_no_internet">Please check your internet connection</string>
-    <string name="connection_lost">The internet connection was disrupted. Try refreshing the page</string>
     <string name="show_nearby_stops">View nearby stops</string>
     <string name="title_nearby">Nearby</string>
     <string name="action_add_favourite">Save as favourite</string>
     <string name="action_remove_favourite">Remove favourite</string>
-    <string name="action_edit_remove_favourite">Edit/Remove favourite</string>
     <string name="title_favourites_fragment">Favourites</string>
     <string name="save_favourite_prompt">Choose a name for this stop</string>
     <string name="save">Save</string>
@@ -26,14 +17,9 @@
     <string name="formatted_stop_id">Stop %s</string>
     <string name="formatted_towards">Towards %s</string>
     <string name="formatted_route_title">%s to %s</string>
-    <string name="title_search_fragment">Search</string>
     <string name="show_route">View route</string>
-    <string name="message_download_complete">Updating database...</string>
-    <string name="message_update_complete">Update Complete</string>
     <string name="search_hint">Search for a bus stop or route</string>
-    <string name="action_edit_favourite">Edit favourite</string>
     <string name="action_refresh">Refresh</string>
-    <string name="action_street_view">Street view</string>
     <string name="no_results_message">No Results</string>
     <string name="remove_favourite_confirm">Are you sure\?</string>
     <string name="yes">Yes</string>
@@ -48,12 +34,9 @@
     <string name="title_news_centre">News Centre</string>
     <string name="title_twitter">Twitter</string>
     <string name="title_news_feed">News Feed</string>
-    <string name="button_continue">Continue</string>
-    <string name="button_retry">Retry</string>
 
     <string name="error_no_internet">Please check your internet connection</string>
     <string name="error_unknown">Oops! Something went wrong. Try refreshing the page</string>
-    <string name="error_no_service">The Dublin Bus Service is unavailable. Please try again later</string>
     <string name="error_interrupted">The connection was interrupted. Please check your internet connection</string>
     <string name="error_timeout">The connection timed out. Please check your internet connection</string>
 
@@ -61,7 +44,6 @@
     <string name="dublin_bus">Dublin Bus</string>
     <string name="middle_dot">·</string>
     <string name="dublin_bus_ie">dublinbus.ie</string>
-    <string name="update">Update now</string>
 
     <!-- Endpoints -->
     <string name="dublin_bus_soap_api_endpoint">http://rtpi.dublinbus.ie/</string>
@@ -104,16 +86,7 @@
     <string name="preference_category_information">Information</string>
     <string name="preference_key_privacy_policy">preference_privacy_policy</string>
     <string name="preference_title_privacy_policy">Privacy Policy</string>
-    <string name="preference_privacy_policy_url">file:///android_asset/web/html/privacy_policy.html</string>
-    <string name="preference_key_terms_of_service">preference_terms_of_service</string>
-    <string name="preference_title_title_terms_of_service">Terms of Service</string>
-    <string name="preference_terms_of_service_url">file:///android_asset/web/html/terms_of_service.html</string>
-    <string name="preference_title_data_sources">Data Sources</string>
-    <string name="preference_key_data_sources">preference_data_sources</string>
-    <string name="preference_data_sources_url">file:///android_asset/web/html/data_sources.html</string>
-    <string name="preference_key_open_source_libraries">preference_open_source_libraries</string>
-    <string name="preference_title_open_source_libraries">Open Source Libraries</string>
-    <string name="preference_open_source_libraries_url">file:///android_asset/web/html/open_source_libraries.html</string>
+    <string name="preference_privacy_policy_url">https://conor-ob.github.io/dublin-bus-pal/</string>
     <string name="preference_key_nearby_map_latitude">preference_nearby_map_latitude</string>
     <string name="preference_key_nearby_map_longitude">preference_nearby_map_longitude</string>
     <string name="preference_key_nearby_map_zoom">preference_nearby_map_zoom</string>

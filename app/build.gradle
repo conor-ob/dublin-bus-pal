@@ -20,29 +20,25 @@ android {
         applicationId "ie.dublinbuspal.android"
         minSdkVersion buildConfig.minSdk
         targetSdkVersion buildConfig.targetSdk
-        versionCode 1000
-        versionName "1.0"
+        versionCode 101000 // x|xx|xx|x = major_version|minor_version|bugfix|snapshot(0)/release(1)
+        versionName "1.1.0-SNAPSHOT"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [googleMapsApiKey     : "$googleMapsApiKey",
-                                fabricApiKey: "$fabricApiKey",
+                                fabricApiKey         : "$fabricApiKey",
                                 twitterConsumerKey   : "$twitterConsumerKey",
                                 twitterConsumerSecret: "$twitterConsumerSecret"]
-
-//        multiDexEnabled true
-
-//        javaCompileOptions {
-//            annotationProcessorOptions {
-//                includeCompileClasspath = true
-//            }
-//        }
     }
 
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable false
+//            minifyEnabled true
+//            shrinkResources true
+//            useProguard true
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
+            debuggable true
             applicationIdSuffix = ".debug"
             ext.enableCrashlytics = false
         }
@@ -57,6 +53,17 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
         test.java.srcDirs += 'src/test/kotlin'
         androidTest.java.srcDirs += 'src/androidTest/kotlin'
+    }
+
+    // xpp3 defines classes that conflict with classes now provided by Android. Solutions include
+    // finding newer versions or alternative libraries that don't have the same problem (for example,
+    // for httpclient use HttpUrlConnection or okhttp instead), or repackaging the library using
+    // something like jarjar. [DuplicatePlatformClasses]
+    configurations {
+        all {
+            exclude module: 'httpclient'
+            exclude module: 'xpp3'
+        }
     }
 
 }
