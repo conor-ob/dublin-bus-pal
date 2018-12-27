@@ -20,8 +20,8 @@ android {
         applicationId "ie.dublinbuspal.android"
         minSdkVersion buildConfig.minSdk
         targetSdkVersion buildConfig.targetSdk
-        versionCode 200000 // x|xx|xx|x = major_version|minor_version|bugfix|snapshot(0)/release(1)
-        versionName "2.0.0-SNAPSHOT"
+        versionCode 200001 // x|xx|xx|x = major_version|minor_version|bugfix|snapshot(0)/release(1)
+        versionName "2.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [googleMapsApiKey     : "$googleMapsApiKey",
                                 fabricApiKey         : "$fabricApiKey",
