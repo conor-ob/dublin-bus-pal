@@ -9,9 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import ie.dublinbuspal.android.R;
 import ie.dublinbuspal.model.rss.RssNews;
@@ -19,14 +21,15 @@ import ie.dublinbuspal.util.StringUtils;
 
 public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssViewHolder> {
 
-    private List<RssNews> items;
+    private List<RssNews> items = Collections.emptyList();
 
     RssAdapter() {
         super();
     }
 
     @Override
-    public RssViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @NonNull
+    public RssViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_item_rss, parent, false);
         RssViewHolder holder = new RssViewHolder(view);
@@ -35,14 +38,16 @@ public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(RssViewHolder holder, int position) {
-        RssNews item = items.get(position);
-        holder.bind(item);
+    public void onBindViewHolder(@NonNull RssViewHolder holder, int position) {
+        if (position > -1 && position < items.size()) {
+            RssNews item = items.get(position);
+            holder.bind(item);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return items == null ? 0 : items.size();
+        return items.size();
     }
 
     void setItems(List<RssNews> items) {
@@ -81,10 +86,13 @@ public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssViewHolder> {
 
         @Override
         public void onClick(View view) {
-            RssNews item = items.get(getAdapterPosition());
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(item.getLink()));
-            view.getContext().startActivity(intent);
+            int adapterPosition = getAdapterPosition();
+            if (adapterPosition > -1 && adapterPosition < items.size()) {
+                RssNews item = items.get(adapterPosition);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(item.getLink()));
+                view.getContext().startActivity(intent);
+            }
         }
 
     }

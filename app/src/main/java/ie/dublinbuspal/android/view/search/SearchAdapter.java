@@ -5,9 +5,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import ie.dublinbuspal.android.R;
 import ie.dublinbuspal.model.route.Route;
@@ -21,7 +23,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private static final int ROUTE = 1;
     private static final int BUS_STOP = 2;
 
-    private List<Object> searchResults;
+    private List<Object> searchResults = Collections.emptyList();
     private final SearchQueryView view;
 
     SearchAdapter(SearchQueryView view) {
@@ -29,7 +31,8 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @NonNull
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType) {
             case TITLE:
                 View titleView = LayoutInflater.from(parent.getContext())
@@ -54,26 +57,28 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Object searchResult = searchResults.get(position);
-        if (searchResult instanceof String && holder instanceof TitleViewHolder) {
-            String text = (String) searchResult;
-            TitleViewHolder titleViewHolder = (TitleViewHolder) holder;
-            titleViewHolder.bind(text);
-        } else if (searchResult instanceof Route && holder instanceof RouteViewHolder) {
-            Route route = (Route) searchResult;
-            RouteViewHolder routeViewHolder = (RouteViewHolder) holder;
-            routeViewHolder.bind(route);
-        } else if (searchResult instanceof Stop && holder instanceof BusStopViewHolder) {
-            Stop busStop = (Stop) searchResult;
-            BusStopViewHolder busStopViewHolder = (BusStopViewHolder) holder;
-            busStopViewHolder.bind(busStop);
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (position > -1 && position < searchResults.size()) {
+            Object searchResult = searchResults.get(position);
+            if (searchResult instanceof String && holder instanceof TitleViewHolder) {
+                String text = (String) searchResult;
+                TitleViewHolder titleViewHolder = (TitleViewHolder) holder;
+                titleViewHolder.bind(text);
+            } else if (searchResult instanceof Route && holder instanceof RouteViewHolder) {
+                Route route = (Route) searchResult;
+                RouteViewHolder routeViewHolder = (RouteViewHolder) holder;
+                routeViewHolder.bind(route);
+            } else if (searchResult instanceof Stop && holder instanceof BusStopViewHolder) {
+                Stop busStop = (Stop) searchResult;
+                BusStopViewHolder busStopViewHolder = (BusStopViewHolder) holder;
+                busStopViewHolder.bind(busStop);
+            }
         }
     }
 
     @Override
     public int getItemCount() {
-        return searchResults == null ? 0 : searchResults.size();
+        return searchResults.size();
     }
 
     @Override
@@ -134,10 +139,13 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         @Override
         public void onClick(View itemView) {
-            Object searchResult = searchResults.get(getAdapterPosition());
-            if (searchResult instanceof Route) {
-                Route route = (Route) searchResult;
-                view.launchRouteActivity(route.getId());
+            int adapterPosition = getAdapterPosition();
+            if (adapterPosition > -1 && adapterPosition < searchResults.size()) {
+                Object searchResult = searchResults.get(adapterPosition);
+                if (searchResult instanceof Route) {
+                    Route route = (Route) searchResult;
+                    view.launchRouteActivity(route.getId());
+                }
             }
         }
 
@@ -174,10 +182,13 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         @Override
         public void onClick(View itemView) {
-            Object searchResult = searchResults.get(getAdapterPosition());
-            if (searchResult instanceof Stop) {
-                Stop busStop = (Stop) searchResult;
-                view.launchRealTimeActivity(busStop.id());
+            int adapterPosition = getAdapterPosition();
+            if (adapterPosition > -1 && adapterPosition < searchResults.size()) {
+                Object searchResult = searchResults.get(adapterPosition);
+                if (searchResult instanceof Stop) {
+                    Stop busStop = (Stop) searchResult;
+                    view.launchRealTimeActivity(busStop.id());
+                }
             }
         }
 

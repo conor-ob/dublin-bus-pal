@@ -24,7 +24,7 @@ class LiveDataUseCase @Inject constructor(
         return getLiveData(stopId).map { condenseLiveData(it) }
     }
 
-    private fun condenseLiveData(liveData: List<LiveData>): Map<Pair<String, Destination>, List<LiveData>>? {
+    private fun condenseLiveData(liveData: List<LiveData>): Map<Pair<String, Destination>, List<LiveData>> {
         val condensedLivedata = LinkedHashMap<Pair<String, Destination>, MutableList<LiveData>>()
         for (data in liveData) {
             val key = Pair(data.routeId, data.destination)

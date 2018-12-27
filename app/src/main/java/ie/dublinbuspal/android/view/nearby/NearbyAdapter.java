@@ -5,9 +5,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import ie.dublinbuspal.android.R;
 import ie.dublinbuspal.android.util.LocationUtilities;
@@ -18,15 +20,16 @@ import ie.dublinbuspal.util.StringUtils;
 public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.ViewHolder> {
 
     private final NearbyView view;
-    private List<Double> distances;
-    private List<Stop> busStops;
+    private List<Double> distances = Collections.emptyList();
+    private List<Stop> busStops = Collections.emptyList();
 
     NearbyAdapter(NearbyView view) {
         this.view = view;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @NonNull
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_item_bus_stop, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
@@ -35,20 +38,22 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        Stop busStop = busStops.get(position);
-        String walkTime;
-        if (CollectionUtils.isNullOrEmpty(distances)) {
-            walkTime = null;
-        } else {
-            walkTime = LocationUtilities.getWalkTime(distances.get(position));
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        if (position > -1 && position < busStops.size()) {
+            Stop busStop = busStops.get(position);
+            String walkTime;
+            if (CollectionUtils.isNullOrEmpty(distances)) {
+                walkTime = null;
+            } else {
+                walkTime = LocationUtilities.getWalkTime(distances.get(position));
+            }
+            holder.bind(busStop, walkTime);
         }
-        holder.bind(busStop, walkTime);
     }
 
     @Override
     public int getItemCount() {
-        return busStops == null ? 0 : busStops.size();
+        return busStops.size();
     }
 
     public void setBusStops(List<Stop> busStops) {
@@ -100,8 +105,11 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.ViewHolder
 
         @Override
         public void onClick(View itemView) {
-            Stop busStop = busStops.get(getAdapterPosition());
-            view.launchRealTimeActivity(busStop.id());
+            int adapterPosition = getAdapterPosition();
+            if (adapterPosition > -1 && adapterPosition < busStops.size()) {
+                Stop busStop = busStops.get(adapterPosition);
+                view.launchRealTimeActivity(busStop.id());
+            }
         }
 
     }

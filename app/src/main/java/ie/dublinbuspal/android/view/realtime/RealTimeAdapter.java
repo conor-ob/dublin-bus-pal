@@ -8,9 +8,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import ie.dublinbuspal.android.R;
 import ie.dublinbuspal.model.livedata.LiveData;
@@ -22,7 +24,7 @@ public class RealTimeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private static final int DEFAULT = 0;
     private static final int EMPTY = -1;
 
-    private List<Object> realTimeData;
+    private List<Object> realTimeData = Collections.emptyList();
     private final RealTimeView view;
     private boolean showArrivalTime;
 
@@ -32,7 +34,8 @@ public class RealTimeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @NonNull
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType) {
             case EMPTY:
                 View emptyView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_realtime_empty,
@@ -51,17 +54,19 @@ public class RealTimeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Object realTimeData = this.realTimeData.get(position);
-        if (holder instanceof RealTimeStopDataViewHolder) {
-            RealTimeStopDataViewHolder viewHolder = (RealTimeStopDataViewHolder) holder;
-            viewHolder.bind((LiveData) realTimeData);
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (position > -1 && position < realTimeData.size()) {
+            Object realTimeData = this.realTimeData.get(position);
+            if (holder instanceof RealTimeStopDataViewHolder) {
+                RealTimeStopDataViewHolder viewHolder = (RealTimeStopDataViewHolder) holder;
+                viewHolder.bind((LiveData) realTimeData);
+            }
         }
     }
 
     @Override
     public int getItemCount() {
-        return realTimeData == null ? 0 : realTimeData.size();
+        return realTimeData.size();
     }
 
     @Override
@@ -131,12 +136,13 @@ public class RealTimeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         @Override
         public void onClick(View viewItem) {
             int adapterPosition = getAdapterPosition();
-            List<Object> allData =  realTimeData;
-            if (!CollectionUtils.isNullOrEmpty(allData)
-                    && adapterPosition > -1) {
-                LiveData realTimeData = (LiveData) allData.get(adapterPosition);
-                String routeId = realTimeData.getRouteId();
-                view.launchRouteActivity(routeId);
+            if (adapterPosition > -1 && adapterPosition < realTimeData.size()) {
+                Object item = realTimeData.get(adapterPosition);
+                if (item instanceof LiveData) {
+                    LiveData liveData = (LiveData) item;
+                    String routeId = liveData.getRouteId();
+                    view.launchRouteActivity(routeId);
+                }
             }
         }
 

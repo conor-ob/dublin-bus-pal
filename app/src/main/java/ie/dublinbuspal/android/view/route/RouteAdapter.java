@@ -5,9 +5,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import ie.dublinbuspal.android.R;
 import ie.dublinbuspal.model.stop.Stop;
@@ -19,14 +21,15 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
     private static final int DESTINATION = 2;
 
     private final RouteView view;
-    private List<Stop> busStops;
+    private List<Stop> busStops = Collections.emptyList();
 
     RouteAdapter(RouteView view) {
         this.view = view;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @NonNull
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType) {
             case ORIGIN:
                 View beginView = LayoutInflater.from(parent.getContext())
@@ -53,14 +56,16 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        Stop busStop = busStops.get(position);
-        holder.bind(busStop, position);
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        if (position > -1 && position < busStops.size()) {
+            Stop busStop = busStops.get(position);
+            holder.bind(busStop, position);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return busStops == null ? 0 : busStops.size();
+        return busStops.size();
     }
 
     @Override
@@ -95,8 +100,11 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
 
         @Override
         public void onClick(View itemView) {
-            Stop busStop = busStops.get(getAdapterPosition());
-            view.launchRealTimeActivity(busStop.id());
+            int adapterPosition = getAdapterPosition();
+            if (adapterPosition > -1 && adapterPosition < busStops.size()) {
+                Stop busStop = busStops.get(adapterPosition);
+                view.launchRealTimeActivity(busStop.id());
+            }
         }
 
         public void bind(Stop busStop, int position) {

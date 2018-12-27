@@ -5,9 +5,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import ie.dublinbuspal.android.R;
 import ie.dublinbuspal.model.favourite.FavouriteStop;
@@ -18,14 +20,15 @@ public class FavouritesAdapter
         extends RecyclerView.Adapter<FavouritesAdapter.FavouritesViewHolder> {
 
     private final FavouritesView view;
-    private List<FavouriteStop> favouriteBusStops;
+    private List<FavouriteStop> favouriteBusStops = Collections.emptyList();
 
     FavouritesAdapter(FavouritesView view) {
         this.view = view;
     }
 
     @Override
-    public FavouritesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @NonNull
+    public FavouritesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_item_bus_stop, parent, false);
         FavouritesViewHolder viewHolder = new FavouritesViewHolder(view);
@@ -34,14 +37,16 @@ public class FavouritesAdapter
     }
 
     @Override
-    public void onBindViewHolder(FavouritesViewHolder holder, int position) {
-        FavouriteStop busStop = favouriteBusStops.get(position);
-        holder.bind(busStop);
+    public void onBindViewHolder(@NonNull FavouritesViewHolder holder, int position) {
+        if (position > -1 && position < favouriteBusStops.size()) {
+            FavouriteStop busStop = favouriteBusStops.get(position);
+            holder.bind(busStop);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return favouriteBusStops == null ? 0 : favouriteBusStops.size();
+        return favouriteBusStops.size();
     }
 
     public void setFavourites(List<FavouriteStop> favouriteBusStops) {
@@ -81,8 +86,11 @@ public class FavouritesAdapter
 
         @Override
         public void onClick(View itemView) {
-            FavouriteStop favouriteBusStop = favouriteBusStops.get(getAdapterPosition());
-            view.launchRealTimeActivity(favouriteBusStop.getId());
+            int adapterPosition = getAdapterPosition();
+            if (adapterPosition > -1 && adapterPosition < favouriteBusStops.size()) {
+                FavouriteStop favouriteBusStop = favouriteBusStops.get(adapterPosition);
+                view.launchRealTimeActivity(favouriteBusStop.getId());
+            }
         }
 
     }
