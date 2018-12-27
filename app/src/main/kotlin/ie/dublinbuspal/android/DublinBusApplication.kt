@@ -2,13 +2,16 @@ package ie.dublinbuspal.android
 
 import android.app.Application
 import android.preference.PreferenceManager
+import com.crashlytics.android.Crashlytics
+import com.crashlytics.android.answers.Answers
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.twitter.sdk.android.core.Twitter
 import com.twitter.sdk.android.core.TwitterAuthConfig
 import com.twitter.sdk.android.core.TwitterConfig
 import ie.dublinbuspal.android.util.ErrorLog
-import ie.dublinbuspal.di.*
 import ie.dublinbuspal.android.util.MetadataUtils
+import ie.dublinbuspal.di.*
+import io.fabric.sdk.android.Fabric
 import io.reactivex.plugins.RxJavaPlugins
 import timber.log.Timber
 
@@ -43,10 +46,10 @@ class DublinBusApplication : Application() {
     private fun setupDagger() {
         applicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule(ApplicationModule(applicationContext))
-                .databaseModule(DatabaseModule(resources.getString(R.string.dublin_bus_database_name))) //TODO check database name of existing app
+                .databaseModule(DatabaseModule(resources.getString(R.string.dublin_bus_database_name)))
                 .networkModule(NetworkModule(
                         resources.getString(R.string.dublin_bus_soap_api_endpoint),
-                        resources.getString(R.string.smart_dublin_rest_api_endpoint),
+                        resources.getString(R.string.dublin_bus_rest_api_endpoint),
                         resources.getString(R.string.dublin_bus_rss_api_endpoint)
                 )
                 )
@@ -65,7 +68,9 @@ class DublinBusApplication : Application() {
     }
 
     private fun setupAnalytics() {
-        //        Fabric.with(getApplicationContext(), new Crashlytics(), new Answers());
+        if (!BuildConfig.DEBUG) {
+            Fabric.with(applicationContext, Crashlytics(), Answers())
+        }
     }
 
     private fun setupPreferences() {

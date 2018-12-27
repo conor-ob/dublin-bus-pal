@@ -47,9 +47,9 @@ data class Stop(
 
     fun coordinate(): Coordinate {
         if (defaultCoordinate != null) {
-            return defaultCoordinate!!
+            return defaultCoordinate
         } else if (dublinBusCoordinate != null) {
-            return dublinBusCoordinate!!
+            return dublinBusCoordinate
         }
         return goAheadDublinCoordinate!!
     }

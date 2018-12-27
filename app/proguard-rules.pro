@@ -33,11 +33,6 @@
 -keep class org.** { *; }
 -keep class twitter4j.** { *; }
 
-# Bottom Navigation View Shifting https://stackoverflow.com/questions/40176244/how-to-disable-bottomnavigationview-shift-mode
--keepclassmembers class android.support.design.internal.BottomNavigationMenuView {
-    boolean mShiftingMode;
-}
-
 # Map marker alpha property modified by reflection
 -keep class com.google.android.gms.maps.model.Marker { *; }
 

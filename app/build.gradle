@@ -2,12 +2,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'io.fabric'
 
 Properties properties = new Properties()
 if (project.rootProject.file("keys.properties").exists()) {
     properties.load(project.rootProject.file('keys.properties').newDataInputStream())
 }
 def googleMapsApiKey = properties.getProperty('com.google.android.geo.API_KEY')
+def fabricApiKey = properties.getProperty('io.fabric.ApiKey')
 def twitterConsumerKey = properties.getProperty('com.twitter.sdk.android.CONSUMER_KEY')
 def twitterConsumerSecret = properties.getProperty('com.twitter.sdk.android.CONSUMER_SECRET')
 
@@ -18,29 +20,27 @@ android {
         applicationId "ie.dublinbuspal.android"
         minSdkVersion buildConfig.minSdk
         targetSdkVersion buildConfig.targetSdk
-        versionCode 1000
-        versionName "1.0"
+        versionCode 200000 // x|xx|xx|x = major_version|minor_version|bugfix|snapshot(0)/release(1)
+        versionName "2.0.0-SNAPSHOT"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [googleMapsApiKey     : "$googleMapsApiKey",
+                                fabricApiKey         : "$fabricApiKey",
                                 twitterConsumerKey   : "$twitterConsumerKey",
                                 twitterConsumerSecret: "$twitterConsumerSecret"]
-
-//        multiDexEnabled true
-
-//        javaCompileOptions {
-//            annotationProcessorOptions {
-//                includeCompileClasspath = true
-//            }
-//        }
     }
 
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable false
+//            minifyEnabled true
+//            shrinkResources true
+//            useProguard true
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
+            debuggable true
             applicationIdSuffix = ".debug"
+            ext.enableCrashlytics = false
         }
     }
 
@@ -53,6 +53,17 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
         test.java.srcDirs += 'src/test/kotlin'
         androidTest.java.srcDirs += 'src/androidTest/kotlin'
+    }
+
+    // xpp3 defines classes that conflict with classes now provided by Android. Solutions include
+    // finding newer versions or alternative libraries that don't have the same problem (for example,
+    // for httpclient use HttpUrlConnection or okhttp instead), or repackaging the library using
+    // something like jarjar. [DuplicatePlatformClasses]
+    configurations {
+        all {
+            exclude module: 'httpclient'
+            exclude module: 'xpp3'
+        }
     }
 
 }
@@ -69,15 +80,13 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:${versions.androidx.constraintlayout}"
     implementation "androidx.recyclerview:recyclerview:${versions.androidx.recyclerview}"
     implementation "androidx.room:room-runtime:${versions.androidx.room_runtime}"
-    implementation "com.github.conor-ob:sticky-headers-recyclerview:${versions.sticky_headers_recyclerview}"
+    implementation "com.crashlytics.sdk.android:crashlytics:${versions.crashlytics}"
     implementation "com.google.android.material:material:${versions.material}"
     implementation "com.google.dagger:dagger:${versions.dagger}"
     implementation "com.google.maps.android:android-maps-utils:${versions.android_map_utils}"
     implementation "com.hannesdorfmann.mosby3:mvp-conductor:${versions.mvp_conductor}"
     implementation "com.jakewharton.threetenabp:threetenabp:${versions.threetenabp}"
     implementation "com.jakewharton.timber:timber:${versions.timber}"
-    implementation "com.mikepenz:fastadapter:${versions.fastadapter}"
-    implementation "com.mikepenz:fastadapter-commons:${versions.fastadapter_commons}"
     implementation "com.twitter.sdk.android:tweet-ui:$versions.tweet_ui"
     implementation "io.reactivex.rxjava2:rxandroid:${versions.rx_android}"
     implementation "io.reactivex.rxjava2:rxkotlin:${versions.rx_kotlin}"
@@ -91,17 +100,8 @@ dependencies {
     testImplementation "junit:junit:${testVersions.junit}"
 
     // Conflict with dependency 'blah blah' in project ':app'. Resolved versions for runtime classpath (x.x.x) and compile classpath (x.x.x) differ. This can lead to runtime crashes
-    implementation "com.squareup.retrofit2:retrofit:${versions.retrofit}"
-    implementation "com.squareup.retrofit2:converter-gson:${versions.converter_gson}"
-    implementation "com.google.code.gson:gson:${versions.gson}"
-    implementation("com.squareup.okhttp3:okhttp:3.11.0")
-    implementation("com.squareup.okio:okio:1.14.0")
-
-    //TODO temporary
-    implementation "org.apache.commons:commons-lang3:3.6"
-    implementation("com.squareup.retrofit2:converter-simplexml:2.3.0") {
-        exclude group: 'stax', module: 'stax-api'
-        exclude group: 'stax', module: 'stax'
-        exclude group: 'xpp3', module: 'xpp3'
-    }
+    implementation("com.squareup.retrofit2:converter-gson:2.5.0")
+    implementation("com.google.code.gson:gson:2.8.5")
+    implementation("com.squareup.retrofit2:converter-simplexml:2.5.0")
+    implementation("com.squareup.okhttp3:okhttp:3.12.1")
 }

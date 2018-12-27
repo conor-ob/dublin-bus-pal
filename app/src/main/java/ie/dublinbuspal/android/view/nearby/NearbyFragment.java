@@ -13,7 +13,6 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -236,10 +235,14 @@ public class NearbyFragment
         traffic.setOnClickListener(view1 -> {
             showTraffic = !showTraffic;
             if (showTraffic) {
-                googleMap.setTrafficEnabled(true);
+                if (googleMap != null) {
+                    googleMap.setTrafficEnabled(true);
+                }
                 traffic.setImageResource(R.drawable.ic_traffic_blue);
             } else {
-                googleMap.setTrafficEnabled(false);
+                if (googleMap != null) {
+                    googleMap.setTrafficEnabled(false);
+                }
                 traffic.setImageResource(R.drawable.ic_traffic_grey);
             }
         });
@@ -297,13 +300,15 @@ public class NearbyFragment
     @Override
     public void updateLocation(Coordinate coordinate) {
         lastKnowLocation = coordinate;
-        if (!googleMap.isMyLocationEnabled()) {
-            googleMap.setMyLocationEnabled(true);
+        if (googleMap != null) {
+            if (!googleMap.isMyLocationEnabled()) {
+                googleMap.setMyLocationEnabled(true);
+            }
+            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
+                    .target(new LatLng(coordinate.getX(), coordinate.getY()))
+                    .zoom(googleMap.getCameraPosition().zoom)
+                    .build()));
         }
-        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
-                .target(new LatLng(coordinate.getX(), coordinate.getY()))
-                .zoom(googleMap.getCameraPosition().zoom)
-                .build()));
     }
 
     @Override
@@ -338,7 +343,9 @@ public class NearbyFragment
 
     @Override
     public void onCameraIdle() {
-        getPresenter().refreshNearby(LocationUtilities.toLocation(this.googleMap.getCameraPosition().target));
+        if (googleMap != null) {
+            getPresenter().refreshNearby(LocationUtilities.toLocation(this.googleMap.getCameraPosition().target));
+        }
     }
 
     private void setShowNearbyStopsButtonVisibility(int visibility) {
@@ -388,53 +395,57 @@ public class NearbyFragment
 
         @Override
         public void onCameraMove() {
-            if (mapIsTouched) {
-                removeLocationUpdates();
+            if (googleMap != null) {
+                if (mapIsTouched) {
+                    removeLocationUpdates();
+                }
+
+                float currentZoom = googleMap.getCameraPosition().zoom;
+
+                //TODO bug here where some ids are visible when zoomed out
+                if (currentZoom <= TEXT_VISIBILITY_ZOOM && previousZoom >= TEXT_VISIBILITY_ZOOM) {
+                    for (Marker marker : getGoogleMapTextMarkers().values()) {
+                        marker.setVisible(false);
+                    }
+                } else if (currentZoom >= TEXT_VISIBILITY_ZOOM && previousZoom <= TEXT_VISIBILITY_ZOOM) {
+                    for (Marker marker : getGoogleMapTextMarkers().values()) {
+                        marker.setVisible(true);
+                    }
+                }
+
+                if (currentZoom <= ICON_TYPE_ZOOM && previousZoom >= ICON_TYPE_ZOOM) {
+                    for (Marker marker : getGoogleMapMarkers().values()) {
+                        marker.setIcon(getZoomedOutIcon());
+                    }
+                } else if (currentZoom >= ICON_TYPE_ZOOM && previousZoom <= ICON_TYPE_ZOOM) {
+                    for (Marker marker : getGoogleMapMarkers().values()) {
+                        marker.setIcon(getDefaultIcon());
+                    }
+                }
+
+                previousZoom = currentZoom;
             }
-
-            float currentZoom = googleMap.getCameraPosition().zoom;
-
-            //TODO bug here where some ids are visible when zoomed out
-            if (currentZoom <= TEXT_VISIBILITY_ZOOM && previousZoom >= TEXT_VISIBILITY_ZOOM) {
-                for (Marker marker : getGoogleMapTextMarkers().values()) {
-                    marker.setVisible(false);
-                }
-            } else if (currentZoom >= TEXT_VISIBILITY_ZOOM && previousZoom <= TEXT_VISIBILITY_ZOOM) {
-                for (Marker marker : getGoogleMapTextMarkers().values()) {
-                    marker.setVisible(true);
-                }
-            }
-
-            if (currentZoom <= ICON_TYPE_ZOOM && previousZoom >= ICON_TYPE_ZOOM) {
-                for (Marker marker : getGoogleMapMarkers().values()) {
-                    marker.setIcon(getZoomedOutIcon());
-                }
-            } else if (currentZoom >= ICON_TYPE_ZOOM && previousZoom <= ICON_TYPE_ZOOM) {
-                for (Marker marker : getGoogleMapMarkers().values()) {
-                    marker.setIcon(getDefaultIcon());
-                }
-            }
-
-            previousZoom = currentZoom;
         }
 
         private void addNewMarkers(Collection<Stop> busStops) {
-            BitmapDescriptor icon;
-            if (googleMap.getCameraPosition().zoom <= ICON_TYPE_ZOOM) {
-                icon = getZoomedOutIcon();
-            } else {
-                icon = getDefaultIcon();
-            }
-            for (Stop busStop : busStops) {
-                if (getGoogleMapMarkers().get(busStop) == null) {
-                    Marker marker = googleMap.addMarker(getMarkerOptions(busStop, icon));
-                    marker.setIcon(icon);
-                    Marker textMarker = googleMap.addMarker(getTextMarkerOptions(busStop));
-                    textMarker.setVisible(googleMap.getCameraPosition().zoom >= TEXT_VISIBILITY_ZOOM);
-                    AnimationUtils.fadeInMarker(marker);
-                    AnimationUtils.fadeInMarker(textMarker);
-                    getGoogleMapMarkers().put(busStop, marker);
-                    getGoogleMapTextMarkers().put(busStop, textMarker);
+            if (googleMap != null) {
+                BitmapDescriptor icon;
+                if (googleMap.getCameraPosition().zoom <= ICON_TYPE_ZOOM) {
+                    icon = getZoomedOutIcon();
+                } else {
+                    icon = getDefaultIcon();
+                }
+                for (Stop busStop : busStops) {
+                    if (getGoogleMapMarkers().get(busStop) == null) {
+                        Marker marker = googleMap.addMarker(getMarkerOptions(busStop, icon));
+                        marker.setIcon(icon);
+                        Marker textMarker = googleMap.addMarker(getTextMarkerOptions(busStop));
+                        textMarker.setVisible(googleMap.getCameraPosition().zoom >= TEXT_VISIBILITY_ZOOM);
+                        AnimationUtils.fadeInMarker(marker);
+                        AnimationUtils.fadeInMarker(textMarker);
+                        getGoogleMapMarkers().put(busStop, marker);
+                        getGoogleMapTextMarkers().put(busStop, textMarker);
+                    }
                 }
             }
         }
@@ -513,10 +524,15 @@ public class NearbyFragment
             fillPaint.setTypeface(Typeface.create("sans-serif-condensed", Typeface.NORMAL));
             canvas.drawText(busStop.id(), 0, baseline, fillPaint);
 
+            boolean visible = false;
+            if (googleMap != null) {
+                visible = googleMap.getCameraPosition().zoom >= TEXT_VISIBILITY_ZOOM;
+            }
+
             return new MarkerOptions()
                     .position(new LatLng(busStop.coordinate().getX(), busStop.coordinate().getY()))
                     .anchor(0.5f, -0.2f)
-                    .visible(googleMap.getCameraPosition().zoom >= TEXT_VISIBILITY_ZOOM)
+                    .visible(visible)
                     .icon(BitmapDescriptorFactory.fromBitmap(image));
         }
 
@@ -598,14 +614,16 @@ public class NearbyFragment
 
         @Override
         public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-            View view = googleMapFragment.getView();
-            if (view != null) {
-                int dy = bottomSheet.getTop() - coordinatorLayout.getHeight();
-                view.setTranslationY(dy / 2);
-                crosshair.setTranslationY(dy / 2);
-                if (dy >= -bottomSheetPeekHeightPx) {
-                    gps.setTranslationY(dy);
-                    traffic.setTranslationY(dy);
+            if (googleMapFragment != null) {
+                View view = googleMapFragment.getView();
+                if (view != null) {
+                    int dy = bottomSheet.getTop() - coordinatorLayout.getHeight();
+                    view.setTranslationY(dy / 2);
+                    crosshair.setTranslationY(dy / 2);
+                    if (dy >= -bottomSheetPeekHeightPx) {
+                        gps.setTranslationY(dy);
+                        traffic.setTranslationY(dy);
+                    }
                 }
             }
         }

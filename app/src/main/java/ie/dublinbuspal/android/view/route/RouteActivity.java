@@ -223,24 +223,26 @@ public class RouteActivity extends MvpActivity<RouteView, RoutePresenter>
             setShowBusTimesButtonVisibility(View.VISIBLE);
         }
         firstResponse = true;
-        clearMap();
         adapter.setBusStops(busStops);
-        PolylineOptions polylineOptions = new PolylineOptions();
-        polylineOptions.width(8);
-        polylineOptions.color(ContextCompat.getColor(getBaseContext(), R.color.colorPrimary));
-        for (Stop busStop : busStops) {
-            markers.add(googleMap.addMarker(newMarkerOptions(busStop)));
-            polylineOptions.add(new LatLng(busStop.coordinate().getX(), busStop.coordinate().getY()));
-        }
-        polylines.add(googleMap.addPolyline(polylineOptions));
+        if (googleMap != null) {
+            clearMap();
+            PolylineOptions polylineOptions = new PolylineOptions();
+            polylineOptions.width(8);
+            polylineOptions.color(ContextCompat.getColor(getBaseContext(), R.color.colorPrimary));
+            for (Stop busStop : busStops) {
+                markers.add(googleMap.addMarker(newMarkerOptions(busStop)));
+                polylineOptions.add(new LatLng(busStop.coordinate().getX(), busStop.coordinate().getY()));
+            }
+            polylines.add(googleMap.addPolyline(polylineOptions));
 
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        for (Stop busStop : busStops) {
-            builder.include(new LatLng(busStop.coordinate().getX(), busStop.coordinate().getY()));
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            for (Stop busStop : busStops) {
+                builder.include(new LatLng(busStop.coordinate().getX(), busStop.coordinate().getY()));
+            }
+            LatLngBounds bounds = builder.build();
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 64);
+            googleMap.animateCamera(cameraUpdate);
         }
-        LatLngBounds bounds = builder.build();
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 64);
-        googleMap.animateCamera(cameraUpdate);
     }
 
     private void clearMap() {
@@ -322,10 +324,12 @@ public class RouteActivity extends MvpActivity<RouteView, RoutePresenter>
 
         @Override
         public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-            View view = googleMapFragment.getView();
-            if (view != null) {
-                int dy = bottomSheet.getTop() - coordinatorLayout.getHeight();
-                view.setTranslationY(dy / 2);
+            if (googleMapFragment != null) {
+                View view = googleMapFragment.getView();
+                if (view != null) {
+                    int dy = bottomSheet.getTop() - coordinatorLayout.getHeight();
+                    view.setTranslationY(dy / 2);
+                }
             }
         }
 

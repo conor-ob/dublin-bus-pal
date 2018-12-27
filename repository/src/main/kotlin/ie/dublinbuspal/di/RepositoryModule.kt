@@ -66,6 +66,17 @@ import javax.inject.Singleton
 @Module
 class RepositoryModule {
 
+    private val shortTermMemoryPolicy: MemoryPolicy by lazy { newMemoryPolicy(30, TimeUnit.SECONDS) }
+    private val midTermMemoryPolicy: MemoryPolicy by lazy { newMemoryPolicy(3, TimeUnit.HOURS) }
+    private val longTermMemoryPolicy: MemoryPolicy by lazy { newMemoryPolicy(7, TimeUnit.DAYS) }
+
+    private fun newMemoryPolicy(value: Long, timeUnit: TimeUnit): MemoryPolicy {
+        return MemoryPolicy.builder()
+                .setExpireAfterWrite(value)
+                .setExpireAfterTimeUnit(timeUnit)
+                .build()
+    }
+
     @Provides
     @Singleton
     fun stopRepository(
@@ -85,19 +96,11 @@ class RepositoryModule {
             persisterDao: PersisterDao,
             txRunner: TxRunner
     ): Repository<DefaultStop> {
-
         val fetcher = Fetcher<StopsResponseXml, String> { resource.getDublinBusStops() }
-
-        val memoryPolicy = MemoryPolicy.builder()
-                .setExpireAfterWrite(24)
-                .setExpireAfterTimeUnit(TimeUnit.HOURS)
-                .build()
-
         val domainMapper = DefaultStopDomainMapper()
         val entityMapper = DefaultStopEntityMapper()
-        val persister = DefaultStopPersister(memoryPolicy, persisterDao, dao, txRunner, entityMapper, domainMapper)
-        val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
-
+        val persister = DefaultStopPersister(longTermMemoryPolicy, persisterDao, dao, txRunner, entityMapper, domainMapper)
+        val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, longTermMemoryPolicy)
         return DefaultStopRepository(store)
     }
 
@@ -109,19 +112,11 @@ class RepositoryModule {
             persisterDao: PersisterDao,
             txRunner: TxRunner
     ): Repository<DublinBusStop> {
-
         val fetcher = Fetcher<StopsResponseJson, String> { resource.getDublinBusStops() }
-
-        val memoryPolicy = MemoryPolicy.builder()
-                .setExpireAfterWrite(24)
-                .setExpireAfterTimeUnit(TimeUnit.HOURS)
-                .build()
-
         val domainMapper = DublinBusStopDomainMapper()
         val entityMapper = DublinBusStopEntityMapper()
-        val persister = DublinBusStopPersister(memoryPolicy, persisterDao, dao, txRunner, entityMapper, domainMapper)
-        val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
-
+        val persister = DublinBusStopPersister(longTermMemoryPolicy, persisterDao, dao, txRunner, entityMapper, domainMapper)
+        val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, longTermMemoryPolicy)
         return DublinBusStopRepository(store)
     }
 
@@ -133,19 +128,11 @@ class RepositoryModule {
             persisterDao: PersisterDao,
             txRunner: TxRunner
     ): Repository<GoAheadDublinStop> {
-
         val fetcher = Fetcher<StopsResponseJson, String> { resource.getGoAheadDublinStops() }
-
-        val memoryPolicy = MemoryPolicy.builder()
-                .setExpireAfterWrite(24)
-                .setExpireAfterTimeUnit(TimeUnit.HOURS)
-                .build()
-
         val domainMapper = GoAheadDublinStopDomainMapper()
         val entityMapper = GoAheadDublinStopEntityMapper()
-        val persister = GoAheadDublinStopPersister(memoryPolicy, persisterDao, dao, txRunner, entityMapper, domainMapper)
-        val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
-
+        val persister = GoAheadDublinStopPersister(longTermMemoryPolicy, persisterDao, dao, txRunner, entityMapper, domainMapper)
+        val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, longTermMemoryPolicy)
         return GoAheadDublinStopRepository(store)
     }
 
@@ -166,19 +153,11 @@ class RepositoryModule {
             persisterDao: PersisterDao,
             txRunner: TxRunner
     ): Repository<DefaultRoute> {
-
         val fetcher = Fetcher<RoutesResponseXml, String> { resource.getDublinBusRoutes() }
-
-        val memoryPolicy = MemoryPolicy.builder()
-                .setExpireAfterWrite(24)
-                .setExpireAfterTimeUnit(TimeUnit.HOURS)
-                .build()
-
         val domainMapper = DefaultRouteDomainMapper()
         val entityMapper = DefaultRouteEntityMapper()
-        val persister = DefaultRoutePersister(memoryPolicy, persisterDao, dao, txRunner, entityMapper, domainMapper)
-        val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
-
+        val persister = DefaultRoutePersister(longTermMemoryPolicy, persisterDao, dao, txRunner, entityMapper, domainMapper)
+        val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, longTermMemoryPolicy)
         return DefaultRouteRepository(store)
     }
 
@@ -190,19 +169,11 @@ class RepositoryModule {
             persisterDao: PersisterDao,
             txRunner: TxRunner
     ): Repository<GoAheadDublinRoute> {
-
         val fetcher = Fetcher<RouteListInformationWithVariantsResponseJson, String> { resource.getGoAheadDublinRoutes() }
-        
-        val memoryPolicy = MemoryPolicy.builder()
-                .setExpireAfterWrite(24)
-                .setExpireAfterTimeUnit(TimeUnit.HOURS)
-                .build()
-
         val domainMapper = GoAheadDublinRouteDomainMapper()
         val entityMapper = GoAheadDublinRouteEntityMapper()
-        val persister = GoAheadDublinRoutePersister(memoryPolicy, persisterDao, dao, txRunner, entityMapper, domainMapper)
-        val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
-
+        val persister = GoAheadDublinRoutePersister(longTermMemoryPolicy, persisterDao, dao, txRunner, entityMapper, domainMapper)
+        val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, longTermMemoryPolicy)
         return GoAheadDublinRouteRepository(store)
     }
 
@@ -211,20 +182,13 @@ class RepositoryModule {
     fun defaultRouteServiceRepository(
             resource: DublinBusSoapResource
     ): Repository<DefaultRouteService> {
-
-        val memoryPolicy = MemoryPolicy.builder()
-                .setExpireAfterWrite(24)
-                .setExpireAfterTimeUnit(TimeUnit.HOURS)
-                .build()
-
         val mapper = DefaultRouteServiceMapper()
         val store = StoreBuilder.parsedWithKey<String, RouteServiceResponseXml, DefaultRouteService>()
                 .fetcher { key -> resource.getDublinBusRouteService(key) }
                 .parser { xml -> mapper.map(xml) }
-                .memoryPolicy(memoryPolicy)
+                .memoryPolicy(midTermMemoryPolicy)
                 .refreshOnStale()
                 .open()
-
         return DefaultRouteServiceRepository(store)
     }
 
@@ -233,20 +197,13 @@ class RepositoryModule {
     fun goAheadDublinRouteServiceRepository(
             resource: DublinBusGoAheadDublinRestResource
     ): Repository<GoAheadDublinRouteService> {
-
-        val memoryPolicy = MemoryPolicy.builder()
-                .setExpireAfterWrite(24)
-                .setExpireAfterTimeUnit(TimeUnit.HOURS)
-                .build()
-
         val mapper = GoAheadDublinRouteServiceMapper()
         val store = StoreBuilder.parsedWithKey<String, RouteInformationResponseJson, GoAheadDublinRouteService>()
                 .fetcher { key -> resource.getGoAheadDublinRouteService(key) }
                 .parser { xml -> mapper.map(xml) }
-                .memoryPolicy(memoryPolicy)
+                .memoryPolicy(midTermMemoryPolicy)
                 .refreshOnStale()
                 .open()
-
         return GoAheadDublinRouteServiceRepository(store)
     }
 
@@ -264,70 +221,47 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun defaultLiveDataRepository(resource: DublinBusSoapResource): Repository<RealTimeStopData> {
-
-        val memoryPolicy = MemoryPolicy.builder()
-                .setExpireAfterWrite(30)
-                .setExpireAfterTimeUnit(TimeUnit.SECONDS)
-                .build()
-
         val mapper = DefaultLiveDataEntityMapper()
         val store = StoreBuilder.parsedWithKey<String, LiveDataResponseXml, List<RealTimeStopData>>()
                 .fetcher { key -> resource.getDublinBusLiveData(key) }
                 .parser { xml -> mapper.map(xml.realTimeStopData) }
-                .memoryPolicy(memoryPolicy)
+                .memoryPolicy(shortTermMemoryPolicy)
                 .refreshOnStale()
                 .open()
-
         return DefaultLiveDataRepository(store)
     }
 
     @Provides
     @Singleton
     fun goAheadDublinLiveDataRepository(resource: DublinBusGoAheadDublinRestResource): Repository<DublinBusGoAheadDublinLiveData> {
-
-        val memoryPolicy = MemoryPolicy.builder()
-                .setExpireAfterWrite(30)
-                .setExpireAfterTimeUnit(TimeUnit.SECONDS)
-                .build()
-
         val mapper = DublinBusGoAheadDublinLiveDataEntityMapper()
         val store = StoreBuilder.parsedWithKey<String, RealTimeBusInformationResponseJson, List<DublinBusGoAheadDublinLiveData>>()
                 .fetcher { key -> resource.getGoAheadDublinLiveData(key) }
                 .parser { json -> mapper.map(json.realTimeBusInformation) }
-                .memoryPolicy(memoryPolicy)
+                .memoryPolicy(shortTermMemoryPolicy)
                 .refreshOnStale()
                 .open()
-
         return GoAheadDublinLiveDataRepository(store)
     }
 
     @Provides
     @Singleton
     fun favouritesRepository(dao: FavouriteStopDao): FavouriteStopRepository<FavouriteStop> {
-
         val domainMapper = FavouriteStopDomainMapper()
         val entityMapper = FavouriteStopEntityMapper()
-
         return DefaultFavouriteStopRepository(dao, entityMapper, domainMapper)
     }
 
     @Provides
     @Singleton
     fun rssRepository(resource: DublinBusRssResource): Repository<RssNews> {
-
-        val memoryPolicy = MemoryPolicy.builder()
-                .setExpireAfterWrite(24)
-                .setExpireAfterTimeUnit(TimeUnit.HOURS)
-                .build()
-
         val mapper = RssMapper()
         val store = StoreBuilder.parsedWithKey<String, RssResponseXml, List<RssNews>>()
                 .fetcher { resource.getDublinBusNews() }
                 .parser { xml -> mapper.map(xml.channel!!.newsItems) }
-                .memoryPolicy(memoryPolicy)
+                .memoryPolicy(midTermMemoryPolicy)
                 .refreshOnStale()
                 .open()
-
         return RssNewsRepository(store)
     }
 

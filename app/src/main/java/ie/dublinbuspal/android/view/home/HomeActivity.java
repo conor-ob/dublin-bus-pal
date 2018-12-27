@@ -9,6 +9,9 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -20,9 +23,6 @@ import ie.dublinbuspal.android.view.favourite.FavouritesFragment;
 import ie.dublinbuspal.android.view.nearby.NearbyFragment;
 import ie.dublinbuspal.android.view.news.NewsFragment;
 import ie.dublinbuspal.android.view.search.SearchFragment;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -119,7 +119,6 @@ public class HomeActivity extends AppCompatActivity {
 
     private void setupBottomNavigation() {
         bottomNavigationView = findViewById(R.id.bottom_navigation);
-        BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 item -> {
                     switch (item.getItemId()) {
