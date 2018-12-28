@@ -2,6 +2,7 @@ package ie.dublinbuspal.android.util;
 
 import com.crashlytics.android.Crashlytics;
 
+import ie.dublinbuspal.android.BuildConfig;
 import timber.log.Timber;
 
 public final class ErrorLog {
@@ -16,7 +17,9 @@ public final class ErrorLog {
 
     public static void u(Throwable throwable) {
         l(throwable);
-        Crashlytics.logException(throwable);
+        if (!BuildConfig.DEBUG) {
+            Crashlytics.logException(throwable);
+        }
     }
 
     private static void l(Throwable throwable) {

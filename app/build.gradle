@@ -80,7 +80,6 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:${versions.androidx.constraintlayout}"
     implementation "androidx.recyclerview:recyclerview:${versions.androidx.recyclerview}"
     implementation "androidx.room:room-runtime:${versions.androidx.room_runtime}"
-    implementation "com.crashlytics.sdk.android:crashlytics:${versions.crashlytics}"
     implementation "com.google.android.material:material:${versions.material}"
     implementation "com.google.dagger:dagger:${versions.dagger}"
     implementation "com.google.maps.android:android-maps-utils:${versions.android_map_utils}"
@@ -98,6 +97,10 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:${testVersions.androidx.junit}"
     androidTestImplementation "androidx.test:runner:${testVersions.androidx.runner}"
     testImplementation "junit:junit:${testVersions.junit}"
+
+    compile("com.crashlytics.sdk.android:crashlytics:${versions.crashlytics}") {
+        transitive = true
+    }
 
     // Conflict with dependency 'blah blah' in project ':app'. Resolved versions for runtime classpath (x.x.x) and compile classpath (x.x.x) differ. This can lead to runtime crashes
     implementation("com.squareup.retrofit2:converter-gson:2.5.0")
