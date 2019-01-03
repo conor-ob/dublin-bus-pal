@@ -8,7 +8,7 @@ import ie.dublinbuspal.data.dao.*
 import ie.dublinbuspal.data.entity.*
 
 @Database(
-        version = 2,
+        version = 4,
         exportSchema = true,
         entities = [
             DefaultStopEntity::class,

@@ -8,7 +8,7 @@ import ie.dublinbuspal.data.TxRunner
 import ie.dublinbuspal.data.dao.*
 import ie.dublinbuspal.database.DatabaseTxRunner
 import ie.dublinbuspal.database.DublinBusDatabase
-import ie.dublinbuspal.database.migration.Migrations.MIGRATION_1_2
+import ie.dublinbuspal.database.migration.Migrations.MIGRATION_3_4
 import javax.inject.Singleton
 
 @Module
@@ -20,8 +20,9 @@ class DatabaseModule(
     @Singleton
     fun database(context: Context): DublinBusDatabase = Room
             .databaseBuilder(context, DublinBusDatabase::class.java, databaseName)
+            .fallbackToDestructiveMigrationFrom(1, 2)
             .addMigrations(
-                    MIGRATION_1_2
+                    MIGRATION_3_4
             )
             .build()
 

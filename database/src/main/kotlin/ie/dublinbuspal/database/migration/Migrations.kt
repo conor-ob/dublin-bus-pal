@@ -5,6 +5,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 object Migrations {
 
+    @Deprecated("Migration broke during update to 2.0.0, fallbackToDestructiveMigration is used until database version 4")
     val MIGRATION_1_2 = object : Migration(1, 2) {
 
         override fun migrate(database: SupportSQLiteDatabase) {
@@ -22,6 +23,14 @@ object Migrations {
             database.execSQL("DROP TABLE `tb_route_service`")
             database.execSQL("DROP TABLE `tb_favourites`")
             database.execSQL("DROP TABLE `tb_unchecked_bus_stop_service`")
+        }
+
+    }
+
+    val MIGRATION_3_4 = object : Migration(3, 4) {
+
+        override fun migrate(database: SupportSQLiteDatabase) {
+            // nothing to do
         }
 
     }
