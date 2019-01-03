@@ -41,6 +41,17 @@ public class FavouritesPresenterImpl extends MvpBasePresenter<FavouritesView>
         getDisposables().dispose();
     }
 
+    @Override
+    public void onPause(List<FavouriteStop> favourites) {
+        getDisposables().add(useCase.saveFavourites(favourites)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnComplete(this::onPause)
+                .doOnError(this::onError)
+                .subscribe()
+        );
+    }
+
     private void onError(Throwable throwable) {
         ErrorLog.e(throwable);
         ifViewAttached(view -> {

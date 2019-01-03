@@ -11,7 +11,7 @@ interface FavouriteStopDao : BaseDao<FavouriteStopEntity> {
     @Query("SELECT * FROM favourites WHERE id = :id")
     fun select(id: String): Maybe<FavouriteStopEntity>
 
-    @Query("SELECT * FROM favourites")
+    @Query("SELECT * FROM favourites ORDER BY `order`")
     fun selectAll(): Maybe<List<FavouriteStopEntity>>
 
     @Query("DELETE FROM favourites")

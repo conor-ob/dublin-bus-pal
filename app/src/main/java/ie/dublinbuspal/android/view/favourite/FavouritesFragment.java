@@ -15,6 +15,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.hannesdorfmann.mosby3.mvp.MvpFragment;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -22,6 +23,7 @@ import javax.inject.Inject;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -32,11 +34,13 @@ import ie.dublinbuspal.android.view.realtime.RealTimeActivity;
 import ie.dublinbuspal.android.view.settings.SettingsActivity;
 import ie.dublinbuspal.model.favourite.FavouriteStop;
 import ie.dublinbuspal.util.CollectionUtils;
+import timber.log.Timber;
 
 public class FavouritesFragment extends MvpFragment<FavouritesView, FavouritesPresenter>
         implements FavouritesView {
 
     private View root;
+    private RecyclerView recyclerView;
     private FavouritesAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private LinearLayout noFavouritesView;
@@ -65,6 +69,7 @@ public class FavouritesFragment extends MvpFragment<FavouritesView, FavouritesPr
         setupLayout(view);
         setupListeners();
         setupOptionsMenu();
+        setupDragAndDrop();
     }
 
     @SuppressLint("RestrictedApi")
@@ -100,7 +105,11 @@ public class FavouritesFragment extends MvpFragment<FavouritesView, FavouritesPr
 
     @Override
     public void onPause() {
-        getPresenter().onPause();
+        if (shouldSaveFavourites) {
+            getPresenter().onPause(adapter.getFavourites());
+        } else {
+            getPresenter().onPause();
+        }
         super.onPause();
     }
 
@@ -139,7 +148,7 @@ public class FavouritesFragment extends MvpFragment<FavouritesView, FavouritesPr
         toolbar.setTitle(getResources().getString(R.string.title_favourites_fragment));
         root = view.findViewById(R.id.root);
         adapter = new FavouritesAdapter(this);
-        RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
+        recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -160,5 +169,34 @@ public class FavouritesFragment extends MvpFragment<FavouritesView, FavouritesPr
             }
         });
     }
+
+    private void setupDragAndDrop() {
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+    }
+
+    private boolean shouldSaveFavourites = false;
+    private ItemTouchHelper.Callback itemTouchHelperCallback = new ItemTouchHelper.Callback() {
+
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            Collections.swap(adapter.getFavourites(), viewHolder.getAdapterPosition(), target.getAdapterPosition());
+            adapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+            shouldSaveFavourites = true;
+            return true;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            Timber.d("onSwiped");
+        }
+
+        @Override
+        public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+            return makeFlag(ItemTouchHelper.ACTION_STATE_DRAG,
+                    ItemTouchHelper.DOWN | ItemTouchHelper.UP | ItemTouchHelper.START | ItemTouchHelper.END);
+        }
+
+    };
 
 }

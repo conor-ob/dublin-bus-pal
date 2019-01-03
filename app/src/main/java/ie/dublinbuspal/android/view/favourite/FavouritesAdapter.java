@@ -54,6 +54,10 @@ public class FavouritesAdapter
         notifyDataSetChanged();
     }
 
+    public List<FavouriteStop> getFavourites() {
+        return favouriteBusStops;
+    }
+
     public class FavouritesViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener{
 
