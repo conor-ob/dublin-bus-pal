@@ -1,6 +1,7 @@
 package ie.dublinbuspal.service.resource
 
 import ie.dublinbuspal.service.api.DublinBusSoapApi
+import ie.dublinbuspal.service.api.StaticApi
 import ie.dublinbuspal.service.model.livedata.*
 import ie.dublinbuspal.service.model.route.*
 import ie.dublinbuspal.service.model.routeservice.RouteServiceRequestBodyXml
@@ -15,7 +16,8 @@ import ie.dublinbuspal.util.StringUtils
 import io.reactivex.Single
 
 class DublinBusSoapResourceAdapter(
-        private val api: DublinBusSoapApi
+        private val api: DublinBusSoapApi,
+        private val staticApi: StaticApi
 ) : DublinBusSoapResource {
 
     override fun getDublinBusStops(): Single<StopsResponseXml> {

@@ -5,6 +5,7 @@ import dagger.Provides
 import ie.dublinbuspal.service.api.DublinBusRssApi
 import ie.dublinbuspal.service.api.DublinBusSoapApi
 import ie.dublinbuspal.service.api.DublinBusGoAheadDublinRestApi
+import ie.dublinbuspal.service.api.StaticApi
 import ie.dublinbuspal.service.interceptor.NetworkLoggingInterceptor
 import ie.dublinbuspal.service.resource.*
 import okhttp3.OkHttpClient
@@ -21,7 +22,8 @@ import javax.inject.Singleton
 class NetworkModule(
         private val soapApiEndpoint: String,
         private val restApiEndpoint: String,
-        private val rssApiEndpoint: String
+        private val rssApiEndpoint: String,
+        private val staticApiEndpoint: String
 ) {
 
     private val callAdapter: CallAdapter.Factory by lazy { RxJava2CallAdapterFactory.create() }
@@ -40,7 +42,7 @@ class NetworkModule(
 
     @Provides
     @Singleton
-    fun dublinBusSoapResource(): DublinBusSoapResource {
+    fun dublinBusSoapResource(staticApi: StaticApi): DublinBusSoapResource {
         val retrofit = Retrofit.Builder()
                 .baseUrl(soapApiEndpoint)
                 .client(okHttpClient)
@@ -48,12 +50,12 @@ class NetworkModule(
                 .addCallAdapterFactory(callAdapter)
                 .build()
         val api = retrofit.create(DublinBusSoapApi::class.java)
-        return DublinBusSoapResourceAdapter(api)
+        return DublinBusSoapResourceAdapter(api, staticApi)
     }
 
     @Provides
     @Singleton
-    fun smartDublinRestResource(): DublinBusGoAheadDublinRestResource {
+    fun smartDublinRestResource(staticApi: StaticApi): DublinBusGoAheadDublinRestResource {
         val retrofit = Retrofit.Builder()
                 .baseUrl(restApiEndpoint)
                 .client(okHttpClient)
@@ -61,7 +63,7 @@ class NetworkModule(
                 .addCallAdapterFactory(callAdapter)
                 .build()
         val api = retrofit.create(DublinBusGoAheadDublinRestApi::class.java)
-        return DublinBusGoAheadDublinRestResourceAdapter(api)
+        return DublinBusGoAheadDublinRestResourceAdapter(api, staticApi)
     }
 
     @Provides
@@ -75,6 +77,19 @@ class NetworkModule(
                 .build()
         val api = retrofit.create(DublinBusRssApi::class.java)
         return DublinBusRssResourceAdapter(api)
+    }
+
+    @Provides
+    @Singleton
+    fun staticApi(): StaticApi {
+        val retrofit = Retrofit.Builder()
+                .baseUrl(staticApiEndpoint)
+                .client(okHttpClient)
+                .addConverterFactory(jsonDeserializer)
+//                .addConverterFactory(xmlDeserializer)
+                .addCallAdapterFactory(callAdapter)
+                .build()
+        return retrofit.create(StaticApi::class.java)
     }
 
 }
