@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <a href="https://play.google.com/store/apps/details?id=ie.dublinbuspal.android"><img src="https://img.shields.io/badge/version-2.0.1-lightgrey.svg?style=shield"></a>
+  <a href="https://play.google.com/store/apps/details?id=ie.dublinbuspal.android"><img src="https://img.shields.io/badge/version-2.1.1-lightgrey.svg?style=shield"></a>
   <a href="https://circleci.com/gh/conor-ob/dublin-bus-pal/tree/master"><img src="https://circleci.com/gh/conor-ob/dublin-bus-pal/tree/master.svg?style=shield"></a>
   <a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/license-GPL%20v3-blue.svg?style=shield"></a>
 </p>

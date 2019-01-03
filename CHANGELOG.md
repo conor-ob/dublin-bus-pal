@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.1.1](https://github.com/conor-ob/dublin-bus-pal/compare/2.1.0...2.1.1) (03-01-2019)
+Added mechanism to retry failed API calls to return cached static data hosted on this repository
+
+## [2.1.0](https://github.com/conor-ob/dublin-bus-pal/compare/2.0.2...2.1.0) (03-01-2019)
+Added ability to reorder saved favourites by dragging and dropping
+
+Fixed database migration crash by using destructive migrations until current database version
+
+## [2.0.2](https://github.com/conor-ob/dublin-bus-pal/compare/2.0.1...2.0.2) (27-12-2018)
+Attempt to fix bug where no stops or routes display on upgrading to 2.0.0 or 2.0.1
+
 ## [2.0.1](https://github.com/conor-ob/dublin-bus-pal/compare/2.0.0...2.0.1) (27-12-2018)
 Fix for crash: https://issuetracker.google.com/issues/79478779
 
