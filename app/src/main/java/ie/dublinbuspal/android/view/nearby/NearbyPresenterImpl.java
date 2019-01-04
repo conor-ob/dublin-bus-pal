@@ -8,13 +8,13 @@ import java.util.SortedMap;
 
 import javax.inject.Inject;
 
-import ie.dublinbuspal.android.util.ErrorLog;
 import ie.dublinbuspal.model.stop.Stop;
 import ie.dublinbuspal.usecase.nearby.NearbyStopsUseCase;
 import ie.dublinbuspal.util.Coordinate;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class NearbyPresenterImpl extends MvpBasePresenter<NearbyView> implements NearbyPresenter {
 
@@ -50,7 +50,7 @@ public class NearbyPresenterImpl extends MvpBasePresenter<NearbyView> implements
     }
 
     private void onGetBusStopsError(Throwable throwable) {
-        ErrorLog.e(throwable);
+        Timber.e(throwable);
         ifViewAttached(NearbyView::hideProgress);
     }
 

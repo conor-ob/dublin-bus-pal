@@ -8,9 +8,12 @@ import com.jakewharton.threetenabp.AndroidThreeTen
 import com.twitter.sdk.android.core.Twitter
 import com.twitter.sdk.android.core.TwitterAuthConfig
 import com.twitter.sdk.android.core.TwitterConfig
-import ie.dublinbuspal.android.util.ErrorLog
+import ie.dublinbuspal.android.util.CrashlyticsTree
 import ie.dublinbuspal.android.util.MetadataUtils
-import ie.dublinbuspal.di.*
+import ie.dublinbuspal.di.ApplicationComponent
+import ie.dublinbuspal.di.ApplicationModule
+import ie.dublinbuspal.di.DatabaseModule
+import ie.dublinbuspal.di.NetworkModule
 import io.fabric.sdk.android.Fabric
 import io.reactivex.plugins.RxJavaPlugins
 import timber.log.Timber
@@ -20,7 +23,7 @@ class DublinBusApplication : Application() {
     lateinit var applicationComponent: ApplicationComponent
 
     init {
-        RxJavaPlugins.setErrorHandler { ErrorLog.u(it) }
+        RxJavaPlugins.setErrorHandler { Timber.e(it) }
     }
 
     override fun onCreate() {
@@ -36,6 +39,8 @@ class DublinBusApplication : Application() {
     private fun setupTimber() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
+        } else {
+            Timber.plant(CrashlyticsTree())
         }
     }
 

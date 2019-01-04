@@ -7,12 +7,12 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.util.ErrorLog;
 import ie.dublinbuspal.model.favourite.FavouriteStop;
 import ie.dublinbuspal.usecase.favourites.FavouritesUseCase;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class FavouritesPresenterImpl extends MvpBasePresenter<FavouritesView>
         implements FavouritesPresenter {
@@ -53,7 +53,7 @@ public class FavouritesPresenterImpl extends MvpBasePresenter<FavouritesView>
     }
 
     private void onError(Throwable throwable) {
-        ErrorLog.e(throwable);
+        Timber.e(throwable);
         ifViewAttached(view -> {
             view.hideProgress();
             view.showError(R.string.error_unknown);

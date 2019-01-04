@@ -9,12 +9,12 @@ import java.net.UnknownHostException;
 import javax.inject.Inject;
 
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.util.ErrorLog;
 import ie.dublinbuspal.model.routeservice.RouteService;
 import ie.dublinbuspal.usecase.routeservice.RouteServiceUseCase;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class RoutePresenterImpl extends MvpBasePresenter<RouteView> implements RoutePresenter {
 
@@ -54,7 +54,7 @@ public class RoutePresenterImpl extends MvpBasePresenter<RouteView> implements R
     }
 
     private void onError(Throwable throwable) {
-        ErrorLog.e(throwable);
+        Timber.e(throwable);
         ifViewAttached(view -> {
             view.hideProgress();
             if (throwable instanceof UnknownHostException) {

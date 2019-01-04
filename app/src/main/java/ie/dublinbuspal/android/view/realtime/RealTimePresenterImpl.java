@@ -12,7 +12,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.util.ErrorLog;
 import ie.dublinbuspal.model.livedata.LiveData;
 import ie.dublinbuspal.model.stop.Stop;
 import ie.dublinbuspal.usecase.favourites.FavouritesUseCase;
@@ -21,6 +20,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class RealTimePresenterImpl extends MvpBasePresenter<RealTimeView>
         implements RealTimePresenter {
@@ -123,7 +123,7 @@ public class RealTimePresenterImpl extends MvpBasePresenter<RealTimeView>
     }
 
     private void onError(Throwable throwable) {
-        ErrorLog.e(throwable);
+        Timber.e(throwable);
         ifViewAttached(view -> {
             view.hideProgress();
             if (throwable instanceof UnknownHostException) {

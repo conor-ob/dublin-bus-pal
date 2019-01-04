@@ -18,11 +18,11 @@ import java.net.UnknownHostException;
 import javax.inject.Inject;
 
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.util.ErrorLog;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class TwitterPresenterImpl extends MvpBasePresenter<TwitterView>
         implements TwitterPresenter {
@@ -64,7 +64,7 @@ public class TwitterPresenterImpl extends MvpBasePresenter<TwitterView>
 
             @Override
             public void failure(TwitterException exception) {
-                ErrorLog.e(exception);
+                Timber.e(exception);
                 if (exception.getCause() != null) {
                     onError(exception.getCause());
                 } else {
@@ -101,7 +101,7 @@ public class TwitterPresenterImpl extends MvpBasePresenter<TwitterView>
     }
 
     private void onError(Throwable throwable) {
-        ErrorLog.e(throwable);
+        Timber.e(throwable);
         ifViewAttached(view -> {
             view.hideProgress();
             if (throwable instanceof UnknownHostException) {

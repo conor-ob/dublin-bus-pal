@@ -10,13 +10,13 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.util.ErrorLog;
 import ie.dublinbuspal.model.rss.RssNews;
 import ie.dublinbuspal.usecase.rss.RssNewsUseCase;
 import ie.dublinbuspal.util.CollectionUtils;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class RssPresenterImpl extends MvpBasePresenter<RssView> implements RssPresenter {
 
@@ -60,7 +60,7 @@ public class RssPresenterImpl extends MvpBasePresenter<RssView> implements RssPr
     }
 
     private void onGetRssError(Throwable throwable) {
-        ErrorLog.e(throwable);
+        Timber.e(throwable);
         ifViewAttached(view -> {
             view.hideProgress();
             if (throwable instanceof UnknownHostException) {
