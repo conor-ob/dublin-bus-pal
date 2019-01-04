@@ -78,7 +78,9 @@ class StopRepository(
                 aggregatedStops[stop.id] = aggregatedStop.copy(favouriteName = stop.name, favouriteRoutes = stop.routes)
             }
         }
-        return aggregatedStops.values.toList()
+        return aggregatedStops.values
+                .filter { it.routes().isNotEmpty() }
+                .toList()
     }
 
     override fun getAllById(id: String): Observable<List<Stop>> {
