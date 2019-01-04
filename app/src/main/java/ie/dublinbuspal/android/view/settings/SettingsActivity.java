@@ -3,6 +3,7 @@ package ie.dublinbuspal.android.view.settings;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,7 +28,6 @@ import javax.inject.Inject;
 import ie.dublinbuspal.android.BuildConfig;
 import ie.dublinbuspal.android.DublinBusApplication;
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.util.ErrorLog;
 import ie.dublinbuspal.android.view.web.WebViewActivity;
 import ie.dublinbuspal.usecase.update.UpdateStopsAndRoutesUseCase;
 import ie.dublinbuspal.util.StringUtils;
@@ -97,7 +97,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             bindPreferenceSummaryToValue(findPreference(
                     getString(R.string.preference_key_auto_refresh_interval)));
             bindLastUpdatedTimestampSummaryToValue(findPreference(
-                    getString(R.string.preference_key_update_database)));
+                    getString(R.string.preference_key_update_database)), null);
             bindAppVersionSummaryToValue(findPreference(
                     getString(R.string.preference_key_app_version)));
         }
@@ -131,7 +131,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                                         .putLong(getString(R.string.preference_key_update_database), TimeUtils.now().toEpochMilli())
                                         .apply();
                                 try {
-                                    bindLastUpdatedTimestampSummaryToValue(updatePreference);
+                                    bindLastUpdatedTimestampSummaryToValue(updatePreference, TimeUtils.now());
                                 } catch (Exception e) {
                                     //TODO check if view is attached
                                 }
@@ -266,11 +266,17 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             preferenceSummaryListener.onPreferenceChange(preference, BuildConfig.VERSION_NAME);
         }
 
-        private static void bindLastUpdatedTimestampSummaryToValue(Preference lastUpdated) {
-            long time = PreferenceManager.getDefaultSharedPreferences(lastUpdated.getContext())
-                    .getLong(lastUpdated.getKey(), TimeUtils.now().toEpochMilli());
+        private static void bindLastUpdatedTimestampSummaryToValue(Preference lastUpdated, Instant timestamp) {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(lastUpdated.getContext());
+            long time;
+            if (timestamp == null) {
+                time = preferences.getLong(lastUpdated.getKey(), TimeUtils.now().toEpochMilli());
+            } else {
+                time = timestamp.toEpochMilli();
+            }
             String format = String.format(Locale.UK, "Last updated %s",
                     TimeUtils.formatAsDate(Instant.ofEpochMilli(time)));
+            preferences.edit().putLong(lastUpdated.getKey(), time).apply();
             preferenceSummaryListener.onPreferenceChange(lastUpdated, format);
         }
 
@@ -281,7 +287,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         }
 
         private void handleError(Throwable throwable) {
-            ErrorLog.e(throwable);
+            Timber.e(throwable);
             String message;
 //            if (throwable instanceof SoapServiceUnavailableException) {
 //                message = getString(R.string.error_no_service);
