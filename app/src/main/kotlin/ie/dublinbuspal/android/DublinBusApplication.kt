@@ -10,10 +10,7 @@ import com.twitter.sdk.android.core.TwitterAuthConfig
 import com.twitter.sdk.android.core.TwitterConfig
 import ie.dublinbuspal.android.util.CrashlyticsTree
 import ie.dublinbuspal.android.util.MetadataUtils
-import ie.dublinbuspal.di.ApplicationComponent
-import ie.dublinbuspal.di.ApplicationModule
-import ie.dublinbuspal.di.DatabaseModule
-import ie.dublinbuspal.di.NetworkModule
+import ie.dublinbuspal.di.*
 import io.fabric.sdk.android.Fabric
 import io.reactivex.plugins.RxJavaPlugins
 import timber.log.Timber
@@ -28,11 +25,11 @@ class DublinBusApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        setupAnalytics()
         setupTimber()
         setupThreeTen()
         setupDagger()
         setupTwitter()
-        setupAnalytics()
         setupPreferences()
     }
 
