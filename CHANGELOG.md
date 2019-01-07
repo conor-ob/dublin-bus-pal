@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.1.2](https://github.com/conor-ob/dublin-bus-pal/compare/2.1.1...2.1.2) (07-01-2019)
+* Fix for Android 9 Pie (SDK 28) devices
+* Improve crash reporting logging
+* Fix bug where last updated time was wrong
+* Do not display drop-off stops
+
 ## [2.1.1](https://github.com/conor-ob/dublin-bus-pal/compare/2.1.0...2.1.1) (03-01-2019)
 Added mechanism to retry failed API calls to return cached static data hosted on this repository
 
