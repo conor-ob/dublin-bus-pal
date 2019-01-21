@@ -1,10 +1,11 @@
 package ie.dublinbuspal.mapping.livedata
 
 import ie.dublinbuspal.model.livedata.Destination
-import ie.dublinbuspal.model.livedata.DueTime
 import ie.dublinbuspal.model.livedata.DublinBusGoAheadDublinLiveData
+import ie.dublinbuspal.model.livedata.DueTime
 import ie.dublinbuspal.repository.Mapper
 import ie.dublinbuspal.service.model.livedata.RealTimeBusInformationJson
+import ie.dublinbuspal.util.Formatter
 import ie.dublinbuspal.util.TimeUtils
 
 class DublinBusGoAheadDublinLiveDataEntityMapper : Mapper<RealTimeBusInformationJson, DublinBusGoAheadDublinLiveData> {
@@ -18,7 +19,7 @@ class DublinBusGoAheadDublinLiveDataEntityMapper : Mapper<RealTimeBusInformation
     }
 
     private fun mapDueTime(duetime: String, expectedTime: String): DueTime {
-        val expectedTimeInstant = TimeUtils.toInstant(expectedTime)
+        val expectedTimeInstant = TimeUtils.dateTimeStampToInstant(expectedTime, Formatter.dateTime)
         val time = TimeUtils.formatAsTime(expectedTimeInstant)
         if (duetime == "Due") {
             return DueTime(0L, time)

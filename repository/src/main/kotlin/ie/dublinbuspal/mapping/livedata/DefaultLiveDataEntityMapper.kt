@@ -5,6 +5,7 @@ import ie.dublinbuspal.model.livedata.DueTime
 import ie.dublinbuspal.model.livedata.RealTimeStopData
 import ie.dublinbuspal.repository.Mapper
 import ie.dublinbuspal.service.model.livedata.RealTimeStopDataDataXml
+import ie.dublinbuspal.util.Formatter
 import ie.dublinbuspal.util.TimeUtils
 
 class DefaultLiveDataEntityMapper : Mapper<RealTimeStopDataDataXml, RealTimeStopData> {
@@ -18,8 +19,8 @@ class DefaultLiveDataEntityMapper : Mapper<RealTimeStopDataDataXml, RealTimeStop
     }
 
     private fun mapDueTime(timestamp: String, expectedTime: String): DueTime {
-        val timestampInstant = TimeUtils.toInstant(timestamp)
-        val expectedTimeInstant = TimeUtils.toInstant(expectedTime)
+        val timestampInstant = TimeUtils.dateTimeStampToInstant(timestamp, Formatter.isoDateTime)
+        val expectedTimeInstant = TimeUtils.dateTimeStampToInstant(expectedTime, Formatter.isoDateTime)
         val minutes = TimeUtils.minutesBetween(timestampInstant, expectedTimeInstant)
         return DueTime(minutes, TimeUtils.formatAsTime(expectedTimeInstant))
     }

@@ -4,13 +4,14 @@ import ie.dublinbuspal.model.rss.RssNews
 import ie.dublinbuspal.model.rss.RssNewsAge
 import ie.dublinbuspal.repository.Mapper
 import ie.dublinbuspal.service.model.rss.NewsItemXml
+import ie.dublinbuspal.util.Formatter
 import ie.dublinbuspal.util.TimeUtils
 import org.threeten.bp.Instant
 
 class RssMapper : Mapper<NewsItemXml, RssNews> {
 
     override fun map(from: NewsItemXml): RssNews {
-        val time = TimeUtils.toInstant(from.pubDate!!)
+        val time = TimeUtils.dateTimeStampToInstant(from.pubDate!!, Formatter.zonedDateTime)
         return RssNews(from.title!!, from.link!!, from.description!!, mapRssAge(time))
     }
 
