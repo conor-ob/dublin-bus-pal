@@ -1,7 +1,7 @@
 package ie.dublinbuspal.di
 
 import dagger.Component
-import ie.dublinbuspal.android.view.favourite.FavouritesPresenterImpl
+import ie.dublinbuspal.android.view.favourites.FavouritesPresenterImpl
 import ie.dublinbuspal.android.view.nearby.NearbyPresenterImpl
 import ie.dublinbuspal.android.view.news.rss.RssPresenterImpl
 import ie.dublinbuspal.android.view.news.twitter.TwitterPresenterImpl

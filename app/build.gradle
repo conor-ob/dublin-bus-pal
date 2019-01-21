@@ -66,6 +66,12 @@ android {
         }
     }
 
+    // Enables view caching in viewholders.
+    // See: https://github.com/Kotlin/KEEP/blob/master/proposals/android-extensions-entity-caching.md
+    androidExtensions {
+        experimental = true
+    }
+
 }
 
 dependencies {
@@ -87,6 +93,8 @@ dependencies {
     implementation "com.jakewharton.threetenabp:threetenabp:${versions.threetenabp}"
     implementation "com.jakewharton.timber:timber:${versions.timber}"
     implementation "com.twitter.sdk.android:tweet-ui:$versions.tweet_ui"
+    implementation "com.xwray:groupie:${versions.groupie}"
+    implementation "com.xwray:groupie-kotlin-android-extensions:${versions.groupie}"
     implementation "io.reactivex.rxjava2:rxandroid:${versions.rx_android}"
     implementation "io.reactivex.rxjava2:rxkotlin:${versions.rx_kotlin}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"

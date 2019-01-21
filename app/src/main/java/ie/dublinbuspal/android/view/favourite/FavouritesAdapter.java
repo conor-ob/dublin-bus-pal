@@ -15,6 +15,7 @@ import ie.dublinbuspal.android.R;
 import ie.dublinbuspal.model.favourite.FavouriteStop;
 import ie.dublinbuspal.util.CollectionUtils;
 import ie.dublinbuspal.util.StringUtils;
+import ie.dublinbuspal.android.view.favourites.FavouritesView;
 
 public class FavouritesAdapter
         extends RecyclerView.Adapter<FavouritesAdapter.FavouritesViewHolder> {
@@ -22,7 +23,7 @@ public class FavouritesAdapter
     private final FavouritesView view;
     private List<FavouriteStop> favouriteBusStops = Collections.emptyList();
 
-    FavouritesAdapter(FavouritesView view) {
+    public FavouritesAdapter(FavouritesView view) {
         this.view = view;
     }
 

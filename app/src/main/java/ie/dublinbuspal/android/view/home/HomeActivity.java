@@ -19,7 +19,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import ie.dublinbuspal.android.R;
-import ie.dublinbuspal.android.view.favourite.FavouritesFragment;
+import ie.dublinbuspal.android.view.favourites.FavouritesFragment;
 import ie.dublinbuspal.android.view.nearby.NearbyFragment;
 import ie.dublinbuspal.android.view.news.NewsFragment;
 import ie.dublinbuspal.android.view.search.SearchFragment;
