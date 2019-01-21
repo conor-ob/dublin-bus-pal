@@ -1,32 +1,14 @@
 package ie.dublinbuspal.util
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.threeten.bp.*
 import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.format.DateTimeParseException
 import org.threeten.bp.temporal.ChronoUnit
 import java.util.*
 
 object TimeUtils {
 
-    private val logger: Logger by lazy { LoggerFactory.getLogger(javaClass) }
     private val zoneId: ZoneId by lazy { ZoneId.of(TimeZone.getDefault().id) }
     private val zoneOffset: ZoneOffset by lazy { ZoneOffset.systemDefault().rules.getOffset(Instant.now()) }
-    private val parsers: List<DateTimeFormatter> by lazy {
-        listOf(
-                DateTimeFormatter.ISO_DATE_TIME,
-                DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"),
-                DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss VV")
-        )
-    }
-    private val formatters: List<DateTimeFormatter> by lazy {
-        listOf(
-                DateTimeFormatter.ofPattern("dd MMM yyyy"),
-                DateTimeFormatter.ofPattern("dd MMM"),
-                DateTimeFormatter.ofPattern("d MMM, HH:mm")
-        )
-    }
 
     @JvmStatic
     fun now(): Instant {
@@ -36,15 +18,8 @@ object TimeUtils {
     }
 
     @JvmStatic
-    fun toInstant(timestamp: String): Instant {
-        for (parser in parsers) {
-            try {
-                return LocalDateTime.parse(timestamp, parser).toInstant(zoneOffset)
-            } catch (e: DateTimeParseException) {
-                logger.debug("parser [$parser] failed to parse timestamp [$timestamp]")
-            }
-        }
-        throw Exception("Unable to parse timestamp [$timestamp]")
+    fun dateTimeStampToInstant(timestamp: String, formatter: DateTimeFormatter): Instant {
+        return LocalDateTime.parse(timestamp, formatter).toInstant(zoneOffset)
     }
 
     @JvmStatic
@@ -67,12 +42,12 @@ object TimeUtils {
         val days = ChronoUnit.DAYS.between(instantInThePast, instantNow)
         if (days > 365) {
             val dateTime = LocalDateTime.ofInstant(instantInThePast, zoneId)
-            return formatters[0].format(dateTime)
+            return Formatter.dayMonthYear.format(dateTime)
         }
         val hours = ChronoUnit.HOURS.between(instantInThePast, instantNow)
         if (hours > 23) {
             val dateTime = LocalDateTime.ofInstant(instantInThePast, zoneId)
-            return formatters[1].format(dateTime)
+            return Formatter.dayMonth.format(dateTime)
         }
         if (hours >= 1) {
             return "${hours}h"
@@ -87,7 +62,18 @@ object TimeUtils {
     @JvmStatic
     fun formatAsDate(instant: Instant): String {
         val dateTime = LocalDateTime.ofInstant(instant, zoneId)
-        return formatters[2].format(dateTime)
+        return Formatter.dayMonthTime.format(dateTime)
     }
+
+}
+
+object Formatter {
+
+    val isoDateTime: DateTimeFormatter = DateTimeFormatter.ISO_DATE_TIME
+    val dateTime: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
+    val zonedDateTime: DateTimeFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss VV")
+    val dayMonthYear: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
+    val dayMonth: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM")
+    val dayMonthTime: DateTimeFormatter = DateTimeFormatter.ofPattern("d MMM, HH:mm")
 
 }
