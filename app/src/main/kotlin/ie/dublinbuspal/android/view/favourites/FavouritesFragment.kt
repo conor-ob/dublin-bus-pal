@@ -8,20 +8,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.ViewHolder
 import ie.dublinbuspal.android.R
 import ie.dublinbuspal.android.util.getApplicationComponent
-import ie.dublinbuspal.android.view.favourite.FavouritesAdapter
 import ie.dublinbuspal.android.view.home.HomeActivity
 import ie.dublinbuspal.android.view.realtime.RealTimeActivity
 import ie.dublinbuspal.android.view.settings.SettingsActivity
 import ie.dublinbuspal.util.CollectionUtils
 import kotlinx.android.synthetic.main.fragment_favourites.*
 import timber.log.Timber
-import java.util.*
 
 class FavouritesFragment : MvpFragment<FavouritesView, FavouritesPresenter>(), FavouritesView {
 
-    private lateinit var adapter: FavouritesAdapter
+    private lateinit var adapter: GroupAdapter<ViewHolder>
 
     override fun createPresenter(): FavouritesPresenter {
         return getApplicationComponent().favouritesPresenter()
@@ -68,11 +68,7 @@ class FavouritesFragment : MvpFragment<FavouritesView, FavouritesPresenter>(), F
     }
 
     override fun onPause() {
-        if (shouldSaveFavourites) {
-            getPresenter().onPause(adapter.favourites)
-        } else {
-            getPresenter().onPause()
-        }
+        getPresenter().onPause(shouldSaveFavourites)
         super.onPause()
     }
 
@@ -81,7 +77,12 @@ class FavouritesFragment : MvpFragment<FavouritesView, FavouritesPresenter>(), F
         if (viewModel.isInError) {
             Snackbar.make(root, getString(viewModel.errorMessage), Snackbar.LENGTH_LONG).show()
         } else {
-            adapter.favourites = viewModel.favourites
+            adapter.clear()
+            adapter.addAll(viewModel.favourites.map {
+                val item = FavouriteItem(it)
+                item.extras["id"] = it.id
+                return@map item
+            })
             if (CollectionUtils.isNullOrEmpty(viewModel.favourites)) {
                 swipe_refresh.visibility = View.GONE
                 no_favourites.visibility = View.VISIBLE
@@ -94,14 +95,14 @@ class FavouritesFragment : MvpFragment<FavouritesView, FavouritesPresenter>(), F
         }
     }
 
-    override fun launchRealTimeActivity(stopId: String) {
-        val intent = RealTimeActivity.newIntent(context, stopId)
-        startActivity(intent)
-    }
-
     private fun setupLayout() {
         toolbar.title = resources.getString(R.string.title_favourites_fragment)
-        adapter = FavouritesAdapter(this)
+        adapter = GroupAdapter()
+        adapter.setOnItemClickListener { item, _ ->
+            val stopId = item.extras["id"] as String
+            val intent = RealTimeActivity.newIntent(context, stopId)
+            startActivity(intent)
+        }
         recycler_view.adapter = adapter
         recycler_view.setHasFixedSize(true)
         val layoutManager = LinearLayoutManager(context)
@@ -127,7 +128,7 @@ class FavouritesFragment : MvpFragment<FavouritesView, FavouritesPresenter>(), F
     private val itemTouchHelperCallback = object : ItemTouchHelper.Callback() {
 
         override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
-            Collections.swap(adapter.favourites, viewHolder.adapterPosition, target.adapterPosition)
+            presenter.onFavouritesReordered(viewHolder.adapterPosition, target.adapterPosition)
             adapter.notifyItemMoved(viewHolder.adapterPosition, target.adapterPosition)
             shouldSaveFavourites = true
             return true

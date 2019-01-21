@@ -45,4 +45,8 @@ class DefaultFavouriteStopRepository(
         dao.delete(id)
     }
 
+    override fun count(): Long {
+        return dao.count().blockingGet()
+    }
+
 }

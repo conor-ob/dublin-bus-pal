@@ -1,14 +1,13 @@
 package ie.dublinbuspal.android.view.favourites
 
 import com.hannesdorfmann.mosby3.mvp.MvpPresenter
-import ie.dublinbuspal.model.favourite.FavouriteStop
 
 interface FavouritesPresenter : MvpPresenter<FavouritesView> {
 
     fun onResume()
 
-    fun onPause()
+    fun onPause(shouldSaveFavourites: Boolean)
 
-    fun onPause(favourites: List<FavouriteStop>)
+    fun onFavouritesReordered(position1: Int, position2: Int)
 
 }

@@ -7,6 +7,7 @@ import ie.dublinbuspal.usecase.favourites.FavouritesUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import java.util.*
 import javax.inject.Inject
 
 class FavouritesPresenterImpl @Inject constructor(
@@ -51,27 +52,37 @@ class FavouritesPresenterImpl @Inject constructor(
         )
     }
 
-    override fun onPause() {
+    override fun onPause(shouldSaveFavourites: Boolean) {
+        if (shouldSaveFavourites) {
+            subscriptions().add(useCase.saveFavourites(viewModel.favourites)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnComplete { onPause() }
+                    .doOnError {
+                        viewModel = viewModel.copy(
+                                isInError = true,
+                                errorMessage = R.string.error_unknown,
+                                isLoading = false,
+                                favourites = emptyList()
+                        )
+                        renderView()
+                    }
+                    .subscribe()
+            )
+        } else {
+            onPause()
+        }
+    }
+
+    private fun onPause() {
         subscriptions().clear()
         subscriptions().dispose()
     }
 
-    override fun onPause(favourites: List<FavouriteStop>) {
-        subscriptions().add(useCase.saveFavourites(favourites)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnComplete { onPause() }
-                .doOnError {
-                    viewModel = viewModel.copy(
-                            isInError = true,
-                            errorMessage = R.string.error_unknown,
-                            isLoading = false,
-                            favourites = emptyList()
-                    )
-                    renderView()
-                }
-                .subscribe()
-        )
+    override fun onFavouritesReordered(position1: Int, position2: Int) {
+        val copy = viewModel.favourites
+        Collections.swap(copy, position1, position2)
+        viewModel = viewModel.copy(favourites = copy)
     }
 
     private fun renderView() {

@@ -20,4 +20,7 @@ interface FavouriteStopDao : BaseDao<FavouriteStopEntity> {
     @Query("DELETE FROM favourites WHERE id = :id")
     fun delete(id: String)
 
+    @Query("SELECT COUNT(*) FROM favourites")
+    fun count(): Maybe<Long>
+
 }

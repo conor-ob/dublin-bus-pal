@@ -18,4 +18,6 @@ interface FavouriteStopRepository<T> {
 
     fun delete(id: String)
 
+    fun count(): Long
+
 }

@@ -6,6 +6,4 @@ interface FavouritesView : MvpView {
 
     fun render(viewModel: ViewModel)
 
-    fun launchRealTimeActivity(stopId: String)
-
 }
