@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
+import com.xwray.groupie.ExpandableGroup
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import ie.dublinbuspal.android.R
@@ -18,6 +19,7 @@ import ie.dublinbuspal.android.view.settings.SettingsActivity
 import ie.dublinbuspal.util.CollectionUtils
 import kotlinx.android.synthetic.main.fragment_favourites.*
 import timber.log.Timber
+import java.lang.IndexOutOfBoundsException
 
 class FavouritesFragment : MvpFragment<FavouritesView, FavouritesPresenter>(), FavouritesView {
 
@@ -73,22 +75,29 @@ class FavouritesFragment : MvpFragment<FavouritesView, FavouritesPresenter>(), F
     }
 
     override fun render(viewModel: ViewModel) {
-        swipe_refresh.isRefreshing = viewModel.isLoading
         if (viewModel.isInError) {
             Snackbar.make(root, getString(viewModel.errorMessage), Snackbar.LENGTH_LONG).show()
         } else {
             adapter.clear()
-            adapter.addAll(viewModel.favourites.map {
-                val item = FavouriteItem(it)
-                item.extras["id"] = it.id
-                return@map item
-            })
+            for (favourite in viewModel.favourites) {
+                val favouriteItem = FavouriteItem(favourite)
+                favouriteItem.extras["id"] = favourite.id
+                val expandableGroup = ExpandableGroup(favouriteItem)
+                val liveData = viewModel.liveData[favourite.id]
+                if (liveData != null) {
+                    for (data in liveData) {
+                        val liveDataItem = FavouriteLiveDataItem(data)
+                        liveDataItem.extras["id"] = data.routeId
+                        expandableGroup.add(liveDataItem)
+                    }
+                    expandableGroup.add(BottomDividerItem())
+                }
+                adapter.add(expandableGroup)
+            }
             if (CollectionUtils.isNullOrEmpty(viewModel.favourites)) {
-                swipe_refresh.visibility = View.GONE
                 no_favourites.visibility = View.VISIBLE
                 add_favourites.show()
             } else {
-                swipe_refresh.visibility = View.VISIBLE
                 no_favourites.visibility = View.GONE
                 add_favourites.hide()
             }
@@ -103,13 +112,28 @@ class FavouritesFragment : MvpFragment<FavouritesView, FavouritesPresenter>(), F
             val intent = RealTimeActivity.newIntent(context, stopId)
             startActivity(intent)
         }
+        adapter.setOnItemLongClickListener { _, _ ->
+            while (anyItemsAreExpanded()) {
+                val count = adapter.itemCount
+                for (position in 0 until count) {
+                    try {
+                        val item = adapter.getItem(position)
+                        if (item is FavouriteItem) {
+                            if (item.isExpanded()) {
+                                item.collapse()
+                            }
+                        }
+                    } catch (e: IndexOutOfBoundsException) {
+                        // lol
+                    }
+                }
+            }
+            return@setOnItemLongClickListener true
+        }
         recycler_view.adapter = adapter
         recycler_view.setHasFixedSize(true)
         val layoutManager = LinearLayoutManager(context)
         recycler_view.layoutManager = layoutManager
-        swipe_refresh.isEnabled = false
-        swipe_refresh.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent)
-        swipe_refresh.isRefreshing = true
     }
 
     private fun setupListeners() {
@@ -124,14 +148,36 @@ class FavouritesFragment : MvpFragment<FavouritesView, FavouritesPresenter>(), F
         itemTouchHelper.attachToRecyclerView(recycler_view)
     }
 
+    private fun anyItemsAreExpanded(): Boolean {
+        val count = adapter.itemCount
+        for (position in 0 until count) {
+            val item = adapter.getItem(position)
+            if (item is FavouriteItem) {
+                if (item.isExpanded()) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
     private var shouldSaveFavourites = false
     private val itemTouchHelperCallback = object : ItemTouchHelper.Callback() {
 
         override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
-            presenter.onFavouritesReordered(viewHolder.adapterPosition, target.adapterPosition)
+            Timber.d("onMove")
+            if (anyItemsAreExpanded()) {
+                return false
+            }
+            presenter.onReorderFavourites(viewHolder.adapterPosition, target.adapterPosition)
             adapter.notifyItemMoved(viewHolder.adapterPosition, target.adapterPosition)
             shouldSaveFavourites = true
             return true
+        }
+
+        override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+            super.clearView(recyclerView, viewHolder)
+            presenter.onFinishedReorderFavourites()
         }
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {

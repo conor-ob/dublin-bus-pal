@@ -20,6 +20,10 @@ class LiveDataUseCase @Inject constructor(
         return liveDataRepository.getAllById(stopId)
     }
 
+    fun getLiveData(stopId: String, routeFilter: List<String>): Observable<List<LiveData>> {
+        return liveDataRepository.getAllById(stopId).map { liveData -> liveData.filter { routeFilter.contains(it.routeId) } }
+    }
+
     fun getCondensedLiveData(stopId: String): Observable<Map<Pair<String, Destination>, List<LiveData>>> {
         return getLiveData(stopId).map { condenseLiveData(it) }
     }

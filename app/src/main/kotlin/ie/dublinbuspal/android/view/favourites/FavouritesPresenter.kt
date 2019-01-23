@@ -8,6 +8,8 @@ interface FavouritesPresenter : MvpPresenter<FavouritesView> {
 
     fun onPause(shouldSaveFavourites: Boolean)
 
-    fun onFavouritesReordered(position1: Int, position2: Int)
+    fun onReorderFavourites(position1: Int, position2: Int)
+
+    fun onFinishedReorderFavourites()
 
 }

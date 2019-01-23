@@ -3,47 +3,46 @@ package ie.dublinbuspal.android.view.favourites
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import ie.dublinbuspal.android.R
 import ie.dublinbuspal.model.favourite.FavouriteStop
+import ie.dublinbuspal.model.livedata.LiveData
 import ie.dublinbuspal.usecase.favourites.FavouritesUseCase
+import ie.dublinbuspal.usecase.livedata.LiveDataUseCase
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class FavouritesPresenterImpl @Inject constructor(
-        private val useCase: FavouritesUseCase
+        private val favouritesUseCase: FavouritesUseCase,
+        private val liveDataUseCase: LiveDataUseCase
 ) : MvpBasePresenter<FavouritesView>(), FavouritesPresenter {
 
     private var subscriptions: CompositeDisposable? = null
     private var viewModel = ViewModel()
 
     override fun onResume() {
-        subscriptions().add(useCase.getFavourites()
+        subscriptions().add(favouritesUseCase.getFavourites()
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    viewModel = viewModel.copy(
+                .map {
+                    viewModel.copy(
                             isInError = false,
                             errorMessage = -1,
-                            isLoading = true,
-                            favourites = emptyList()
-                    )
-                    renderView()
-                }
-                .doOnNext {
-                    viewModel = viewModel.copy(
-                            isInError = false,
-                            errorMessage = -1,
-                            isLoading = false,
                             favourites = it
                     )
+                }
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext {
+                    viewModel = it
                     renderView()
+                    getLiveData(it.favourites)
                 }
                 .doOnError {
                     viewModel = viewModel.copy(
                             isInError = true,
                             errorMessage = R.string.error_unknown,
-                            isLoading = false,
                             favourites = emptyList()
                     )
                     renderView()
@@ -52,9 +51,31 @@ class FavouritesPresenterImpl @Inject constructor(
         )
     }
 
+    private fun getLiveData(favourites: List<FavouriteStop>) {
+        for (favourite in favourites) {
+            subscriptions().add(Observable.interval(30, TimeUnit.SECONDS)
+                    .flatMap { liveDataUseCase.getLiveData(favourite.id, favourite.routes) }
+                    .map {
+                        val newLiveData = viewModel.liveData
+                        newLiveData[favourite.id] = it.take(3)
+                        return@map viewModel.copy(
+                                liveData = newLiveData
+                        )
+                    }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnNext {
+                        viewModel = it
+                        renderView()
+                    }
+                    .subscribe()
+            )
+        }
+    }
+
     override fun onPause(shouldSaveFavourites: Boolean) {
         if (shouldSaveFavourites) {
-            subscriptions().add(useCase.saveFavourites(viewModel.favourites)
+            subscriptions().add(favouritesUseCase.saveFavourites(viewModel.favourites)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnComplete { onPause() }
@@ -62,7 +83,6 @@ class FavouritesPresenterImpl @Inject constructor(
                         viewModel = viewModel.copy(
                                 isInError = true,
                                 errorMessage = R.string.error_unknown,
-                                isLoading = false,
                                 favourites = emptyList()
                         )
                         renderView()
@@ -79,10 +99,14 @@ class FavouritesPresenterImpl @Inject constructor(
         subscriptions().dispose()
     }
 
-    override fun onFavouritesReordered(position1: Int, position2: Int) {
+    override fun onReorderFavourites(position1: Int, position2: Int) {
         val copy = viewModel.favourites
         Collections.swap(copy, position1, position2)
         viewModel = viewModel.copy(favourites = copy)
+    }
+
+    override fun onFinishedReorderFavourites() {
+        renderView()
     }
 
     private fun renderView() {
@@ -101,6 +125,6 @@ class FavouritesPresenterImpl @Inject constructor(
 data class ViewModel(
     val isInError: Boolean = false,
     val errorMessage: Int = -1,
-    val isLoading: Boolean = true,
-    val favourites: List<FavouriteStop> = emptyList()
+    val favourites: List<FavouriteStop> = emptyList(),
+    val liveData: MutableMap<String, List<LiveData>> = mutableMapOf()
 )
