@@ -72,7 +72,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             setupInjection();
             addPreferencesFromResource(R.xml.preferences);
             bindDynamicSummaries();
-            bindSwitchEnabledPreferences();
             bindListeners();
         }
 
@@ -94,27 +93,13 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         private void bindDynamicSummaries() {
             bindPreferenceSummaryToValue(findPreference(
                     getString(R.string.preference_key_home_screen)));
-            bindPreferenceSummaryToValue(findPreference(
-                    getString(R.string.preference_key_auto_refresh_interval)));
             bindLastUpdatedTimestampSummaryToValue(findPreference(
                     getString(R.string.preference_key_update_database)), null);
             bindAppVersionSummaryToValue(findPreference(
                     getString(R.string.preference_key_app_version)));
         }
 
-        private void bindSwitchEnabledPreferences() {
-            bindSwitchEnabledPair(findPreference(getString(R.string.preference_key_auto_refresh)),
-                    findPreference(getString(R.string.preference_key_auto_refresh_interval)));
-        }
-
         private void bindListeners() {
-            Preference autoRefreshPreference = findPreference(
-                    getString(R.string.preference_key_auto_refresh));
-            autoRefreshPreference.setOnPreferenceClickListener(preference -> {
-                bindSwitchEnabledPair(autoRefreshPreference, findPreference(
-                        getString(R.string.preference_key_auto_refresh_interval)));
-                return true;
-            });
             SyncPreference updatePreference = (SyncPreference) findPreference(
                     getString(R.string.preference_key_update_database));
             updatePreference.setOnPreferenceClickListener(preference -> {

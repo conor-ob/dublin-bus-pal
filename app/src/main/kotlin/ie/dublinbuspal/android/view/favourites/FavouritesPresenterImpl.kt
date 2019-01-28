@@ -6,13 +6,10 @@ import ie.dublinbuspal.model.favourite.FavouriteStop
 import ie.dublinbuspal.model.livedata.LiveData
 import ie.dublinbuspal.usecase.favourites.FavouritesUseCase
 import ie.dublinbuspal.usecase.livedata.LiveDataUseCase
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import timber.log.Timber
 import java.util.*
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class FavouritesPresenterImpl @Inject constructor(
@@ -53,8 +50,7 @@ class FavouritesPresenterImpl @Inject constructor(
 
     private fun getLiveData(favourites: List<FavouriteStop>) {
         for (favourite in favourites) {
-            subscriptions().add(Observable.interval(30, TimeUnit.SECONDS)
-                    .flatMap { liveDataUseCase.getLiveData(favourite.id, favourite.routes) }
+            subscriptions().add(liveDataUseCase.getLiveDataStream(favourite.id, favourite.routes)
                     .map {
                         val newLiveData = viewModel.liveData
                         newLiveData[favourite.id] = it.take(3)
@@ -123,8 +119,8 @@ class FavouritesPresenterImpl @Inject constructor(
 }
 
 data class ViewModel(
-    val isInError: Boolean = false,
-    val errorMessage: Int = -1,
-    val favourites: List<FavouriteStop> = emptyList(),
-    val liveData: MutableMap<String, List<LiveData>> = mutableMapOf()
+        val isInError: Boolean = false,
+        val errorMessage: Int = -1,
+        val favourites: List<FavouriteStop> = emptyList(),
+        val liveData: MutableMap<String, List<LiveData>> = mutableMapOf()
 )
