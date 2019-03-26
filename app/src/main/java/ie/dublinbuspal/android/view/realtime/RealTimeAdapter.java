@@ -15,6 +15,7 @@ import java.util.Locale;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import ie.dublinbuspal.android.R;
+import ie.dublinbuspal.android.view.livedata.LiveDataView;
 import ie.dublinbuspal.model.livedata.LiveData;
 import ie.dublinbuspal.util.CollectionUtils;
 import ie.dublinbuspal.util.StringUtils;
@@ -25,10 +26,10 @@ public class RealTimeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private static final int EMPTY = -1;
 
     private List<Object> realTimeData = Collections.emptyList();
-    private final RealTimeView view;
+    private final LiveDataView view;
     private boolean showArrivalTime;
 
-    RealTimeAdapter(RealTimeView view) {
+    RealTimeAdapter(LiveDataView view) {
         this.view = view;
         this.showArrivalTime = false;
     }

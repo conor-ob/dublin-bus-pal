@@ -80,10 +80,10 @@ public class RealTimePresenterImpl extends MvpBasePresenter<RealTimeView> implem
     }
 
     private void getRealTimeData() {
-        getDisposables().add(liveDataUseCase.getLiveDataStream(getModel().getStopId(), getModel().getAdjustedBusStopService())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onGetRealTimeData, this::onError));
+//        getDisposables().add(liveDataUseCase.getLiveDataStream(getModel().getStopId(), getModel().getAdjustedBusStopService())
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(this::onGetRealTimeData, this::onError));
     }
 
     private void onGetBusStop(Stop busStop) {

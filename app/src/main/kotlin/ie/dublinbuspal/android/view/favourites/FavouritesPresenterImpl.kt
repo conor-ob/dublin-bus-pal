@@ -50,7 +50,7 @@ class FavouritesPresenterImpl @Inject constructor(
 
     private fun getLiveData(favourites: List<FavouriteStop>) {
         for (favourite in favourites) {
-            subscriptions().add(liveDataUseCase.getLiveDataStream(favourite.id, favourite.routes)
+            subscriptions().add(liveDataUseCase.getLiveDataStream(favourite.id, favourite.routes.toSet())
                     .map {
                         val newLiveData = viewModel.liveData
                         newLiveData[favourite.id] = it.take(3)

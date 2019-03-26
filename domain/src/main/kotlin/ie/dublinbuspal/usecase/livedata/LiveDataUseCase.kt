@@ -16,12 +16,12 @@ class LiveDataUseCase @Inject constructor(
         return stopRepository.getById(stopId)
     }
 
-    fun getLiveDataStream(stopId: String, routeFilter: List<String>): Observable<List<LiveData>> {
+    fun getLiveDataStream(stopId: String, routeFilter: Set<String>): Observable<List<LiveData>> {
         return Observable.interval(0L, 30L, TimeUnit.SECONDS)
                 .flatMap { getLiveData(stopId, routeFilter) }
     }
 
-    private fun getLiveData(stopId: String, routeFilter: List<String>): Observable<List<LiveData>> {
+    private fun getLiveData(stopId: String, routeFilter: Set<String>): Observable<List<LiveData>> {
         return liveDataRepository.getAllById(stopId)
                 .map { liveData -> liveData.filter { routeFilter.contains(it.routeId) } }
     }
