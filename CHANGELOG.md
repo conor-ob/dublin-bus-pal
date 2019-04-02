@@ -1,5 +1,8 @@
 # Changelog
 
+## [2.1.3](https://github.com/conor-ob/dublin-bus-pal/compare/2.1.2...2.1.3) (02-04-2019)
+* Fix for bus stop icon flickering on map
+
 ## [2.1.2](https://github.com/conor-ob/dublin-bus-pal/compare/2.1.1...2.1.2) (07-01-2019)
 * Fix for Android 9 Pie (SDK 28) devices
 * Improve crash reporting logging
