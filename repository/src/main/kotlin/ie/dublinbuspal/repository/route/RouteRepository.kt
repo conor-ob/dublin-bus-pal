@@ -19,8 +19,8 @@ class RouteRepository(
 
     override fun getAll(): Observable<List<Route>> {
         return Observable.combineLatest(
-                defaultRouteRepository.getAll().startWith(emptyList<DefaultRoute>()).subscribeOn(Schedulers.io()),
-                goAheadDublinRouteRepository.getAll().startWith(emptyList<GoAheadDublinRoute>()).subscribeOn(Schedulers.io()),
+                defaultRouteRepository.getAll().subscribeOn(Schedulers.io()),
+                goAheadDublinRouteRepository.getAll().subscribeOn(Schedulers.io()),
                 BiFunction { defaultRoutes, goAheadDublinRoutes -> aggregate(defaultRoutes, goAheadDublinRoutes) }
         )
     }

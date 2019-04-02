@@ -20,10 +20,10 @@ class StopRepository(
 
     override fun getAll(): Observable<List<Stop>> {
         return Observable.combineLatest(
-                defaultStopRepository.getAll().startWith(emptyList<DefaultStop>()).subscribeOn(Schedulers.io()),
-                dublinBusStopRepository.getAll().startWith(emptyList<DublinBusStop>()).subscribeOn(Schedulers.io()),
-                goAheadDublinStopRepository.getAll().startWith(emptyList<GoAheadDublinStop>()).subscribeOn(Schedulers.io()),
-                favouriteStopRepository.getAll().startWith(emptyList<FavouriteStop>()).subscribeOn(Schedulers.io()),
+                defaultStopRepository.getAll().subscribeOn(Schedulers.io()),
+                dublinBusStopRepository.getAll().subscribeOn(Schedulers.io()),
+                goAheadDublinStopRepository.getAll().subscribeOn(Schedulers.io()),
+                favouriteStopRepository.getAll().subscribeOn(Schedulers.io()),
                 Function4 { defaultStops, dublinBusStops, goAheadDublinStops, favouriteStops ->
                     aggregate(defaultStops, dublinBusStops, goAheadDublinStops, favouriteStops)
                 }
