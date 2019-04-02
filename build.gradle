@@ -4,7 +4,20 @@ buildscript {
             'minSdk'    : 21,
             'targetSdk' : 28,
             'compileSdk': 28,
+            'version'   : [
+                    'major'  : 2,
+                    'minor'  : 1,
+                    'patch'  : 3,
+                    'release': false
+            ],
     ]
+
+    if (ext.buildConfig.version.release) {
+        ext.buildConfig.version['name'] = "${buildConfig.version.major}.${buildConfig.version.minor}.${buildConfig.version.patch}"
+    } else {
+        ext.buildConfig.version['name'] = "${buildConfig.version.major}.${buildConfig.version.minor}.${buildConfig.version.patch}-SNAPSHOT"
+    }
+    ext.buildConfig.version['code'] = buildConfig.version.major * 100000 + buildConfig.version.minor * 1000 + buildConfig.version.patch * 10
 
     ext.versions = [
             'androidx'                   : [
