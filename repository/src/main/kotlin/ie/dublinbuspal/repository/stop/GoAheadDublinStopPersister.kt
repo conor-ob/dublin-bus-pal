@@ -11,16 +11,18 @@ import ie.dublinbuspal.repository.AbstractPersister
 import ie.dublinbuspal.repository.Mapper
 import ie.dublinbuspal.service.model.stop.StopJson
 import ie.dublinbuspal.service.model.stop.StopsResponseJson
+import ie.dublinbuspal.util.InternetManager
 import io.reactivex.Observable
 
 class GoAheadDublinStopPersister(
         memoryPolicy: MemoryPolicy,
+        internetManager: InternetManager,
         private val persisterDao: PersisterDao,
         private val dao: GoAheadDublinStopDao,
         private val txRunner: TxRunner,
         private val entityMapper: Mapper<StopJson, GoAheadDublinStopEntity>,
         private val domainMapper: Mapper<GoAheadDublinStopEntity, GoAheadDublinStop>
-) : AbstractPersister<StopsResponseJson, List<GoAheadDublinStop>, String>(memoryPolicy, persisterDao) {
+) : AbstractPersister<StopsResponseJson, List<GoAheadDublinStop>, String>(memoryPolicy, persisterDao, internetManager) {
 
     override fun read(key: String): Observable<List<GoAheadDublinStop>> {
         return dao.selectAll()

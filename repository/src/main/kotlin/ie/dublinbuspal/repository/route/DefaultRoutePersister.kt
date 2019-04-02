@@ -11,16 +11,18 @@ import ie.dublinbuspal.repository.AbstractPersister
 import ie.dublinbuspal.repository.Mapper
 import ie.dublinbuspal.service.model.route.RouteXml
 import ie.dublinbuspal.service.model.route.RoutesResponseXml
+import ie.dublinbuspal.util.InternetManager
 import io.reactivex.Observable
 
 class DefaultRoutePersister(
         memoryPolicy: MemoryPolicy,
+        internetManager: InternetManager,
         private val persisterDao: PersisterDao,
         private val dao: DefaultRouteDao,
         private val txRunner: TxRunner,
         private val entityMapper: Mapper<RouteXml, DefaultRouteEntity>,
         private val domainMapper: Mapper<DefaultRouteEntity, DefaultRoute>
-) : AbstractPersister<RoutesResponseXml, List<DefaultRoute>, String>(memoryPolicy, persisterDao) {
+) : AbstractPersister<RoutesResponseXml, List<DefaultRoute>, String>(memoryPolicy, persisterDao, internetManager) {
 
     override fun read(key: String): Observable<List<DefaultRoute>> {
         return dao.selectAll()
