@@ -52,8 +52,7 @@ class DublinBusApplication : Application() {
                 .networkModule(NetworkModule(
                         resources.getString(R.string.dublin_bus_soap_api_endpoint),
                         resources.getString(R.string.dublin_bus_rest_api_endpoint),
-                        resources.getString(R.string.dublin_bus_rss_api_endpoint),
-                        resources.getString(R.string.static_api_endpoint)
+                        resources.getString(R.string.dublin_bus_rss_api_endpoint)
                 )
                 )
                 .build()
