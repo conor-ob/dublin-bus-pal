@@ -72,9 +72,15 @@ dependencies {
     implementation project(':data')
     implementation project(':database')
     implementation project(':domain')
-    implementation project(":repository")
-    implementation project(":service")
+    implementation project(':repository')
+    implementation project(':service')
     implementation project(':util')
+
+    implementation "com.google.firebase:firebase-core:${versions.firebase_core}"
+    implementation "com.crashlytics.sdk.android:crashlytics:${versions.crashlytics}"
+    implementation "com.google.android.gms:play-services-location:${versions.play_services_location}"
+    implementation "com.google.android.gms:play-services-maps:${versions.play_services_maps}"
+    implementation "com.google.android.gms:play-services-places:${versions.play_services_places}"
 
     implementation "androidx.appcompat:appcompat:${versions.androidx.appcompat}"
     implementation "androidx.constraintlayout:constraintlayout:${versions.androidx.constraintlayout}"
@@ -98,13 +104,11 @@ dependencies {
     androidTestImplementation "androidx.test:runner:${testVersions.androidx.runner}"
     testImplementation "junit:junit:${testVersions.junit}"
 
-    compile("com.crashlytics.sdk.android:crashlytics:${versions.crashlytics}") {
-        transitive = true
-    }
-
-    // Conflict with dependency 'blah blah' in project ':app'. Resolved versions for runtime classpath (x.x.x) and compile classpath (x.x.x) differ. This can lead to runtime crashes
+    // Conflict with dependency "blah blah" in project ":app". Resolved versions for runtime classpath (x.x.x) and compile classpath (x.x.x) differ. This can lead to runtime crashes
     implementation("com.squareup.retrofit2:converter-gson:2.5.0")
     implementation("com.google.code.gson:gson:2.8.5")
     implementation("com.squareup.retrofit2:converter-simplexml:2.5.0")
     implementation("com.squareup.okhttp3:okhttp:3.12.1")
 }
+
+apply plugin: "com.google.gms.google-services"
