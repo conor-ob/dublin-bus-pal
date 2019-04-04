@@ -5,10 +5,15 @@ import androidx.room.Room
 import dagger.Module
 import dagger.Provides
 import ie.dublinbuspal.data.TxRunner
-import ie.dublinbuspal.data.dao.*
+import ie.dublinbuspal.data.dao.DefaultRouteDao
+import ie.dublinbuspal.data.dao.FavouriteStopDao
+import ie.dublinbuspal.data.dao.GoAheadDublinRouteDao
+import ie.dublinbuspal.data.dao.PersisterDao
+import ie.dublinbuspal.data.resource.DublinBusStopCacheResource
 import ie.dublinbuspal.database.DatabaseTxRunner
 import ie.dublinbuspal.database.DublinBusDatabase
 import ie.dublinbuspal.database.migration.Migrations.MIGRATION_3_4
+import ie.dublinbuspal.database.resource.DublinBusStopCacheResourceImpl
 import javax.inject.Singleton
 
 @Module
@@ -28,15 +33,12 @@ class DatabaseModule(
 
     @Provides
     @Singleton
-    fun defaultStopDao(database: DublinBusDatabase): DefaultStopDao = database.defaultStopDao()
-
-    @Provides
-    @Singleton
-    fun dublinBusStopDao(database: DublinBusDatabase): DublinBusStopDao = database.dublinBusStopDao()
-
-    @Provides
-    @Singleton
-    fun goAheadDublinStopDao(database: DublinBusDatabase): GoAheadDublinStopDao = database.goAheadDublinStopDao()
+    fun dublinBusStopCacheResource(database: DublinBusDatabase, txRunner: TxRunner): DublinBusStopCacheResource {
+        val dublinBusStopLocationDao = database.dublinBusStopLocationDao()
+        val dublinBusStopServiceDao = database.dublinBusStopServiceDao()
+        val dublinBusStopDao = database.dublinBusStopDao()
+        return DublinBusStopCacheResourceImpl(dublinBusStopLocationDao, dublinBusStopServiceDao, dublinBusStopDao, txRunner)
+    }
 
     @Provides
     @Singleton

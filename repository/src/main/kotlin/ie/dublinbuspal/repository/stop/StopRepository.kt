@@ -1,89 +1,67 @@
 package ie.dublinbuspal.repository.stop
 
 import ie.dublinbuspal.model.favourite.FavouriteStop
-import ie.dublinbuspal.model.stop.DefaultStop
 import ie.dublinbuspal.model.stop.DublinBusStop
-import ie.dublinbuspal.model.stop.GoAheadDublinStop
-import ie.dublinbuspal.model.stop.Stop
 import ie.dublinbuspal.repository.FavouriteStopRepository
 import ie.dublinbuspal.repository.Repository
 import io.reactivex.Observable
-import io.reactivex.functions.Function4
+import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 
 class StopRepository(
-        private val defaultStopRepository: Repository<DefaultStop>,
         private val dublinBusStopRepository: Repository<DublinBusStop>,
-        private val goAheadDublinStopRepository: Repository<GoAheadDublinStop>,
         private val favouriteStopRepository: FavouriteStopRepository<FavouriteStop>
-) : Repository<Stop> {
+) : Repository<DublinBusStop> {
 
-    override fun getAll(): Observable<List<Stop>> {
+    //TODO do I need a different data class with favourite info?
+
+    override fun getAll(): Observable<List<DublinBusStop>> {
         return Observable.combineLatest(
-                defaultStopRepository.getAll().subscribeOn(Schedulers.io()),
                 dublinBusStopRepository.getAll().subscribeOn(Schedulers.io()),
-                goAheadDublinStopRepository.getAll().subscribeOn(Schedulers.io()),
                 favouriteStopRepository.getAll().subscribeOn(Schedulers.io()),
-                Function4 { defaultStops, dublinBusStops, goAheadDublinStops, favouriteStops ->
-                    aggregate(defaultStops, dublinBusStops, goAheadDublinStops, favouriteStops)
+                BiFunction { dublinBusStops, favouriteStops ->
+                    aggregate(dublinBusStops, favouriteStops)
                 }
         )
     }
 
-    override fun getById(id: String): Observable<Stop> {
+    override fun getById(id: String): Observable<DublinBusStop> {
         return getAll()
                 .map { stops -> findMatching(id, stops) }
-                .filter { stop -> stop.id() != "-1" }
+                .filter { stop -> stop.id != "-1" }
                 .distinctUntilChanged()
     }
 
-    private fun findMatching(id: String, stops: List<Stop>): Stop {
+    private fun findMatching(id: String, stops: List<DublinBusStop>): DublinBusStop {
         for (stop in stops) {
-            if (id == stop.id()) {
+            if (id == stop.id) {
                 return stop
             }
         }
-        return Stop(defaultId = "-1")
+//        return DublinBusStop(id = "-1")
+        throw RuntimeException()
     }
 
     private fun aggregate(
-            defaultStops: List<DefaultStop>,
             dublinBusStops: List<DublinBusStop>,
-            goAheadDublinStops: List<GoAheadDublinStop>,
             favouriteStops: List<FavouriteStop>
-    ): List<Stop> {
-        val aggregatedStops = mutableMapOf<String, Stop>()
-        for (stop in defaultStops) {
-            aggregatedStops[stop.id] = Stop(defaultId = stop.id, defaultName = stop.name, defaultCoordinate = stop.coordinate)
+    ): List<DublinBusStop> {
+        val dublinBusStopsById = mutableMapOf<String, DublinBusStop>()
+        for (dublinBusStop in dublinBusStops) {
+            dublinBusStopsById[dublinBusStop.id] = dublinBusStop
         }
-        for (stop in dublinBusStops) {
-            val aggregatedStop = aggregatedStops[stop.id]
-            if (aggregatedStop == null) {
-                aggregatedStops[stop.id] = Stop(dublinBusId = stop.id, dublinBusName = stop.name, dublinBusCoordinate = stop.coordinate, dublinBusRoutes = stop.routes)
-            } else {
-                aggregatedStops[stop.id] = aggregatedStop.copy(dublinBusId = stop.id, dublinBusName = stop.name, dublinBusCoordinate = stop.coordinate, dublinBusRoutes = stop.routes)
+        for (favouriteStop in favouriteStops) {
+            val cachedStop = dublinBusStopsById[favouriteStop.id]
+            if (cachedStop != null) {
+                dublinBusStopsById[favouriteStop.id] = cachedStop.copy(name = favouriteStop.name)
             }
         }
-        for (stop in goAheadDublinStops) {
-            val aggregatedStop = aggregatedStops[stop.id]
-            if (aggregatedStop == null) {
-                aggregatedStops[stop.id] = Stop(goAheadDublinId = stop.id, goAheadDublinName = stop.name, goAheadDublinCoordinate = stop.coordinate, goAheadDublinRoutes = stop.routes)
-            } else {
-                aggregatedStops[stop.id] = aggregatedStop.copy(goAheadDublinId = stop.id, goAheadDublinName = stop.name, goAheadDublinCoordinate = stop.coordinate, goAheadDublinRoutes = stop.routes)
-            }
-        }
-        for (stop in favouriteStops) {
-            val aggregatedStop = aggregatedStops[stop.id]
-            if (aggregatedStop != null) {
-                aggregatedStops[stop.id] = aggregatedStop.copy(favouriteName = stop.name, favouriteRoutes = stop.routes)
-            }
-        }
-        return aggregatedStops.values
-                .filter { it.routes().isNotEmpty() }
+        return dublinBusStopsById.values
+//                .filter { it.routes().isNotEmpty() }
                 .toList()
     }
 
-    override fun getAllById(id: String): Observable<List<Stop>> {
+    override fun getAllById(id: String): Observable<List<DublinBusStop>> {
         throw UnsupportedOperationException()
     }
 

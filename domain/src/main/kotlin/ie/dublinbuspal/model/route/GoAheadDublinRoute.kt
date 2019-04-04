@@ -6,5 +6,5 @@ data class GoAheadDublinRoute(
         val id: String,
         val origin: String,
         val destination: String,
-        val operator: Operator = Operator.GO_AHEAD_DUBLIN
+        val operator: Operator = Operator.GO_AHEAD
 )

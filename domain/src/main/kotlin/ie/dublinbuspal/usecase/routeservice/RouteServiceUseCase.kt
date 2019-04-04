@@ -25,7 +25,7 @@ class RouteServiceUseCase @Inject constructor(
     }
 
     private fun getRouteServiceByOperator(route: Route): Observable<RouteService> {
-        if (route.operator == Operator.DEFAULT) {
+        if (route.operator == Operator.DUBLIN_BUS) {
             return Observable.combineLatest(
                     defaultRouteServiceRepository.getById(route.id).subscribeOn(Schedulers.io()),
                     stopRepository.getAll().subscribeOn(Schedulers.io()),

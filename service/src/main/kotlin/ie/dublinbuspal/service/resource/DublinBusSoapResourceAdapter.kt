@@ -12,6 +12,7 @@ import ie.dublinbuspal.service.model.stop.StopsRequestRootXml
 import ie.dublinbuspal.service.model.stop.StopsRequestXml
 import ie.dublinbuspal.service.model.stop.StopsResponseXml
 import ie.dublinbuspal.util.StringUtils
+import ie.rtpi.RtpiClient
 import io.reactivex.Single
 
 class DublinBusSoapResourceAdapter(
@@ -19,6 +20,12 @@ class DublinBusSoapResourceAdapter(
 ) : DublinBusSoapResource {
 
     override fun getDublinBusStops(): Single<StopsResponseXml> {
+        RtpiClient().dublinBus().getStops()
+                .doOnNext {
+                    it.map { stop -> print(stop.toString()) }
+                }
+                .subscribe()
+
         return api.getStops(dublinBusStopsKey)
                 .map { adaptDublinBusStopsResponse(it) }
     }

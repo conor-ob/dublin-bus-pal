@@ -8,6 +8,7 @@ import ie.dublinbuspal.data.entity.DefaultRouteEntity
 import ie.dublinbuspal.data.entity.PersisterEntity
 import ie.dublinbuspal.model.route.DefaultRoute
 import ie.dublinbuspal.repository.AbstractPersister
+import ie.dublinbuspal.repository.LegacyAbstractPersister
 import ie.dublinbuspal.repository.Mapper
 import ie.dublinbuspal.service.model.route.RouteXml
 import ie.dublinbuspal.service.model.route.RoutesResponseXml
@@ -22,7 +23,7 @@ class DefaultRoutePersister(
         private val txRunner: TxRunner,
         private val entityMapper: Mapper<RouteXml, DefaultRouteEntity>,
         private val domainMapper: Mapper<DefaultRouteEntity, DefaultRoute>
-) : AbstractPersister<RoutesResponseXml, List<DefaultRoute>, String>(memoryPolicy, persisterDao, internetManager) {
+) : LegacyAbstractPersister<RoutesResponseXml, List<DefaultRoute>, String>(memoryPolicy, persisterDao, internetManager) {
 
     override fun read(key: String): Observable<List<DefaultRoute>> {
         return dao.selectAll()

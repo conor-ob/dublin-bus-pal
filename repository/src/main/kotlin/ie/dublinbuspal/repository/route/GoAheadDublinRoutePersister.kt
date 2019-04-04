@@ -8,6 +8,7 @@ import ie.dublinbuspal.data.entity.GoAheadDublinRouteEntity
 import ie.dublinbuspal.data.entity.PersisterEntity
 import ie.dublinbuspal.model.route.GoAheadDublinRoute
 import ie.dublinbuspal.repository.AbstractPersister
+import ie.dublinbuspal.repository.LegacyAbstractPersister
 import ie.dublinbuspal.repository.Mapper
 import ie.dublinbuspal.service.model.route.RouteListInformationWithVariantsJson
 import ie.dublinbuspal.service.model.route.RouteListInformationWithVariantsResponseJson
@@ -22,7 +23,7 @@ class GoAheadDublinRoutePersister(
         private val txRunner: TxRunner,
         private val entityMapper: Mapper<RouteListInformationWithVariantsJson, GoAheadDublinRouteEntity>,
         private val domainMapper: Mapper<GoAheadDublinRouteEntity, GoAheadDublinRoute>
-) : AbstractPersister<RouteListInformationWithVariantsResponseJson, List<GoAheadDublinRoute>, String>(memoryPolicy, persisterDao, internetManager) {
+) : LegacyAbstractPersister<RouteListInformationWithVariantsResponseJson, List<GoAheadDublinRoute>, String>(memoryPolicy, persisterDao, internetManager) {
 
     override fun read(key: String): Observable<List<GoAheadDublinRoute>> {
         return dao.selectAll()

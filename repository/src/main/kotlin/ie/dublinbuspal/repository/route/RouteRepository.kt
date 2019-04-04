@@ -38,7 +38,7 @@ class RouteRepository(
                 return route
             }
         }
-        return Route(id = "-1", origin = "", destination = "", operator = Operator.DEFAULT)
+        return Route(id = "-1", origin = "", destination = "", operator = Operator.DUBLIN_BUS)
     }
 
     private fun aggregate(defaultRoutes: List<DefaultRoute>, goAheadDublinRoutes: List<GoAheadDublinRoute>): List<Route> {

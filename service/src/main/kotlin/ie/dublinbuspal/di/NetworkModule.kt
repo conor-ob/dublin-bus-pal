@@ -2,11 +2,15 @@ package ie.dublinbuspal.di
 
 import dagger.Module
 import dagger.Provides
+import ie.dublinbuspal.service.Client
+import ie.dublinbuspal.service.ClientImpl
+import ie.dublinbuspal.service.api.DublinBusGoAheadDublinRestApi
 import ie.dublinbuspal.service.api.DublinBusRssApi
 import ie.dublinbuspal.service.api.DublinBusSoapApi
-import ie.dublinbuspal.service.api.DublinBusGoAheadDublinRestApi
 import ie.dublinbuspal.service.interceptor.NetworkLoggingInterceptor
 import ie.dublinbuspal.service.resource.*
+import ie.rtpi.RtpiClient
+import ie.rtpi.Service
 import okhttp3.OkHttpClient
 import retrofit2.CallAdapter
 import retrofit2.Converter
@@ -14,6 +18,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -36,6 +41,12 @@ class NetworkModule(
                 .writeTimeout(60, TimeUnit.SECONDS)
                 .readTimeout(60, TimeUnit.SECONDS)
                 .build()
+    }
+
+    @Provides
+    @Singleton
+    fun client(): Client {
+        return ClientImpl(RtpiClient(EnumSet.of(Service.DUBLIN_BUS)).dublinBus())
     }
 
     @Provides
