@@ -8,7 +8,7 @@ import io.reactivex.Observable
 import javax.inject.Inject
 
 class LiveDataUseCase @Inject constructor(
-        private val liveDataRepository: Repository<LiveData>,
+//        private val liveDataRepository: Repository<LiveData>,
         private val stopRepository: Repository<Stop>
 ) {
 
@@ -17,7 +17,8 @@ class LiveDataUseCase @Inject constructor(
     }
 
     fun getLiveData(stopId: String): Observable<List<LiveData>> {
-        return liveDataRepository.getAllById(stopId)
+//        return liveDataRepository.getAllById(stopId)
+        TODO()
     }
 
     fun getCondensedLiveData(stopId: String): Observable<Map<Pair<String, Destination>, List<LiveData>>> {

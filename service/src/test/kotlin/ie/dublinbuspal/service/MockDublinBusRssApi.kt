@@ -1,7 +1,7 @@
 package ie.dublinbuspal.service
 
-import ie.dublinbuspal.service.api.DublinBusRssApi
-import ie.dublinbuspal.service.model.rss.RssResponseXml
+import ie.dublinbuspal.service.api.rss.DublinBusRssApi
+import ie.dublinbuspal.service.api.rss.RssResponseXml
 import ie.dublinbuspal.service.util.XmlUtils
 import io.reactivex.Single
 

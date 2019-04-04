@@ -2,15 +2,13 @@ package ie.dublinbuspal.di
 
 import dagger.Module
 import dagger.Provides
-import ie.dublinbuspal.service.Client
-import ie.dublinbuspal.service.ClientImpl
-import ie.dublinbuspal.service.api.DublinBusGoAheadDublinRestApi
-import ie.dublinbuspal.service.api.DublinBusRssApi
-import ie.dublinbuspal.service.api.DublinBusSoapApi
+import ie.dublinbuspal.service.api.dublinbus.DublinBusApi
+import ie.dublinbuspal.service.api.rss.DublinBusRssApi
+import ie.dublinbuspal.service.api.rtpi.RtpiApi
 import ie.dublinbuspal.service.interceptor.NetworkLoggingInterceptor
-import ie.dublinbuspal.service.resource.*
-import ie.rtpi.RtpiClient
-import ie.rtpi.Service
+import ie.dublinbuspal.service.resource.DublinBusRouteResource
+import ie.dublinbuspal.service.resource.DublinBusRssResource
+import ie.dublinbuspal.service.resource.DublinBusStopResource
 import okhttp3.OkHttpClient
 import retrofit2.CallAdapter
 import retrofit2.Converter
@@ -18,14 +16,13 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
-import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
 class NetworkModule(
-        private val soapApiEndpoint: String,
-        private val restApiEndpoint: String,
+        private val dublinBusApiEndpoint: String,
+        private val rtpiApiEndpoint: String,
         private val rssApiEndpoint: String
 ) {
 
@@ -45,47 +42,62 @@ class NetworkModule(
 
     @Provides
     @Singleton
-    fun client(): Client {
-        return ClientImpl(RtpiClient(EnumSet.of(Service.DUBLIN_BUS)).dublinBus())
-    }
-
-    @Provides
-    @Singleton
-    fun dublinBusSoapResource(): DublinBusSoapResource {
+    fun dublinBusApi(): DublinBusApi {
         val retrofit = Retrofit.Builder()
-                .baseUrl(soapApiEndpoint)
+                .baseUrl(dublinBusApiEndpoint)
                 .client(okHttpClient)
                 .addConverterFactory(xmlDeserializer)
                 .addCallAdapterFactory(callAdapter)
                 .build()
-        val api = retrofit.create(DublinBusSoapApi::class.java)
-        return DublinBusSoapResourceAdapter(api)
+        return retrofit.create(DublinBusApi::class.java)
     }
 
     @Provides
     @Singleton
-    fun smartDublinRestResource(): DublinBusGoAheadDublinRestResource {
+    fun rtpiApi(): RtpiApi {
         val retrofit = Retrofit.Builder()
-                .baseUrl(restApiEndpoint)
+                .baseUrl(rtpiApiEndpoint)
                 .client(okHttpClient)
                 .addConverterFactory(jsonDeserializer)
                 .addCallAdapterFactory(callAdapter)
                 .build()
-        val api = retrofit.create(DublinBusGoAheadDublinRestApi::class.java)
-        return DublinBusGoAheadDublinRestResourceAdapter(api)
+        return retrofit.create(RtpiApi::class.java)
     }
 
     @Provides
     @Singleton
-    fun dublinBusRssResource(): DublinBusRssResource {
+    fun rssApi(): DublinBusRssApi {
         val retrofit = Retrofit.Builder()
-                .baseUrl(rssApiEndpoint)
+                .baseUrl(rtpiApiEndpoint)
                 .client(okHttpClient)
-                .addConverterFactory(xmlDeserializer)
+                .addConverterFactory(jsonDeserializer)
                 .addCallAdapterFactory(callAdapter)
                 .build()
-        val api = retrofit.create(DublinBusRssApi::class.java)
-        return DublinBusRssResourceAdapter(api)
+        return retrofit.create(DublinBusRssApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun dublinBusStopResource(
+            dublinBusApi: DublinBusApi,
+            rtpiApi: RtpiApi
+    ): DublinBusStopResource {
+        return DublinBusStopResource(dublinBusApi, rtpiApi)
+    }
+
+    @Provides
+    @Singleton
+    fun dublinBusRouteResource(
+            dublinBusApi: DublinBusApi,
+            rtpiApi: RtpiApi
+    ): DublinBusRouteResource {
+        return DublinBusRouteResource(dublinBusApi, rtpiApi)
+    }
+
+    @Provides
+    @Singleton
+    fun dublinBusRssResource(rssApi: DublinBusRssApi): DublinBusRssResource {
+        return DublinBusRssResource(rssApi)
     }
 
 }

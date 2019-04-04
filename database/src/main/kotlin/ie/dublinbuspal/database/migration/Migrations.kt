@@ -41,9 +41,14 @@ object Migrations {
             database.execSQL("CREATE TABLE IF NOT EXISTS `stop_locations` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, PRIMARY KEY(`id`))")
             database.execSQL("CREATE TABLE IF NOT EXISTS `stop_services` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `stop_id` TEXT NOT NULL, `operator` TEXT NOT NULL, `route` TEXT NOT NULL, FOREIGN KEY(`stop_id`) REFERENCES `stop_locations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )")
             database.execSQL("CREATE  INDEX `index_stop_services_stop_id` ON `stop_services` (`stop_id`)")
+            database.execSQL("CREATE TABLE IF NOT EXISTS `routes` (`id` TEXT NOT NULL, `operator` TEXT NOT NULL, PRIMARY KEY(`id`))")
+            database.execSQL("CREATE TABLE IF NOT EXISTS `route_variants` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `route_id` TEXT NOT NULL, `origin` TEXT NOT NULL, `destination` TEXT NOT NULL, FOREIGN KEY(`route_id`) REFERENCES `routes`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )")
+            database.execSQL("CREATE  INDEX `index_route_variants_route_id` ON `route_variants` (`route_id`)")
             database.execSQL("DROP TABLE `default_stops`")
             database.execSQL("DROP TABLE `dublin_bus_stops`")
             database.execSQL("DROP TABLE `go_ahead_dublin_stops`")
+            database.execSQL("DROP TABLE `default_routes`")
+            database.execSQL("DROP TABLE `go_ahead_dublin_routes`")
         }
 
     }

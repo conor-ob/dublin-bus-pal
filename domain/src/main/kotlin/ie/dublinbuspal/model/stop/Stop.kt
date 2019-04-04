@@ -1,57 +1,31 @@
 package ie.dublinbuspal.model.stop
 
-import ie.dublinbuspal.util.AlphanumComparator
-import ie.dublinbuspal.util.CollectionUtils
-import ie.dublinbuspal.util.Coordinate
-import ie.dublinbuspal.util.StringUtils
+import ie.dublinbuspal.util.*
+import java.util.*
 
 data class Stop(
-        private val defaultId: String? = null,
-        private val dublinBusId: String? = null,
-        private val goAheadDublinId: String? = null,
-
-        private val favouriteName: String? = null,
-        private val defaultName: String? = null,
-        private val dublinBusName: String? = null,
-        private val goAheadDublinName: String? = null,
-
-        private val defaultCoordinate: Coordinate? = null,
-        private val dublinBusCoordinate: Coordinate? = null,
-        private val goAheadDublinCoordinate: Coordinate? = null,
-
-        private val favouriteRoutes: List<String> = emptyList(),
-        private val defaultRoutes: List<String> = emptyList(),
-        private val dublinBusRoutes: List<String> = emptyList(),
-        private val goAheadDublinRoutes: List<String> = emptyList()
+        val id: String,
+        val name: String,
+        val favouriteName: String? = null,
+        val coordinate: Coordinate,
+        val operators: EnumSet<Operator>,
+        val routes: Map<Operator, Set<String>>,
+        val favouriteRoutes: Set<String> = emptySet()
 ) {
 
     fun id(): String {
-        if (!StringUtils.isNullOrEmpty(defaultId)) {
-            return defaultId!!
-        } else if (!StringUtils.isNullOrEmpty(dublinBusId)) {
-            return dublinBusId!!
-        }
-        return goAheadDublinId!!
+        return id
     }
 
     fun name(): String {
         if (!StringUtils.isNullOrEmpty(favouriteName)) {
             return favouriteName!!
-        } else if (!StringUtils.isNullOrEmpty(defaultName)) {
-            return defaultName!!
-        } else if (!StringUtils.isNullOrEmpty(dublinBusName)) {
-            return dublinBusName!!
         }
-        return goAheadDublinName!!
+        return name
     }
 
     fun coordinate(): Coordinate {
-        if (defaultCoordinate != null) {
-            return defaultCoordinate
-        } else if (dublinBusCoordinate != null) {
-            return dublinBusCoordinate
-        }
-        return goAheadDublinCoordinate!!
+        return coordinate
     }
 
     fun routes(): List<String> {
@@ -61,9 +35,7 @@ data class Stop(
             return routes
         }
         val uniques = mutableSetOf<String>()
-        uniques.addAll(defaultRoutes)
-        uniques.addAll(dublinBusRoutes)
-        uniques.addAll(goAheadDublinRoutes)
+        uniques.addAll(routes.values.flatten())
         val routes = uniques.toMutableList()
         routes.sortWith(Comparator { thisRoute, thatRoute -> AlphanumComparator.getInstance().compare(thisRoute, thatRoute) } )
         return routes
@@ -74,27 +46,23 @@ data class Stop(
     }
 
     fun isDublinBusOnly(): Boolean {
-        return (isDefault() || isDublinBus()) && !isGoAheadDublin()
+        return isDublinBus() && !isGoAheadDublin()
     }
 
     fun isGoAheadDublinOnly(): Boolean {
-        return !isDefault() && !isDublinBus() && isGoAheadDublin()
+        return !isDublinBus() && isGoAheadDublin()
     }
 
     fun isDublinBusAndGoAheadDublin(): Boolean {
-        return (isDefault() || isDublinBus()) && isGoAheadDublin()
-    }
-
-    private fun isDefault(): Boolean {
-        return StringUtils.isNotNullOrEmpty(defaultId)
+        return isDublinBus() && isGoAheadDublin()
     }
 
     private fun isDublinBus(): Boolean {
-        return StringUtils.isNotNullOrEmpty(dublinBusId)
+        return operators.contains(Operator.DUBLIN_BUS)
     }
 
     private fun isGoAheadDublin(): Boolean {
-        return StringUtils.isNotNullOrEmpty(goAheadDublinId)
+        return operators.contains(Operator.GO_AHEAD)
     }
 
 }

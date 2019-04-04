@@ -13,27 +13,29 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class RouteServiceUseCase @Inject constructor(
-        private val routeRepository: Repository<Route>,
-        private val stopRepository: Repository<Stop>,
-        private val defaultRouteServiceRepository: Repository<DefaultRouteService>,
-        private val goAheadDublinRouteServiceRepository: Repository<GoAheadDublinRouteService>
+//        private val routeRepository: Repository<Route>,
+        private val stopRepository: Repository<Stop>
+//        private val defaultRouteServiceRepository: Repository<DefaultRouteService>,
+//        private val goAheadDublinRouteServiceRepository: Repository<GoAheadDublinRouteService>
 ) {
 
     fun getRouteService(routeId: String): Observable<RouteService> {
-        return routeRepository.getById(routeId)
-                .flatMap { getRouteServiceByOperator(it) }
+//        return routeRepository.getById(routeId)
+//                .flatMap { getRouteServiceByOperator(it) }
+        TODO()
     }
 
     private fun getRouteServiceByOperator(route: Route): Observable<RouteService> {
-        if (route.operator == Operator.DUBLIN_BUS) {
-            return Observable.combineLatest(
-                    defaultRouteServiceRepository.getById(route.id).subscribeOn(Schedulers.io()),
-                    stopRepository.getAll().subscribeOn(Schedulers.io()),
-                    BiFunction { defaultRouteService, stops -> aggregateDefaultRouteService(route, defaultRouteService, stops) }
-            )
-        }
-        return goAheadDublinRouteServiceRepository.getById(route.id).subscribeOn(Schedulers.io())
-                .map { aggregateGoAheadDublinRouteService(route, it) }
+        TODO()
+//        if (route.operator == Operator.DUBLIN_BUS) {
+//            return Observable.combineLatest(
+//                    defaultRouteServiceRepository.getById(route.id).subscribeOn(Schedulers.io()),
+//                    stopRepository.getAll().subscribeOn(Schedulers.io()),
+//                    BiFunction { defaultRouteService, stops -> aggregateDefaultRouteService(route, defaultRouteService, stops) }
+//            )
+//        }
+//        return goAheadDublinRouteServiceRepository.getById(route.id).subscribeOn(Schedulers.io())
+//                .map { aggregateGoAheadDublinRouteService(route, it) }
     }
 
     private fun aggregateDefaultRouteService(route: Route, defaultRouteService: DefaultRouteService, stops: List<Stop>): RouteService {

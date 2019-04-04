@@ -23,6 +23,7 @@ class DublinBusStopCacheResourceImpl(
 
     override fun insertStops(stops: Pair<List<DublinBusStopLocationEntity>, List<DublinBusStopServiceEntity>>) {
         txRunner.runInTx {
+            dublinBusStopLocationDao.deleteAll()
             dublinBusStopLocationDao.insertAll(stops.first)
             dublinBusStopServiceDao.insertAll(stops.second)
         }

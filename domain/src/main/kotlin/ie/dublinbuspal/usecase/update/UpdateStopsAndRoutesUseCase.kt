@@ -1,6 +1,6 @@
 package ie.dublinbuspal.usecase.update
 
-import ie.dublinbuspal.model.route.GoAheadDublinRoute
+import ie.dublinbuspal.model.route.Route
 import ie.dublinbuspal.model.stop.DublinBusStop
 import ie.dublinbuspal.repository.Repository
 import io.reactivex.Observable
@@ -10,13 +10,13 @@ import javax.inject.Inject
 
 class UpdateStopsAndRoutesUseCase @Inject constructor(
         private val dublinBusStopRepository: Repository<DublinBusStop>,
-        private val goAheadDublinRouteRepository: Repository<GoAheadDublinRoute>
+        private val dublinBusRouteRepository: Repository<Route>
 ) {
 
     fun update(): Observable<Int> {
         return Observable.combineLatest(
                 dublinBusStopRepository.refresh().startWith(false).subscribeOn(Schedulers.io()),
-                goAheadDublinRouteRepository.refresh().startWith(false).subscribeOn(Schedulers.io()),
+                dublinBusRouteRepository.refresh().startWith(false).subscribeOn(Schedulers.io()),
                 BiFunction { r1, r2 -> update(r1, r2) }
         )
     }
