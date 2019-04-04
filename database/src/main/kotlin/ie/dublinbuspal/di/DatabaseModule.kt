@@ -13,6 +13,7 @@ import ie.dublinbuspal.data.resource.DublinBusStopCacheResource
 import ie.dublinbuspal.database.DatabaseTxRunner
 import ie.dublinbuspal.database.DublinBusDatabase
 import ie.dublinbuspal.database.migration.Migrations.MIGRATION_3_4
+import ie.dublinbuspal.database.migration.Migrations.MIGRATION_4_5
 import ie.dublinbuspal.database.resource.DublinBusStopCacheResourceImpl
 import javax.inject.Singleton
 
@@ -27,7 +28,8 @@ class DatabaseModule(
             .databaseBuilder(context, DublinBusDatabase::class.java, databaseName)
             .fallbackToDestructiveMigrationFrom(1, 2)
             .addMigrations(
-                    MIGRATION_3_4
+                    MIGRATION_3_4,
+                    MIGRATION_4_5
             )
             .build()
 

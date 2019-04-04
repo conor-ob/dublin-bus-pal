@@ -38,7 +38,12 @@ object Migrations {
     val MIGRATION_4_5 = object : Migration(4, 5) {
 
         override fun migrate(database: SupportSQLiteDatabase) {
-
+            database.execSQL("CREATE TABLE IF NOT EXISTS `stop_locations` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, PRIMARY KEY(`id`))")
+            database.execSQL("CREATE TABLE IF NOT EXISTS `stop_services` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `stop_id` TEXT NOT NULL, `operator` TEXT NOT NULL, `route` TEXT NOT NULL, FOREIGN KEY(`stop_id`) REFERENCES `stop_locations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )")
+            database.execSQL("CREATE  INDEX `index_stop_services_stop_id` ON `stop_services` (`stop_id`)")
+            database.execSQL("DROP TABLE `default_stops`")
+            database.execSQL("DROP TABLE `dublin_bus_stops`")
+            database.execSQL("DROP TABLE `go_ahead_dublin_stops`")
         }
 
     }
