@@ -14,17 +14,13 @@ object DublinBusLiveDataMapper : Mapper<RtpiRealTimeBusInformationJson, LiveData
         return LiveData(
                 routeId = from.route!!,
                 destination = mapDestination(from.destination!!),
-                dueTime = mapDueTime(from.arrivalDateTime!!, from.timestampFormat!!)
+                dueTime = mapDueTime(from.arrivalDateTime!!)
         )
     }
 
-    private fun mapDueTime(expectedTime: String, timestampFormat: String): DueTime {
+    private fun mapDueTime(expectedTime: String): DueTime {
         val timestampInstant = TimeUtils.now()
-        val expectedTimeInstant = if (timestampFormat == "ISO") {
-            TimeUtils.dateTimeStampToInstant(expectedTime, Formatter.isoDateTime)
-        } else {
-            TimeUtils.dateTimeStampToInstant(expectedTime, Formatter.dateTime)
-        }
+        val expectedTimeInstant = TimeUtils.dateTimeStampToInstant(expectedTime, Formatter.isoDateTime)
         val minutes = TimeUtils.minutesBetween(timestampInstant, expectedTimeInstant)
         return DueTime(minutes, TimeUtils.formatAsTime(expectedTimeInstant))
     }

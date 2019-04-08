@@ -3,6 +3,8 @@ package ie.dublinbuspal.service.resource
 import ie.dublinbuspal.service.api.dublinbus.*
 import ie.dublinbuspal.service.api.rtpi.RtpiApi
 import ie.dublinbuspal.service.api.rtpi.RtpiRealTimeBusInformationJson
+import ie.dublinbuspal.util.Formatter
+import ie.dublinbuspal.util.TimeUtils
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
@@ -32,8 +34,7 @@ class DublinBusLiveDataResource(
                     RtpiRealTimeBusInformationJson(
                             route = liveData.routeId!!,
                             destination = liveData.destination!!,
-                            arrivalDateTime = liveData.expectedTimestamp!!,
-                            timestampFormat = liveData.timestampFormat!!
+                            arrivalDateTime = liveData.expectedTimestamp!!
                     )
             )
         }
@@ -54,8 +55,23 @@ class DublinBusLiveDataResource(
     private fun fetchRtpiLiveData(stopId: String): Single<List<RtpiRealTimeBusInformationJson>> {
         return rtpiApi.realTimeBusInformation(stopId, "gad", "json")
                 .map { response -> response.results
-                        .map { it.copy(timestampFormat = "dd/MM/yyyy HH:mm:ss") }
+                        .map {
+                            it.copy(
+                                    arrivalDateTime = toIso8601Timestamp(it.arrivalDateTime),
+                                    departureDateTime = toIso8601Timestamp(it.departureDateTime),
+                                    scheduledDepartureDateTime = toIso8601Timestamp(it.scheduledArrivalDateTime),
+                                    scheduledArrivalDateTime = toIso8601Timestamp(it.scheduledArrivalDateTime),
+                                    sourceTimestamp = toIso8601Timestamp(it.sourceTimestamp)
+                            )
+                        }
                 }
+    }
+
+    private fun toIso8601Timestamp(timestamp: String?): String? {
+        if (timestamp == null) {
+            return null
+        }
+        return TimeUtils.toIso8601Timestamp(timestamp, Formatter.dateTime)
     }
 
 }

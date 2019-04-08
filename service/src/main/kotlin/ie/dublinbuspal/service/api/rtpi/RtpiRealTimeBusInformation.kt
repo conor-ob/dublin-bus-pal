@@ -12,7 +12,6 @@ data class RtpiRealTimeBusInformationResponseJson(
 
 data class RtpiRealTimeBusInformationJson(
     @SerializedName("arrivaldatetime") val arrivalDateTime: String? = null,
-    var timestampFormat: String? = null,
     @SerializedName("duetime") val dueTime: String? = null,
     @SerializedName("departuredatetime") val departureDateTime: String? = null,
     @SerializedName("departureduetime") val departureDueTime: String? = null,

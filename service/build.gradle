@@ -12,6 +12,7 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxkotlin:${versions.rx_kotlin}"
     implementation "org.slf4j:slf4j-api:${versions.slf4j_api}"
     implementation "com.google.code.gson:gson:${versions.gson}"
+    implementation "com.jakewharton.threetenabp:threetenabp:${versions.threetenabp}"
     implementation("com.squareup.retrofit2:converter-simplexml:${versions.converter_simplexml}") {
         exclude group: 'stax', module: 'stax-api'
         exclude group: 'stax', module: 'stax'

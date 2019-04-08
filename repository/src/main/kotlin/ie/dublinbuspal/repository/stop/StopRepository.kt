@@ -8,7 +8,6 @@ import ie.dublinbuspal.repository.Repository
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
-import java.lang.RuntimeException
 
 class StopRepository(
         private val dublinBusStopRepository: Repository<DublinBusStop>,
@@ -16,6 +15,7 @@ class StopRepository(
 ) : Repository<Stop> {
 
     //TODO do I need a different data class with favourite info?
+    private var cache = emptyMap<String, Stop>()
 
     override fun getAll(): Observable<List<Stop>> {
         return Observable.combineLatest(
@@ -28,20 +28,7 @@ class StopRepository(
     }
 
     override fun getById(id: String): Observable<Stop> {
-        return getAll()
-                .map { stops -> findMatching(id, stops) }
-                .filter { stop -> stop.id() != "-1" }
-                .distinctUntilChanged()
-    }
-
-    private fun findMatching(id: String, stops: List<Stop>): Stop {
-        for (stop in stops) {
-            if (id == stop.id()) {
-                return stop
-            }
-        }
-//        return Stop(id = "-1")
-        throw RuntimeException()
+        return Observable.just(cache[id])
     }
 
     private fun aggregate(
@@ -55,12 +42,11 @@ class StopRepository(
         for (stop in favouriteStops) {
             val aggregatedStop = aggregatedStops[stop.id]
             if (aggregatedStop != null) {
-                aggregatedStops[stop.id] = aggregatedStop.copy(favouriteName = stop.name, favouriteRoutes = emptySet()) //TODO
+                aggregatedStops[stop.id] = aggregatedStop.copy(favouriteName = stop.name, favouriteRoutes = stop.routes.toSet()) //TODO
             }
         }
-        return aggregatedStops.values
-                .filter { it.routes().isNotEmpty() }
-                .toList()
+        cache = aggregatedStops
+        return aggregatedStops.values.toList()
     }
 
     override fun getAllById(id: String): Observable<List<Stop>> {
