@@ -7,6 +7,8 @@ import retrofit2.http.POST
 
 interface DublinBusApi {
 
+    //TODO use TikXML https://github.com/Tickaroo/tikxml
+
     @Headers("Content-Type: text/xml", "Accept-Charset: utf-8")
     @POST("/DublinBusRTPIService.asmx")
     fun getAllDestinations(

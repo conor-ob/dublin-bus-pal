@@ -14,9 +14,9 @@ class DublinBusStopResource(
 
     fun getStops(): Single<List<RtpiBusStopInformationJson>> {
         return Single.zip(
-                fetchDefaultDublinBusStops().subscribeOn(Schedulers.io()),
-                fetchRtpiDublinBusStops().subscribeOn(Schedulers.io()),
-                fetchRtpiGoAheadBusStops().subscribeOn(Schedulers.io()),
+                fetchDefaultDublinBusStops().subscribeOn(Schedulers.newThread()),
+                fetchRtpiDublinBusStops().subscribeOn(Schedulers.newThread()),
+                fetchRtpiGoAheadBusStops().subscribeOn(Schedulers.newThread()),
                 Function3 { defaultStops, dublinBusStops, goAheadDublinStops -> aggregate(defaultStops, dublinBusStops, goAheadDublinStops) }
         )
     }

@@ -6,6 +6,7 @@ import ie.dublinbuspal.service.api.dublinbus.DublinBusApi
 import ie.dublinbuspal.service.api.rss.DublinBusRssApi
 import ie.dublinbuspal.service.api.rtpi.RtpiApi
 import ie.dublinbuspal.service.interceptor.NetworkLoggingInterceptor
+import ie.dublinbuspal.service.resource.DublinBusLiveDataResource
 import ie.dublinbuspal.service.resource.DublinBusRouteResource
 import ie.dublinbuspal.service.resource.DublinBusRssResource
 import ie.dublinbuspal.service.resource.DublinBusStopResource
@@ -68,7 +69,7 @@ class NetworkModule(
     @Singleton
     fun rssApi(): DublinBusRssApi {
         val retrofit = Retrofit.Builder()
-                .baseUrl(rtpiApiEndpoint)
+                .baseUrl(rssApiEndpoint)
                 .client(okHttpClient)
                 .addConverterFactory(jsonDeserializer)
                 .addCallAdapterFactory(callAdapter)
@@ -92,6 +93,15 @@ class NetworkModule(
             rtpiApi: RtpiApi
     ): DublinBusRouteResource {
         return DublinBusRouteResource(dublinBusApi, rtpiApi)
+    }
+
+    @Provides
+    @Singleton
+    fun dublinBusLiveDataResource(
+            dublinBusApi: DublinBusApi,
+            rtpiApi: RtpiApi
+    ) : DublinBusLiveDataResource {
+        return DublinBusLiveDataResource(dublinBusApi, rtpiApi)
     }
 
     @Provides

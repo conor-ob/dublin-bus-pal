@@ -15,6 +15,7 @@ import ie.dublinbuspal.mapping.favourite.FavouriteStopDomainMapper
 import ie.dublinbuspal.mapping.favourite.FavouriteStopEntityMapper
 import ie.dublinbuspal.mapping.rss.RssMapper
 import ie.dublinbuspal.model.favourite.FavouriteStop
+import ie.dublinbuspal.model.livedata.LiveData
 import ie.dublinbuspal.model.route.Route
 import ie.dublinbuspal.model.rss.RssNews
 import ie.dublinbuspal.model.stop.DublinBusStop
@@ -22,6 +23,8 @@ import ie.dublinbuspal.model.stop.Stop
 import ie.dublinbuspal.repository.FavouriteStopRepository
 import ie.dublinbuspal.repository.Repository
 import ie.dublinbuspal.repository.favourite.DefaultFavouriteStopRepository
+import ie.dublinbuspal.repository.livedata.DublinBusLiveDataMapper
+import ie.dublinbuspal.repository.livedata.LiveDataRepository
 import ie.dublinbuspal.repository.route.DublinBusRoutePersister
 import ie.dublinbuspal.repository.route.DublinBusRouteRepository
 import ie.dublinbuspal.repository.rss.RssNewsRepository
@@ -30,7 +33,9 @@ import ie.dublinbuspal.repository.stop.DublinBusStopRepository
 import ie.dublinbuspal.repository.stop.StopRepository
 import ie.dublinbuspal.service.api.rss.RssResponseXml
 import ie.dublinbuspal.service.api.rtpi.RtpiBusStopInformationJson
+import ie.dublinbuspal.service.api.rtpi.RtpiRealTimeBusInformationJson
 import ie.dublinbuspal.service.api.rtpi.RtpiRouteListInformationWithVariantsJson
+import ie.dublinbuspal.service.resource.DublinBusLiveDataResource
 import ie.dublinbuspal.service.resource.DublinBusRouteResource
 import ie.dublinbuspal.service.resource.DublinBusRssResource
 import ie.dublinbuspal.service.resource.DublinBusStopResource
@@ -87,6 +92,20 @@ class RepositoryModule {
         val persister = DublinBusRoutePersister(cacheResource, longTermMemoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, longTermMemoryPolicy)
         return DublinBusRouteRepository(store)
+    }
+
+    @Provides
+    @Singleton
+    fun liveDataRepository(
+            liveDataResource: DublinBusLiveDataResource
+    ): Repository<LiveData> {
+        val store = StoreBuilder.parsedWithKey<String, List<RtpiRealTimeBusInformationJson>, List<LiveData>>()
+                .fetcher { key -> liveDataResource.getLiveData(key) }
+                .parser { xml -> DublinBusLiveDataMapper.map(xml) }
+                .memoryPolicy(shortTermMemoryPolicy)
+                .refreshOnStale()
+                .open()
+        return LiveDataRepository(store)
     }
 
 //    @Provides
@@ -153,16 +172,7 @@ class RepositoryModule {
 //        return GoAheadDublinRouteServiceRepository(store)
 //    }
 //
-//    @Provides
-//    @Singleton
-//    fun liveDataRepository(
-//            defaultLiveDataRepository: Repository<RealTimeStopData>,
-//            goAheadDublinLiveDataRepository: Repository<DublinBusGoAheadDublinLiveData>
-//    ): Repository<LiveData> {
-//        val defaultLiveDataMapper = DefaultLiveDataDomainMapper()
-//        val goAheadDublinLiveDataMapper = DublinBusGoAheadDublinLiveDataDomainMapper()
-//        return LiveDataRepository(defaultLiveDataRepository, goAheadDublinLiveDataRepository, defaultLiveDataMapper, goAheadDublinLiveDataMapper)
-//    }
+
 //
 //    @Provides
 //    @Singleton
