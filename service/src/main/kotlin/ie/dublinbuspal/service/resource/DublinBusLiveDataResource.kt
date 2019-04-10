@@ -4,6 +4,7 @@ import ie.dublinbuspal.service.api.dublinbus.*
 import ie.dublinbuspal.service.api.rtpi.RtpiApi
 import ie.dublinbuspal.service.api.rtpi.RtpiRealTimeBusInformationJson
 import ie.dublinbuspal.util.Formatter
+import ie.dublinbuspal.util.Operator
 import ie.dublinbuspal.util.TimeUtils
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
@@ -33,6 +34,7 @@ class DublinBusLiveDataResource(
             aggregated.add(
                     RtpiRealTimeBusInformationJson(
                             route = liveData.routeId!!,
+                            operator = Operator.DUBLIN_BUS.code,
                             destination = liveData.destination!!,
                             arrivalDateTime = liveData.expectedTimestamp!!
                     )

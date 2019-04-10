@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface SearchQueryView extends MvpView {
 
-    void launchRouteActivity(String routeId);
+    void launchRouteActivity(String routeId, String operator);
 
     void launchRealTimeActivity(String stopId);
 

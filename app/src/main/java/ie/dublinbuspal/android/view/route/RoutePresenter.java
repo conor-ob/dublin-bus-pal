@@ -4,7 +4,7 @@ import com.hannesdorfmann.mosby3.mvp.MvpPresenter;
 
 public interface RoutePresenter extends MvpPresenter<RouteView> {
 
-    void onResume(String routeId, String stopId);
+    void onResume(String routeId, String operator, String stopId);
 
     void changeDirectionPressed();
 

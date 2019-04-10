@@ -5,7 +5,7 @@ import ie.dublinbuspal.util.Operator
 data class Route(
         val id: String,
         val variants: List<RouteVariant>,
-        val origin: String = variants[0].origin,
+        val origin: String = variants[0].origin, //TODO
         val destination: String = variants[0].destination,
         val operator: Operator
 )

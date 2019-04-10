@@ -406,8 +406,8 @@ public class RealTimeActivity
     }
 
     @Override
-    public void launchRouteActivity(String routeId) {
-        Intent intent = RouteActivity.newIntent(this, routeId, getStopId());
+    public void launchRouteActivity(String routeId, String operator) {
+        Intent intent = RouteActivity.newIntent(this, routeId, operator, getStopId());
         startActivity(intent);
     }
 

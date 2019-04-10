@@ -150,8 +150,8 @@ public class SearchFragment
     }
 
     @Override
-    public void launchRouteActivity(String routeId) {
-        Intent intent = RouteActivity.newIntent(getContext(), routeId);
+    public void launchRouteActivity(String routeId, String operator) {
+        Intent intent = RouteActivity.newIntent(getContext(), routeId, operator);
         startActivity(intent);
     }
 

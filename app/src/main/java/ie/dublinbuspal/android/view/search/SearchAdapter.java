@@ -144,7 +144,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 Object searchResult = searchResults.get(adapterPosition);
                 if (searchResult instanceof Route) {
                     Route route = (Route) searchResult;
-                    view.launchRouteActivity(route.getId());
+                    view.launchRouteActivity(route.getId(), route.getOperator().getCode());
                 }
             }
         }

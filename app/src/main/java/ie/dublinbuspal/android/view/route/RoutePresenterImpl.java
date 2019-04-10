@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import ie.dublinbuspal.android.R;
 import ie.dublinbuspal.model.routeservice.RouteService;
 import ie.dublinbuspal.usecase.routeservice.RouteServiceUseCase;
+import ie.dublinbuspal.util.Operator;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -29,10 +30,10 @@ public class RoutePresenterImpl extends MvpBasePresenter<RouteView> implements R
     }
 
     @Override
-    public void onResume(String routeId, String stopId) {
+    public void onResume(String routeId, String operator, String stopId) {
         getModel().setRouteId(routeId);
         getModel().setStopId(stopId);
-        getDisposables().add(useCase.getRouteService(getModel().getRouteId())
+        getDisposables().add(useCase.getRouteService(getModel().getRouteId(), Operator.parse(operator))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetRouteService, this::onError));

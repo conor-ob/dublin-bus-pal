@@ -52,6 +52,7 @@ public class RouteActivity extends MvpActivity<RouteView, RoutePresenter>
         implements RouteView, OnMapReadyCallback {
 
     private static final String ROUTE_ID = "route_id";
+    private static final String OPERATOR = "operator";
 
     private SupportMapFragment googleMapFragment;
     private GoogleMap googleMap;
@@ -104,7 +105,7 @@ public class RouteActivity extends MvpActivity<RouteView, RoutePresenter>
     @Override
     protected void onResume() {
         super.onResume();
-        getPresenter().onResume(getRouteId(), getStopId());
+        getPresenter().onResume(getRouteId(), getOperator(), getStopId());
     }
 
 
@@ -189,6 +190,10 @@ public class RouteActivity extends MvpActivity<RouteView, RoutePresenter>
 
     private String getRouteId() {
         return getIntent().getStringExtra(ROUTE_ID);
+    }
+
+    private String getOperator() {
+        return getIntent().getStringExtra(OPERATOR);
     }
 
     private String getStopId() {
@@ -292,16 +297,18 @@ public class RouteActivity extends MvpActivity<RouteView, RoutePresenter>
         }
     }
 
-    public static Intent newIntent(Context context, String routeId) {
+    public static Intent newIntent(Context context, String routeId, String operator) {
         Intent intent = new Intent(context, RouteActivity.class);
         intent.putExtra(ROUTE_ID, routeId);
+        intent.putExtra(OPERATOR, operator);
         return intent;
     }
 
-    public static Intent newIntent(Context context, String routeId, String stopId) {
+    public static Intent newIntent(Context context, String routeId, String operator, String stopId) {
         Intent intent = new Intent(context, RouteActivity.class);
         intent.putExtra(ROUTE_ID, routeId);
         intent.putExtra(RealTimeActivity.STOP_ID, stopId);
+        intent.putExtra(OPERATOR, operator);
         return intent;
     }
 

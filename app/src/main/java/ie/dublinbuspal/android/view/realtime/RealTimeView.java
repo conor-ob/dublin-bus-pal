@@ -18,7 +18,7 @@ public interface RealTimeView extends MvpView {
 
     void showBusStopService(List<String> busStopService);
 
-    void launchRouteActivity(String routeId);
+    void launchRouteActivity(String routeId, String operator);
 
     void onFavouriteSaved();
 

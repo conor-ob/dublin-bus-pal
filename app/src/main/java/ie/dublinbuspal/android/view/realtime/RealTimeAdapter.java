@@ -141,7 +141,7 @@ public class RealTimeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 if (item instanceof LiveData) {
                     LiveData liveData = (LiveData) item;
                     String routeId = liveData.getRouteId();
-                    view.launchRouteActivity(routeId);
+                    view.launchRouteActivity(routeId, liveData.getOperator().getCode());
                 }
             }
         }

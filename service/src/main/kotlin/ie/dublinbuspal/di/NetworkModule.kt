@@ -6,10 +6,7 @@ import ie.dublinbuspal.service.api.dublinbus.DublinBusApi
 import ie.dublinbuspal.service.api.rss.DublinBusRssApi
 import ie.dublinbuspal.service.api.rtpi.RtpiApi
 import ie.dublinbuspal.service.interceptor.NetworkLoggingInterceptor
-import ie.dublinbuspal.service.resource.DublinBusLiveDataResource
-import ie.dublinbuspal.service.resource.DublinBusRouteResource
-import ie.dublinbuspal.service.resource.DublinBusRssResource
-import ie.dublinbuspal.service.resource.DublinBusStopResource
+import ie.dublinbuspal.service.resource.*
 import okhttp3.OkHttpClient
 import retrofit2.CallAdapter
 import retrofit2.Converter
@@ -100,8 +97,17 @@ class NetworkModule(
     fun dublinBusLiveDataResource(
             dublinBusApi: DublinBusApi,
             rtpiApi: RtpiApi
-    ) : DublinBusLiveDataResource {
+    ): DublinBusLiveDataResource {
         return DublinBusLiveDataResource(dublinBusApi, rtpiApi)
+    }
+
+    @Provides
+    @Singleton
+    fun dublinBusRouteServiceResource(
+            dublinBusApi: DublinBusApi,
+            rtpiApi: RtpiApi
+    ): DublinBusRouteServiceResource {
+        return DublinBusRouteServiceResource(dublinBusApi, rtpiApi)
     }
 
     @Provides

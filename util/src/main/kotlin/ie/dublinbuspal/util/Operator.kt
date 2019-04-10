@@ -12,6 +12,7 @@ enum class Operator(
 
     companion object {
 
+        @JvmStatic
         fun parse(value: String): Operator {
             for (operator in values()) {
                 if (operator.displayName.equals(value, ignoreCase = true)

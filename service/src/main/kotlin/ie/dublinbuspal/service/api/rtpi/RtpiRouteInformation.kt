@@ -19,3 +19,17 @@ data class RtpiRouteInformationJson(
     @SerializedName("lastupdated") val lastUpdated: String,
     @SerializedName("stops") val stops: List<RtpiBusStopInformationJson> = mutableListOf()
 )
+
+data class RtpiRouteService(
+        val routeId: String,
+        val operator: String,
+        val variants: List<RtpiRouteServiceVariant>
+)
+
+data class RtpiRouteServiceVariant(
+        val origin: String,
+        val originLocalized: String? = null,
+        val destination: String,
+        val destinationLocalized: String? = null,
+        val stopIds: List<String> = mutableListOf()
+)
