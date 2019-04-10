@@ -59,17 +59,41 @@ class DublinBusLiveDataResource(
         val requestBody = DublinBusRealTimeStopDataRequestBodyXml(requestRoot)
         val request = DublinBusRealTimeStopDataRequestXml(requestBody)
         return dublinBusApi.getRealTimeStopData(request)
-                .map { response -> response.dublinBusRealTimeStopData }
+                .map { response ->
+                    response.dublinBusRealTimeStopData
+                            .filter {
+                                it.routeId != null
+                                        && it.destination != null
+                                        && it.expectedTimestamp != null
+                            }
+                            .map {
+                                it.copy(
+                                        routeId = it.routeId!!.trim(),
+                                        destination = it.destination!!.trim(),
+                                        expectedTimestamp = it.expectedTimestamp!!.trim()
+                                )
+                            }
+                }
     }
 
     private fun fetchRtpiLiveData(stopId: String): Single<List<RtpiRealTimeBusInformationJson>> {
         return rtpiApi.realTimeBusInformation(stopId, Operator.GO_AHEAD.code, RtpiApi.JSON)
-                .map { response -> response.results
-                        .map {
-                            it.copy(
-                                    arrivalDateTime = toIso8601Timestamp(it.arrivalDateTime)
-                            )
-                        }
+                .map { response ->
+                    response.results
+                            .filter {
+                                it.route != null
+                                        && it.destination != null
+                                        && it.operator != null
+                                        && it.arrivalDateTime != null
+                            }
+                            .map {
+                                it.copy(
+                                        route = it.route!!.trim(),
+                                        operator = it.operator!!.trim().toUpperCase(),
+                                        destination = it.destination!!.trim(),
+                                        arrivalDateTime = toIso8601Timestamp(it.arrivalDateTime)
+                                )
+                            }
                 }
     }
 

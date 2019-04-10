@@ -31,8 +31,19 @@ class DublinBusRouteResource(
         return dublinBusApi.getRoutes(request)
                 .map { response ->
                     response.routes
-                            .filter { it.id != null && it.origin != null && it.destination != null && it.id != "1C" }
-                            .map { it.copy(id = it.id!!.trim(), origin = it.origin!!.trim(), destination = it.destination!!.trim()) }
+                            .filter {
+                                it.id != null
+                                        && it.origin != null
+                                        && it.destination != null
+                                        && it.id != "1C"
+                            }
+                            .map {
+                                it.copy(
+                                        id = it.id!!.trim(),
+                                        origin = it.origin!!.trim(),
+                                        destination = it.destination!!.trim()
+                                )
+                            }
                 }
     }
 
@@ -41,7 +52,8 @@ class DublinBusRouteResource(
                 .map { response ->
                     response.results
                             .filter {
-                                it.route != null && it.operator != null
+                                it.route != null
+                                        && it.operator != null
                                         && (Operator.DUBLIN_BUS.code.equals(it.operator.trim(), ignoreCase = true)
                                         || Operator.GO_AHEAD.code.equals(it.operator.trim(), ignoreCase = true))
                             }
@@ -79,12 +91,12 @@ class DublinBusRouteResource(
             } else {
                 val newRoutes = aggregatedRoute.variants.toMutableList()
                 newRoutes.addAll(
-                    route.variants.map {
-                        RouteVariant(
-                                origin = it.origin,
-                                destination = it.destination
-                        )
-                    }
+                        route.variants.map {
+                            RouteVariant(
+                                    origin = it.origin,
+                                    destination = it.destination
+                            )
+                        }
                 )
                 aggregatedRoutes[route.route] = aggregatedRoute.copy(variants = newRoutes)
             }
