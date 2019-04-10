@@ -4,6 +4,7 @@ import ie.dublinbuspal.service.api.dublinbus.*
 import ie.dublinbuspal.service.api.rtpi.RtpiApi
 import ie.dublinbuspal.service.api.rtpi.RtpiRouteListInformationVariantJson
 import ie.dublinbuspal.service.api.rtpi.RtpiRouteListInformationWithVariantsJson
+import ie.dublinbuspal.util.Operator
 import ie.dublinbuspal.util.StringUtils
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
@@ -34,9 +35,11 @@ class DublinBusRouteResource(
     }
 
     private fun fetchRtpiBusRoutes(): Single<List<RtpiRouteListInformationWithVariantsJson>> {
-        return rtpiApi.routelistInformationWithVariants("json")
+        return rtpiApi.routelistInformationWithVariants(RtpiApi.JSON)
                 .map { response -> response.results
-                        .filter { it.route != null && it.operator != null && ("bac" == it.operator.toLowerCase().trim() || "gad" == it.operator.toLowerCase().trim()) }
+                        .filter { it.route != null && it.operator != null
+                                && (Operator.DUBLIN_BUS.code == it.operator.toLowerCase().trim()
+                                || Operator.GO_AHEAD.code == it.operator.toLowerCase().trim()) }
                         .map { it.copy(route = it.route!!.trim()) }
                 }
     }
@@ -46,7 +49,7 @@ class DublinBusRouteResource(
         for (route in defaultRoutes) {
             val aggregatedRoute = aggregatedRoutes[route.id!!]
             if (aggregatedRoute == null) {
-                aggregatedRoutes[route.id!!] = RtpiRouteListInformationWithVariantsJson(operator = "bac", route = route.id!!,
+                aggregatedRoutes[route.id!!] = RtpiRouteListInformationWithVariantsJson(operator = Operator.DUBLIN_BUS.code, route = route.id!!,
                         variants = listOf(RtpiRouteListInformationVariantJson(origin = route.origin!!, destination = route.destination!!)))
             } else {
                 //shouldn't happen

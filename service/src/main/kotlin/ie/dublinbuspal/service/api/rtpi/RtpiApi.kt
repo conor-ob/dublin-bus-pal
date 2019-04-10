@@ -31,4 +31,8 @@ interface RtpiApi {
             @Query("format") format: String
     ): Single<RtpiRealTimeBusInformationResponseJson>
 
+    companion object {
+        const val JSON = "json"
+    }
+
 }

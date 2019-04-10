@@ -3,6 +3,7 @@ package ie.dublinbuspal.service.resource
 import ie.dublinbuspal.service.api.dublinbus.*
 import ie.dublinbuspal.service.api.rtpi.RtpiApi
 import ie.dublinbuspal.service.api.rtpi.RtpiBusStopInformationJson
+import ie.dublinbuspal.util.Operator
 import io.reactivex.Single
 import io.reactivex.functions.Function3
 import io.reactivex.schedulers.Schedulers
@@ -33,7 +34,7 @@ class DublinBusStopResource(
     }
 
     private fun fetchRtpiDublinBusStops(): Single<List<RtpiBusStopInformationJson>> {
-        return rtpiApi.busStopInformation("bac", "json")
+        return rtpiApi.busStopInformation(Operator.DUBLIN_BUS.code, RtpiApi.JSON)
             .map { response -> response.results
                 .filter { it.displayId != null && it.fullName != null && it.latitude != null && it.longitude != null }
                 .map { it.copy(displayId = it.displayId!!.trim(), fullName = it.fullName!!.trim(), latitude = it.latitude!!.trim(), longitude = it.longitude!!.trim()) }
@@ -41,7 +42,7 @@ class DublinBusStopResource(
     }
 
     private fun fetchRtpiGoAheadBusStops(): Single<List<RtpiBusStopInformationJson>> {
-        return rtpiApi.busStopInformation("gad", "json")
+        return rtpiApi.busStopInformation(Operator.GO_AHEAD.code, RtpiApi.JSON)
             .map { response -> response.results
                 .filter { it.displayId != null && it.fullName != null && it.latitude != null && it.longitude != null }
                 .map { it.copy(displayId = it.displayId!!.trim(), fullName = it.fullName!!.trim(), latitude = it.latitude!!.trim(), longitude = it.longitude!!.trim()) }

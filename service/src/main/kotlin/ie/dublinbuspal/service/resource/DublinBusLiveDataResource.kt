@@ -49,13 +49,11 @@ class DublinBusLiveDataResource(
         val requestBody = DublinBusRealTimeStopDataRequestBodyXml(requestRoot)
         val request = DublinBusRealTimeStopDataRequestXml(requestBody)
         return dublinBusApi.getRealTimeStopData(request)
-                .map { response -> response.dublinBusRealTimeStopData
-                        .map { it.copy(timestampFormat = "ISO") }
-                }
+                .map { response -> response.dublinBusRealTimeStopData }
     }
 
     private fun fetchRtpiLiveData(stopId: String): Single<List<RtpiRealTimeBusInformationJson>> {
-        return rtpiApi.realTimeBusInformation(stopId, "gad", "json")
+        return rtpiApi.realTimeBusInformation(stopId, Operator.GO_AHEAD.code, RtpiApi.JSON)
                 .map { response -> response.results
                         .map {
                             it.copy(

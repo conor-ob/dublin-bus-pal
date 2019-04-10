@@ -63,7 +63,7 @@ class DublinBusRouteServiceResource(
     }
 
     private fun fetchRtpiRouteServices(routeId: String, operator: Operator): Single<List<RtpiRouteInformationJson>> {
-        return rtpiApi.routeInformation(routeId, operator.code, "json").map { it.results }
+        return rtpiApi.routeInformation(routeId, operator.code, RtpiApi.JSON).map { it.results }
     }
 
 }
