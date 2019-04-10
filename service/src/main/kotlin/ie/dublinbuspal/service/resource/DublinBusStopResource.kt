@@ -1,5 +1,7 @@
 package ie.dublinbuspal.service.resource
 
+import ie.dublinbuspal.service.api.RtpiStop
+import ie.dublinbuspal.service.api.StopService
 import ie.dublinbuspal.service.api.dublinbus.*
 import ie.dublinbuspal.service.api.rtpi.RtpiApi
 import ie.dublinbuspal.service.api.rtpi.RtpiBusStopInformationJson
@@ -13,7 +15,7 @@ class DublinBusStopResource(
         private val rtpiApi: RtpiApi
 ) {
 
-    fun getStops(): Single<List<RtpiBusStopInformationJson>> {
+    fun getStops(): Single<List<RtpiStop>> {
         return Single.zip(
                 fetchDefaultDublinBusStops().subscribeOn(Schedulers.newThread()),
                 fetchRtpiDublinBusStops().subscribeOn(Schedulers.newThread()),
@@ -53,23 +55,25 @@ class DublinBusStopResource(
         defaultStops: List<DublinBusDestinationXml>,
         dublinBusStops: List<RtpiBusStopInformationJson>,
         goAheadDublinStops: List<RtpiBusStopInformationJson>
-    ): List<RtpiBusStopInformationJson> {
-        val aggregatedStops = mutableMapOf<String, RtpiBusStopInformationJson>()
+    ): List<RtpiStop> {
+        val aggregatedStops = mutableMapOf<String, RtpiStop>()
         for (stop in defaultStops) {
             var aggregatedStop = aggregatedStops[stop.id]
             if (aggregatedStop == null) {
-                aggregatedStops[stop.id!!] = RtpiBusStopInformationJson(
-                    stopId = stop.id!!,
-                    fullName = stop.name!!,
+                aggregatedStops[stop.id!!] = RtpiStop(
+                    id = stop.id!!,
+                    name = stop.name!!,
                     latitude = stop.latitude!!,
-                    longitude = stop.longitude!!
+                    longitude = stop.longitude!!,
+                    stopServices = emptyList()
                 )
             } else {
                 aggregatedStop = aggregatedStop.copy(
-                    stopId = stop.id!!,
-                    fullName = stop.name!!,
+                    id = stop.id!!,
+                    name = stop.name!!,
                     latitude = stop.latitude!!,
-                    longitude = stop.longitude!!
+                    longitude = stop.longitude!!,
+                    stopServices = emptyList()
                 )
                 aggregatedStops[stop.id!!] = aggregatedStop
             }
@@ -77,22 +81,56 @@ class DublinBusStopResource(
         for (stop in dublinBusStops) {
             var aggregatedStop = aggregatedStops[stop.stopId]
             if (aggregatedStop == null) {
-                aggregatedStops[stop.stopId!!] = stop
+                aggregatedStops[stop.stopId!!] = RtpiStop(
+                        id = stop.displayId!!,
+                        name = stop.fullName!!,
+                        latitude = stop.latitude!!,
+                        longitude = stop.longitude!!,
+                        stopServices = stop.operators.map {
+                            StopService(
+                                    operatorId = it.name!!,
+                                    routeIds = it.routes
+                            )
+                        }
+                )
             } else {
-                val existingOperators = aggregatedStop.operators.toMutableList()
-                existingOperators.addAll(stop.operators)
-                aggregatedStop = aggregatedStop.copy(operators = existingOperators)
+                val existingOperators = aggregatedStop.stopServices.toMutableList()
+                existingOperators.addAll(stop.operators.map {
+                        StopService(
+                                operatorId = it.name!!,
+                                routeIds = it.routes
+                        )
+                    }
+                )
+                aggregatedStop = aggregatedStop.copy(stopServices = existingOperators)
                 aggregatedStops[stop.stopId!!] = aggregatedStop
             }
         }
         for (stop in goAheadDublinStops) {
             var aggregatedStop = aggregatedStops[stop.stopId]
             if (aggregatedStop == null) {
-                aggregatedStops[stop.stopId!!] = stop
+                aggregatedStops[stop.stopId!!] = RtpiStop(
+                        id = stop.displayId!!,
+                        name = stop.fullName!!,
+                        latitude = stop.latitude!!,
+                        longitude = stop.longitude!!,
+                        stopServices = stop.operators.map {
+                            StopService(
+                                    operatorId = it.name!!,
+                                    routeIds = it.routes
+                            )
+                        }
+                )
             } else {
-                val existingOperators = aggregatedStop.operators.toMutableList()
-                existingOperators.addAll(stop.operators)
-                aggregatedStop = aggregatedStop.copy(operators = existingOperators)
+                val existingOperators = aggregatedStop.stopServices.toMutableList()
+                existingOperators.addAll(stop.operators.map {
+                    StopService(
+                            operatorId = it.name!!,
+                            routeIds = it.routes
+                    )
+                }
+                )
+                aggregatedStop = aggregatedStop.copy(stopServices = existingOperators)
                 aggregatedStops[stop.stopId!!] = aggregatedStop
             }
         }

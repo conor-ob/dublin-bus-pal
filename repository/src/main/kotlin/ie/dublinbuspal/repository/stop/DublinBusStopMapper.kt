@@ -4,7 +4,7 @@ import ie.dublinbuspal.data.entity.DublinBusStopEntity
 import ie.dublinbuspal.data.entity.DublinBusStopLocationEntity
 import ie.dublinbuspal.data.entity.DublinBusStopServiceEntity
 import ie.dublinbuspal.model.stop.DublinBusStop
-import ie.dublinbuspal.service.api.rtpi.RtpiBusStopInformationJson
+import ie.dublinbuspal.service.api.RtpiStop
 import ie.dublinbuspal.util.Coordinate
 import ie.dublinbuspal.util.Operator
 import java.util.*
@@ -12,25 +12,25 @@ import java.util.*
 object DublinBusStopMapper {
 
     fun mapJsonToEntities(
-            jsonArray: List<RtpiBusStopInformationJson>
+            jsonArray: List<RtpiStop>
     ): Pair<List<DublinBusStopLocationEntity>, List<DublinBusStopServiceEntity>> {
         val locationEntities = mutableListOf<DublinBusStopLocationEntity>()
         val serviceEntities = mutableListOf<DublinBusStopServiceEntity>()
         for (json in jsonArray) {
             locationEntities.add(
                     DublinBusStopLocationEntity(
-                            id = json.stopId!!,
-                            name = json.fullName!!,
-                            latitude = json.latitude!!.toDouble(),
-                            longitude = json.longitude!!.toDouble()
+                            id = json.id,
+                            name = json.name,
+                            latitude = json.latitude.toDouble(),
+                            longitude = json.longitude.toDouble()
                     )
             )
-            for (operator in json.operators) {
-                for (route in operator.routes) {
+            for (stopService in json.stopServices) {
+                for (route in stopService.routeIds) {
                     serviceEntities.add(
                             DublinBusStopServiceEntity(
-                                    stopId = json.stopId!!,
-                                    operator = operator.name!!,
+                                    stopId = json.id,
+                                    operator = stopService.operatorId,
                                     route = route
                             )
                     )

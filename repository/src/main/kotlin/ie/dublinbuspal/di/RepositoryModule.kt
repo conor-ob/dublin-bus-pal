@@ -35,11 +35,11 @@ import ie.dublinbuspal.repository.rss.RssNewsRepository
 import ie.dublinbuspal.repository.stop.DublinBusStopPersister
 import ie.dublinbuspal.repository.stop.DublinBusStopRepository
 import ie.dublinbuspal.repository.stop.StopRepository
+import ie.dublinbuspal.service.api.RtpiLiveData
+import ie.dublinbuspal.service.api.RtpiRoute
+import ie.dublinbuspal.service.api.RtpiRouteService
+import ie.dublinbuspal.service.api.RtpiStop
 import ie.dublinbuspal.service.api.rss.RssResponseXml
-import ie.dublinbuspal.service.api.rtpi.RtpiBusStopInformationJson
-import ie.dublinbuspal.service.api.rtpi.RtpiRealTimeBusInformationJson
-import ie.dublinbuspal.service.api.rtpi.RtpiRouteListInformationWithVariantsJson
-import ie.dublinbuspal.service.api.rtpi.RtpiRouteService
 import ie.dublinbuspal.service.resource.*
 import ie.dublinbuspal.util.InternetManager
 import ie.dublinbuspal.util.Operator
@@ -77,7 +77,7 @@ class RepositoryModule {
             persisterDao: PersisterDao,
             internetManager: InternetManager
     ): Repository<DublinBusStop> {
-        val fetcher = Fetcher<List<RtpiBusStopInformationJson>, String> { dublinBusStopResource.getStops() }
+        val fetcher = Fetcher<List<RtpiStop>, String> { dublinBusStopResource.getStops() }
         val persister = DublinBusStopPersister(cacheResource, longTermMemoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, longTermMemoryPolicy)
         return DublinBusStopRepository(store)
@@ -91,7 +91,7 @@ class RepositoryModule {
             persisterDao: PersisterDao,
             internetManager: InternetManager
     ): Repository<Route> {
-        val fetcher = Fetcher<List<RtpiRouteListInformationWithVariantsJson>, String> { dublinBusRouteResource.getRoutes() }
+        val fetcher = Fetcher<List<RtpiRoute>, String> { dublinBusRouteResource.getRoutes() }
         val persister = DublinBusRoutePersister(cacheResource, longTermMemoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, longTermMemoryPolicy)
         return DublinBusRouteRepository(store)
@@ -102,7 +102,7 @@ class RepositoryModule {
     fun liveDataRepository(
             liveDataResource: DublinBusLiveDataResource
     ): Repository<LiveData> {
-        val store = StoreBuilder.parsedWithKey<String, List<RtpiRealTimeBusInformationJson>, List<LiveData>>()
+        val store = StoreBuilder.parsedWithKey<String, List<RtpiLiveData>, List<LiveData>>()
                 .fetcher { key -> liveDataResource.getLiveData(key) }
                 .parser { xml -> DublinBusLiveDataMapper.map(xml) }
                 .memoryPolicy(shortTermMemoryPolicy)

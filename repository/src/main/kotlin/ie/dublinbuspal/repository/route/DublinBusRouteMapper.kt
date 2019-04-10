@@ -5,27 +5,27 @@ import ie.dublinbuspal.data.entity.DublinBusRouteInfoEntity
 import ie.dublinbuspal.data.entity.DublinBusRouteVariantEntity
 import ie.dublinbuspal.model.route.Route
 import ie.dublinbuspal.model.route.RouteVariant
-import ie.dublinbuspal.service.api.rtpi.RtpiRouteListInformationWithVariantsJson
+import ie.dublinbuspal.service.api.RtpiRoute
 import ie.dublinbuspal.util.Operator
 
 object DublinBusRouteMapper {
 
     fun mapJsonToEntities(
-            jsonArray: List<RtpiRouteListInformationWithVariantsJson>
+            jsonArray: List<RtpiRoute>
     ): Pair<List<DublinBusRouteInfoEntity>, List<DublinBusRouteVariantEntity>> {
         val infoEntities = mutableListOf<DublinBusRouteInfoEntity>()
         val variantEntities = mutableListOf<DublinBusRouteVariantEntity>()
         for (json in jsonArray) {
             infoEntities.add(
                     DublinBusRouteInfoEntity(
-                            id = json.route!!,
-                            operator = json.operator!!
+                            id = json.routeId,
+                            operator = json.operatorId
                     )
             )
             for (variant in json.variants) {
                 variantEntities.add(
                         DublinBusRouteVariantEntity(
-                                routeId = json.route!!,
+                                routeId = json.routeId,
                                 origin = variant.origin,
                                 destination = variant.destination
                         )

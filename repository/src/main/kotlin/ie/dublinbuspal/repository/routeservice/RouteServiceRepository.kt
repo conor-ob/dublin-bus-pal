@@ -5,7 +5,7 @@ import ie.dublinbuspal.model.routeservice.RouteServiceVariant
 import ie.dublinbuspal.model.stop.Stop
 import ie.dublinbuspal.repository.KeyedRepository
 import ie.dublinbuspal.repository.Repository
-import ie.dublinbuspal.service.api.rtpi.RtpiRouteService
+import ie.dublinbuspal.service.api.RtpiRouteService
 import ie.dublinbuspal.util.Operator
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -43,7 +43,7 @@ class RouteServiceRepository(
         }
         return RouteService(
                 id = rtpiRouteService.routeId,
-                operator = Operator.parse(rtpiRouteService.operator),
+                operator = Operator.parse(rtpiRouteService.operatorId),
                 variants = variants
         )
     }

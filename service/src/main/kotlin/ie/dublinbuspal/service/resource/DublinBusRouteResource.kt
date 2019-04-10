@@ -1,8 +1,9 @@
 package ie.dublinbuspal.service.resource
 
+import ie.dublinbuspal.service.api.RouteVariant
+import ie.dublinbuspal.service.api.RtpiRoute
 import ie.dublinbuspal.service.api.dublinbus.*
 import ie.dublinbuspal.service.api.rtpi.RtpiApi
-import ie.dublinbuspal.service.api.rtpi.RtpiRouteListInformationVariantJson
 import ie.dublinbuspal.service.api.rtpi.RtpiRouteListInformationWithVariantsJson
 import ie.dublinbuspal.util.Operator
 import ie.dublinbuspal.util.StringUtils
@@ -15,7 +16,7 @@ class DublinBusRouteResource(
         private val rtpiApi: RtpiApi
 ) {
 
-    fun getRoutes(): Single<List<RtpiRouteListInformationWithVariantsJson>> {
+    fun getRoutes(): Single<List<RtpiRoute>> {
         return Single.zip(
                 fetchDefaultDublinBusRoutes().subscribeOn(Schedulers.io()),
                 fetchRtpiBusRoutes().subscribeOn(Schedulers.io()),
@@ -28,29 +29,36 @@ class DublinBusRouteResource(
         val requestBody = DublinBusRoutesRequestBodyXml(requestRoot)
         val request = DublinBusRoutesRequestXml(requestBody)
         return dublinBusApi.getRoutes(request)
-                .map { response -> response.routes
-                        .filter { it.id != null && it.origin != null && it.destination != null && it.id != "1C" }
-                        .map { it.copy(id = it.id!!.trim(), origin = it.origin!!.trim(), destination = it.destination!!.trim()) }
+                .map { response ->
+                    response.routes
+                            .filter { it.id != null && it.origin != null && it.destination != null && it.id != "1C" }
+                            .map { it.copy(id = it.id!!.trim(), origin = it.origin!!.trim(), destination = it.destination!!.trim()) }
                 }
     }
 
     private fun fetchRtpiBusRoutes(): Single<List<RtpiRouteListInformationWithVariantsJson>> {
         return rtpiApi.routelistInformationWithVariants(RtpiApi.JSON)
-                .map { response -> response.results
-                        .filter { it.route != null && it.operator != null
-                                && (Operator.DUBLIN_BUS.code == it.operator.toLowerCase().trim()
-                                || Operator.GO_AHEAD.code == it.operator.toLowerCase().trim()) }
-                        .map { it.copy(route = it.route!!.trim()) }
+                .map { response ->
+                    response.results
+                            .filter {
+                                it.route != null && it.operator != null
+                                        && (Operator.DUBLIN_BUS.code == it.operator.toLowerCase().trim()
+                                        || Operator.GO_AHEAD.code == it.operator.toLowerCase().trim())
+                            }
+                            .map { it.copy(route = it.route!!.trim()) }
                 }
     }
 
-    private fun aggregate(defaultRoutes: List<DublinBusRouteXml>, rtpiRoutes: List<RtpiRouteListInformationWithVariantsJson>): List<RtpiRouteListInformationWithVariantsJson> {
-        val aggregatedRoutes = mutableMapOf<String, RtpiRouteListInformationWithVariantsJson>()
+    private fun aggregate(defaultRoutes: List<DublinBusRouteXml>, rtpiRoutes: List<RtpiRouteListInformationWithVariantsJson>): List<RtpiRoute> {
+        val aggregatedRoutes = mutableMapOf<String, RtpiRoute>()
         for (route in defaultRoutes) {
             val aggregatedRoute = aggregatedRoutes[route.id!!]
             if (aggregatedRoute == null) {
-                aggregatedRoutes[route.id!!] = RtpiRouteListInformationWithVariantsJson(operator = Operator.DUBLIN_BUS.code, route = route.id!!,
-                        variants = listOf(RtpiRouteListInformationVariantJson(origin = route.origin!!, destination = route.destination!!)))
+                aggregatedRoutes[route.id!!] = RtpiRoute(
+                        routeId = route.id!!,
+                        operatorId = Operator.DUBLIN_BUS.code,
+                        variants = listOf(RouteVariant(origin = route.origin!!, destination = route.destination!!))
+                )
             } else {
                 //shouldn't happen
             }
@@ -58,10 +66,26 @@ class DublinBusRouteResource(
         for (route in rtpiRoutes) {
             val aggregatedRoute = aggregatedRoutes[route.route!!]
             if (aggregatedRoute == null) {
-                aggregatedRoutes[route.route] = route
+                aggregatedRoutes[route.route] = RtpiRoute(
+                        routeId = route.route,
+                        operatorId = route.operator!!,
+                        variants = route.variants.map {
+                            RouteVariant(
+                                    origin = it.origin,
+                                    destination = it.destination
+                            )
+                        }
+                )
             } else {
                 val newRoutes = aggregatedRoute.variants.toMutableList()
-                newRoutes.addAll(route.variants)
+                newRoutes.addAll(
+                    route.variants.map {
+                        RouteVariant(
+                                origin = it.origin,
+                                destination = it.destination
+                        )
+                    }
+                )
                 aggregatedRoutes[route.route] = aggregatedRoute.copy(variants = newRoutes)
             }
         }

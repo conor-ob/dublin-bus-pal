@@ -1,10 +1,10 @@
 package ie.dublinbuspal.service.resource
 
+import ie.dublinbuspal.service.api.RtpiRouteService
+import ie.dublinbuspal.service.api.RtpiRouteServiceVariant
 import ie.dublinbuspal.service.api.dublinbus.*
 import ie.dublinbuspal.service.api.rtpi.RtpiApi
 import ie.dublinbuspal.service.api.rtpi.RtpiRouteInformationJson
-import ie.dublinbuspal.service.api.rtpi.RtpiRouteService
-import ie.dublinbuspal.service.api.rtpi.RtpiRouteServiceVariant
 import ie.dublinbuspal.util.Operator
 import io.reactivex.Single
 
@@ -49,7 +49,11 @@ class DublinBusRouteServiceResource(
                             )
                     )
                 }
-                RtpiRouteService(routeId, operator.code, variants)
+                RtpiRouteService(
+                        routeId = routeId,
+                        operatorId = operator.code,
+                        variants = variants
+                )
             }
         }
         throw IllegalStateException("Unable to get Route Service for route ID: '$routeId' and operator: '$operator'")

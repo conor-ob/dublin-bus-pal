@@ -1,5 +1,6 @@
 package ie.dublinbuspal.service.resource
 
+import ie.dublinbuspal.service.api.RtpiLiveData
 import ie.dublinbuspal.service.api.dublinbus.*
 import ie.dublinbuspal.service.api.rtpi.RtpiApi
 import ie.dublinbuspal.service.api.rtpi.RtpiRealTimeBusInformationJson
@@ -15,7 +16,7 @@ class DublinBusLiveDataResource(
         private val rtpiApi: RtpiApi
 ) {
 
-    fun getLiveData(stopId: String): Single<List<RtpiRealTimeBusInformationJson>> {
+    fun getLiveData(stopId: String): Single<List<RtpiLiveData>> {
         return Single.zip(
                 fetchDublinBusLiveData(stopId).subscribeOn(Schedulers.newThread()),
                 fetchRtpiLiveData(stopId).subscribeOn(Schedulers.newThread()),
@@ -28,19 +29,28 @@ class DublinBusLiveDataResource(
     private fun aggregate(
             dublinBusLiveData: List<DublinBusRealTimeStopDataXml>,
             rtpiLiveData: List<RtpiRealTimeBusInformationJson>
-    ): List<RtpiRealTimeBusInformationJson> {
-        val aggregated = mutableListOf<RtpiRealTimeBusInformationJson>()
+    ): List<RtpiLiveData> {
+        val aggregated = mutableListOf<RtpiLiveData>()
         for (liveData in dublinBusLiveData) {
             aggregated.add(
-                    RtpiRealTimeBusInformationJson(
-                            route = liveData.routeId!!,
-                            operator = Operator.DUBLIN_BUS.code,
+                    RtpiLiveData(
+                            routeId = liveData.routeId!!,
+                            operatorId = Operator.DUBLIN_BUS.code,
                             destination = liveData.destination!!,
-                            arrivalDateTime = liveData.expectedTimestamp!!
+                            expectedTimestamp = liveData.expectedTimestamp!!
                     )
             )
         }
-        aggregated.addAll(rtpiLiveData)
+        for (liveData in rtpiLiveData) {
+            aggregated.add(
+                    RtpiLiveData(
+                            routeId = liveData.route!!,
+                            operatorId = Operator.GO_AHEAD.code,
+                            destination = liveData.destination!!,
+                            expectedTimestamp = liveData.arrivalDateTime!!
+                    )
+            )
+        }
         return aggregated
     }
 
@@ -57,11 +67,7 @@ class DublinBusLiveDataResource(
                 .map { response -> response.results
                         .map {
                             it.copy(
-                                    arrivalDateTime = toIso8601Timestamp(it.arrivalDateTime),
-                                    departureDateTime = toIso8601Timestamp(it.departureDateTime),
-                                    scheduledDepartureDateTime = toIso8601Timestamp(it.scheduledArrivalDateTime),
-                                    scheduledArrivalDateTime = toIso8601Timestamp(it.scheduledArrivalDateTime),
-                                    sourceTimestamp = toIso8601Timestamp(it.sourceTimestamp)
+                                    arrivalDateTime = toIso8601Timestamp(it.arrivalDateTime)
                             )
                         }
                 }

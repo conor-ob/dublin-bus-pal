@@ -4,19 +4,19 @@ import ie.dublinbuspal.model.livedata.Destination
 import ie.dublinbuspal.model.livedata.DueTime
 import ie.dublinbuspal.model.livedata.LiveData
 import ie.dublinbuspal.repository.Mapper
-import ie.dublinbuspal.service.api.rtpi.RtpiRealTimeBusInformationJson
+import ie.dublinbuspal.service.api.RtpiLiveData
 import ie.dublinbuspal.util.Formatter
 import ie.dublinbuspal.util.Operator
 import ie.dublinbuspal.util.TimeUtils
 
-object DublinBusLiveDataMapper : Mapper<RtpiRealTimeBusInformationJson, LiveData> {
+object DublinBusLiveDataMapper : Mapper<RtpiLiveData, LiveData> {
 
-    override fun map(from: RtpiRealTimeBusInformationJson): LiveData {
+    override fun map(from: RtpiLiveData): LiveData {
         return LiveData(
-                routeId = from.route!!,
-                operator = Operator.parse(from.operator!!),
-                destination = mapDestination(from.destination!!),
-                dueTime = mapDueTime(from.arrivalDateTime!!)
+                routeId = from.routeId,
+                operator = Operator.parse(from.operatorId),
+                destination = mapDestination(from.destination),
+                dueTime = mapDueTime(from.expectedTimestamp)
         )
     }
 

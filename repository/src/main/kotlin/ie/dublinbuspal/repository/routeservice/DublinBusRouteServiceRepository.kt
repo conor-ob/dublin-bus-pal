@@ -2,7 +2,7 @@ package ie.dublinbuspal.repository.routeservice
 
 import com.nytimes.android.external.store3.base.impl.Store
 import ie.dublinbuspal.repository.KeyedRepository
-import ie.dublinbuspal.service.api.rtpi.RtpiRouteService
+import ie.dublinbuspal.service.api.RtpiRouteService
 import ie.dublinbuspal.util.Operator
 import io.reactivex.Observable
 

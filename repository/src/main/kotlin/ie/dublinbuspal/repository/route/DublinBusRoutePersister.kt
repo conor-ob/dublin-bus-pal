@@ -5,6 +5,7 @@ import ie.dublinbuspal.data.dao.PersisterDao
 import ie.dublinbuspal.data.resource.DublinBusRouteCacheResource
 import ie.dublinbuspal.model.route.Route
 import ie.dublinbuspal.repository.AbstractPersister
+import ie.dublinbuspal.service.api.RtpiRoute
 import ie.dublinbuspal.service.api.rtpi.RtpiRouteListInformationWithVariantsJson
 import ie.dublinbuspal.util.InternetManager
 import io.reactivex.Maybe
@@ -14,13 +15,13 @@ class DublinBusRoutePersister(
         memoryPolicy: MemoryPolicy,
         persisterDao: PersisterDao,
         internetManager: InternetManager
-) : AbstractPersister<List<RtpiRouteListInformationWithVariantsJson>, List<Route>, String>(memoryPolicy, persisterDao, internetManager) {
+) : AbstractPersister<List<RtpiRoute>, List<Route>, String>(memoryPolicy, persisterDao, internetManager) {
 
     override fun select(key: String): Maybe<List<Route>> {
         return cacheResource.selectRoutes().map { DublinBusRouteMapper.mapEntitiesToStops(it) }
     }
 
-    override fun insert(key: String, raw: List<RtpiRouteListInformationWithVariantsJson>) {
+    override fun insert(key: String, raw: List<RtpiRoute>) {
         cacheResource.insertRoutes(DublinBusRouteMapper.mapJsonToEntities(raw))
     }
 
