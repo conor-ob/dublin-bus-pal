@@ -3,7 +3,7 @@ package ie.dublinbuspal.di
 import dagger.Module
 import dagger.Provides
 import ie.dublinbuspal.service.api.dublinbus.DublinBusApi
-import ie.dublinbuspal.service.api.rss.DublinBusRssApi
+import ie.dublinbuspal.service.api.rss.RssApi
 import ie.dublinbuspal.service.api.rtpi.RtpiApi
 import ie.dublinbuspal.service.interceptor.NetworkLoggingInterceptor
 import ie.dublinbuspal.service.resource.*
@@ -64,14 +64,14 @@ class NetworkModule(
 
     @Provides
     @Singleton
-    fun rssApi(): DublinBusRssApi {
+    fun rssApi(): RssApi {
         val retrofit = Retrofit.Builder()
                 .baseUrl(rssApiEndpoint)
                 .client(okHttpClient)
-                .addConverterFactory(jsonDeserializer)
+                .addConverterFactory(xmlDeserializer)
                 .addCallAdapterFactory(callAdapter)
                 .build()
-        return retrofit.create(DublinBusRssApi::class.java)
+        return retrofit.create(RssApi::class.java)
     }
 
     @Provides
@@ -112,7 +112,7 @@ class NetworkModule(
 
     @Provides
     @Singleton
-    fun dublinBusRssResource(rssApi: DublinBusRssApi): DublinBusRssResource {
+    fun dublinBusRssResource(rssApi: RssApi): DublinBusRssResource {
         return DublinBusRssResource(rssApi)
     }
 

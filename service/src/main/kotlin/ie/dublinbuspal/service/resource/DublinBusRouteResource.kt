@@ -42,8 +42,8 @@ class DublinBusRouteResource(
                     response.results
                             .filter {
                                 it.route != null && it.operator != null
-                                        && (Operator.DUBLIN_BUS.code == it.operator.toLowerCase().trim()
-                                        || Operator.GO_AHEAD.code == it.operator.toLowerCase().trim())
+                                        && (Operator.DUBLIN_BUS.code.equals(it.operator.trim(), ignoreCase = true)
+                                        || Operator.GO_AHEAD.code.equals(it.operator.trim(), ignoreCase = true))
                             }
                             .map { it.copy(route = it.route!!.trim()) }
                 }
