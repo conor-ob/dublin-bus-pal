@@ -114,9 +114,9 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun routeServiceRepository(
-            dublinBusRouteServiceRepository: KeyedRepository<Pair<String, Operator>, RtpiRouteService>,
+            dublinBusRouteServiceRepository: KeyedRepository<Pair<String, String>, RtpiRouteService>,
             stopRepository: Repository<Stop>
-    ): KeyedRepository<Pair<String, Operator>, RouteService> {
+    ): KeyedRepository<Pair<String, String>, RouteService> {
         return RouteServiceRepository(dublinBusRouteServiceRepository, stopRepository)
     }
 
@@ -124,8 +124,8 @@ class RepositoryModule {
     @Singleton
     fun dublinBusRouteServiceRepository(
             routeServiceResource: DublinBusRouteServiceResource
-    ): KeyedRepository<Pair<String, Operator>, RtpiRouteService> {
-        val store = StoreBuilder.key<Pair<String, Operator>, RtpiRouteService>()
+    ): KeyedRepository<Pair<String, String>, RtpiRouteService> {
+        val store = StoreBuilder.key<Pair<String, String>, RtpiRouteService>()
                 .fetcher { key -> routeServiceResource.getRouteService(key.first, key.second) }
                 .memoryPolicy(shortTermMemoryPolicy)
                 .refreshOnStale()

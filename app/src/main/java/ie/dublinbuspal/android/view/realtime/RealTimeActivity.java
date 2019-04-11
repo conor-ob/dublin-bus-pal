@@ -61,7 +61,7 @@ import ie.dublinbuspal.android.DublinBusApplication;
 import ie.dublinbuspal.android.R;
 import ie.dublinbuspal.android.util.GoogleMapConstants;
 import ie.dublinbuspal.android.util.ImageUtils;
-import ie.dublinbuspal.android.view.route.RouteActivity;
+import ie.dublinbuspal.android.view.route.RouteServiceActivity;
 import ie.dublinbuspal.android.view.settings.SettingsActivity;
 import ie.dublinbuspal.model.livedata.LiveData;
 import ie.dublinbuspal.model.stop.Stop;
@@ -407,7 +407,7 @@ public class RealTimeActivity
 
     @Override
     public void launchRouteActivity(String routeId, String operator) {
-        Intent intent = RouteActivity.newIntent(this, routeId, operator, getStopId());
+        Intent intent = RouteServiceActivity.newIntent(this, routeId, operator, getStopId());
         startActivity(intent);
     }
 

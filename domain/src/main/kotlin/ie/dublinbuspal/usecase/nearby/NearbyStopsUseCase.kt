@@ -2,14 +2,11 @@ package ie.dublinbuspal.usecase.nearby
 
 import ie.dublinbuspal.location.LocationProvider
 import ie.dublinbuspal.model.stop.Stop
-import ie.dublinbuspal.repository.PreferencesRepository
 import ie.dublinbuspal.repository.Repository
 import ie.dublinbuspal.util.CollectionUtils
 import ie.dublinbuspal.util.Coordinate
 import ie.dublinbuspal.util.LocationUtils
-import io.reactivex.Completable
 import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
 import java.util.*
 import javax.inject.Inject
 

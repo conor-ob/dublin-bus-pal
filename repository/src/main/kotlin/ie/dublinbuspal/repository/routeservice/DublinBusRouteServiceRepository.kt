@@ -7,10 +7,10 @@ import ie.dublinbuspal.util.Operator
 import io.reactivex.Observable
 
 class DublinBusRouteServiceRepository(
-        private val store: Store<RtpiRouteService, Pair<String, Operator>>
-) : KeyedRepository<Pair<String, Operator>, RtpiRouteService> {
+        private val store: Store<RtpiRouteService, Pair<String, String>>
+) : KeyedRepository<Pair<String, String>, RtpiRouteService> {
 
-    override fun getById(key: Pair<String, Operator>): Observable<RtpiRouteService> {
+    override fun getById(key: Pair<String, String>): Observable<RtpiRouteService> {
         return store.get(key).toObservable()
     }
 
@@ -18,7 +18,7 @@ class DublinBusRouteServiceRepository(
         throw UnsupportedOperationException()
     }
 
-    override fun getAllById(key: Pair<String, Operator>): Observable<List<RtpiRouteService>> {
+    override fun getAllById(key: Pair<String, String>): Observable<List<RtpiRouteService>> {
         throw UnsupportedOperationException()
     }
 

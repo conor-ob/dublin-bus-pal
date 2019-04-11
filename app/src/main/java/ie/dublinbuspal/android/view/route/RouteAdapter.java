@@ -20,10 +20,10 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
     private static final int DEFAULT = 1;
     private static final int DESTINATION = 2;
 
-    private final RouteView view;
+    private final RouteServiceView view;
     private List<Stop> busStops = Collections.emptyList();
 
-    RouteAdapter(RouteView view) {
+    RouteAdapter(RouteServiceView view) {
         this.view = view;
     }
 

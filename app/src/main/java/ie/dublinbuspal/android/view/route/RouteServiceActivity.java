@@ -29,6 +29,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.hannesdorfmann.mosby3.mvp.MvpActivity;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -45,11 +47,12 @@ import ie.dublinbuspal.android.R;
 import ie.dublinbuspal.android.util.GoogleMapConstants;
 import ie.dublinbuspal.android.util.ImageUtils;
 import ie.dublinbuspal.android.view.realtime.RealTimeActivity;
+import ie.dublinbuspal.android.view.routeservice.RouteServiceViewModel;
 import ie.dublinbuspal.android.view.settings.SettingsActivity;
 import ie.dublinbuspal.model.stop.Stop;
 
-public class RouteActivity extends MvpActivity<RouteView, RoutePresenter>
-        implements RouteView, OnMapReadyCallback {
+public class RouteServiceActivity extends MvpActivity<RouteServiceView, RouteServicePresenter>
+        implements RouteServiceView, OnMapReadyCallback {
 
     private static final String ROUTE_ID = "route_id";
     private static final String OPERATOR = "operator";
@@ -69,7 +72,7 @@ public class RouteActivity extends MvpActivity<RouteView, RoutePresenter>
 
     @NonNull
     @Override
-    public RoutePresenter createPresenter() {
+    public RouteServicePresenter createPresenter() {
         return ((DublinBusApplication) getApplication()).getApplicationComponent().routeServicePresenter();
     }
 
@@ -142,6 +145,7 @@ public class RouteActivity extends MvpActivity<RouteView, RoutePresenter>
             }
         });
         this.googleMap = googleMap;
+        getPresenter().onMapReady();
     }
 
     private void setupGoogleMap() {
@@ -185,7 +189,7 @@ public class RouteActivity extends MvpActivity<RouteView, RoutePresenter>
         bottomSheetBehavior.setBottomSheetCallback(new ParallaxGoogleMapCallback());
         showRouteButton.setOnClickListener(v ->
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED));
-        swapDirectionButton.setOnClickListener(v -> getPresenter().changeDirectionPressed());
+        swapDirectionButton.setOnClickListener(v -> getPresenter().onNextVariantPressed());
     }
 
     private String getRouteId() {
@@ -201,31 +205,38 @@ public class RouteActivity extends MvpActivity<RouteView, RoutePresenter>
     }
 
     @Override
-    public void setTitle(String origin, String destination) {
-        title.setText(String.format(Locale.UK,
-                getString(R.string.formatted_route_title), origin, destination));
-    }
-
-    @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return super.onSupportNavigateUp();
-    }
-
-    @Override
-    public void setBiDirectional(boolean bidirectional) {
-        if (bidirectional) {
-            swapDirectionButton.setVisibility(View.VISIBLE);
-        }
     }
 
     //TODO temporary fix blah blah
     private boolean firstResponse = false;
 
     @Override
-    public void displayBusStops(List<Stop> busStops) {
+    public void render(@NotNull RouteServiceViewModel viewModel) {
+        showLoading(viewModel.isLoading());
+        if (viewModel.isError() && viewModel.getErrorResource() != null) {
+            showError(viewModel.getErrorResource());
+        } else if (viewModel.getSelectedVariant() > -1) {
+            title.setText(String.format(
+                    Locale.UK,
+                    getString(R.string.formatted_route_title),
+                    viewModel.selectedOrigin(),
+                    viewModel.selectedDestination())
+            );
+            this.towards.setText(String.format(Locale.UK,
+                    getString(R.string.formatted_towards), viewModel.selectedDestination()));
+            if (viewModel.isMapReady()) {
+                displayBusStops(viewModel.selectedStops());
+            }
+        }
+    }
+
+    private void displayBusStops(List<Stop> busStops) {
         if (!firstResponse) {
             setShowBusTimesButtonVisibility(View.VISIBLE);
+            swapDirectionButton.setVisibility(View.VISIBLE);
         }
         firstResponse = true;
         adapter.setBusStops(busStops);
@@ -259,20 +270,12 @@ public class RouteActivity extends MvpActivity<RouteView, RoutePresenter>
         }
     }
 
-    @Override
-    public void showError(int stringId) {
+    private void showError(int stringId) {
         Snackbar.make(coordinatorLayout, stringId, Snackbar.LENGTH_LONG).show();
     }
 
-    @Override
-    public void hideProgress() {
-        swipeRefresh.setRefreshing(false);
-    }
-
-    @Override
-    public void setTowards(String towards) {
-        this.towards.setText(String.format(Locale.UK,
-                getString(R.string.formatted_towards), towards));
+    private void showLoading(boolean isLoading) {
+        swipeRefresh.setRefreshing(isLoading);
     }
 
     @Override
@@ -298,14 +301,14 @@ public class RouteActivity extends MvpActivity<RouteView, RoutePresenter>
     }
 
     public static Intent newIntent(Context context, String routeId, String operator) {
-        Intent intent = new Intent(context, RouteActivity.class);
+        Intent intent = new Intent(context, RouteServiceActivity.class);
         intent.putExtra(ROUTE_ID, routeId);
         intent.putExtra(OPERATOR, operator);
         return intent;
     }
 
     public static Intent newIntent(Context context, String routeId, String operator, String stopId) {
-        Intent intent = new Intent(context, RouteActivity.class);
+        Intent intent = new Intent(context, RouteServiceActivity.class);
         intent.putExtra(ROUTE_ID, routeId);
         intent.putExtra(RealTimeActivity.STOP_ID, stopId);
         intent.putExtra(OPERATOR, operator);

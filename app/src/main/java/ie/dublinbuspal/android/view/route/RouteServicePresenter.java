@@ -2,12 +2,14 @@ package ie.dublinbuspal.android.view.route;
 
 import com.hannesdorfmann.mosby3.mvp.MvpPresenter;
 
-public interface RoutePresenter extends MvpPresenter<RouteView> {
+public interface RouteServicePresenter extends MvpPresenter<RouteServiceView> {
 
     void onResume(String routeId, String operator, String stopId);
 
-    void changeDirectionPressed();
+    void onNextVariantPressed();
 
     void onDestroy();
+
+    void onMapReady();
 
 }

@@ -12,13 +12,13 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 
 class RouteServiceRepository(
-        private val dublinBusRouteServiceRepository: KeyedRepository<Pair<String, Operator>, RtpiRouteService>,
+        private val dublinBusRouteServiceRepository: KeyedRepository<Pair<String, String>, RtpiRouteService>,
         private val stopRepository: Repository<Stop>
-) : KeyedRepository<Pair<String, Operator>, RouteService> {
+) : KeyedRepository<Pair<String, String>, RouteService> {
 
     private var cache = emptyMap<String, Stop>()
 
-    override fun getById(key: Pair<String, Operator>): Observable<RouteService> {
+    override fun getById(key: Pair<String, String>): Observable<RouteService> {
         return Observable.zip(
                 dublinBusRouteServiceRepository.getById(key).subscribeOn(Schedulers.newThread()),
                 stopRepository.getAll().subscribeOn(Schedulers.newThread()),
@@ -52,7 +52,7 @@ class RouteServiceRepository(
         throw UnsupportedOperationException()
     }
 
-    override fun getAllById(key: Pair<String, Operator>): Observable<List<RouteService>> {
+    override fun getAllById(key: Pair<String, String>): Observable<List<RouteService>> {
         throw UnsupportedOperationException()
     }
 

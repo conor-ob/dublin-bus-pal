@@ -13,15 +13,15 @@ class DublinBusRouteServiceResource(
         private val rtpiApi: RtpiApi
 ) {
 
-    fun getRouteService(routeId: String, operator: Operator): Single<RtpiRouteService> {
-        if (operator == Operator.DUBLIN_BUS) {
+    fun getRouteService(routeId: String, operatorId: String): Single<RtpiRouteService> {
+        if (operatorId.equals(Operator.DUBLIN_BUS.code, ignoreCase = true)) {
             return fetchDublinBusRouteServices(routeId).map { dublinBusRouteService ->
                 val variants = mutableListOf<RtpiRouteServiceVariant>()
                 if (dublinBusRouteService.inboundStopXmls.isNotEmpty()) {
                     variants.add(
                             RtpiRouteServiceVariant(
-                                    origin = dublinBusRouteService.dublinBusStopDataByRoute!!.origin!!,
-                                    destination = dublinBusRouteService.dublinBusStopDataByRoute!!.destination!!,
+                                    origin = dublinBusRouteService.dublinBusStopDataByRoute!!.destination!!,
+                                    destination = dublinBusRouteService.dublinBusStopDataByRoute!!.origin!!,
                                     stopIds = dublinBusRouteService.inboundStopXmls.map { it.id!! }
                             )
                     )
@@ -35,28 +35,28 @@ class DublinBusRouteServiceResource(
                             )
                     )
                 }
-                RtpiRouteService(routeId, operator.code, variants)
+                RtpiRouteService(routeId, operatorId, variants)
             }
-        } else if (operator == Operator.GO_AHEAD) {
-            return fetchRtpiRouteServices(routeId, operator).map { rtpiRouteServices ->
+        } else if (operatorId.equals(Operator.GO_AHEAD.code, ignoreCase = true)) {
+            return fetchRtpiRouteServices(routeId, operatorId).map { rtpiRouteServices ->
                 val variants = mutableListOf<RtpiRouteServiceVariant>()
                 for (rtpiRouteService in rtpiRouteServices) {
                     variants.add(
                             RtpiRouteServiceVariant(
-                                    origin = rtpiRouteService.origin,
-                                    destination = rtpiRouteService.destination,
+                                    origin = rtpiRouteService.origin!!,
+                                    destination = rtpiRouteService.destination!!,
                                     stopIds = rtpiRouteService.stops.map { it.displayId!! }
                             )
                     )
                 }
                 RtpiRouteService(
                         routeId = routeId,
-                        operatorId = operator.code,
+                        operatorId = operatorId,
                         variants = variants
                 )
             }
         }
-        throw IllegalStateException("Unable to get Route Service for route ID: '$routeId' and operator: '$operator'")
+        throw IllegalStateException("Unable to get Route Service for route: '$routeId' and operator: '$operatorId'")
     }
 
     private fun fetchDublinBusRouteServices(routeId: String): Single<DublinBusStopDataByRouteResponseXml> {
@@ -66,8 +66,8 @@ class DublinBusRouteServiceResource(
         return dublinBusApi.getStopDataByRoute(request)
     }
 
-    private fun fetchRtpiRouteServices(routeId: String, operator: Operator): Single<List<RtpiRouteInformationJson>> {
-        return rtpiApi.routeInformation(routeId, operator.code, RtpiApi.JSON).map { it.results }
+    private fun fetchRtpiRouteServices(routeId: String, operatorId: String): Single<List<RtpiRouteInformationJson>> {
+        return rtpiApi.routeInformation(routeId, operatorId, RtpiApi.JSON).map { it.results }
     }
 
 }
