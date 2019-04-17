@@ -32,6 +32,7 @@ import ie.dublinbuspal.android.view.web.WebViewActivity;
 import ie.dublinbuspal.usecase.update.UpdateStopsAndRoutesUseCase;
 import ie.dublinbuspal.util.StringUtils;
 import ie.dublinbuspal.util.TimeUtils;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -63,7 +64,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 //        @Inject DublinBusRepository repository;
 //        @Inject DownloadProgressListener listener;
 
-        @Inject UpdateStopsAndRoutesUseCase useCase;
+        @Inject
+        UpdateStopsAndRoutesUseCase useCase;
         private CompositeDisposable disposables = new CompositeDisposable();
 
         @Override
@@ -119,12 +121,20 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     getString(R.string.preference_key_update_database));
             updatePreference.setOnPreferenceClickListener(preference -> {
                 updatePreference.setRefreshing(true);
+
+                useCase.registerObserver(percent ->
+                        Single.just(percent)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .doOnSuccess(val -> updatePreference.setSummary("Downloading " + String.valueOf(val) + " %"))
+                                .subscribe()
+                );
+
                 disposables.add(useCase.update()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(result -> {
-                            updatePreference.setSummary("Downloading " + String.valueOf(result) + " %");
-                            if (result == 100) {
+                        .subscribe(isFinished -> {
+
+                            if (isFinished) {
                                 updatePreference.setRefreshing(false);
                                 PreferenceManager.getDefaultSharedPreferences(updatePreference.getContext())
                                         .edit()
@@ -136,7 +146,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                                     //TODO check if view is attached
                                 }
                             }
-                            Timber.d(result.toString());
+                            Timber.d(isFinished.toString());
                         }));
 
                 return true;

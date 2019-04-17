@@ -4,8 +4,10 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import ie.dublinbuspal.android.location.LocationProviderImpl
+import ie.dublinbuspal.android.util.DownloadProgressListenerImpl
 import ie.dublinbuspal.android.util.InternetManagerImpl
 import ie.dublinbuspal.location.LocationProvider
+import ie.dublinbuspal.util.DownloadProgressListener
 import ie.dublinbuspal.util.InternetManager
 import javax.inject.Singleton
 
@@ -27,5 +29,9 @@ class ApplicationModule(private val context: Context) {
     @Provides
     @Singleton
     fun internetManager(context: Context): InternetManager = InternetManagerImpl(context)
+
+    @Provides
+    @Singleton
+    fun downloadProgressListener(): DownloadProgressListener = DownloadProgressListenerImpl()
 
 }

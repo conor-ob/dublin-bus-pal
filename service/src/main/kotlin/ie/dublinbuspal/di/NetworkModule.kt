@@ -5,8 +5,11 @@ import dagger.Provides
 import ie.dublinbuspal.service.api.dublinbus.DublinBusApi
 import ie.dublinbuspal.service.api.rss.RssApi
 import ie.dublinbuspal.service.api.rtpi.RtpiApi
+import ie.dublinbuspal.service.interceptor.DownloadProgressInterceptor
 import ie.dublinbuspal.service.interceptor.NetworkLoggingInterceptor
 import ie.dublinbuspal.service.resource.*
+import ie.dublinbuspal.util.DownloadProgressListener
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.CallAdapter
 import retrofit2.Converter
@@ -27,9 +30,12 @@ class NetworkModule(
     private val callAdapter: CallAdapter.Factory by lazy { RxJava2CallAdapterFactory.create() }
     private val jsonDeserializer: Converter.Factory by lazy { GsonConverterFactory.create() }
     private val xmlDeserializer: Converter.Factory by lazy { SimpleXmlConverterFactory.create() }
-    private val okHttpClient: OkHttpClient by lazy {
-        OkHttpClient.Builder()
-                //.addInterceptor(downloadInterceptor)
+
+    @Provides
+    @Singleton
+    fun okhttpClient(downloadProgressInterceptor: Interceptor): OkHttpClient {
+        return OkHttpClient.Builder()
+                .addInterceptor(downloadProgressInterceptor)
                 .addNetworkInterceptor(NetworkLoggingInterceptor())
                 .retryOnConnectionFailure(true)
                 .connectTimeout(60, TimeUnit.SECONDS)
@@ -40,7 +46,15 @@ class NetworkModule(
 
     @Provides
     @Singleton
-    fun dublinBusApi(): DublinBusApi {
+    fun downloadProgressInterceptor(
+            downloadProgressListener: DownloadProgressListener
+    ): Interceptor {
+        return DownloadProgressInterceptor(downloadProgressListener)
+    }
+
+    @Provides
+    @Singleton
+    fun dublinBusApi(okHttpClient: OkHttpClient): DublinBusApi {
         val retrofit = Retrofit.Builder()
                 .baseUrl(dublinBusApiEndpoint)
                 .client(okHttpClient)
@@ -52,7 +66,7 @@ class NetworkModule(
 
     @Provides
     @Singleton
-    fun rtpiApi(): RtpiApi {
+    fun rtpiApi(okHttpClient: OkHttpClient): RtpiApi {
         val retrofit = Retrofit.Builder()
                 .baseUrl(rtpiApiEndpoint)
                 .client(okHttpClient)
@@ -64,7 +78,7 @@ class NetworkModule(
 
     @Provides
     @Singleton
-    fun rssApi(): RssApi {
+    fun rssApi(okHttpClient: OkHttpClient): RssApi {
         val retrofit = Retrofit.Builder()
                 .baseUrl(rssApiEndpoint)
                 .client(okHttpClient)
