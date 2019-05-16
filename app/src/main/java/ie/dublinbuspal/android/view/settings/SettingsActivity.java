@@ -51,10 +51,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -82,6 +81,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         public void onDestroy() {
             disposables.clear();
             disposables.dispose();
+            useCase.unregisterObserver();
             super.onDestroy();
         }
 
@@ -123,10 +123,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 updatePreference.setRefreshing(true);
 
                 useCase.registerObserver(percent ->
-                        Single.just(percent)
+                        disposables.add(Single.just(percent)
                                 .observeOn(AndroidSchedulers.mainThread())
-                                .doOnSuccess(val -> updatePreference.setSummary("Downloading " + String.valueOf(val) + " %"))
-                                .subscribe()
+                                .doOnSuccess(val -> updatePreference.setSummary("Downloading " + val + " %"))
+                                .subscribe())
                 );
 
                 disposables.add(useCase.update()
@@ -135,6 +135,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         .subscribe(isFinished -> {
 
                             if (isFinished) {
+                                useCase.unregisterObserver();
                                 updatePreference.setRefreshing(false);
                                 PreferenceManager.getDefaultSharedPreferences(updatePreference.getContext())
                                         .edit()

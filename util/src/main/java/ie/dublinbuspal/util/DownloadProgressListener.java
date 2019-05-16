@@ -6,4 +6,6 @@ public interface DownloadProgressListener {
 
     void registerObserver(DownloadProgressObserver observer);
 
+    void unregisterObserver();
+
 }

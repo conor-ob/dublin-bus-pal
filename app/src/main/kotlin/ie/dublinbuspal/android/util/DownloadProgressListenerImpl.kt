@@ -12,7 +12,7 @@ class DownloadProgressListenerImpl : DownloadProgressListener {
 
     override fun update(requestId: Int, percent: Int) {
         updates[requestId] = percent
-        val progress = updates.values.sumBy { it } / 5
+        val progress = updates.values.sumBy { it } / 5 //TODO updates.size ?
         Timber.d(updates.toString())
         Timber.d(progress.toString())
         observer?.onProgressUpdate(progress)
@@ -21,6 +21,10 @@ class DownloadProgressListenerImpl : DownloadProgressListener {
     override fun registerObserver(observer: DownloadProgressObserver) {
         updates.clear()
         this.observer = observer
+    }
+
+    override fun unregisterObserver() {
+        this.observer = null
     }
 
 }

@@ -28,4 +28,8 @@ class UpdateStopsAndRoutesUseCase @Inject constructor(
         downloadProgressListener.registerObserver(downloadProgressObserver)
     }
 
+    fun unregisterObserver() {
+        downloadProgressListener.unregisterObserver()
+    }
+
 }
