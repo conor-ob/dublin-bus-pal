@@ -40,7 +40,7 @@ class RouteServicePresenterImpl @Inject constructor(
                                 is SocketTimeoutException -> R.string.error_timeout
                                 else -> R.string.error_unknown
                             }
-                            viewModel = viewModel.copy(isError = true, errorResource = errorResource)
+                            viewModel = viewModel.copy(isLoading = false, isError = true, errorResource = errorResource)
                             renderView()
                         }
                         .subscribe()

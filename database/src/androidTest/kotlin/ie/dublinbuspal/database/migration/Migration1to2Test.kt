@@ -5,7 +5,6 @@ import ie.dublinbuspal.data.entity.FavouriteStopEntity
 import ie.dublinbuspal.database.DublinBusDatabase
 import io.reactivex.observers.TestObserver
 import org.junit.Test
-import java.util.*
 
 class Migration1to2Test : MigrationTest() {
 
@@ -13,8 +12,6 @@ class Migration1to2Test : MigrationTest() {
     fun testMigration1to2() {
         testMigration(1, 2, Migrations.MIGRATION_1_2)
     }
-
-    override fun getMigrations() = arrayOf(Migrations.MIGRATION_1_2)
 
     override fun populateDatabasePreMigration(database: SupportSQLiteDatabase) {
         database.execSQL("INSERT INTO tb_bus_stop_service VALUES('123', '1A::2B::3C')")
@@ -24,13 +21,10 @@ class Migration1to2Test : MigrationTest() {
     }
 
     override fun assertDatabaseIntegrityPostMigration(database: DublinBusDatabase) {
-        val testObserver = TestObserver<FavouriteStopEntity>()
-        database.favouriteStopDao().select("123").toObservable().subscribe(testObserver)
+        val testObserver = TestObserver<List<FavouriteStopEntity>>()
+        database.favouriteStopDao().selectAll().toObservable().subscribe(testObserver)
         testObserver.assertNoErrors()
-        val routes = ArrayList<String>()
-        routes.add("1A")
-        routes.add("2B")
-        testObserver.assertResult(FavouriteStopEntity("123", "My Bus Stop", routes, 0))
+        testObserver.assertResult(emptyList())
     }
 
 }
