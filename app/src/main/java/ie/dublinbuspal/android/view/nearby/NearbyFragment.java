@@ -318,15 +318,14 @@ public class NearbyFragment
     }
 
     @Override
-    public void showNearbyStops(SortedMap<Double, Stop> busStops) {
-        List<Stop> nearbyStops = new ArrayList<>(busStops.values());
-        if (CollectionUtils.isNotNullOrEmpty(nearbyStops)) {
+    public void showNearbyStops(List<Stop> busStops) {
+        if (CollectionUtils.isNotNullOrEmpty(busStops)) {
             toolbar.setTitle(String.format(Locale.UK, "Stops near %s",
-                    LocationUtilities.getCoarseAddress(nearbyStops.get(0))));
+                    LocationUtilities.getCoarseAddress(busStops.get(0))));
         }
-        adapter.setDistances(getDistances(nearbyStops));
-        adapter.setBusStops(new ArrayList<>(nearbyStops));
-        mapMarkerManager.update(nearbyStops);
+        adapter.setDistances(getDistances(busStops));
+        adapter.setBusStops(new ArrayList<>(busStops));
+        mapMarkerManager.update(busStops);
         //resizeCircle(busStops);
     }
 

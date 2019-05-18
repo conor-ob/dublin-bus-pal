@@ -4,7 +4,7 @@ import android.location.Location;
 
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 
-import java.util.SortedMap;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -41,7 +41,7 @@ public class NearbyPresenterImpl extends MvpBasePresenter<NearbyView> implements
         getDisposables().dispose();
     }
 
-    private void onGetBusStops(SortedMap<Double, Stop> busStops) {
+    private void onGetBusStops(List<Stop> busStops) {
         ifViewAttached(view -> {
             view.hideProgress();
             view.showButton();
