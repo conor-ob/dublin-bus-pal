@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.1.4](https://github.com/conor-ob/dublin-bus-pal/compare/2.1.3...2.1.4) (21-05-2019)
+* Rewrote data model and local database persistence
+* Bug fixes
+
 ## [2.1.3](https://github.com/conor-ob/dublin-bus-pal/compare/2.1.2...2.1.3) (02-04-2019)
 * Fix for bus stop icon flickering on map
 
