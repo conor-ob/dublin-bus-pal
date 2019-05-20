@@ -39,7 +39,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.hannesdorfmann.mosby3.mvp.MvpActivity;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -65,7 +64,6 @@ import ie.dublinbuspal.android.view.route.RouteServiceActivity;
 import ie.dublinbuspal.android.view.settings.SettingsActivity;
 import ie.dublinbuspal.model.livedata.LiveData;
 import ie.dublinbuspal.model.stop.Stop;
-import ie.dublinbuspal.util.AlphanumComparator;
 import ie.dublinbuspal.util.CollectionUtils;
 
 public class RealTimeActivity
@@ -329,11 +327,8 @@ public class RealTimeActivity
                             Snackbar.LENGTH_SHORT).show();
                 } else {
                     String editedText = editText.getText().toString();
-//                    String name = editedText.isEmpty() ? busStop.getRealName() : editedText; //TODO
                     String name = editedText.isEmpty() ? busStop.name() : editedText;
-                    List<String> routes = new ArrayList<>(routesToSave);
-                    Collections.sort(routes, AlphanumComparator.getInstance());
-                    presenter.saveFavourite(name, routes);
+                    presenter.saveFavourite(name, routesToSave);
                     dialog1.dismiss();
                 }
             });

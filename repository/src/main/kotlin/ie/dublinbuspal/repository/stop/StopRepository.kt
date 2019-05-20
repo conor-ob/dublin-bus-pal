@@ -10,20 +10,19 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 
 class StopRepository(
-        private val dublinBusStopRepository: Repository<DublinBusStop>,
-        private val favouriteStopRepository: FavouriteStopRepository<FavouriteStop>
+    private val dublinBusStopRepository: Repository<DublinBusStop>,
+    private val favouriteStopRepository: FavouriteStopRepository<FavouriteStop>
 ) : Repository<Stop> {
 
-    //TODO do I need a different data class with favourite info?
     private var cache = emptyMap<String, Stop>()
 
     override fun getAll(): Observable<List<Stop>> {
         return Observable.combineLatest(
-                dublinBusStopRepository.getAll().subscribeOn(Schedulers.io()),
-                favouriteStopRepository.getAll().subscribeOn(Schedulers.io()),
-                BiFunction { dublinBusStops, favouriteStops ->
-                    aggregate(dublinBusStops, favouriteStops)
-                }
+            dublinBusStopRepository.getAll().subscribeOn(Schedulers.io()),
+            favouriteStopRepository.getAll().subscribeOn(Schedulers.io()),
+            BiFunction { dublinBusStops, favouriteStops ->
+                aggregate(dublinBusStops, favouriteStops)
+            }
         )
     }
 
@@ -32,8 +31,8 @@ class StopRepository(
     }
 
     private fun aggregate(
-            dublinBusStops: List<DublinBusStop>,
-            favouriteStops: List<FavouriteStop>
+        dublinBusStops: List<DublinBusStop>,
+        favouriteStops: List<FavouriteStop>
     ): List<Stop> {
         val aggregatedStops = mutableMapOf<String, Stop>()
         for (stop in dublinBusStops) {
@@ -42,7 +41,7 @@ class StopRepository(
         for (stop in favouriteStops) {
             val aggregatedStop = aggregatedStops[stop.id]
             if (aggregatedStop != null) {
-                aggregatedStops[stop.id] = aggregatedStop.copy(favouriteName = stop.name, favouriteRoutes = stop.routes.toSet()) //TODO
+                aggregatedStops[stop.id] = aggregatedStop.copy(favouriteName = stop.name, favouriteRoutes = stop.routes)
             }
         }
         cache = aggregatedStops

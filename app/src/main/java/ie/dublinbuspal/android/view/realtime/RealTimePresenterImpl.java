@@ -9,6 +9,7 @@ import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.List;
 
+import java.util.Set;
 import javax.inject.Inject;
 
 import ie.dublinbuspal.android.R;
@@ -139,7 +140,7 @@ public class RealTimePresenterImpl extends MvpBasePresenter<RealTimeView>
     }
 
     @Override
-    public void saveFavourite(String customName, List<String> customRoutes) {
+    public void saveFavourite(String customName, Set<String> customRoutes) {
         getDisposables().add(Observable.fromCallable(() -> favouritesUseCase.saveFavourite(getModel().getStopId(), customName, customRoutes))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
