@@ -27,7 +27,7 @@ import ie.dublinbuspal.android.DublinBusApplication;
 import ie.dublinbuspal.android.R;
 import ie.dublinbuspal.android.view.home.HomeActivity;
 import ie.dublinbuspal.android.view.realtime.RealTimeActivity;
-import ie.dublinbuspal.android.view.route.RouteActivity;
+import ie.dublinbuspal.android.view.route.RouteServiceActivity;
 import ie.dublinbuspal.android.view.settings.SettingsActivity;
 import ie.dublinbuspal.util.CollectionUtils;
 import io.reactivex.Observable;
@@ -150,8 +150,8 @@ public class SearchFragment
     }
 
     @Override
-    public void launchRouteActivity(String routeId) {
-        Intent intent = RouteActivity.newIntent(getContext(), routeId);
+    public void launchRouteActivity(String routeId, String operator) {
+        Intent intent = RouteServiceActivity.newIntent(getContext(), routeId, operator);
         startActivity(intent);
     }
 

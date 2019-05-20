@@ -13,3 +13,15 @@ interface Repository<T> {
     fun refresh(): Observable<Boolean>
 
 }
+
+interface KeyedRepository<K, T> {
+
+    fun getById(key: K): Observable<T>
+
+    fun getAll(): Observable<List<T>>
+
+    fun getAllById(key: K): Observable<List<T>>
+
+    fun refresh(): Observable<Boolean>
+
+}

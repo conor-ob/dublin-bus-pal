@@ -23,6 +23,12 @@ object TimeUtils {
     }
 
     @JvmStatic
+    fun toIso8601Timestamp(timestamp: String, dateTime: DateTimeFormatter): String {
+        val instant = dateTimeStampToInstant(timestamp, dateTime)
+        return Formatter.isoDateTime.format(ZonedDateTime.ofInstant(instant, zoneId))
+    }
+
+    @JvmStatic
     fun secondsBetween(earlierInstant: Instant, laterInstant: Instant): Long {
         return ChronoUnit.SECONDS.between(earlierInstant, laterInstant)
     }

@@ -14,7 +14,7 @@ class FavouritesUseCase @Inject constructor(
         return repository.getAll()
     }
 
-    fun saveFavourite(stopId: String, customName: String, customRoutes: MutableList<String>): Boolean {
+    fun saveFavourite(stopId: String, customName: String, customRoutes: Set<String>): Boolean {
         repository.insert(FavouriteStop(stopId, customName, customRoutes, 0))
         return true //TODO
     }

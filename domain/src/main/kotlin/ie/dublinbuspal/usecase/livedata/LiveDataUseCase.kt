@@ -5,6 +5,7 @@ import ie.dublinbuspal.model.livedata.LiveData
 import ie.dublinbuspal.model.stop.Stop
 import ie.dublinbuspal.repository.Repository
 import io.reactivex.Observable
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class LiveDataUseCase @Inject constructor(
@@ -16,7 +17,12 @@ class LiveDataUseCase @Inject constructor(
         return stopRepository.getById(stopId)
     }
 
-    fun getLiveData(stopId: String): Observable<List<LiveData>> {
+    fun getLiveDataStream(stopId: String): Observable<List<LiveData>> {
+        return Observable.interval(0L, 60L, TimeUnit.SECONDS)
+            .flatMap { getLiveData(stopId) }
+    }
+
+    private fun getLiveData(stopId: String): Observable<List<LiveData>> {
         return liveDataRepository.getAllById(stopId)
     }
 

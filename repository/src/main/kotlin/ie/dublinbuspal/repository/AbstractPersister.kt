@@ -8,6 +8,8 @@ import ie.dublinbuspal.data.dao.PersisterDao
 import ie.dublinbuspal.data.entity.PersisterEntity
 import ie.dublinbuspal.util.InternetManager
 import ie.dublinbuspal.util.TimeUtils
+import io.reactivex.Maybe
+import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
 abstract class AbstractPersister<Raw, Parsed, Key>(
@@ -17,6 +19,19 @@ abstract class AbstractPersister<Raw, Parsed, Key>(
 ) : RoomPersister<Raw, Parsed, Key>, RecordProvider<Key> {
 
     private val lifespan: Long by lazy { memoryPolicy.expireAfterTimeUnit.toSeconds(memoryPolicy.expireAfterWrite) }
+
+    abstract fun select(key: Key): Maybe<Parsed>
+
+    abstract fun insert(key: Key, raw: Raw)
+
+    override fun read(key: Key): Observable<Parsed> {
+        return select(key).toObservable()
+    }
+
+    override fun write(key: Key, raw: Raw) {
+        insert(key, raw)
+        persisterDao.insert(PersisterEntity(key.toString()))
+    }
 
     override fun getRecordState(key: Key): RecordState {
         val persisterEntity = persisterDao.select(key.toString()).blockingGet()

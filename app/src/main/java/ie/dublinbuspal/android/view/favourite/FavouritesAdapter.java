@@ -77,13 +77,13 @@ public class FavouritesAdapter
         public void bind(FavouriteStop busStop) {
             favouriteID.setText(String.format(Locale.UK, formattedStopId, busStop.getId()));
             favouriteName.setText(busStop.getName());
-            if (CollectionUtils.isNullOrEmpty(busStop.getRoutes())) {
+            if (CollectionUtils.isNullOrEmpty(busStop.routes())) {
                 routes.setText(StringUtils.EMPTY_STRING);
                 routes.setVisibility(View.GONE);
             } else {
                 String middleDot = String.format(Locale.UK, " %s ",
                         StringUtils.MIDDLE_DOT);
-                routes.setText(StringUtils.join(busStop.getRoutes(), middleDot));
+                routes.setText(StringUtils.join(busStop.routes(), middleDot));
                 routes.setVisibility(View.VISIBLE);
             }
         }

@@ -60,12 +60,6 @@
     <string name="preference_title_show_arrival_time">Show arrival times</string>
     <string name="preference_key_show_arrival_time">show_arrival_time</string>
     <string name="preference_summary_show_arrival_time">Bus times are shown as a time of day</string>
-    <string name="preference_key_auto_refresh">auto_refresh_rtpi</string>
-    <string name="preference_summary_auto_refresh">Refresh real time information automatically</string>
-    <string name="preference_title_auto_refresh">Auto refresh</string>
-    <string name="preference_title_auto_refresh_interval">Auto refresh interval</string>
-    <string name="preference_key_auto_refresh_interval">auto_refresh_rtpi_seconds</string>
-    <string name="preference_dialog_title_auto_refresh_interval">Refresh every</string>
     <string name="preference_category_update">Update</string>
     <string name="preference_key_update_database">preference_update_database</string>
     <string name="preference_title_update_database">Update bus stop and route data</string>

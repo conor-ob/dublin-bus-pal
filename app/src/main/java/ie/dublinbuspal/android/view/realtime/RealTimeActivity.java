@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -39,14 +38,11 @@ import com.google.android.material.snackbar.Snackbar;
 import com.hannesdorfmann.mosby3.mvp.MvpActivity;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -61,11 +57,10 @@ import ie.dublinbuspal.android.DublinBusApplication;
 import ie.dublinbuspal.android.R;
 import ie.dublinbuspal.android.util.GoogleMapConstants;
 import ie.dublinbuspal.android.util.ImageUtils;
-import ie.dublinbuspal.android.view.route.RouteActivity;
+import ie.dublinbuspal.android.view.route.RouteServiceActivity;
 import ie.dublinbuspal.android.view.settings.SettingsActivity;
 import ie.dublinbuspal.model.livedata.LiveData;
 import ie.dublinbuspal.model.stop.Stop;
-import ie.dublinbuspal.util.AlphanumComparator;
 import ie.dublinbuspal.util.CollectionUtils;
 
 public class RealTimeActivity
@@ -88,7 +83,6 @@ public class RealTimeActivity
     private FloatingActionButton showBusTimesButton;
     private FloatingActionButton mapSwitcherButton;
     //private ViewFlipper viewFlipper;
-    private Timer autoRefreshTimer;
 
     @NonNull
     @Override
@@ -123,24 +117,6 @@ public class RealTimeActivity
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         adapter.setShowArrivalTime(sharedPreferences.getBoolean(getString(
                 R.string.preference_key_show_arrival_time), false));
-
-        if (sharedPreferences.getBoolean(getString(R.string.preference_key_auto_refresh), false)) {
-            String val = sharedPreferences.getString(getString(
-                    R.string.preference_key_auto_refresh_interval), "30");
-            int valInt = Integer.valueOf(val);
-            long ms = TimeUnit.SECONDS.toMillis(valInt);
-
-            final Handler handler = new Handler();
-            autoRefreshTimer = new Timer();
-            TimerTask task = new TimerTask() {
-
-                @Override
-                public void run() {
-                    handler.post(() -> refreshNoProgress());
-                }
-            };
-            autoRefreshTimer.scheduleAtFixedRate(task, ms, ms);
-        }
     }
 
     @Override
@@ -166,9 +142,6 @@ public class RealTimeActivity
     protected void onDestroy() {
         PreferenceManager.getDefaultSharedPreferences(this)
                 .unregisterOnSharedPreferenceChangeListener(this);
-        if (autoRefreshTimer != null) {
-            autoRefreshTimer.cancel();
-        }
         super.onDestroy();
     }
 
@@ -260,10 +233,6 @@ public class RealTimeActivity
         getPresenter().onResume(getStopId());
     }
 
-    private void refreshNoProgress() {
-        getPresenter().onResume(getStopId());
-    }
-
     private void presentRemoveFavouriteDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this,
                 R.style.FavouriteDialogTheme);
@@ -329,11 +298,8 @@ public class RealTimeActivity
                             Snackbar.LENGTH_SHORT).show();
                 } else {
                     String editedText = editText.getText().toString();
-//                    String name = editedText.isEmpty() ? busStop.getRealName() : editedText; //TODO
                     String name = editedText.isEmpty() ? busStop.name() : editedText;
-                    List<String> routes = new ArrayList<>(routesToSave);
-                    Collections.sort(routes, AlphanumComparator.getInstance());
-                    presenter.saveFavourite(name, routes);
+                    presenter.saveFavourite(name, routesToSave);
                     dialog1.dismiss();
                 }
             });
@@ -406,8 +372,8 @@ public class RealTimeActivity
     }
 
     @Override
-    public void launchRouteActivity(String routeId) {
-        Intent intent = RouteActivity.newIntent(this, routeId, getStopId());
+    public void launchRouteActivity(String routeId, String operator) {
+        Intent intent = RouteServiceActivity.newIntent(this, routeId, operator, getStopId());
         startActivity(intent);
     }
 

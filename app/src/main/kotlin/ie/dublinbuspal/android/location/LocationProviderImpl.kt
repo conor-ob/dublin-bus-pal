@@ -19,12 +19,14 @@ class LocationProviderImpl @Inject constructor(context: Context) : LocationProvi
     override fun getLastKnownLocation(): Observable<Coordinate> {
         return locationProvider.lastKnownLocation
                 .filter { isBetterLocation(it) }
+                .doOnNext { lastKnownLocation = it }
                 .map { Coordinate(it.latitude, it.longitude) }
     }
 
     override fun getLocationUpdates(): Observable<Coordinate> {
         return locationProvider.getUpdatedLocation(newRequest())
                 .filter { isBetterLocation(it) }
+                .doOnNext { lastKnownLocation = it }
                 .map { Coordinate(it.latitude, it.longitude) }
     }
 
@@ -37,7 +39,6 @@ class LocationProviderImpl @Inject constructor(context: Context) : LocationProvi
     private fun isBetterLocation(location: Location): Boolean {
         if (lastKnownLocation == null) {
             // A new location is always better than no location
-            lastKnownLocation = location
             return true
         }
 
@@ -64,8 +65,7 @@ class LocationProviderImpl @Inject constructor(context: Context) : LocationProvi
         val isSignificantlyLessAccurate = accuracyDelta > 200
 
         // Check if the old and new location are from the same provider
-        val isFromSameProvider = isSameProvider(location.provider,
-                lastKnownLocation!!.provider)
+        val isFromSameProvider = isSameProvider(location.provider, lastKnownLocation!!.provider)
 
         // Determine location quality using a combination of timeliness and accuracy
         if (isMoreAccurate) {

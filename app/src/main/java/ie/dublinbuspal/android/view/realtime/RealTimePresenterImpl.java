@@ -9,6 +9,7 @@ import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.List;
 
+import java.util.Set;
 import javax.inject.Inject;
 
 import ie.dublinbuspal.android.R;
@@ -22,8 +23,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
-public class RealTimePresenterImpl extends MvpBasePresenter<RealTimeView>
-        implements RealTimePresenter {
+public class RealTimePresenterImpl extends MvpBasePresenter<RealTimeView> implements RealTimePresenter {
 
     private RealTimeModel model;
     private final LiveDataUseCase liveDataUseCase;
@@ -81,7 +81,7 @@ public class RealTimePresenterImpl extends MvpBasePresenter<RealTimeView>
     }
 
     private void getRealTimeData() {
-        getDisposables().add(liveDataUseCase.getLiveData(getModel().getStopId())
+        getDisposables().add(liveDataUseCase.getLiveDataStream(getModel().getStopId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetRealTimeData, this::onError));
@@ -139,7 +139,7 @@ public class RealTimePresenterImpl extends MvpBasePresenter<RealTimeView>
     }
 
     @Override
-    public void saveFavourite(String customName, List<String> customRoutes) {
+    public void saveFavourite(String customName, Set<String> customRoutes) {
         getDisposables().add(Observable.fromCallable(() -> favouritesUseCase.saveFavourite(getModel().getStopId(), customName, customRoutes))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -13,7 +13,6 @@ import android.widget.ImageView;
 public class SyncPreference extends Preference {
 
     private ImageView sync;
-    private boolean refreshing;
 
     public SyncPreference(Context context) {
         super(context);
@@ -35,7 +34,7 @@ public class SyncPreference extends Preference {
     }
 
     private void setSync(View preferenceView) {
-        if (preferenceView != null && preferenceView instanceof ViewGroup) {
+        if (preferenceView instanceof ViewGroup) {
             ViewGroup viewGroup = preferenceView.findViewById(android.R.id.widget_frame);
             if (viewGroup != null) {
                 int count = viewGroup.getChildCount();
@@ -51,7 +50,6 @@ public class SyncPreference extends Preference {
     }
 
     void setRefreshing(boolean refreshing) {
-        this.refreshing = refreshing;
         if (refreshing) {
             RotateAnimation anim = new RotateAnimation(360.0f, 0.0f,
                     Animation.RELATIVE_TO_SELF, 0.5f,
@@ -63,10 +61,6 @@ public class SyncPreference extends Preference {
         } else {
             sync.clearAnimation();
         }
-    }
-
-    boolean isRefreshing() {
-        return refreshing;
     }
 
 }

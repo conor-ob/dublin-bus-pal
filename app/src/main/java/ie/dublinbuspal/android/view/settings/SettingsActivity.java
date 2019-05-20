@@ -32,6 +32,7 @@ import ie.dublinbuspal.android.view.web.WebViewActivity;
 import ie.dublinbuspal.usecase.update.UpdateStopsAndRoutesUseCase;
 import ie.dublinbuspal.util.StringUtils;
 import ie.dublinbuspal.util.TimeUtils;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -50,10 +51,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -63,7 +63,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 //        @Inject DublinBusRepository repository;
 //        @Inject DownloadProgressListener listener;
 
-        @Inject UpdateStopsAndRoutesUseCase useCase;
+        @Inject
+        UpdateStopsAndRoutesUseCase useCase;
         private CompositeDisposable disposables = new CompositeDisposable();
 
         @Override
@@ -72,7 +73,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             setupInjection();
             addPreferencesFromResource(R.xml.preferences);
             bindDynamicSummaries();
-            bindSwitchEnabledPreferences();
             bindListeners();
         }
 
@@ -80,6 +80,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         public void onDestroy() {
             disposables.clear();
             disposables.dispose();
+            useCase.unregisterObserver();
             super.onDestroy();
         }
 
@@ -94,37 +95,32 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         private void bindDynamicSummaries() {
             bindPreferenceSummaryToValue(findPreference(
                     getString(R.string.preference_key_home_screen)));
-            bindPreferenceSummaryToValue(findPreference(
-                    getString(R.string.preference_key_auto_refresh_interval)));
             bindLastUpdatedTimestampSummaryToValue(findPreference(
                     getString(R.string.preference_key_update_database)), null);
             bindAppVersionSummaryToValue(findPreference(
                     getString(R.string.preference_key_app_version)));
         }
 
-        private void bindSwitchEnabledPreferences() {
-            bindSwitchEnabledPair(findPreference(getString(R.string.preference_key_auto_refresh)),
-                    findPreference(getString(R.string.preference_key_auto_refresh_interval)));
-        }
-
         private void bindListeners() {
-            Preference autoRefreshPreference = findPreference(
-                    getString(R.string.preference_key_auto_refresh));
-            autoRefreshPreference.setOnPreferenceClickListener(preference -> {
-                bindSwitchEnabledPair(autoRefreshPreference, findPreference(
-                        getString(R.string.preference_key_auto_refresh_interval)));
-                return true;
-            });
             SyncPreference updatePreference = (SyncPreference) findPreference(
                     getString(R.string.preference_key_update_database));
             updatePreference.setOnPreferenceClickListener(preference -> {
                 updatePreference.setRefreshing(true);
+
+                useCase.registerObserver(percent ->
+                        disposables.add(Single.just(percent)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .doOnSuccess(val -> updatePreference.setSummary("Downloading " + val + " %"))
+                                .subscribe())
+                );
+
                 disposables.add(useCase.update()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(result -> {
-                            updatePreference.setSummary("Downloading " + String.valueOf(result) + " %");
-                            if (result == 100) {
+                        .subscribe(isFinished -> {
+
+                            if (isFinished) {
+                                useCase.unregisterObserver();
                                 updatePreference.setRefreshing(false);
                                 PreferenceManager.getDefaultSharedPreferences(updatePreference.getContext())
                                         .edit()
@@ -136,7 +132,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                                     //TODO check if view is attached
                                 }
                             }
-                            Timber.d(result.toString());
+                            Timber.d(isFinished.toString());
                         }));
 
                 return true;
