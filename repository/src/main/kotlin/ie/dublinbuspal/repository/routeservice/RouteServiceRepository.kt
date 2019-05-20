@@ -12,11 +12,9 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 
 class RouteServiceRepository(
-        private val dublinBusRouteServiceRepository: KeyedRepository<Pair<String, String>, RtpiRouteService>,
-        private val stopRepository: Repository<Stop>
+    private val dublinBusRouteServiceRepository: KeyedRepository<Pair<String, String>, RtpiRouteService>,
+    private val stopRepository: Repository<Stop>
 ) : KeyedRepository<Pair<String, String>, RouteService> {
-
-    private var cache = emptyMap<String, Stop>()
 
     override fun getById(key: Pair<String, String>): Observable<RouteService> {
         return Observable.zip(
@@ -27,17 +25,19 @@ class RouteServiceRepository(
     }
 
     private fun aggregate(
-            rtpiRouteService: RtpiRouteService,
-            stops: List<Stop>
+        rtpiRouteService: RtpiRouteService,
+        stops: List<Stop>
     ): RouteService {
-        cache = stops.associateBy { it.id }
+        val cache = stops.associateBy { it.id }
         val variants = mutableListOf<RouteServiceVariant>()
         for (variant in rtpiRouteService.variants) {
             variants.add(
                     RouteServiceVariant(
                             origin = variant.origin,
                             destination = variant.destination,
-                            stops = variant.stopIds.map { cache.getValue(it) } //TODO some stop ids return null
+                            stops = variant.stopIds
+                                .filter { stopId -> cache.containsKey(stopId) }
+                                .map { stopId -> cache.getValue(stopId) }
                     )
             )
         }
