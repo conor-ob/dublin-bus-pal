@@ -49,7 +49,7 @@ import javax.inject.Singleton
 @Module
 class RepositoryModule {
 
-    private val shortTermMemoryPolicy: MemoryPolicy by lazy { newMemoryPolicy(30, TimeUnit.SECONDS) }
+    private val shortTermMemoryPolicy: MemoryPolicy by lazy { newMemoryPolicy(60, TimeUnit.SECONDS) }
     private val midTermMemoryPolicy: MemoryPolicy by lazy { newMemoryPolicy(3, TimeUnit.HOURS) }
     private val longTermMemoryPolicy: MemoryPolicy by lazy { newMemoryPolicy(7, TimeUnit.DAYS) }
 

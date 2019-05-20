@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -44,8 +43,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -86,7 +83,6 @@ public class RealTimeActivity
     private FloatingActionButton showBusTimesButton;
     private FloatingActionButton mapSwitcherButton;
     //private ViewFlipper viewFlipper;
-    private Timer autoRefreshTimer;
 
     @NonNull
     @Override
@@ -121,24 +117,6 @@ public class RealTimeActivity
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         adapter.setShowArrivalTime(sharedPreferences.getBoolean(getString(
                 R.string.preference_key_show_arrival_time), false));
-
-        if (sharedPreferences.getBoolean(getString(R.string.preference_key_auto_refresh), false)) {
-            String val = sharedPreferences.getString(getString(
-                    R.string.preference_key_auto_refresh_interval), "30");
-            int valInt = Integer.valueOf(val);
-            long ms = TimeUnit.SECONDS.toMillis(valInt);
-
-            final Handler handler = new Handler();
-            autoRefreshTimer = new Timer();
-            TimerTask task = new TimerTask() {
-
-                @Override
-                public void run() {
-                    handler.post(() -> refreshNoProgress());
-                }
-            };
-            autoRefreshTimer.scheduleAtFixedRate(task, ms, ms);
-        }
     }
 
     @Override
@@ -164,9 +142,6 @@ public class RealTimeActivity
     protected void onDestroy() {
         PreferenceManager.getDefaultSharedPreferences(this)
                 .unregisterOnSharedPreferenceChangeListener(this);
-        if (autoRefreshTimer != null) {
-            autoRefreshTimer.cancel();
-        }
         super.onDestroy();
     }
 
@@ -255,10 +230,6 @@ public class RealTimeActivity
 
     private void refresh() {
         swipeRefreshLayout.setRefreshing(true);
-        getPresenter().onResume(getStopId());
-    }
-
-    private void refreshNoProgress() {
         getPresenter().onResume(getStopId());
     }
 

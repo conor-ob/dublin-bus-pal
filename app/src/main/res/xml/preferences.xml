@@ -17,20 +17,6 @@
             android:summary="@string/preference_summary_show_arrival_time"
             android:title="@string/preference_title_show_arrival_time" />
 
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="@string/preference_key_auto_refresh"
-            android:summary="@string/preference_summary_auto_refresh"
-            android:title="@string/preference_title_auto_refresh" />
-
-        <ListPreference
-            android:defaultValue="30"
-            android:dialogTitle="@string/preference_dialog_title_auto_refresh_interval"
-            android:entries="@array/preference_auto_refresh_interval_entries"
-            android:entryValues="@array/preference_auto_refresh_interval_values"
-            android:key="@string/preference_key_auto_refresh_interval"
-            android:title="@string/preference_title_auto_refresh_interval" />
-
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/preference_category_update">

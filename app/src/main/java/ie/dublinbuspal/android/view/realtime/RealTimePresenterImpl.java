@@ -23,8 +23,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
-public class RealTimePresenterImpl extends MvpBasePresenter<RealTimeView>
-        implements RealTimePresenter {
+public class RealTimePresenterImpl extends MvpBasePresenter<RealTimeView> implements RealTimePresenter {
 
     private RealTimeModel model;
     private final LiveDataUseCase liveDataUseCase;
@@ -82,7 +81,7 @@ public class RealTimePresenterImpl extends MvpBasePresenter<RealTimeView>
     }
 
     private void getRealTimeData() {
-        getDisposables().add(liveDataUseCase.getLiveData(getModel().getStopId())
+        getDisposables().add(liveDataUseCase.getLiveDataStream(getModel().getStopId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetRealTimeData, this::onError));
