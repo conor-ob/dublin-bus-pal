@@ -1,5 +1,8 @@
 # Changelog
 
+## [2.1.5](https://github.com/conor-ob/dublin-bus-pal/compare/2.1.4...2.1.5) (21-05-2019)
+* Fixed crash when getting bus stop from repository in RealTimeActivity
+
 ## [2.1.4](https://github.com/conor-ob/dublin-bus-pal/compare/2.1.3...2.1.4) (21-05-2019)
 * Rewrote data model and local database persistence
 * Bug fixes
