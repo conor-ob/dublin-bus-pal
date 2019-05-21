@@ -27,7 +27,11 @@ class StopRepository(
     }
 
     override fun getById(id: String): Observable<Stop> {
-        return Observable.just(cache[id])
+        val stop = cache[id]
+        if (stop != null) {
+            return Observable.just(stop)
+        }
+        return getAll().map { stops -> stops.find { stop -> stop.id == id } }
     }
 
     private fun aggregate(
