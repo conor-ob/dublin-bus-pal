@@ -37,7 +37,8 @@ class DublinBusLiveDataResource(
                             routeId = liveData.routeId!!,
                             operatorId = Operator.DUBLIN_BUS.code,
                             destination = liveData.destination!!,
-                            expectedTimestamp = liveData.expectedTimestamp!!
+                            expectedTimestamp = liveData.expectedTimestamp!!,
+                            minutes = minutesBetweenTimestamps(liveData.expectedTimestamp!!, liveData.responseTimestamp!!)
                     )
             )
         }
@@ -47,7 +48,8 @@ class DublinBusLiveDataResource(
                             routeId = liveData.route!!,
                             operatorId = Operator.GO_AHEAD.code,
                             destination = liveData.destination!!,
-                            expectedTimestamp = liveData.arrivalDateTime!!
+                            expectedTimestamp = liveData.arrivalDateTime!!,
+                            minutes = parseDueTime(liveData.dueTime!!)
                     )
             )
         }
@@ -102,6 +104,24 @@ class DublinBusLiveDataResource(
             return null
         }
         return TimeUtils.toIso8601Timestamp(timestamp, Formatter.dateTime)
+    }
+
+    private fun parseDueTime(dueTime: String): Long {
+        if ("Due".equals(dueTime, ignoreCase = true)) {
+            return 0L
+        }
+        try {
+            return dueTime.toLong()
+        } catch (e: NumberFormatException) {
+            // safety
+        }
+        return 0L
+    }
+
+    private fun minutesBetweenTimestamps(expectedTimestamp: String, responseTimestamp: String): Long {
+        val responseInstant = TimeUtils.dateTimeStampToInstant(responseTimestamp, Formatter.isoDateTime)
+        val expectedInstant = TimeUtils.dateTimeStampToInstant(expectedTimestamp, Formatter.isoDateTime)
+        return TimeUtils.minutesBetween(responseInstant, expectedInstant)
     }
 
 }

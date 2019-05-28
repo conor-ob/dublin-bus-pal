@@ -4,7 +4,8 @@ data class RtpiLiveData(
         val routeId: String,
         val operatorId: String,
         val destination: String,
-        val expectedTimestamp: String
+        val expectedTimestamp: String,
+        val minutes: Long
 )
 
 data class RtpiStop(

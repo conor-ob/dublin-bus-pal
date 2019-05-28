@@ -16,14 +16,12 @@ object DublinBusLiveDataMapper : Mapper<RtpiLiveData, LiveData> {
                 routeId = from.routeId,
                 operator = Operator.parse(from.operatorId),
                 destination = mapDestination(from.destination),
-                dueTime = mapDueTime(from.expectedTimestamp)
+                dueTime = mapDueTime(from.minutes, from.expectedTimestamp)
         )
     }
 
-    private fun mapDueTime(expectedTime: String): DueTime {
-        val timestampInstant = TimeUtils.now()
+    private fun mapDueTime(minutes: Long, expectedTime: String): DueTime {
         val expectedTimeInstant = TimeUtils.dateTimeStampToInstant(expectedTime, Formatter.isoDateTime)
-        val minutes = TimeUtils.minutesBetween(timestampInstant, expectedTimeInstant)
         return DueTime(minutes, TimeUtils.formatAsTime(expectedTimeInstant))
     }
 
