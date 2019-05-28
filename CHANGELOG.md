@@ -1,5 +1,8 @@
 # Changelog
 
+## [2.1.6](https://github.com/conor-ob/dublin-bus-pal/compare/2.1.5...2.1.6) (28-05-2019)
+* Fixed bug where bus times are incorrect if the user's device has an incorrect timezone
+
 ## [2.1.5](https://github.com/conor-ob/dublin-bus-pal/compare/2.1.4...2.1.5) (21-05-2019)
 * Fixed crash when getting bus stop from repository in RealTimeActivity
 
