@@ -1,5 +1,8 @@
 # Changelog
 
+## [2.1.7](https://github.com/conor-ob/dublin-bus-pal/compare/2.1.6...2.1.7) (12-10-2019)
+* Updated RTPI API base URL
+
 ## [2.1.6](https://github.com/conor-ob/dublin-bus-pal/compare/2.1.5...2.1.6) (28-05-2019)
 * Fixed bug where bus times are incorrect if the user's device has an incorrect timezone
 
