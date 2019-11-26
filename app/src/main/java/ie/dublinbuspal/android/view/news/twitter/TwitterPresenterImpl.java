@@ -2,6 +2,8 @@ package ie.dublinbuspal.android.view.news.twitter;
 
 import android.content.Context;
 
+import android.content.res.Configuration;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -88,8 +90,19 @@ public class TwitterPresenterImpl extends MvpBasePresenter<TwitterView>
                 .build();
         return new TweetTimelineRecyclerViewAdapter.Builder(getContext())
                 .setTimeline(timeline)
-                .setViewStyle(R.style.tw__TweetLightStyle)
+                .setViewStyle(getViewStyle())
                 .build();
+    }
+
+    private int getViewStyle() {
+        int currentNightMode = context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        switch (currentNightMode) {
+            case Configuration.UI_MODE_NIGHT_NO:
+                return  R.style.tw__TweetLightStyle;
+            case Configuration.UI_MODE_NIGHT_YES:
+                return  R.style.tw__TweetDarkStyle;
+        }
+        return R.style.tw__TweetLightStyle;
     }
 
     private void onGetAdapter(TweetTimelineRecyclerViewAdapter adapter) {

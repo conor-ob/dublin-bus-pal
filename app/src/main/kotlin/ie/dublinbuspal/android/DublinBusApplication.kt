@@ -1,7 +1,7 @@
 package ie.dublinbuspal.android
 
 import android.app.Application
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.answers.Answers
 import com.jakewharton.threetenabp.AndroidThreeTen
@@ -10,13 +10,17 @@ import com.twitter.sdk.android.core.TwitterAuthConfig
 import com.twitter.sdk.android.core.TwitterConfig
 import ie.dublinbuspal.android.util.CrashlyticsTree
 import ie.dublinbuspal.android.util.MetadataUtils
+import ie.dublinbuspal.android.view.settings.ThemeRepository
 import ie.dublinbuspal.di.*
 import io.fabric.sdk.android.Fabric
 import io.reactivex.plugins.RxJavaPlugins
 import timber.log.Timber
+import javax.inject.Inject
 
 class DublinBusApplication : Application() {
 
+    @Inject
+    lateinit var themeRepository: ThemeRepository
     lateinit var applicationComponent: ApplicationComponent
 
     init {
@@ -25,12 +29,17 @@ class DublinBusApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        setupDagger()
         setupAnalytics()
         setupTimber()
         setupThreeTen()
-        setupDagger()
         setupTwitter()
         setupPreferences()
+        setupTheme()
+    }
+
+    private fun setupTheme() {
+        themeRepository.setPreferredThemeOrDefault()
     }
 
     private fun setupTimber() {
@@ -57,6 +66,7 @@ class DublinBusApplication : Application() {
                     rssApiEndpoint = resources.getString(R.string.dublin_bus_rss_api_endpoint)
                 ))
                 .build()
+        applicationComponent.inject(this)
     }
 
     private fun setupTwitter() {
@@ -77,7 +87,7 @@ class DublinBusApplication : Application() {
     }
 
     private fun setupPreferences() {
-        PreferenceManager.setDefaultValues(applicationContext, ie.dublinbuspal.android.R.xml.preferences, false)
+        PreferenceManager.setDefaultValues(applicationContext, R.xml.preferences, false)
     }
 
 }

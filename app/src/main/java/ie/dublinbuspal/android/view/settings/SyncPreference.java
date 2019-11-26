@@ -1,7 +1,7 @@
 package ie.dublinbuspal.android.view.settings;
 
 import android.content.Context;
-import android.preference.Preference;
+import androidx.preference.Preference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +9,7 @@ import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
+import androidx.preference.PreferenceViewHolder;
 
 public class SyncPreference extends Preference {
 
@@ -27,11 +28,17 @@ public class SyncPreference extends Preference {
     }
 
     @Override
-    protected View onCreateView(ViewGroup parent) {
-        View view = super.onCreateView(parent);
-        setSync(view);
-        return view;
+    public void onBindViewHolder(PreferenceViewHolder holder) {
+        super.onBindViewHolder(holder);
+        setSync(holder.itemView);
     }
+
+//    @Override
+//    protected View onCreateView(ViewGroup parent) {
+//        View view = super.onCreateView(parent);
+//        setSync(view);
+//        return view;
+//    }
 
     private void setSync(View preferenceView) {
         if (preferenceView instanceof ViewGroup) {

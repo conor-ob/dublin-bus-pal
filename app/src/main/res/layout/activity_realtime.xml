@@ -5,8 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#ECF0F1">
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/activity_real_time_app_bar"
@@ -127,8 +126,7 @@
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/toolbarSecondary">
+                    android:layout_height="wrap_content">
 
                     <HorizontalScrollView
                         android:layout_width="match_parent"
@@ -156,9 +154,9 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/activity_real_time_recycler_view"
+                    android:background="?android:attr/colorBackground"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/windowBackground"/>
+                    android:layout_height="match_parent"/>
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

@@ -84,4 +84,14 @@
     <string name="preference_key_nearby_map_latitude">preference_nearby_map_latitude</string>
     <string name="preference_key_nearby_map_longitude">preference_nearby_map_longitude</string>
     <string name="preference_key_nearby_map_zoom">preference_nearby_map_zoom</string>
+
+    <string name="preference_key_preferred_theme">preferred_theme</string>
+    <string name="preference_name_light_theme">Light</string>
+    <string name="preference_name_dark_theme">Dark</string>
+    <string name="preference_name_battery_saver_theme">Set by Battery Saver</string>
+    <string name="preference_name_system_default_theme">System default</string>
+    <string name="preference_value_light_theme" translatable="false">light</string>
+    <string name="preference_value_dark_theme" translatable="false">dark</string>
+    <string name="preference_value_battery_saver_theme" translatable="false">battery</string>
+    <string name="preference_value_system_default_theme" translatable="false">system</string>
 </resources>

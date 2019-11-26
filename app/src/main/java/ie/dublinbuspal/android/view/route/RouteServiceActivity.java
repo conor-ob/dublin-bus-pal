@@ -3,6 +3,7 @@ package ie.dublinbuspal.android.view.route;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -133,8 +134,21 @@ public class RouteServiceActivity extends MvpActivity<RouteServiceView, RouteSer
                 .build();
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(position));
-        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this,
-                R.raw.map_style_no_stops));
+//        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this,
+//                R.raw.map_style_no_stops));
+
+        int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        switch (currentNightMode) {
+            case Configuration.UI_MODE_NIGHT_NO:
+                googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getBaseContext(),
+                        R.raw.map_style_no_stops));
+                break;
+            case Configuration.UI_MODE_NIGHT_YES:
+                googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getBaseContext(),
+                        R.raw.map_style_night));
+                break;
+        }
+
         googleMap.setOnInfoWindowClickListener(marker -> {
             //TODO check hardcoded string if you ever do translations
             try {

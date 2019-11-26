@@ -1,5 +1,13 @@
 [
   {
+    "featureType": "transit.station",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
     "elementType": "geometry",
     "stylers": [
       {

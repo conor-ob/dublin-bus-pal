@@ -5,14 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:foreground="?android:attr/selectableItemBackground"
-    android:background="@color/listItemBackground"
     android:padding="@dimen/list_item_padding">
 
     <TextView
         android:id="@+id/stop_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/textColorPrimary"
         android:textSize="18sp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"/>
@@ -22,7 +20,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:textColor="@color/grey_800"
         android:drawableLeft="@drawable/ic_bus_double_decker"
         android:drawableStart="@drawable/ic_bus_double_decker"
         android:drawablePadding="4dp"

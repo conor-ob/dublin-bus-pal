@@ -66,6 +66,15 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
 }
 
 dependencies {
@@ -98,6 +107,9 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
     implementation "pl.charmas.android:android-reactive-location2:${versions.android_reactive_location2}"
     kapt "com.google.dagger:dagger-compiler:${versions.dagger_compiler}"
+
+    implementation "androidx.preference:preference-ktx:1.1.0"
+    implementation "androidx.fragment:fragment-ktx:1.2.0-rc02"
 
     androidTestImplementation "androidx.test:core:${testVersions.androidx.core}"
     androidTestImplementation "androidx.test.ext:junit:${testVersions.androidx.junit}"

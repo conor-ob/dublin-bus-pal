@@ -1,6 +1,7 @@
 package ie.dublinbuspal.di
 
 import dagger.Component
+import ie.dublinbuspal.android.DublinBusApplication
 import ie.dublinbuspal.android.view.favourite.FavouritesPresenterImpl
 import ie.dublinbuspal.android.view.nearby.NearbyPresenterImpl
 import ie.dublinbuspal.android.view.news.rss.RssPresenterImpl
@@ -8,6 +9,7 @@ import ie.dublinbuspal.android.view.news.twitter.TwitterPresenterImpl
 import ie.dublinbuspal.android.view.realtime.RealTimePresenterImpl
 import ie.dublinbuspal.android.view.routeservice.RouteServicePresenterImpl
 import ie.dublinbuspal.android.view.search.SearchPresenterImpl
+import ie.dublinbuspal.android.view.settings.PreferencesFragment
 import ie.dublinbuspal.android.view.settings.SettingsActivity
 import javax.inject.Singleton
 
@@ -36,6 +38,9 @@ interface ApplicationComponent {
 
     fun twitterPresenter(): TwitterPresenterImpl
 
-    fun inject(mainPreferenceFragment: SettingsActivity.MainPreferenceFragment)
+//    fun inject(mainPreferenceFragment: SettingsActivity.MainPreferenceFragment)
 
+    fun inject(preferencesFragment: PreferencesFragment)
+
+    fun inject(dublinBusApplication: DublinBusApplication)
 }

@@ -3,6 +3,7 @@ package ie.dublinbuspal.android.view.realtime;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -173,7 +174,19 @@ public class RealTimeActivity
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
         this.googleMap.getUiSettings().setMapToolbarEnabled(false);
-        this.googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style_no_stops));
+
+        int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        switch (currentNightMode) {
+            case Configuration.UI_MODE_NIGHT_NO:
+                googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getBaseContext(),
+                        R.raw.map_style_no_stops));
+                break;
+            case Configuration.UI_MODE_NIGHT_YES:
+                googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getBaseContext(),
+                        R.raw.map_style_night));
+                break;
+        }
+
 //        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
 //                550, getResources().getDisplayMetrics());
 //        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);

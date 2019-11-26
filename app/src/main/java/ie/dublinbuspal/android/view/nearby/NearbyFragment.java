@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -196,8 +197,19 @@ public class NearbyFragment
         googleMap.setOnCameraIdleListener(this);
         googleMap.setOnCameraMoveListener(mapMarkerManager);
         googleMap.setOnInfoWindowClickListener(mapMarkerManager);
-        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(),
-                R.raw.map_style_no_stops));
+
+        int currentNightMode = getActivity().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        switch (currentNightMode) {
+            case Configuration.UI_MODE_NIGHT_NO:
+                googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(),
+                        R.raw.map_style_no_stops));
+                break;
+            case Configuration.UI_MODE_NIGHT_YES:
+                googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(),
+                        R.raw.map_style_night));
+                break;
+        }
+
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.getUiSettings().setMyLocationButtonEnabled(false);
         this.googleMap = googleMap;

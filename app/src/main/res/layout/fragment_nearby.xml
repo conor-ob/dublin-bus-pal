@@ -116,6 +116,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:elevation="8dp"
+                android:background="?android:attr/colorBackground"
                 app:elevation="8dp"
                 app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
                 app:behavior_hideable="true">
@@ -123,8 +124,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/windowBackground"/>
+                    android:layout_height="match_parent"/>
 
             </LinearLayout>
 
