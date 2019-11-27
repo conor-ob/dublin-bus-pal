@@ -18,7 +18,6 @@
         <!--android:fontFamily="sans-serif-condensed"-->
         <!--android:paddingLeft="8dp"-->
         <!--android:paddingRight="8dp"-->
-        <!--android:textColor="@color/textColorPrimary"-->
         <!--android:textSize="18sp"-->
         <!--android:textStyle="bold"-->
         <!--app:layout_constraintBottom_toBottomOf="parent"-->
@@ -35,7 +34,6 @@
         android:fontFamily="sans-serif-condensed"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
-        android:textColor="@color/textColorPrimary"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -48,7 +46,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:textColor="@color/textColorPrimary"
         android:textSize="18sp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/via"
@@ -63,7 +60,6 @@
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
         android:fontFamily="sans-serif-condensed"
-        android:textColor="@color/textColorSecondary"
         android:textSize="16sp"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/destination"
@@ -87,7 +83,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-condensed"
-        android:textColor="@color/colorPrimaryDark"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"

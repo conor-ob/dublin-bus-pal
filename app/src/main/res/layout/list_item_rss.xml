@@ -12,7 +12,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        android:textColor="@color/textColorPrimary"
         android:fontFamily="sans-serif-light"
         android:textStyle="bold"
         android:text="@string/dublin_bus"
@@ -28,7 +27,6 @@
         android:text="@string/middle_dot"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:textColor="@color/grey_600"
         app:layout_constraintLeft_toRightOf="@id/dublin_bus"
         app:layout_constraintBaseline_toBaselineOf="@id/dublin_bus"/>
 
@@ -39,7 +37,6 @@
         android:text="@string/dublin_bus_ie"
         android:fontFamily="sans-serif-light"
         android:textSize="14sp"
-        android:textColor="@color/grey_600"
         app:layout_constraintLeft_toRightOf="@id/dot1"
         app:layout_constraintBaseline_toBaselineOf="@id/dot1"/>
 
@@ -52,7 +49,6 @@
         android:text="@string/middle_dot"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:textColor="@color/grey_600"
         app:layout_constraintLeft_toRightOf="@id/dublin_bus_ie"
         app:layout_constraintBaseline_toBaselineOf="@id/dublin_bus_ie"/>
 
@@ -62,7 +58,6 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-light"
         android:textSize="14sp"
-        android:textColor="@color/grey_600"
         app:layout_constraintLeft_toRightOf="@id/dot2"
         app:layout_constraintBaseline_toBaselineOf="@id/dot2"/>
 
@@ -82,7 +77,6 @@
         android:fontFamily="sans-serif-light"
         android:textStyle="bold"
         android:textSize="14sp"
-        android:textColorLink="@color/colorPrimaryDark"
         app:layout_constraintTop_toBottomOf="@id/dublin_bus"
         app:layout_constraintLeft_toLeftOf="parent"/>
 
@@ -94,7 +88,6 @@
         android:fontFamily="sans-serif-light"
         android:lineSpacingExtra="2dp"
         android:textSize="16sp"
-        android:textColor="#292f33"
         app:layout_constraintTop_toBottomOf="@id/title"
         app:layout_constraintLeft_toLeftOf="parent"/>
 
