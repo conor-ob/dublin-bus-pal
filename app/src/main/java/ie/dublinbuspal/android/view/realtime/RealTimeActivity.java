@@ -172,20 +172,9 @@ public class RealTimeActivity
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        googleMap.getUiSettings().setMapToolbarEnabled(false);
+        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getBaseContext(), R.raw.map_style_no_stops));
         this.googleMap = googleMap;
-        this.googleMap.getUiSettings().setMapToolbarEnabled(false);
-
-        int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-        switch (currentNightMode) {
-            case Configuration.UI_MODE_NIGHT_NO:
-                googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getBaseContext(),
-                        R.raw.map_style_no_stops));
-                break;
-            case Configuration.UI_MODE_NIGHT_YES:
-                googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getBaseContext(),
-                        R.raw.map_style_night));
-                break;
-        }
 
 //        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
 //                550, getResources().getDisplayMetrics());

@@ -197,19 +197,7 @@ public class NearbyFragment
         googleMap.setOnCameraIdleListener(this);
         googleMap.setOnCameraMoveListener(mapMarkerManager);
         googleMap.setOnInfoWindowClickListener(mapMarkerManager);
-
-        int currentNightMode = getActivity().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-        switch (currentNightMode) {
-            case Configuration.UI_MODE_NIGHT_NO:
-                googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(),
-                        R.raw.map_style_no_stops));
-                break;
-            case Configuration.UI_MODE_NIGHT_YES:
-                googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(),
-                        R.raw.map_style_night));
-                break;
-        }
-
+        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.map_style_no_stops));
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.getUiSettings().setMyLocationButtonEnabled(false);
         this.googleMap = googleMap;

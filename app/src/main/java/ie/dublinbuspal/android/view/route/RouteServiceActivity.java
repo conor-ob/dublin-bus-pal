@@ -137,17 +137,7 @@ public class RouteServiceActivity extends MvpActivity<RouteServiceView, RouteSer
 //        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this,
 //                R.raw.map_style_no_stops));
 
-        int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-        switch (currentNightMode) {
-            case Configuration.UI_MODE_NIGHT_NO:
-                googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getBaseContext(),
-                        R.raw.map_style_no_stops));
-                break;
-            case Configuration.UI_MODE_NIGHT_YES:
-                googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getBaseContext(),
-                        R.raw.map_style_night));
-                break;
-        }
+        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getBaseContext(), R.raw.map_style_no_stops));
 
         googleMap.setOnInfoWindowClickListener(marker -> {
             //TODO check hardcoded string if you ever do translations
