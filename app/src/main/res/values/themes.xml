@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Theme.DublinBusPal.DayNight" parent="Theme.DublinBusPal"/>
+
+    <style name="Theme.DublinBusPal" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!--Material color attributes -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
+
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="colorError">@color/colorError</item>
+
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+        <item name="colorOnBackground">@color/colorOnBackground</item>
+        <item name="colorOnSurface">@color/colorOnSurface</item>
+        <item name="colorOnError">@color/colorOnError</item>
+
+        <item name="android:statusBarColor">@color/colorStatusBar</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:navigationBarColor">?android:colorBackground</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+        <item name="android:navigationBarDividerColor" tools:targetApi="o_mr1">?colorControlHighlight</item>
+
+        <!--Remap legacy AppCompat attributes to MaterialComponent attributes-->
+        <item name="colorPrimaryDark">?colorPrimaryVariant</item>
+        <item name="colorAccent">?colorSecondary</item>
+
+        <item name="emphasisHighAlpha">0.87</item>
+        <item name="emphasisMediumAlpha">0.60</item>
+        <item name="emphasisDisabledAlpha">0.38</item>
+
+        <!--Widget styles-->
+        <item name="appBarLayoutStyle">@style/Widget.DublinBusPal.AppBar</item>
+        <item name="toolbarStyle">@style/Widget.DublinBusPal.Toolbar</item>
+
+        <item name="badgeStyle">@style/Widget.MaterialComponents.Badge</item>
+        <item name="bottomAppBarStyle">@style/Widget.MaterialComponents.BottomAppBar</item>
+        <item name="bottomNavigationStyle">@style/Widget.MaterialComponents.BottomNavigationView</item>
+        <item name="chipStyle">@style/Widget.MaterialComponents.Chip.Action</item>
+        <item name="chipGroupStyle">@style/Widget.MaterialComponents.ChipGroup</item>
+        <item name="chipStandaloneStyle">@style/Widget.MaterialComponents.Chip.Entry</item>
+        <item name="floatingActionButtonStyle">@style/Widget.MaterialComponents.FloatingActionButton</item>
+        <item name="extendedFloatingActionButtonStyle">@style/Widget.MaterialComponents.ExtendedFloatingActionButton.Icon</item>
+        <item name="materialButtonStyle">@style/Widget.MaterialComponents.Button</item>
+        <item name="materialButtonOutlinedStyle">@style/Widget.MaterialComponents.Button.OutlinedButton</item>
+        <item name="materialButtonToggleGroupStyle">@style/Widget.MaterialComponents.MaterialButtonToggleGroup</item>
+        <item name="materialCardViewStyle">@style/Widget.MaterialComponents.CardView</item>
+        <item name="navigationViewStyle">@style/Widget.MaterialComponents.NavigationView</item>
+        <item name="sliderStyle">@style/Widget.MaterialComponents.Slider</item>
+        <item name="snackbarStyle">@style/Widget.MaterialComponents.Snackbar</item>
+        <item name="snackbarButtonStyle">@style/Widget.MaterialComponents.Button.TextButton.Snackbar</item>
+        <item name="snackbarTextViewStyle">@style/Widget.MaterialComponents.Snackbar.TextView</item>
+        <item name="tabStyle">@style/Widget.MaterialComponents.TabLayout</item>
+        <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.FilledBox</item>
+
+        <!-- Type styles -->
+        <item name="textAppearanceHeadline1">@style/TextAppearance.DublinMapper.Headline1</item>
+        <item name="textAppearanceHeadline2">@style/TextAppearance.DublinMapper.Headline2</item>
+        <item name="textAppearanceHeadline3">@style/TextAppearance.DublinMapper.Headline3</item>
+        <item name="textAppearanceHeadline4">@style/TextAppearance.DublinMapper.Headline4</item>
+        <item name="textAppearanceHeadline5">@style/TextAppearance.DublinMapper.Headline5</item>
+        <item name="textAppearanceHeadline6">@style/TextAppearance.DublinMapper.Headline6</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.DublinMapper.Subtitle1</item>
+        <item name="textAppearanceSubtitle2">@style/TextAppearance.DublinMapper.Subtitle2</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.DublinMapper.Body1</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.DublinMapper.Body2</item>
+        <item name="textAppearanceCaption">@style/TextAppearance.DublinMapper.Caption</item>
+        <item name="textAppearanceButton">@style/TextAppearance.DublinMapper.Button</item>
+        <item name="textAppearanceOverline">@style/TextAppearance.DublinMapper.Overline</item>
+
+        <!-- Shape styles -->
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.MaterialComponents.SmallComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.MaterialComponents.MediumComponent</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.MaterialComponents.LargeComponent</item>
+    </style>
+
+</resources>

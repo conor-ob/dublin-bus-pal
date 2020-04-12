@@ -236,8 +236,7 @@ public class RealTimeActivity
     }
 
     private void presentRemoveFavouriteDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this,
-                R.style.FavouriteDialogTheme);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.action_remove_favourite));
         builder.setMessage(getString(R.string.remove_favourite_confirm));
         String yesText = getString(R.string.yes);
@@ -271,8 +270,7 @@ public class RealTimeActivity
             }
         });
 
-        AlertDialog dialog = new AlertDialog.Builder(this,
-                R.style.FavouriteDialogTheme)
+        AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.save_favourite_prompt))
                 .setView(frameView)
                 .setNeutralButton(getString(R.string.select_all_routes), null)

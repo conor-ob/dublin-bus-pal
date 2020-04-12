@@ -18,8 +18,7 @@
             android:layout_height="?attr/actionBarSize"
             android:layout_weight="1"
             app:layout_scrollFlags="scroll|enterAlways"
-            app:title="@string/title_news_centre"
-            app:popupTheme="@style/MainActionBar.Popup">
+            app:title="@string/title_news_centre">
 
         </androidx.appcompat.widget.Toolbar>
 
