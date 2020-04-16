@@ -54,6 +54,7 @@ class DublinBusApplication : Application() {
                 .networkModule(NetworkModule(
                     dublinBusApiEndpoint = resources.getString(R.string.dublin_bus_soap_api_endpoint),
                     rtpiApiEndpoint = resources.getString(R.string.dublin_bus_rest_api_endpoint),
+                    rtpiFallbackApiEndpoint = resources.getString(R.string.dublin_bus_rest_fallback_api_endpoint),
                     rssApiEndpoint = resources.getString(R.string.dublin_bus_rss_api_endpoint)
                 ))
                 .build()

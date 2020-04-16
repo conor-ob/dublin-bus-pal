@@ -12,8 +12,9 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 
 class DublinBusRouteResource(
-        private val dublinBusApi: DublinBusApi,
-        private val rtpiApi: RtpiApi
+    private val dublinBusApi: DublinBusApi,
+    private val rtpiApi: RtpiApi,
+    private val rtpiFallbackApi: RtpiApi
 ) {
 
     fun getRoutes(): Single<List<RtpiRoute>> {
@@ -49,6 +50,7 @@ class DublinBusRouteResource(
 
     private fun fetchRtpiBusRoutes(): Single<List<RtpiRouteListInformationWithVariantsJson>> {
         return rtpiApi.routelistInformationWithVariants(RtpiApi.JSON)
+            .onErrorResumeNext { rtpiFallbackApi.routelistInformationWithVariants(RtpiApi.JSON) }
                 .map { response ->
                     response.results
                             .filter {

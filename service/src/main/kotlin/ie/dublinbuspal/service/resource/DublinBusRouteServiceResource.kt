@@ -9,8 +9,9 @@ import ie.dublinbuspal.util.Operator
 import io.reactivex.Single
 
 class DublinBusRouteServiceResource(
-        private val dublinBusApi: DublinBusApi,
-        private val rtpiApi: RtpiApi
+    private val dublinBusApi: DublinBusApi,
+    private val rtpiApi: RtpiApi,
+    private val rtpiFallbackApi: RtpiApi
 ) {
 
     fun getRouteService(routeId: String, operatorId: String): Single<RtpiRouteService> {
@@ -68,6 +69,7 @@ class DublinBusRouteServiceResource(
 
     private fun fetchRtpiRouteServices(routeId: String, operatorId: String): Single<List<RtpiRouteInformationJson>> {
         return rtpiApi.routeInformation(routeId, operatorId, RtpiApi.JSON).map { it.results }
+            .onErrorResumeNext { rtpiFallbackApi.routeInformation(routeId, operatorId, RtpiApi.JSON).map { it.results } }
     }
 
 }

@@ -11,8 +11,9 @@ import io.reactivex.functions.Function3
 import io.reactivex.schedulers.Schedulers
 
 class DublinBusStopResource(
-        private val dublinBusApi: DublinBusApi,
-        private val rtpiApi: RtpiApi
+    private val dublinBusApi: DublinBusApi,
+    private val rtpiApi: RtpiApi,
+    private val rtpiFallbackApi: RtpiApi
 ) {
 
     fun getStops(): Single<List<RtpiStop>> {
@@ -52,6 +53,7 @@ class DublinBusStopResource(
 
     private fun fetchRtpiDublinBusStops(): Single<List<RtpiBusStopInformationJson>> {
         return rtpiApi.busStopInformation(Operator.DUBLIN_BUS.code, RtpiApi.JSON)
+            .onErrorResumeNext { rtpiFallbackApi.busStopInformation(Operator.DUBLIN_BUS.code, RtpiApi.JSON) }
                 .map { response ->
                     response.results
                             .filter {

@@ -18,12 +18,14 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
 class NetworkModule(
         private val dublinBusApiEndpoint: String,
         private val rtpiApiEndpoint: String,
+        private val rtpiFallbackApiEndpoint: String,
         private val rssApiEndpoint: String
 ) {
 
@@ -66,6 +68,7 @@ class NetworkModule(
 
     @Provides
     @Singleton
+    @Named("rtpi_api")
     fun rtpiApi(okHttpClient: OkHttpClient): RtpiApi {
         val retrofit = Retrofit.Builder()
                 .baseUrl(rtpiApiEndpoint)
@@ -73,6 +76,19 @@ class NetworkModule(
                 .addConverterFactory(jsonDeserializer)
                 .addCallAdapterFactory(callAdapter)
                 .build()
+        return retrofit.create(RtpiApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    @Named("rtpi_fallback_api")
+    fun rtpiFallbackApi(okHttpClient: OkHttpClient): RtpiApi {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(rtpiFallbackApiEndpoint)
+            .client(okHttpClient)
+            .addConverterFactory(jsonDeserializer)
+            .addCallAdapterFactory(callAdapter)
+            .build()
         return retrofit.create(RtpiApi::class.java)
     }
 
@@ -91,37 +107,41 @@ class NetworkModule(
     @Provides
     @Singleton
     fun dublinBusStopResource(
-            dublinBusApi: DublinBusApi,
-            rtpiApi: RtpiApi
+        dublinBusApi: DublinBusApi,
+        @Named("rtpi_api") rtpiApi: RtpiApi,
+        @Named("rtpi_fallback_api") rtpiFallbackApi: RtpiApi
     ): DublinBusStopResource {
-        return DublinBusStopResource(dublinBusApi, rtpiApi)
+        return DublinBusStopResource(dublinBusApi, rtpiApi, rtpiFallbackApi)
     }
 
     @Provides
     @Singleton
     fun dublinBusRouteResource(
-            dublinBusApi: DublinBusApi,
-            rtpiApi: RtpiApi
+        dublinBusApi: DublinBusApi,
+        @Named("rtpi_api") rtpiApi: RtpiApi,
+        @Named("rtpi_fallback_api") rtpiFallbackApi: RtpiApi
     ): DublinBusRouteResource {
-        return DublinBusRouteResource(dublinBusApi, rtpiApi)
+        return DublinBusRouteResource(dublinBusApi, rtpiApi, rtpiFallbackApi)
     }
 
     @Provides
     @Singleton
     fun dublinBusLiveDataResource(
-            dublinBusApi: DublinBusApi,
-            rtpiApi: RtpiApi
+        dublinBusApi: DublinBusApi,
+        @Named("rtpi_api") rtpiApi: RtpiApi,
+        @Named("rtpi_fallback_api") rtpiFallbackApi: RtpiApi
     ): DublinBusLiveDataResource {
-        return DublinBusLiveDataResource(dublinBusApi, rtpiApi)
+        return DublinBusLiveDataResource(dublinBusApi, rtpiApi, rtpiFallbackApi)
     }
 
     @Provides
     @Singleton
     fun dublinBusRouteServiceResource(
-            dublinBusApi: DublinBusApi,
-            rtpiApi: RtpiApi
+        dublinBusApi: DublinBusApi,
+        @Named("rtpi_api") rtpiApi: RtpiApi,
+        @Named("rtpi_fallback_api") rtpiFallbackApi: RtpiApi
     ): DublinBusRouteServiceResource {
-        return DublinBusRouteServiceResource(dublinBusApi, rtpiApi)
+        return DublinBusRouteServiceResource(dublinBusApi, rtpiApi, rtpiFallbackApi)
     }
 
     @Provides
