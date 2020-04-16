@@ -1,5 +1,8 @@
 # Changelog
 
+## [2.1.8](https://github.com/conor-ob/dublin-bus-pal/compare/2.1.7...2.1.8) (16-04-2020)
+* Fixed bug where real time information didn't load
+
 ## [2.1.7](https://github.com/conor-ob/dublin-bus-pal/compare/2.1.6...2.1.7) (12-10-2019)
 * Updated RTPI API base URL
 
