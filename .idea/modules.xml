@@ -2,14 +2,14 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/data/data.iml" filepath="$PROJECT_DIR$/data/data.iml" />
-      <module fileurl="file://$PROJECT_DIR$/database/database.iml" filepath="$PROJECT_DIR$/database/database.iml" />
-      <module fileurl="file://$PROJECT_DIR$/domain/domain.iml" filepath="$PROJECT_DIR$/domain/domain.iml" />
       <module fileurl="file://$PROJECT_DIR$/dublin-bus-pal.iml" filepath="$PROJECT_DIR$/dublin-bus-pal.iml" />
-      <module fileurl="file://$PROJECT_DIR$/repository/repository.iml" filepath="$PROJECT_DIR$/repository/repository.iml" />
-      <module fileurl="file://$PROJECT_DIR$/service/service.iml" filepath="$PROJECT_DIR$/service/service.iml" />
-      <module fileurl="file://$PROJECT_DIR$/util/util.iml" filepath="$PROJECT_DIR$/util/util.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/dublin-bus-pal.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/dublin-bus-pal.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/data/dublin-bus-pal.data.iml" filepath="$PROJECT_DIR$/.idea/modules/data/dublin-bus-pal.data.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/database/dublin-bus-pal.database.iml" filepath="$PROJECT_DIR$/.idea/modules/database/dublin-bus-pal.database.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/domain/dublin-bus-pal.domain.iml" filepath="$PROJECT_DIR$/.idea/modules/domain/dublin-bus-pal.domain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/repository/dublin-bus-pal.repository.iml" filepath="$PROJECT_DIR$/.idea/modules/repository/dublin-bus-pal.repository.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/service/dublin-bus-pal.service.iml" filepath="$PROJECT_DIR$/.idea/modules/service/dublin-bus-pal.service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/util/dublin-bus-pal.util.iml" filepath="$PROJECT_DIR$/.idea/modules/util/dublin-bus-pal.util.iml" />
     </modules>
   </component>
 </project>
