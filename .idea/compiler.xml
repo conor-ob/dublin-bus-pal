@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="dublin-bus-pal.app" target="1.8" />
+      <module name="dublin-bus-pal.data" target="1.8" />
+      <module name="dublin-bus-pal.database" target="1.8" />
+      <module name="dublin-bus-pal.domain" target="1.8" />
+      <module name="dublin-bus-pal.repository" target="1.8" />
+      <module name="dublin-bus-pal.service" target="1.8" />
+      <module name="dublin-bus-pal.util" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
